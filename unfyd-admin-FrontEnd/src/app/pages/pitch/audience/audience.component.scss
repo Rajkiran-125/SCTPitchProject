@@ -1,0 +1,34 @@
+.structure-card {
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 20px;
+    box-shadow: 1px 1px 10px #ccc;
+}
+.structure-header {
+    display: flex;
+    justify-content: space-between;
+
+    label{
+        font-weight: bold;
+        color: var(--black-color-08);
+    }
+}
+.structure-body {
+    font-size: var(--small-font);
+    margin: 10px 0;
+}
+.structure-footer {
+    font-size: var(--small-font);
+    font-weight: bold;
+}
+
+.scrollbar{
+    overflow: auto;
+    height: calc(100% - 50px);
+}
+.audienceListTable ::ng-deep .dataTable table tbody tr td {
+    text-align: left;
+  }
+  .audienceListTable ::ng-deep .dataTable table thead tr th{
+    text-align: left;
+  }

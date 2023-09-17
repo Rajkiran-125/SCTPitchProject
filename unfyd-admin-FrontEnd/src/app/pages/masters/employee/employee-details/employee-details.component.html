@@ -1,0 +1,105 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="action-bar">
+        <div class="action-area">
+        </div>
+        <div class="action-area" *ngIf="tab !== 'payment'">
+            <a *ngIf="userConfig?.Edit" mat-raised-button color="primary" (click)="action('edit')">
+                <mat-icon>edit</mat-icon>
+            </a>
+        </div>
+    </div>
+    <div class="wrapper">
+        <app-steps [steps]="employeeDetailsSteps" [id]="contactId" [tab]="tab"></app-steps>
+        <div *ngIf="tab !== 'kyc'" class="row details">
+            <div class="col-lg-3 col-md-3 col-sm-12" *ngFor="let item of data | keyvalue : keepOrder">
+                <p>
+                    <small>{{item.key}}</small>
+                    <strong>{{item.value == true ? 'Yes' : item.value == false ? 'no' : item.value}}</strong>
+                    <span *ngIf="(item.key == 'Is Caste Certificate Submitted' && item.value == true) 
+                        || (item.key == 'Is Aadhaar Card Uploaded ?' && item.value == true)
+                        || (item.key == 'Is PAN Card uploaded ?' && item.value == true)
+                        || (item.key == 'Is Signature Uploaded ?' && item.value == true)
+                        || (item.key == 'Is Photograph Uploaded?' && item.value == true)
+                        || (item.key == 'Health Insurance Check' && item.value == true)
+                        || (item.key == 'Covid Vaccination Status' && item.value == true)
+                        || (item.key == 'Is Differently Abled ?' && item.value == true)
+                        || (item.key == 'Is Reference Check Done ?' && item.value == true)
+                        || (item.key == 'Is Police Verification Done ?' && item.value == true)
+                        || (item.key == 'Any Ongoing Cases ?' && item.value == true)
+                        || (item.key == 'Is Resume uploaded ?' && item.value == true)
+                        || (item.key == 'Is Appointment Letter / Consultant Agreement uploaded ?' && item.value == true)
+                        || (item.key == 'Offer Letter' && item.value == true)
+                        || (item.key == 'Is Medical Clearance Report Uploaded ?' && item.value == true)
+                        || (item.key == 'Is Police Clearance Attached' && item.value == true)">
+
+                        <mat-icon class="view cursorPointer" (click)="viewDocument(
+                            item.key == 'Is Caste Certificate Submitted' ? 'Caste Certificate' :
+                            item.key == 'Is Aadhaar Card Uploaded ?' ? 'Aadhar Card' :
+                            item.key == 'Is PAN Card uploaded ?' ? 'PanCard' :
+                            item.key == 'Is Signature Uploaded ?' ? 'Signature' :
+                            item.key == 'Is Photograph Uploaded?' ? 'Photograpgh' :
+                            item.key == 'Health Insurance Check' ? 'Health Insurance' :
+                            item.key == 'Covid Vaccination Status' ? 'Covid Vaccination Certificate' :
+                            item.key == 'Is Differently Abled ?' ? 'Specially Abled' :
+                            item.key == 'Is Reference Check Done ?' ? 'Reference' :
+                            item.key == 'Is Police Verification Done ?' ? 'Police Verificaton' :
+                            item.key == 'Any Ongoing Cases ?' ? 'Ongoing Cases' :
+                            item.key == 'Is Resume uploaded ?' ? 'Resume' :
+                            item.key == 'Is Appointment Letter / Consultant Agreement uploaded ?' ? 'Appointment Letter' :
+                            item.key == 'Offer Letter' ? 'Offer Letter' :
+                            item.key == 'Is Medical Clearance Report Uploaded ?' ? 'Medical Test Report' :
+                            item.key == 'Is Police Clearance Attached' ? 'Pcc Clearance Report' :
+                            item.key
+                                    , 'document')" #tooltip="matTooltip" matTooltip="View">
+                            remove_red_eye</mat-icon>
+                    </span>
+                </p>
+            </div>
+
+        </div>
+        <div class="dataTable" *ngIf="tab ==  'kyc'">
+            <table>
+                <thead>
+                    <tr>
+                        <ng-container *ngFor="let data of tabKey; let i = index">
+                            <th>{{data == 'Action' ? '' : data}}</th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="tabValue.length>0">
+                        <tr
+                            *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+
+                            <ng-container *ngFor="let val of tabKey; let i = index">
+                                <td *ngIf="val == 'SrNo'"><span>{{j+1}}</span></td>
+                                <td *ngIf="val == 'Action'" class="action">
+                                    <mat-icon class="view" (click)="viewDocument(data[tabKey[i+1]], 'document')"
+                                        #tooltip="matTooltip" matTooltip="View">remove_red_eye</mat-icon>
+                                </td>
+                                <td *ngIf="val == 'Print'">
+                                    <button class="btn sm-btn" mat-flat-button color="primary" type="button">
+                                        <mat-icon>print</mat-icon><span>Print</span>
+                                    </button>
+                                </td>
+                                <td *ngIf="val !== 'SrNo' && val !== 'Action' && val !== 'Print'">
+                                    <span [innerHtml]="data[tabKey[i]]"></span>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="tabValue.length==0">
+                        <tr>
+                            <td [attr.colspan]="tabKey.length">No Data Found</td>
+                        </tr>
+                    </ng-container>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pagination" *ngIf="tabValue.length>10 && tab == 'kyc'">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+</div>

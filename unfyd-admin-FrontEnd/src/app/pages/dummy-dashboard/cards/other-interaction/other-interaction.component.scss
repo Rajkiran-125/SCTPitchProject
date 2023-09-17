@@ -1,0 +1,25 @@
+.cardHeight{
+  font-size: var(--content);
+  height: 205px;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  .align-center{
+    display: grid;
+    align-items: center;
+    overflow-y: auto;
+    width: 100%;
+    padding: 0 5px 0 0;
+
+    .marginY12px{
+      margin: 10px 0;
+    }
+  }
+}
+
+
+.icon{
+  font-size: var(--content);
+  color: var(--gray_color);
+  margin: 0 5px 0 0 !important;
+}

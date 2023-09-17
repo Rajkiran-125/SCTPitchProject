@@ -1,0 +1,111 @@
+<div class="inner-container" >
+  <div class="wrapper">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form" #formDirective="ngForm">
+    <div class="row">
+      <div class="col-1 text-center backarrow">
+        <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-lg-7 col-md-7 col-10 pl-0">
+          <legend>{{ reset ? 'Update' :'Add New' }} {{changeModuleDisplayName}}</legend>
+
+            <div class="formGroup mt-4">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <!-- [ngClass]="{ 'shake': submittedForm && f.key1.errors }" -->
+                        <mat-form-field appearance="fill"  >
+
+                            <mat-label>{{labelName?.Key}}</mat-label>
+                            <input matInput formControlName="key1" appTitleCase >
+                            <mat-error *ngIf="f.key1.errors">
+                              <!-- <ng-container *ngIf="f.key1.errors.minlength">
+                                  {{minMessage}}
+                              </ng-container> -->
+                              <ng-container *ngIf="f.key1.errors.maxlength">
+                                  {{masters.MaxLengthMessage1}}
+                             </ng-container>
+                             <ng-container *ngIf="f.key1.errors.required">{{labelName?.Key}} is required.
+                            </ng-container>
+                              <ng-container *ngIf="f.key1.errors.pattern">{{labelName?.Key}} is invalid.
+                              </ng-container>
+                              <ng-container *ngIf="f.key1?.errors?.checknull">Whitespace not allowed.
+                              </ng-container>
+                              <ng-container *ngIf="f.key1?.errors?.checknull1">Must be at least 3 characters long.
+                              </ng-container>
+                          </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <!-- [ngClass]="{ 'shake': submittedForm && f.value1.errors }" -->
+                        <mat-form-field appearance="fill"  >
+
+                            <mat-label>{{labelName?.Value}}</mat-label>
+                            <input matInput formControlName="value1" appTitleCase >
+                            <mat-error *ngIf="f.value1.errors">
+                              <!-- <ng-container *ngIf="f.value1.errors.minlength">
+                                  {{minMessage}}
+                              </ng-container> -->
+                              <ng-container *ngIf="f.value1.errors.maxlength">
+                                  {{masters.MaxLengthMessage1}}
+                             </ng-container>
+                              <ng-container *ngIf="f.value1.errors.pattern">{{labelName?.Value}} is invalid.
+                              </ng-container>
+                              <ng-container *ngIf="f.value1.errors.required">{{labelName?.Value}} is required.</ng-container>
+                              <ng-container *ngIf="f.value1?.errors?.checknull">Whitespace not allowed.
+                              </ng-container>
+                              <ng-container *ngIf="f.value1?.errors?.checknull1">Must be at least 3 characters long.
+                              </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 ">
+                      <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.description1.errors }"
+>
+                      <mat-label>{{labelName?.Description}}</mat-label>
+
+                      <input matInput formControlName="description1"  maxlength="500" >
+                      <mat-error *ngIf="f.description1.errors">
+                        <ng-container *ngIf="f.description1.errors.pattern && !f.description1.errors.maxlength">Description is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f.description1.errors.minlength">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                        <ng-container *ngIf="f.description1.errors.maxlength && !f.description1.errors.pattern">
+                          Cannot be beyond 500 characters.
+                        </ng-container>
+                        <ng-container *ngIf="f.description1?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                        <!-- <ng-container *ngIf="f.description1?.errors?.checknull">Whitespace not allowed.
+                        </ng-container> -->
+                    </mat-error>
+                      </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-none d-block d-md-none">
+              <div class="col-lg-6 col-md-6 col-12">
+                <button  class="btn btn-gray btnwidth mr-2" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button>
+                <button *ngIf="reset ? (userConfig?.Update) : (userConfig?.Save)" class="btn btnwidth" mat-flat-button color="primary"  type="button" (click)="submit('add', formDirective)">{{ reset ? labelName?.Update : labelName?.Save }}</button>
+              </div>
+              <div class="col-lg-6 col-md-6 col-12 mt-2">
+                <button *ngIf="!reset && userConfig?.Reset" #reset  class="btn btn-gray btnwidth mr-2" mat-flat-button type="Reset" >{{labelName?.Reset}}</button>
+                <button *ngIf=" (userConfig?.SaveAddNew) && !reset" class="btn outline btnwidth" mat-stroked-button color="primary"  (click)="submit('saveAndAddNew', formDirective)">{{labelName?.SaveAddNew}} </button>
+              </div>
+            </div>
+
+            <div class="btn-group d-none d-md-block">
+              <!-- <button  class="btn btn-gray" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+              <button *ngIf="!reset && userConfig?.Reset" #reset  class="btn btn-gray" mat-flat-button type="Reset" >{{labelName?.Reset}}</button>
+              <button *ngIf=" (userConfig?.SaveAddNew) && !reset" class="btn outline"   mat-stroked-button color="primary"  (click)="submit('saveAndAddNew', formDirective )">{{labelName?.SaveAddNew}} </button>
+              <button *ngIf="reset ? (userConfig?.Update) : (userConfig?.Save)" class="btn" mat-flat-button color="primary"  type="button" (click)="submit('add', formDirective)">{{ reset ? labelName?.Update : labelName?.Save }}</button>
+            </div>
+      </div>
+
+    </div>
+  </form>
+  </div>
+</div>

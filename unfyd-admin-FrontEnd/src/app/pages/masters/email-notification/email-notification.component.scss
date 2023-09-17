@@ -1,0 +1,64 @@
+.agent-listview {
+    margin-top: 20px;
+    height: calc(100vh - 222px);
+    overflow-y: auto;
+
+    .list {
+      margin: 0;
+      background-color: var(--white_color);
+      padding: 0;
+
+      .list-items {
+        padding-left: 0;
+        list-style-type: none;
+        border: 1px solid var(--theme_input_border);
+        border-bottom: 0px;
+
+        &:last-child {
+          border-bottom: 1px solid var(--theme_input_border);
+        }
+
+        .menus {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 10px 20px;
+          background: var(--gray_color_60);
+          border: var(--border);
+
+          .list-ttl {
+            color: var(--theme_title);
+            font-size: 16px;
+            text-transform: capitalize;
+          }
+
+          .action {
+            display: flex;
+            align-items: center;
+
+            .check {
+              ::ng-deep.mat-checkbox-layout {
+                margin-bottom: 0px;
+              }
+            }
+
+            .edit {
+              margin-left: 14px;
+
+              button {
+                background-color: transparent;
+                border: none;
+                vertical-align: sub;
+
+                i {
+                  font-size: 14px;
+                }
+
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }

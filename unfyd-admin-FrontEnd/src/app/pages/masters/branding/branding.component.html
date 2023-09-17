@@ -1,0 +1,248 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper mb-5">
+    <form [formGroup]="form">
+      <legend class="legendheader">{{ changeModuleDisplayName }}</legend>
+      <div class="formGroup">
+        <div class="">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-12 blue-dropdown">
+              <mat-form-field appearance="fill">
+                <mat-label>Application</mat-label>
+                <mat-select [(value)]="productName" (selectionChange)="selectedProduct($event.value)" panelClass="blue-panel">
+                  <mat-option
+                    *ngFor="let data of productType"
+                    [value]="data.ProductName">{{ data.ProductName }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="brandingData" class="formGroup">
+        <legend class="groupTitle">
+          <span>{{ labelName?.LoginPage }}</span>
+        </legend>
+        <div class="mt-4 mb-2">
+          <span class="groupSubTitle">{{ labelName?.Logo }}</span>
+        </div>
+        <div class="group logo-group">
+          <div class="subTitle">
+            <mat-slide-toggle color="primary" class="toggleBtn" formControlName="loginImgStatus"></mat-slide-toggle>
+          </div>
+          <div class="avatar1">
+            <div *ngIf="userConfig?.Edit" class="editHover">
+              <mat-icon>edit</mat-icon>
+            </div>
+            <div class="loader" *ngIf="loginLoader">
+              <span class="spinner"></span>
+            </div>
+            <mat-icon *ngIf="!loginImg">now_wallpaper</mat-icon>
+            <img *ngIf="loginImg" [src]="loginImg" />
+            <input type="file" (change)="directUpload($event, 'Login_Image', '', 120, 120)" title="" />
+          </div>
+        </div>
+        <div class="group">
+          <div class="subTitle">
+            <span class="groupSubTitle">{{ labelName?.ApplicationName }}</span>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 d-grid">
+              <div class="switch">
+                <mat-slide-toggle color="primary" class="toggleBtn"
+                  formControlName="loginheadertextStatus"></mat-slide-toggle>
+                <input type="text" class="textInput groupInput" formControlName="loginheadertext" />
+              </div>
+
+              <small class="errorMsg" *ngIf="form?.get('loginheadertext')?.hasError('pattern')">{{
+                labelName?.ApplicationName }} is invalid</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="group bannerGroup">
+          <div class="subTitle">
+            <span class="groupSubTitle">{{ labelName?.BannerImages }}</span>
+            <div class="d-flex align-items-center">
+              <i class="icon-add addBtnBlue mr-1 mb-2" color="primary" *ngIf="userConfig?.Add && productName" (click)="addBrand(); scroll(target)"></i>
+            </div>
+            <!-- <button mat-stroked-button (click)="addBrand(); scroll(target)"
+              class="editBtn addBtnBlue"><mat-icon>add</mat-icon></button> -->
+            <!-- <a (click)="addBrand(); scroll(target)">
+              <mat-icon #tooltip="matTooltip" matTooltip="Add">add_circle</mat-icon>Add More</a> -->
+          </div>
+          <div class="row" cdkDropListOrientation="horizontal" cdkDropList [cdkDropListData]="bannerimg"
+            (cdkDropListDropped)="drop($event)">
+            <div class="col-lg-4 col-md-6 col-sm-12 d-none d-md-block" formArrayName="bannerimg"
+              *ngFor="let brandGroup of bannerimg?.controls; let i = index" cdkDrag>
+              <div class="banner-card" [formGroupName]="i">
+                <div class="banner-head">
+                  <i>{{i+1}}</i><span></span>
+                  <span class="text-end">
+                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="status"></mat-slide-toggle>
+                    <span class="icon-Delete red-color cursorPointer deleteIcon" (click)="removeBrand(i)"
+                      #tooltip="matTooltip" matTooltip="Delete"></span>
+                  </span>
+                  <!-- <mat-icon
+                    class="red-color cursorPointer"
+                    (click)="removeBrand(i)"
+                    #tooltip="matTooltip"
+                    matTooltip="Delete">delete</mat-icon> -->
+                </div>
+                <div class="avatar">
+                  <div class="editHover"><mat-icon>edit</mat-icon></div>
+                  <div class="loader" *ngIf="imgLoader[i]">
+                    <span class="spinner"></span>
+                  </div>
+                  <mat-icon *ngIf="!Img[i]">now_wallpaper</mat-icon>
+                  <img *ngIf="Img[i]" [src]="Img[i]" />
+                  <input type="file" (change)="directUpload($event, 'Image', i, 600, 600)" title="" />
+                </div>
+                <input type="text" placeholder="Title" formControlName="title" />
+                <textarea matInput placeholder="Description" formControlName="description"></textarea>
+              </div>
+              <div class="banner-card" [formGroupName]="i">
+                <input type="text" placeholder="URL" formControlName="link" />
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 d-none d-block d-md-none" formArrayName="bannerimg"
+              *ngFor="let brandGroup of bannerimg?.controls; let i = index">
+              <div class="banner-card" [formGroupName]="i">
+                <div class="banner-head">
+                  <i>{{i+1}}</i><span></span>
+                  <span class="text-end">
+                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="status"></mat-slide-toggle>
+                    <span class="icon-Delete red-color cursorPointer deleteIcon" (click)="removeBrand(i)"
+                      #tooltip="matTooltip" matTooltip="Delete"></span>
+                  </span>
+                  <!-- <mat-icon
+                    class="red-color cursorPointer"
+                    (click)="removeBrand(i)"
+                    #tooltip="matTooltip"
+                    matTooltip="Delete">delete</mat-icon> -->
+                </div>
+                <div class="avatar">
+                  <div class="editHover"><mat-icon>edit</mat-icon></div>
+                  <div class="loader" *ngIf="imgLoader[i]">
+                    <span class="spinner"></span>
+                  </div>
+                  <mat-icon *ngIf="!Img[i]">now_wallpaper</mat-icon>
+                  <img *ngIf="Img[i]" [src]="Img[i]" />
+                  <input type="file" (change)="directUpload($event, 'Image', i, 600, 600)" title="" />
+                </div>
+                <input type="text" placeholder="Title" formControlName="title" />
+                <textarea matInput placeholder="Description" formControlName="description"></textarea>
+              </div>
+              <div class="banner-card" [formGroupName]="i">
+                <input type="text" placeholder="URL" formControlName="link" />
+              </div>
+            </div>
+          </div>
+          <div #target></div>
+        </div>
+        <div class="group">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 d-grid mt-4">
+              <div class="subTitle">
+                <span class="groupSubTitle">{{ labelName?.CopyrightText }}</span>
+              </div>
+              <div class="switch">
+                <mat-slide-toggle color="primary" class="toggleBtn" formControlName="copyrighttextStatus"
+                  (toggleChange)="copyRightTextChange()"></mat-slide-toggle>
+                <input type="text" class="textInput groupInput" formControlName="copyrighttext" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 d-grid mt-4">
+              <div class="subTitle">
+                <span class="groupSubTitle">{{ labelName?.CopyrightURL }}</span>
+              </div>
+              <div class="switch">
+                <mat-slide-toggle color="primary" class="toggleBtn" formControlName="copyrighturlStatus"
+                  [disabled]="!form.value.copyrighttextStatus"></mat-slide-toggle>
+                <input type="text" class="textInput groupInput" formControlName="copyrighturl" />
+              </div>
+            </div>
+            <div class="col-6"></div>
+            <div class="col-6">
+                <mat-error *ngIf="form?.get('copyrighturl')?.errors?.pattern">{{ labelName?.CopyrightURL }} is invalid.</mat-error>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="brandingData" class="formGroup">
+        <legend class="groupTitle">
+          <span>{{ labelName?.HomePage }}</span>
+        </legend>
+        <div class="mt-4 mb-2">
+          <span class="groupSubTitle">{{ labelName?.HeaderLogo }}</span>
+        </div>
+        <div class="group logo-group">
+          <div class="subTitle">
+            <!-- <span>{{ labelName?.HeaderLogo }}</span> -->
+            <mat-slide-toggle color="primary" class="toggleBtn" formControlName="headerImgStatus"></mat-slide-toggle>
+          </div>
+          <div class="avatar">
+            <div *ngIf="userConfig?.Edit" class="editHover">
+              <mat-icon>edit</mat-icon>
+            </div>
+            <div class="loader" *ngIf="headerLoader">
+              <span class="spinner"></span>
+            </div>
+            <mat-icon *ngIf="!headerImg">now_wallpaper</mat-icon>
+            <img *ngIf="headerImg" [src]="headerImg" />
+            <input type="file" (change)="directUpload($event, 'Header_Image', '', 120, 40)" title="" />
+          </div>
+        </div>
+        <div class="group">
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 d-grid">
+              <div class="subTitle">
+                <span class="groupSubTitle">{{ labelName?.HeaderText }}</span>
+              </div>
+              <div class="switch">
+                <mat-slide-toggle color="primary" class="toggleBtn"
+                  formControlName="headertextStatus"></mat-slide-toggle>
+                <input class="textInput groupInput" formControlName="headertext" />
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-12 d-grid">
+              <div class="subTitle">
+                <span class="groupSubTitle">{{ labelName?.CopyrightText }}</span>
+              </div>
+              <div class="switch">
+                <mat-slide-toggle color="primary" class="toggleBtn" formControlName="footertextStatus"
+                  (toggleChange)="footertextStatusChange()"></mat-slide-toggle>
+                <input class="textInput groupInput" formControlName="footertext" />
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 d-grid">
+              <div class="subTitle">
+                <span class="groupSubTitle">{{ labelName?.CopyrightURL }}</span>
+              </div>
+              <div class="switch">
+                <mat-slide-toggle color="primary" class="toggleBtn" formControlName="footerurlStatus"
+                  [disabled]="!form.value.footertextStatus"></mat-slide-toggle>
+                <input class="textInput groupInput" formControlName="footerurl" />
+              </div>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4">
+              <mat-error *ngIf="form?.get('footerurl')?.errors?.pattern">{{ labelName?.CopyrightURL }} is invalid.</mat-error>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div  *ngIf="brandingData" class="btn-group mb-3">
+        <!-- <button class="btn btn-gray" (click)="back()"  mat-flat-button type="Reset">  Cancel </button> -->
+        <button class="btn btn-gray" *ngIf="!reset" mat-flat-button type="Reset">
+          {{ labelName?.Reset}}
+        </button>
+        <button *ngIf="userConfig?.Save" class="btn" mat-flat-button color="primary" (click)="submit()" [disabled]="form.invalid"
+          type="submit"> {{ labelName?.Save}} </button>
+          <!-- [disabled]="form.invalid" -->
+      </div>
+    </form>
+  </div>
+</div>

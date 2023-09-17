@@ -1,0 +1,211 @@
+// .search-form{
+//   // background-color: var(--backgroud_color);
+//   margin: -30px -40px 0px -40px;
+//   padding: 30px 40px;
+// }
+// ::ng-deep {
+//   .wrapper {
+//       // padding: 10px 40px!important;
+//       max-height: fit-content!important;
+//       overflow: hidden;
+//   }
+// }
+// ::ng-deep {
+//   .wrapper {
+//     max-height: inherit!important;
+//   }
+//   .mat-tab-link-container {
+//     height: 40px!important;
+//   }
+//   .mat-tab-header {
+//     padding: 0 10px!important;
+//     background: var(--white_color);
+//     border: 0!important;
+//   }
+//   .mat-tab-links {
+//     display: flex;
+//     // padding: 5px!important;
+//   }
+// }
+// @media screen and (max-width: 480px) {
+//   .search-form {
+//       margin: 0px 0px 0px 0px;
+//       padding: 0px 0px;
+//   }
+//   ::ng-deep {
+//       .btn-group {
+//           display: flex!important;
+//       }
+//       .wrapper {
+//           padding: 12px 30px;
+//       }
+//   }
+// }
+
+// ul {
+//   position: relative;
+//   list-style: none;
+//   // margin: 0 -20px 10px -20px;
+//   padding: 0;
+//   display: flex;
+//   // justify-content: space-evenly;
+//   li.selected{
+//       background-color: red;
+//   }
+//   &.form-steps {
+//       li {
+//           z-index: 1;
+//           a {
+//               display: flex;
+//               flex-direction: column;
+//               justify-content: center;
+//               align-items: center;
+//               i {
+//                   font-size: 14px;
+//                   padding: 10px;
+//                   background-color: var(--white_color);
+//                   border: var(--border);
+//                   border-radius: 50%;
+//                   color: var(--gray_color);
+//               }
+//               label {
+//                   color: var(--black_color_70);
+//                   margin-top: 4px;
+//                   line-height: inherit;
+//                   font-size: 13px;
+//               }
+//               &.active, &:hover {
+//                   i {
+//                       background-color: var(--primary_color);
+//                       color: var(--white_color);
+//                   }
+//                   label {
+//                       color: var(--black_color_90);
+//                   }
+//               }
+//           }
+//       }
+//       &::before {
+//           position: absolute;
+//           left: 0;
+//           right: 0;
+//           top: 20px;
+//           height: 2px;
+//           background-color: var(--gray_color);
+//           display: block;
+//           clear: both;
+//           content: "";
+//       }
+//   }
+//   &.tab-steps {
+//       // margin-top: -30px;
+//       border-bottom: var(--border);
+//       li {
+//           flex: 1;
+//           a {
+//               color: var(--black_color_70);
+//               label {
+//                   display: block;
+//                   font-size: 16px;
+//                   text-align: center;
+//                   padding: 15px 0;
+//               }
+//               &.active, &:hover {
+//                   label {
+//                       background-color: var(--backgroud_color);
+//                       color: var(--primary_color);
+//                       font-weight: bold;
+//                   }
+//               }
+//           }
+//           & + li {
+//               border-left: var(--border);
+//           }
+
+//       }
+//   }
+//   li {
+//       a {
+//           text-decoration: none;
+//           label{
+//               cursor: pointer;
+//           }
+//       }
+//   }
+// }
+
+// .selected{
+//   background-color: var(--primary_color);
+//   color: var(--white_color);
+// }
+// ::ng-deep{
+//   .wrapper {
+//       padding: 15px 40px!important;
+//   }
+// }
+
+// @media screen and (max-width: 480px) {
+//   ul {
+//       width: 96%;
+//       overflow: auto;
+//       margin: 0 2%;
+//       margin-bottom: 2%;
+//   }
+//   ul.form-steps li {
+//       margin: 0 10px;
+//   }
+//   ::ng-deep{
+//       .wrapper {
+//           padding: 15px!important;
+//       }
+//   }
+// }
+
+// // .list {
+// //     list-style: none;
+// //     flex-wrap: wrap;
+// //     display: flex;
+// //     padding: 0;
+// //     margin: 0;
+// //   }
+
+// //   .list li {
+// //     border-bottom: 1px solid #fff;
+// //     flex: 1 0 15%;
+// //     padding: 10px;
+// //     color: #fff;
+// //   }
+
+
+// // //   .list li:nth-child(4n + 1) {
+// // //     background: blue;
+// // //   }
+// //   .list li{
+// //     background: rgb(255, 255, 255);
+// //     color: var(--primary_color);
+// //     font-weight: bold;
+// //   }
+
+// //   .list li:nth-child(4n + 2) {
+// //     background: orange;
+// //   }
+
+// //   .list li:nth-child(4n + 3) {
+// //     background: green;
+// //   }
+// //   .list li:nth-child(4n + 4) {
+// //     background: purple;
+// //   }
+
+// .borderBottom{
+//   border-bottom: 3px solid var(--primary_color);
+// }
+
+// .pointer{
+//   cursor: pointer;
+// }
+
+// .padding0{
+//   padding: 0 !important;
+//   overflow-x: auto;
+// }

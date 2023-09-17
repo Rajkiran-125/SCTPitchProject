@@ -1,0 +1,611 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="wrapper py-4">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-1 text-center ">
+                    <mat-icon class="gray cursorPointer" [routerLink]="['/masters/accounts']">keyboard_backspace
+                    </mat-icon>
+                </div>
+                <div class="col-11 pl-0">
+                    <legend class="size">{{ reset ? 'Update' :'Add New' }} Accounts</legend>
+                    <div class="formGroup">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-4 col-sm-12">
+                                <label>
+                                    <b>{{labelName?.CompanyInfo}}</b>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"  >
+                                    <mat-label> {{labelName?.FirstName}} </mat-label>
+                                    <input matInput formControlName="firstname">
+                                    <mat-error *ngIf="f.firstname.errors">
+                                        <ng-container *ngIf="f.firstname.errors.required">{{labelName?.FirstName}} is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.firstname.errors.pattern">{{labelName?.FirstName}} is invalid
+                                        </ng-container>
+                                        <ng-container *ngIf="f.firstname?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"  >
+                                    <mat-label>{{labelName?.LastName}} </mat-label>
+                                    <input matInput formControlName="lastname">
+                                    <mat-error *ngIf="f.lastname.errors">
+                                        <ng-container *ngIf="f.lastname.errors.required">{{labelName?.LastName}} is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.lastname.errors.pattern">{{labelName?.LastName}} is invalid
+                                        </ng-container>
+                                        <ng-container *ngIf="f.lastname?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill" >
+                                    <mat-label>{{labelName?.Email}}</mat-label>
+                                    <input matInput formControlName="emailid">
+                                    <mat-error *ngIf="f.emailid.errors">
+                                        <ng-container *ngIf="f.emailid.errors.required">EmailID is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.emailid.errors.pattern">EmailID is invalid
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"  >
+                                    <mat-label>{{labelName?.PhoneNo}}</mat-label>
+                                    <input matInput formControlName="phoneno">
+                                    <mat-error *ngIf="f.phoneno.errors">
+                                        <ng-container *ngIf="f.phoneno.errors.required">Phone No. is
+                                            Required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.phoneno.errors.pattern">Phone No. is
+                                            Invalid
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill" >
+                                    <mat-label>{{labelName?.Designation}}</mat-label>
+                                    <input matInput formControlName="designation">
+                                    <mat-error *ngIf="f.designation.errors">
+                                        <ng-container *ngIf="f.designation.errors.required">Designation is
+                                            required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.designation.errors.pattern">Designation is
+                                            invalid
+                                        </ng-container>
+                                        <ng-container *ngIf="f.designation?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                       
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-4 col-sm-12">
+                                <mat-form-field appearance="fill"  >
+                                    <mat-label> {{labelName?.CompanyName}} </mat-label>
+                                    <input matInput formControlName="companyname">
+                                    <mat-error *ngIf="f.companyname.errors">
+                                        <ng-container *ngIf="f.companyname.errors.required">{{labelName?.CompanyName}} is
+                                            required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.companyname.errors.pattern">{{labelName?.CompanyName}} is
+                                            invalid
+                                        </ng-container>
+                                        <ng-container *ngIf="f.companyname?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"  >
+                                    <mat-label>{{labelName?.Country}}</mat-label>
+                                    <mat-select formControlName="country">
+                                        <mat-select-filter class="two" (openedChange)="openedChange($event)"
+                                            *ngIf="select1.focused" [placeholder]="'Search'"
+                                            [displayMember]="'CountryName'" [array]="country"
+                                            (filteredReturn)="countryfilter1 =$event">
+                                        </mat-select-filter>
+                                        <mat-option *ngFor="let data of countryfilter1;"
+                                            [value]="data.CountryID">{{data.CountryName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.country.errors">
+                                        <ng-container *ngIf="f.country.errors.required">{{labelName?.Country}} is
+                                            required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.country.errors.pattern">{{labelName?.Country}} is
+                                            invalid
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"  >
+                                    <mat-label>{{labelName?.DomainShortCode}}</mat-label>
+                                    <input matInput maxlength="30" formControlName="domainshortcode">
+                                    <mat-error *ngIf="f.domainshortcode.errors">
+                                        <ng-container *ngIf="f.domainshortcode.errors.required">{{labelName?.DomainShortCode}} is
+                                            required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.domainshortcode.errors.pattern">{{labelName?.DomainShortCode}} is
+                                            invalid
+                                        </ng-container>
+                                        <ng-container *ngIf="f.domainshortcode?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"  >
+                                    <mat-label>{{labelName?.ContractStartDate}}</mat-label>
+                                    <input readonly formControlName="startDate" type="text" [min]="todayDate"
+                                        [matDatepicker]="startDate" matInput >
+                                    <mat-datepicker-toggle matSuffix [for]="startDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #startDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"  >
+                                    <mat-label>{{labelName?.ContractRenewalDate}}</mat-label>
+                                    <input readonly formControlName="endDate" type="text" [min]="todayDate"
+                                        [max]="maxDate" [matDatepicker]="endDate" matInput>
+                                    <mat-datepicker-toggle matSuffix [for]="endDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #endDate></mat-datepicker>
+                                    <mat-error *ngIf="f.endDate.errors">
+                                        <ng-container *ngIf="f.endDate.errors.required">{{labelName?.ContractRenewalDate}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+
+                                </mat-form-field>
+                                <mat-hint class="mat-error" style="margin-left: 15px;font-size: 11px;" *ngIf="errorval == true">Renewal Date Should be Greater than Start Date</mat-hint>
+                            </div>
+                        </div>
+                        <div class="row" style="font-size: 12px;padding-bottom: 10px;padding-top: 15px;">
+                            <div class="col col-10">
+                                <mat-label appearance="fill" >{{labelName?.ContractType}}</mat-label>
+                                <mat-radio-group formControlName="contracttype" style="margin-left:20px;">
+                                    <mat-radio-button  (change)="button($event)" value="Trial">Trial</mat-radio-button>
+                                    <mat-radio-button (change)="button($event)" value="License">License</mat-radio-button>
+                                </mat-radio-group>
+                                <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                            *ngIf="contracttype == true"> {{labelName?.ContractType}} is required</mat-hint>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-4 col-sm-12">
+                                <label>
+                                    <b>{{labelName?.BillingDetails}}</b>
+                                </label>
+                            </div>
+                        </div>
+                        <div formGroupName="sendingAddress">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-4 col-sm-12">
+                                    <label>
+                                        <b>{{labelName?.Shiptoaddress}}</b>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-8 col-md-4 col-sm-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.shipBuilding}} </mat-label>
+                                        <input matInput formControlName="Building" [ngClass]="{ 'shake': submittedForm && f?.Building?.errors }">
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Building').hasError('required')">
+                                            {{labelName?.shipBuilding}} is required
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Building').hasError('pattern')">
+                                            {{labelName?.shipBuilding}} is invalid
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Building').errors?.checknull">Whitespace not allowed.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.Street?.errors }">
+                                        <mat-label>{{labelName?.shipStreetName}} </mat-label>
+                                        <input matInput formControlName="Street">
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Street').hasError('required')">
+                                            {{labelName?.shipStreetName}} is required
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Street').hasError('pattern')">
+                                            {{labelName?.shipStreetName}} is invalid
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Street').errors?.checknull">Whitespace not allowed.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.Landmark?.errors }">
+                                        <mat-label>{{labelName?.shipLandmark}}</mat-label>
+                                        <input matInput formControlName="Landmark">
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Landmark').hasError('required')">
+                                            {{labelName?.shipLandmark}} is required
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Landmark').hasError('pattern')">
+                                            {{labelName?.shipLandmark}} is invalid
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.sendingAddress.get('Landmark').errors?.checknull">Whitespace not allowed.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.presentaddresscountry?.errors }">
+                                        <mat-label>{{labelName?.shipCountry}}</mat-label>
+                                        <mat-select formControlName="presentaddresscountry"
+                                            (selectionChange)="getPresentStates($event.value)" #select1>
+                                            <mat-select-filter class="two" (openedChange)="openedChange($event)"
+                                                *ngIf="select1.focused" [placeholder]="'Search'"
+                                                [displayMember]="'CountryName'" [array]="country"
+                                                (filteredReturn)="countryfilter1 =$event">
+                                            </mat-select-filter>
+                                            <mat-option *ngFor="let data of countryfilter1;"
+                                                [value]="data.CountryID">{{data.CountryName}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                        *ngIf="form.controls.sendingAddress.get('presentaddresscountry').hasError('required')">
+                                        <ng-container
+                                            *ngIf="form.controls.sendingAddress.get('presentaddresscountry').hasError('required')">
+                                            {{labelName?.shipCountry}} is required
+                                        </ng-container>
+
+                                    </mat-error>
+
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.presentaddressstate?.errors }">
+                                        <mat-label>State</mat-label>
+                                        <mat-select formControlName="presentaddressstate"
+                                            (selectionChange)="getPresentDistrict($event.value)" #select2>
+                                            <mat-select-filter class="two" [placeholder]="'Search'"
+                                                *ngIf="select2.focused" [displayMember]="'StateName'"
+                                                [array]="filterepresentStates"
+                                                (filteredReturn)="searchState =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of searchState;" [value]="data.StateID">
+                                                {{data.StateName}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                        *ngIf="form.controls.sendingAddress.get('presentaddressstate').hasError('required')">
+                                        <ng-container
+                                            *ngIf="form.controls.sendingAddress.get('presentaddressstate').hasError('required')">
+                                            State is required
+                                        </ng-container>
+
+                                    </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.presentaddressdistrict?.errors }">
+                                        <mat-label>{{labelName?.shipCity}}</mat-label>
+                                        <mat-select formControlName="presentaddressdistrict"
+                                            (selectionChange)="getPresentPincode($event.value)" #select3>
+                                            <mat-select-filter class="two" [placeholder]="'Search'"
+                                                *ngIf="select3.focused" [displayMember]="'Districtname'"
+                                                [array]="filtereddistrict"
+                                                (filteredReturn)="searchdistrict =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of searchdistrict;"
+                                                [value]="data.DistrictId">{{data.Districtname}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                        *ngIf="form.controls.sendingAddress.get('presentaddressdistrict').hasError('required')">
+                                        <ng-container
+                                            *ngIf="form.controls.sendingAddress.get('presentaddressdistrict').hasError('required')">
+                                            {{labelName?.shipCity}} is required
+                                        </ng-container>
+
+                                    </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.presentaddresspincode?.errors }">
+                                        <mat-label>{{labelName?.shipPincode}}</mat-label>
+                                        <mat-select formControlName="presentaddresspincode" [(ngModel)]="pincodevar"
+                                            #select4>
+                                            <mat-select-filter class="two" [placeholder]="'Search'"
+                                                *ngIf="select4.focused" [displayMember]="'Pincode'"
+                                                [array]="filtereddPincode"
+                                                (filteredReturn)="searchzipcode =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of searchzipcode;" [value]="data.Pincode">
+                                                {{data.Pincode}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="form.controls.sendingAddress.get('presentaddresspincode').hasError('required')">
+                                            <ng-container
+                                                *ngIf="form.controls.sendingAddress.get('presentaddresspincode').hasError('required')">
+                                                {{labelName?.shipPincode}} is required
+                                            </ng-container>
+
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 10px;" *ngIf="permanentForm">
+                            <div class="col-lg-8 col-md-4 col-sm-12">
+                                <label>
+                                    <b>{{labelName?.Billtoaddress}}</b>
+                                </label>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-checkbox class="example-margin" color="primary" [checked]="checked"
+                                    formControlName="BillSameAsShipAddress" value="checked"
+                                    (change)="samePresentAddPermanent($event.checked)">
+                                    {{labelName?.sameasabove}}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <div formGroupName="billingAddress" *ngIf="permanentForm">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-4 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.Building?.errors }">
+                                        <mat-label>{{labelName?.billBuilding}}</mat-label>
+                                        <input matInput formControlName="Building">
+                                        
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Building').hasError('required')">
+                                            {{labelName?.billBuilding}} is required
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Building').hasError('pattern')">
+                                            {{labelName?.billBuilding}} is invalid
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Building').errors?.checknull">Whitespace not allowed.
+                                        </mat-error>
+                                        
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.Street?.errors }">
+                                        <mat-label>{{labelName?.billStreet}}</mat-label>
+                                        <input matInput formControlName="Street">
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Street').hasError('required')">
+                                            {{labelName?.billStreet}} is required
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Street').hasError('pattern')">
+                                            {{labelName?.billStreet}} is invalid
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Street').errors?.checknull">Whitespace not allowed.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.Landmark?.errors }">
+                                        <mat-label>{{labelName?.billLandmark}}</mat-label>
+                                        <input matInput formControlName="Landmark">
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Landmark').hasError('required')">
+                                            {{labelName?.billLandmark}} is required
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Landmark').hasError('pattern')">
+                                            {{labelName?.billLandmark}} is invalid
+                                        </mat-error>
+                                        <mat-error *ngIf="form.controls.billingAddress.get('Landmark').errors?.checknull">Whitespace not allowed.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.presentaddresscountry?.errors }">
+                                        <mat-label>{{labelName?.billCountry}}</mat-label>
+                                        <mat-select formControlName="presentaddresscountry"
+                                            (selectionChange)="getPresentStates2($event.value)" #select5>
+
+                                            <mat-select-filter class="two" [placeholder]="'Search'"
+                                                *ngIf="select5.focused" [displayMember]="'CountryName'"
+                                                [array]="country"
+                                                (filteredReturn)="filteredcountry2 =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of filteredcountry2;"
+                                                [value]="data.CountryID">{{data.CountryName}}
+                                            </mat-option>                                          
+                                        
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="form.controls.billingAddress.get('presentaddresscountry').hasError('required')">
+                                            <ng-container
+                                                *ngIf="form.controls.billingAddress.get('presentaddresscountry').hasError('required')">
+                                                {{labelName?.billCountry}} is required
+                                            </ng-container>
+
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.presentaddressstate?.errors }">
+                                        <mat-label>State</mat-label>
+                                        <mat-select formControlName="presentaddressstate"
+                                            (selectionChange)="getPresentDistrict2($event.value)" #select6>
+                                            <mat-select-filter class="two" [placeholder]="'Search'"
+                                                *ngIf="select6.focused" [displayMember]="'StateName'"
+                                                [array]="filterepresentStates2"
+                                                (filteredReturn)="searchstate1 =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of searchstate1;" [value]="data.StateID">
+                                                {{data.StateName}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="form.controls.billingAddress.get('presentaddressstate').hasError('required')">
+                                            <ng-container
+                                                *ngIf="form.controls.billingAddress.get('presentaddressstate').hasError('required')">
+                                                State is required
+                                            </ng-container>
+
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.presentaddressdistrict?.errors }">
+                                        <mat-label>{{labelName?.billCity}}</mat-label>
+                                        <mat-select formControlName="presentaddressdistrict"
+                                            (selectionChange)="getPresentPincode2($event.value)" #select7>
+
+                                            <mat-select-filter class="two" [placeholder]="'Search'"
+                                                *ngIf="select7.focused" [displayMember]="'Districtname'"
+                                                [array]="filtereddistrict2"
+                                                (filteredReturn)="searchdistrict2 =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of searchdistrict2;"
+                                                [value]="data.DistrictId">{{data.Districtname}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="form.controls.billingAddress.get('presentaddressdistrict').hasError('required')">
+                                            <ng-container
+                                                *ngIf="form.controls.billingAddress.get('presentaddressdistrict').hasError('required')">
+                                                {{labelName?.billCity}} is required
+                                            </ng-container>
+
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-3 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f?.presentaddresspincode?.errors }">
+                                        <mat-label>{{labelName?.billPincode}}</mat-label>
+                                        <mat-select formControlName="presentaddresspincode" #select8>
+                                            <mat-select-filter class="two" [placeholder]="'Search'"
+                                                *ngIf="select8.focused" [displayMember]="'Pincode'"
+                                                [array]="filtereddPincode2"
+                                                (filteredReturn)="searchzipcode2 =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of searchzipcode2;" [value]="data.Pincode">
+                                                {{data.Pincode}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                        *ngIf="form.controls.billingAddress.get('presentaddresspincode').hasError('required')">
+                                        <ng-container
+                                            *ngIf="form.controls.billingAddress.get('presentaddresspincode').hasError('required')">
+                                            {{labelName?.billPincode}} is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.address?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                    </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-4 col-sm-12">
+                                <label>
+                                    <b>{{labelName?.Recipientemailids}}</b>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- <div class="row" formArrayName="emailAdd" 
+                        *ngFor="let add of emailAdd().controls; let i=index;">
+                            <div style="display: flex;justify-content: space-evenly;"
+                                [formGroupName]="i">
+                                <div class="col-lg-10 col-md-10 col-sm-10"
+                                    style="display: flex;justify-content: space-evenly;">
+                                    <div class="col-lg-11 col-md-11 col-sm-10">
+                                        <mat-form-field appearance="fill"  >
+                                            <mat-label>{{labelName?.EmailAddress}}</mat-label>
+                                            <input matInput type="text" formControlName="emailAddr">
+                                            <mat-error
+                                                *ngIf="emailAdd().controls[i].get('emailAddr').hasError('required')"> Email
+                                                is required</mat-error>
+                                                <mat-error
+                                                *ngIf="emailAdd().controls[i].get('emailAddr').hasError('pattern')"> Email
+                                                is invalid </mat-error>
+                                        </mat-form-field>
+                                        
+                                    </div>
+                               
+                                    <div class="col-lg-1 col-md-1 col-sm-2">
+                                        <div *ngIf="emailAdd().controls.length > 1"
+                                            style="padding: 2px;padding-top: 4px;border: 1px solid #839eb7;border-radius:4px;height: 30px;width: 30px;text-align: center;">
+                                            <mat-icon *ngIf="userConfig?.RemoveEmail" (click)="removeemailAdd(i)"
+                                                style="float: right;" color="primary">
+                                                remove_circle
+                                            </mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+
+                               
+                                <div class="col-lg-1 col-md-1 col-sm-2">
+                                    <div *ngIf="  this.emailAdd().at(i).value.emailAddr != '' && this.emailAdd().at(i).value.emailAddr != undefined &&
+                                    emailAdd().controls.length < 10 && i+1 == emailAdd().controls.length" 
+                                        style="padding: 2px;padding-top: 4px;border: 1px solid #839eb7;border-radius:4px;height: 30px;width: 30px;text-align: center;">
+                                        <mat-icon *ngIf="userConfig?.AddEmail" (click)="addemailAdd()"
+                                            style="float: right;" color="primary">
+                                            add_circle </mat-icon>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div *ngIf="emailAdd().errors" class="col-lg-3 col-md-3 col-sm-2">
+                                <mat-error style="font-size: 11px;" *ngIf="emailAdd().errors">
+                                    Email cannot be dublicate
+                                </mat-error>
+                            </div>
+                        </div> -->
+                       <div class="col-lg-6 col-md-6 col-sm-12">
+                            <mat-form-field appearance="fill">                            
+                            <mat-label>{{labelName?.EmailAddress}}</mat-label>  
+                            <mat-chip-list #chipList aria-label="Video keywords" multiple                            
+                            formControlName="emailAddr">                            
+                            <mat-chip *ngFor="let keyword of form.value.emailAddr" [selected]="keyword"                            
+                            [value]="keyword" (removed)="removeKeyword(keyword)">                            
+                            {{keyword}}                            
+                            <button matChipRemove>                            
+                            <mat-icon>cancel</mat-icon>                            
+                            </button>                            
+                            </mat-chip>                            
+                            <input placeholder="New Email..." [matChipInputFor]="chipList" #abcd id="abcd"
+                            (matChipInputTokenEnd)="addKeywordFromInput($event)"    >
+                            <!-- (keydown)="validEmailID($event)"                       -->
+                            </mat-chip-list> 
+                            <mat-error>
+                            <ng-container *ngIf="f.emailAddr?.errors?.required && validEmail == false">                            
+                            Email is required                            
+                            </ng-container>  
+                            </mat-error>
+                            <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                            *ngIf="validEmail == true;"> {{labelName?.EmailAddress}} is invalid</mat-hint>
+                            
+                            </mat-form-field>
+                            
+                            </div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                        <button *ngIf="!reset && userConfig?.Reset" id="reset" #reset class="btn btn-gray"
+                            mat-flat-button type="Reset">Reset</button>
+                        <button *ngIf="reset ? (userConfig?.Update) : (userConfig?.Save)" class="btn" mat-flat-button
+                            color="primary" (click)="submit('add')" type="button">{{ reset ? 'Update' :'Save'
+                            }}</button>
+                        <button *ngIf="(userConfig?.SaveAddNew) && !reset" class="btn outline" mat-stroked-button
+                            color="primary" (click)="submit('saveAndAddNew')">Save & Add New</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

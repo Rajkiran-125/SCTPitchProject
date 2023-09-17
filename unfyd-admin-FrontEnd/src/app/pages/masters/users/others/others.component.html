@@ -1,0 +1,159 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="userConfig?.Cancel" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+          <div class="row ">
+            <!-- <div class="col-1 text-center ">
+              <mat-icon class="gray cursorPointer" (click)="backspace()" >keyboard_backspace</mat-icon>
+            </div> -->
+            <div class="col-12 py-0">
+                <span class="d-flex">
+                    <span>                   
+                         <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon>
+                    </span>
+                    <span>
+                        <legend class="ml-2">Update User</legend>
+                    </span>
+                </span>
+            <div class="formGroup">
+                    <div class="masters_block">
+                        <app-steps [steps]="userFormSteps" [tabSelected]="'Contact Center Details'" (newsteps)="addnewsteps($event)" [isDialog]="isDialog" [id]="path"></app-steps>
+                        <div class="row ">
+                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex customdd">
+                                <mat-form-field appearance="fill" class="dropdownButtonField">
+                                    <mat-label>{{labelName?.ContactCenterLocation}}</mat-label>
+                                    <mat-select  formControlName="cclocationid" disableOptionCentering>
+                                      <mat-select-filter class="two" [placeholder]="'Search'" [displayMember]="'Location'" [array]="contactCenterLocation" (filteredReturn)="filteredList3 =$event"></mat-select-filter>
+                                    <mat-option *ngFor="let item of filteredList3" [value]="item.Actionable">
+                                      {{item.Location}}
+                                      </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span>
+                                  <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 dropdownButton"
+                                    style="width:40px;font-weight: bold;"  (click)="dropdown('CCL','Contact Center Location')" ><span class="icon-master_data_management"></span></button>
+                                </span>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex customdd">
+                                <mat-form-field appearance="fill" class="dropdownButtonField">
+                                    <mat-label>{{labelName?.Skill}}</mat-label>
+                                        <mat-select formControlName="skillsmap" disableOptionCentering multiple class="skillmap">
+                                        <mat-option *ngFor="let data of skillType" [value]="data.Id">{{data.SkillName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span>
+                                  <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 dropdownButton"
+                                    style="width:40px;font-weight: bold;"  (click)="dropdown('Skills','Skill')" ><span class="icon-master_data_management"></span></button>
+                                </span>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex customdd">
+                                <mat-form-field appearance="fill" class="dropdownButtonField">
+                                    <mat-label>{{labelName?.Group}}</mat-label>
+                                    <mat-select formControlName="groupid" disableOptionCentering multiple class="skillmap">
+                                        <mat-option *ngFor="let data of getGroupList" [value]="data.GroupID">
+                                            {{data.GroupName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span>
+                                  <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 dropdownButton"
+                                    style="width:40px;font-weight: bold;"  (click)="dropdown('UG','User Groups')" ><span class="icon-master_data_management"></span></button>
+                                </span>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex customdd">
+                                <mat-form-field appearance="fill" class="dropdownButtonField">
+                                    <mat-label>{{labelName?.Designation}}</mat-label>
+                                    <mat-select formControlName="designation" disableOptionCentering (selectionChange) = "getRM($event.value)">
+                                      <mat-select-filter class="two" [placeholder]="'Search'" [displayMember]="'Value'"  [array]="getDesignation" (filteredReturn)="filteredList4 =$event"></mat-select-filter>
+                                        <mat-option *ngFor="let item of filteredList4" [value]="item.Id">
+                                          {{item.Value}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span>
+                                  <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 dropdownButton"
+                                    style="width:40px;font-weight: bold;"  (click)="dropdown('HY','Hierarchy')" ><span class="icon-master_data_management"></span></button>
+                                </span>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 d-flex customdd">
+                                <mat-form-field appearance="fill" class="dropdownButtonField">
+                                    <mat-label>{{labelName?.ReportingMgr}}</mat-label>
+                                    <mat-select formControlName="rmid" disableOptionCentering>
+                                      <mat-select-filter class="two" [placeholder]="'Search'" [displayMember]="'Value'" [array]="getRMList" (filteredReturn)="filteredList5 =$event"></mat-select-filter>
+                                        <mat-option *ngFor="let item of filteredList5" [value]="item.Id">
+                                          {{item.Value}}
+                                        </mat-option>  
+                                    </mat-select>
+                                </mat-form-field>
+                                <span>
+                                  <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 dropdownButton"
+                                    style="width:40px;font-weight: bold;"  (click)="dropdown('HY','Hierarchy')" ><span class="icon-master_data_management"></span></button>
+                                </span>
+                            </div> 
+                            <div class="col-lg-4 col-md-6 col-sm-12 customdd">
+                                <mat-form-field appearance="fill">
+                                    <mat-label> {{labelName?.CRMId}}</mat-label>
+                                    <input matInput formControlName="crmid" appTitleCase>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 dropdown customdd">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.TimeZone}}</mat-label>
+                                    <mat-select formControlName="timezone" >
+                                      <mat-select-filter class="two"  [placeholder]="'Filter'" [displayMember]="'text'" [array]="timeZones" (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+                                        <mat-option *ngFor="let item of filteredList2" [value]="item.text">
+                                          {{item.text}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                      
+                        <div class="row" *ngIf="IsVoiceChannel == true">
+  
+                            <div class="col-lg-4 col-md-4 col-sm-12 dropdown customdd">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Extension}}</mat-label>                                    
+                                    <input matInput  appTitleCase>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 customdd">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.VoiceAdapters}}</mat-label>
+                                    <mat-select disableOptionCentering>
+                                        
+                                      </mat-select>
+                                </mat-form-field>
+
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 customdd">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.SRNumber}}</mat-label>
+                                    <mat-select disableOptionCentering>
+                                        
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                      
+
+
+                    </div>
+            </div>
+            <div class="btn-group" >
+                <!-- <button *ngIf="userConfig?.Cancel"class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                <button *ngIf="!reset && userConfig?.Reset" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button>
+                <button *ngIf="userConfig?.Save" class="btn" mat-flat-button color="primary" (click)="submit()" type="button">{{labelName?.Save}}</button>
+                <button *ngIf="userConfig?.Next" class="btn outline" mat-flat-button color="primary" (click)="Next()" type="button">{{labelName?.Next}}</button>
+            </div>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>

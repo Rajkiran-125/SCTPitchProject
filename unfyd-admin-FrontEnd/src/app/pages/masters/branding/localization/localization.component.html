@@ -1,0 +1,632 @@
+<app-loader *ngIf="loader"></app-loader>
+
+<div class="inner-container2">
+  <div class="wrapper wrapperForLocalization">
+
+    <div class="inner-container2 localization ">
+      <div class="row">
+        <div class="col-10">
+          <legend class="legendheader">{{changeModuleDisplayName}}</legend>
+        </div>
+      </div>
+
+      <div class="row my-2 stickyHeader">
+        <div class="col-lg-2 col-md-6 col-5 blue-dropdown">
+          <mat-form-field appearance="fill">
+            <mat-label>Application</mat-label>
+            <mat-select [(value)]="productID" (selectionChange)="selectedProduct($event.value); setEditFalse()"
+              panelClass="blue-panel">
+              <mat-option *ngFor="let data of productType" [value]="data?.Id">
+                {{data?.ProductName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-8 col-md-6 col-4 headerEdit">
+          <!-- <div class="d-flex align-items-center">
+          </div> -->
+          <i class="icon-edit editBtn mr-2" *ngIf="userConfig?.Edit && !edit && data"  (click)="changeEdit()"></i>
+          <!-- <button *ngIf="userConfig?.Edit && !edit && data" mat-stroked-button (click)="changeEdit()"
+            class=" gray addBtn editBtn"><mat-icon>edit</mat-icon></button> -->
+          <button *ngIf="userConfig?.Add && edit" mat-raised-button class="btn" (click)="CancelEdit()" class=" addBtn"
+            style="margin-right:10px;border:1px solid #eaeaea">Cancel</button>
+          <button *ngIf="userConfig?.Add && edit" mat-raised-button class="btn" color="primary" (click)="save()"
+            [disabled]="!allowedISD.includes(numberFormat)" class="saveBtn">&nbsp;&nbsp;Update&nbsp;&nbsp;</button>
+        </div>
+      </div>
+      <div *ngIf="data == true" class="localizationContent">
+        <div class="row my-3">
+          <div class="col-lg-10 col-md-12 col-12">
+            <div class=" darkWrapper">
+              <div class="search-form">
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0">
+                    <i class="icon-language margin--4 legendIcon"></i>
+                  </div>
+                  <div class="col-lg-11 pr-lg-5 col-md-10 col-sm-9 pl-0 d-flex justify-content-between">
+                    <span class="legend">{{labelName?.Language}}</span>
+                    <div>
+                      <i class="icon-settings mr-2 gray-color cursorPointer" (click)="languagesCommonApi()"></i>
+                      <i class="icon-reports d-none"></i>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-6 pl-0">
+                    <span class="legend" *ngIf="chnageLanguageStatus">Total enabled: {{totalEnabled}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-1 pl-0 text-center">
+                    <span *ngIf="chnageLanguageStatus" (click)="languagesAddMore()" data-toggle="collapse"
+                      href="#multiCollapseExample1" role="button" aria-expanded="false"
+                      aria-controls="multiCollapseExample1">
+                      <i class="icon-rejected"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0 d-none d-md-block"></div>
+                  <div class="col-lg-11 col-md-11 col-12 pl-2">
+                    <div class="d-none d-lg-block 2">
+                      <div class="d-flex align-items-center mobileContentCenter" *ngIf="!this.chnageLanguageStatus">
+                        <ng-container *ngFor="let item of languages  | slice:0:5">
+                          <ng-container *ngIf="languagesByTenant.includes(item.LanguageCode)">
+                            <span *ngIf="item?.Status"
+                              class="col-lg-2 col-md-2 col-sm-2 px-0 py-0 text-center allCenter cursorPointer"
+                              (click)="individualLanguageInfo(item.ModuleName,item.LanguageCode)">
+                              <span class=""
+                                [ngClass]="item?.Status ? 'languageChip':'languageChip languageChipGray cursorPointer'">{{
+                                item?.ModuleName| titlecase }}</span>
+                            </span>
+                          </ng-container>
+                        </ng-container>
+                        <div class="d-none d-md-block">
+                          <span class="btn mr-3 px-0 py-0 text-center allCenter" data-toggle="collapse"
+                            href="#multiCollapseExample1" role="button" aria-expanded="false"
+                            aria-controls="multiCollapseExample1">
+                            <button class="addMore btn" (click)="languagesAddMore()">{{ labelName?.ViewMore}}</button>
+                          </span>
+                          <span class="d-none mr-3 px-0 py-0 text-center allCenter" (click)="openDialog('addLanguage')">
+                            <span class="addMore">{{ labelName?.AddMore}}</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-none d-block d-lg-none 1">
+                      <div class="mobileContentCenter" *ngIf="!this.chnageLanguageStatus">
+                        <ng-container *ngFor="let item of languages  | slice:0:5">
+                          <ng-container *ngIf="languagesByTenant.includes(item.LanguageCode)">
+                            <span *ngIf="item?.Status" class="btn mr-3 mb-2 px-0 py-0 text-center allCenter "
+                              (click)="individualLanguageInfo(item.ModuleName,item.LanguageCode)">
+                              <button class=""
+                                [ngClass]="item?.Status ? 'languageChip addMore btn':'languageChip addMore btn languageChipGray cursorPointer'">{{
+                                item?.ModuleName| titlecase }}</button>
+                            </span>
+                          </ng-container>
+                        </ng-container>
+                        <span class="btn mr-3 px-0 py-0 text-center allCenter" data-toggle="collapse"
+                          href="#multiCollapseExample1" role="button" aria-expanded="false"
+                          aria-controls="multiCollapseExample1">
+                          <button class="addMore btn" (click)="languagesAddMore()">{{ labelName?.ViewMore}}</button>
+                        </span>
+                        <span class="d-none mr-3 px-0 py-0 text-center allCenter" (click)="openDialog('addLanguage')">
+                          <span class="addMore">{{ labelName?.AddMore}}</span>
+                        </span>
+                        <!-- </div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div></div>
+              </div>
+              <div class="collapse multi-collapse row m-0 mt-3 w-100" id="multiCollapseExample1"
+                *ngIf="chnageLanguageStatus">
+                <ng-container>
+                  <input hidden #exelUpload type="file" (change)="import($event)">
+                  <table class="table table-hover table-secondary">
+                    <tbody>
+                      <ng-container *ngFor="let item of languages; let i = index">
+                        <tr *ngIf="languagesByTenant.includes(item.LanguageCode)">
+                          <td>&nbsp;&nbsp;{{item.ModuleName |titlecase}}</td>
+                          <td class="text-center d-none">
+
+
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" *ngIf="item.Status">
+                              <mat-button-toggle value="bold" [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'"
+                                (click)="editview(item)" class="d-flex align-items-center"><mat-icon
+                                  class="primary-color mx-1 iconLanguages">edit</mat-icon></mat-button-toggle>
+                              <mat-button-toggle value="bold" class="d-flex align-items-center"
+                                [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" (click)="view(item)"><mat-icon
+                                  class="primary-color mx-1 iconLanguages">remove_red_eye</mat-icon></mat-button-toggle>
+                              <mat-button-toggle value="italic" class="d-flex align-items-center"
+                                [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'"
+                                (click)="export(item?.LanguageCode,'export')">
+                                <i #tooltip="matTooltip" matTooltip="Export"
+                                  class="icon-export mx-1 primary-color iconLanguages"></i>
+                              </mat-button-toggle>
+                              <mat-button-toggle value="underline" [ngClass]=" !edit ? 'disabledIT' : ''"
+                                class="d-flex align-items-center" (click)="exelUpload.click()">
+                                <i #tooltip="matTooltip" matTooltip="Import"
+                                  class="icon-import mx-1 primary-color iconLanguages"></i>
+                              </mat-button-toggle>
+                            </mat-button-toggle-group>
+
+                          </td>
+                          <td class="text-right">
+                            <div class="d-flex justify-content-end align-items-center">
+                              <mat-button-toggle-group [ngClass]=" !edit ? 'disabledIT' : ''"
+                                [value]="item?.AssignedProperty ? item?.AssignedProperty : textOrientationOptions[0].Key"
+                                class="toggleButtons mx-1" name="fontStyle" aria-label="Font Style">
+                                <mat-button-toggle value={{textOrientationOptions[0].Key}}
+                                  [ngClass]=" !edit ? 'disabledIT' : ''" class="d-flex align-items-center cursorPointer"
+                                  (click)="changeToOrientation(textOrientationOptions[0].Key,i)"
+                                  matTooltip="Align Left">
+                                  <mat-icon class="primary-color  iconLanguages">format_align_left</mat-icon>
+                                </mat-button-toggle>
+                                <mat-button-toggle value={{textOrientationOptions[1].Key}}
+                                  [ngClass]=" !edit ? 'disabledIT' : ''" class="d-flex align-items-center cursorPointer"
+                                  (click)="changeToOrientation(textOrientationOptions[1].Key,i)"
+                                  matTooltip="Align Right">
+                                  <mat-icon class="primary-color  iconLanguages">format_align_right</mat-icon>
+                                </mat-button-toggle>
+                              </mat-button-toggle-group>
+
+                              <span class="languageIcons cursorPointer" (click)="view(item)" matTooltip="Preview">
+                                <mat-icon class="mat-icon-value">remove_red_eye</mat-icon>
+                              </span>
+
+
+                              <span class="languageIcons cursorPointer" [ngClass]=" !edit ? 'disabledIT' : ''"
+                                (click)="editview(item)" matTooltip="Edit">
+                                <mat-icon class="mat-icon-value">edit</mat-icon>
+                              </span>
+
+
+
+                              <span class="languageIcons cursorPointer" [ngClass]=" !edit ? 'disabledIT' : ''"
+                                (click)="exelUpload.click()">
+                                <i #tooltip="matTooltip" matTooltip="Import"
+                                  class="icon-import mx-1 primary-color iconLanguages"></i>
+                              </span>
+                              <span class="languageIcons cursorPointer" (click)="export(item?.LanguageCode,'export')">
+                                <i #tooltip="matTooltip" matTooltip="Export"
+                                  class="icon-export mx-1 primary-color iconLanguages"></i>
+                              </span>
+                              <mat-slide-toggle id="toggle{{i}}" [disabled]="!edit"
+                                (toggleChange)="enableLanguage($event,i)" class="toggleBtn ml-3 cursorPointer"
+                                color="primary" mat-menu-panel [checked]="item?.Status"></mat-slide-toggle>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </ng-container>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+
+        <div class="row my-3">
+          <div class="col-lg-10 col-md-12 col-12">
+            <div class=" darkWrapper p-4">
+              <div class="search-form">
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0">
+                    <i class="icon-time_zone margin--4 legendIcon"></i>
+                  </div>
+
+                  <div class="col-lg-10 col-md-10 col-10 pl-0">
+                    <span class="legend">{{labelName?.TimeZone}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-1 pl-0 text-center">
+
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0"></div>
+
+
+                  <div class="col-lg-11 col-md-11 col-11 pl-0  normal-dropdown">
+
+                    <mat-form-field appearance="fill" class="width500" panelClass="normal-panel">
+                      <mat-select class="fontSizeContent" [(ngModel)]="selectedTimeZoneFormat" [disabled]="!edit"
+                        #timezonesearch>
+
+                        <mat-select-filter class="fontSizeContent" [placeholder]="'Search'" [displayMember]="'text'"
+                          [array]="timeZones" (filteredReturn)="filteredList2 =$event"
+                          *ngIf="timezonesearch.focused"></mat-select-filter>
+                        <mat-option class="" *ngFor="let item of filteredList2" [value]="item.text">
+                          <span class="fontSizeContent">{{item.text}}</span>
+                        </mat-option>
+
+
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+
+                <div class="row  fontSizeContent">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0"></div>
+                  <div class="col-lg-11 col-md-11 col-11 pl-0 d-flex align-items-center">
+                    <span>{{labelName?.Adjustfordaylightsavingtimeautomatically}}</span>
+                    <mat-slide-toggle class="toggleBtn mx-2" color="primary" mat-menu-panel [disabled]="!edit"
+                      (toggleChange)="changeDayLightSavingTime()"
+                      [checked]="selectedDayLightSavingTime"></mat-slide-toggle>
+                  </div>
+                </div>
+                <div></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+
+        <div class="row my-3">
+          <div class="col-lg-10 col-md-12 col-12">
+            <div class=" darkWrapper p-4">
+              <div class="search-form">
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0">
+                    <i class="icon-date_time margin--4 legendIcon"></i>
+                  </div>
+                  <div class="col-lg-10 col-md-10 col-10 pl-0">
+                    <span class="legend ">{{labelName?.DateTimeFormat}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-1 pl-0 text-center">
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0"></div>
+                  <div class="col-lg-11 col-md-11 col-11 pl-0">
+                    <div class="mb-2 d-none">
+                      <span>{{labelName?.Settimeautomatically}}</span>
+                      <mat-slide-toggle class="toggleBtn mx-2" color="primary" mat-menu-panel [disabled]="!edit"
+                        [checked]="setDateTimeAutomatically"></mat-slide-toggle>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-3 col-md-3 col-12 normal-dropdown paddingBottom0 marginbottom">
+                        <mat-form-field appearance="fill" class="">
+                          <mat-select class="fontSizeContent" [(ngModel)]="selectedDateFormats"
+                            panelClass="normal-panel" [disabled]="!edit">
+                            <mat-select-filter [placeholder]="'Search'" [displayMember]="'Value'" [array]="dateFormats"
+                              (filteredReturn)="filteredList3 =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of filteredList3" [value]="item.Key">
+                              <span class="fontSizeContent">{{dateTimeFormatDate | date:item.Value}}</span>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-3 col-md-3 col-12 normal-dropdown paddingBottom0 marginbottom">
+                        <mat-form-field appearance="fill">
+                          <mat-select class="fontSizeContent" [(ngModel)]="selectedTimeFormats"
+                            panelClass="normal-panel" [disabled]="!edit">
+                            <mat-select-filter [placeholder]="'Search'" [displayMember]="'Value'" [array]="timeFormats"
+                              (filteredReturn)="filteredList4 =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of filteredList4" [value]="item.Key">
+                              <span class="fontSizeContent">{{dateTimeFormatDate | date:item.Value}}</span>
+                            </mat-option>
+
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-5 col-md-5 col-8 normal-dropdown paddingBottom0">
+                        <mat-form-field appearance="fill" class="fontSizeContent">
+                          <input type="text" class="fontSizeContent" disabled matInput [value]="mixedDateTimeFormat" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+
+        <div class="row my-3 d-none">
+          <div class="col-lg-10 col-md-12 col-12">
+            <div class=" darkWrapper p-4">
+              <div class="search-form">
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0">
+                    <i class="icon-text_orientation margin--4 legendIcon"></i>
+                  </div>
+                  <div class="col-lg-10 col-md-10 col-10 pl-0">
+                    <span class="legend">{{labelName?.TextOrientation}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-1 pl-0 text-center">
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0"></div>
+                  <div class="col-lg-11 col-md-11 col-sm-11 pl-0 normal-dropdown paddingBottom0">
+                    <mat-form-field appearance="fill" class="width200">
+                      <mat-select [(ngModel)]="textOrientation" panelClass="normal-panel" [disabled]="!edit">
+                        <mat-option *ngFor="let item of textOrientationOptions" [value]="item.Key">{{item.Value |
+                          titlecase}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div></div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+
+        <div class="row my-3">
+          <div class="col-lg-10 col-md-12 col-12">
+            <div class=" darkWrapper p-4">
+              <div class="search-form">
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0">
+                    <i class="icon-number margin--4 legendIcon"></i>
+                  </div>
+                  <div class="col-lg-10 col-md-10 col-10 pl-0">
+                    <span class="legend">{{labelName?.MobileNumberFormat}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-1 pl-0 text-center">
+
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0"></div>
+                  <div class="col-lg-11 col-md-11 col-11 pl-0 normal-dropdown paddingBottom0 ">
+
+                    <div class="row d-flex align-items-center">
+                      <div class="col-lg-3 col-md-3 col-12 fontSizeContent">
+                        <span>{{labelName?.Yourcountrycode}}</span>
+                      </div>
+
+                      <div class="col-lg-9 col-md-9 col-12">
+                        <mat-form-field appearance="fill" class="width250">
+                          <mat-select class="fontSizeContent" [(ngModel)]="numberFormat" [disabled]="!edit"
+                            panelClass="normal-panel" (selectionChange)="changeCurrencyByPhoneNumber();"
+                            #mobilecountrycodesearch>
+                            <mat-select-trigger *ngIf="numberFormat != undefined">
+                              <span class="fontSizeContent flag-icon flag-icon-{{numberFormat| lowercase}}"></span>
+                              <span class="mx-2 fontSizeContent">{{valData('name')}}</span>
+                              <span class="fontSizeContent">+{{valData('dial_code')}}</span>
+                            </mat-select-trigger>
+
+                            <mat-select-filter [placeholder]="'Search'" [displayMember]="'name'" [array]="countryCode"
+                              (filteredReturn)="filteredList5 =$event"
+                              *ngIf="mobilecountrycodesearch.focused"></mat-select-filter>
+                            <mat-option *ngFor="let item of filteredList5" [value]="item.country_code">
+                              <span class="fontSizeContent flag-icon flag-icon-{{item.country_code| lowercase}}"></span>
+                              <span class="fontSizeContent mx-2">{{item?.name}}</span>
+                              <span class="fontSizeContent mx-2">+{{item?.dial_code}}</span>
+                            </mat-option>
+
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row mt-3">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0"></div>
+                  <div class="col-lg-11 col-md-11 col-11 pl-0 normal-dropdown paddingBottom0 ">
+
+                    <div class="row d-flex align-items-center ">
+                      <div class="col-lg-3 col-md-3 col-12 fontSizeContent">
+                        <span>{{labelName?.AllowedISD}}</span>
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-12">
+                        <mat-form-field appearance="fill" class="width250">
+                          <mat-select class="fontSizeContent" [(ngModel)]="allowedISD" [disabled]="!edit"
+                            panelClass="normal-panel" (selectionChange)="setAllowedISD();changeCurrencyByPhoneNumber()"
+                            multiple>
+
+                            <mat-select-trigger *ngIf="allowedISD.length > 0">
+                              <ng-container *ngFor="let item of allowedISD;let last = last">
+                                <ng-container *ngFor="let data1 of countryCode">
+                                  <ng-container *ngIf="data1.country_code == item">
+                                    <span
+                                      class="fontSizeContent flag-icon flag-icon-{{data1.country_code| lowercase}}"></span>
+                                    <span class="fontSizeContent mx-2">+{{data1?.dial_code}}
+
+                                      <span *ngIf="!last">,</span>
+                                    </span>
+                                  </ng-container>
+                                </ng-container>
+                              </ng-container>
+                            </mat-select-trigger>
+
+
+                            <mat-option *ngFor="let item of countryCode" [value]="item.country_code">
+                              <span class="fontSizeContent flag-icon flag-icon-{{item.country_code| lowercase}}"></span>
+                              <span class="fontSizeContent mx-2">{{item?.name}}</span>
+                              <span class="fontSizeContent mx-2">+{{item?.dial_code}}</span>
+                            </mat-option>
+
+                          </mat-select>
+                        </mat-form-field>
+                        <div class="errorMsg" *ngIf="!allowedISD.includes(numberFormat)">
+                          {{labelName?.YourCountryCodeIsNOtAvaialableInAllowedISD}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+
+        <div class="row my-3">
+          <div class="col-lg-10 col-md-12 col-12">
+            <div class=" darkWrapper p-4">
+              <div class="search-form">
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0">
+                    <i class="icon-currency margin--4 legendIcon"></i>
+                  </div>
+                  <div class="col-lg-10 col-md-10 col-10 pl-0">
+                    <span class="legend">{{labelName?.CurrencySymbolFormat}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-1 pl-0 text-center">
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0"></div>
+                  <div class="col-lg-11 col-md-11 col-11 pl-0 normal-dropdown paddingBottom0">
+                    <div class="row">
+                      <div class="col-lg-4 col-md-4 col-12 marginbottom">
+                        <mat-form-field appearance="fill" class="">
+                          <mat-select class="fontSizeContent" [(ngModel)]="currencySymbol" panelClass="normal-panel"
+                            [disabled]="!edit" #currenysymbolsearch>
+                            <mat-select-trigger *ngIf="currencySymbol != undefined">
+                              <span class="font-weight-bold primary-color fontSizeContent"
+                                [innerHTML]="currencyValues('symbol')">
+                              </span>
+                              <span class="mx-2 fontSizeContent">{{currencyValues('currency')}}</span>
+                            </mat-select-trigger>
+                            <mat-select-filter [placeholder]="'Search'" [displayMember]="'currency'"
+                              [array]="currency_list" *ngIf="currenysymbolsearch.focused"
+                              (filteredReturn)="filteredList6 =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of filteredList6" [value]="item.symbol">
+                              <span class="fontSizeContent font-weight-bold primary-color"
+                                [innerHTML]="item.symbol"></span>
+                              <span class="fontSizeContent mx-2">{{item?.currency}}</span>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-12 normal-dropdown paddingBottom0 marginbottom">
+                        <mat-form-field appearance="fill" class="">
+                          <mat-select class="fontSizeContent" [(ngModel)]="currencyFormat" panelClass="normal-panel"
+                            [disabled]="!edit" #currencyformatsearch>
+
+                            <mat-select-filter [placeholder]="'Search'" [displayMember]="'Value'"
+                              [array]="currency_format" *ngIf="currencyformatsearch.focused"
+                              (filteredReturn)="filteredList7 =$event"></mat-select-filter>
+                            <mat-option class="" *ngFor="let item of filteredList7" [value]="item.Key">
+                              <span class="fontSizeContent">{{item?.Value}}</span>
+                            </mat-option>
+
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div></div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+
+        <div class="row my-3 d-none">
+          <div class="col-lg-10 col-md-12 col-12">
+            <div class=" darkWrapper">
+              <div class="search-form">
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0">
+                    <i class="icon-language margin--4 legendIcon"></i>
+                  </div>
+                  <div class="col-lg-10 col-md-10 col-10 pl-0">
+                    <span class="legend">{{labelName?.Greetings}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-1 pl-0 text-center">
+                    <span *ngIf="chnageGreetingsStatus" (click)="greetingsAddMore()" data-toggle="collapse"
+                      href="#multiCollapseExample2" role="button" aria-expanded="false"
+                      aria-controls="multiCollapseExample2">x</span>
+                  </div>
+                </div>
+                <div class="row my-3">
+                  <div class="col-lg-1 col-md-1 col-1 text-center pr-0"></div>
+                  <div class="col-lg-11 col-md-11 col-11 pl-0">
+                    <div class="row align-items-center" *ngIf="!this.chnageGreetingsStatus">
+                      <ng-container *ngFor="let item of greetings">
+                        <span class="col-lg-2 col-md-2 col-2 px-0 py-2 text-center allCenter">
+                          <span class="" [ngClass]="item?.Status ? 'languageChip':'languageChip languageChipGray'">{{
+                            item?.ModuleName| titlecase }}</span>
+                        </span>
+                      </ng-container>
+                      <span class="col-lg-2 col-md-2 col-2 btn px-0 py-2 text-center allCenter" data-toggle="collapse"
+                        href="#multiCollapseExample2" role="button" aria-expanded="false"
+                        aria-controls="multiCollapseExample2">
+                        <button class="addMore btn" (click)="greetingsAddMore()">Add More</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div></div>
+              </div>
+              <div class="collapse multi-collapse row m-0 mt-3 w-100" id="multiCollapseExample2"
+                *ngIf="chnageGreetingsStatus">
+                <button mat-button (click)="addGreetings()">+</button>
+                <ng-container>
+                  <input hidden #exelUpload type="file" (change)="import($event)">
+
+                  <app-filter *ngIf="tabValue.length>0" component="" [role]="userDetails.role" [type]="type"
+                    [tabValue]="tabValue" [addBtn]="false"></app-filter>
+                  <app-loader *ngIf="loader"></app-loader>
+
+                  <div class="wrapper px-0 py-0 padding0" *ngIf="!loader">
+                    <div class="dataTable">
+                      <table>
+                        <thead>
+                          <tr *ngIf="tabValue.length>0">
+                            <ng-container *ngFor="let data of finalField; let i = index">
+                              <th class="column{{i}}">{{data.value}}</th>
+                            </ng-container>
+                          </tr>
+                          <tr *ngIf="noData">
+                            <th>No record found</th>
+                          </tr>
+                        </thead>
+                        <tbody *ngIf="tabValue.length>0">
+                          <ng-container
+                            *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                            <tr>
+                              <ng-container *ngFor="let val of finalField; let i = index">
+                                <td *ngIf="val.value == 'Sr No'" class="column{{i}}">
+                                  <span>{{((page-1)*(itemsPerPage))+(j+1)}}</span>
+                                </td>
+                                <td *ngIf="val.value == 'Actionable'" class="column{{i}}">
+                                </td>
+                                <td *ngIf="val.value !== 'Sr No' && val.value != 'Actionable'" class="column{{i}}">
+                                  <span>{{! isNumber(data[val.value]) ? (data[val.value] |
+                                    titlecase):data[val.value]}}</span>
+                                </td>
+
+                              </ng-container>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="pagination" *ngIf="tabValue.length>10">
+                    <pagination-controls (pageChange)="page = $event" previousLabel=""
+                      nextLabel=""></pagination-controls>
+                  </div>
+                </ng-container>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

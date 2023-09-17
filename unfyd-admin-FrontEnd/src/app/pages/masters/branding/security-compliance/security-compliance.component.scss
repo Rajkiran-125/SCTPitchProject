@@ -1,0 +1,152 @@
+.textInput {
+  width: 55px;
+  border: var(--border);
+  padding: 0 5px;
+  text-align: center;
+  font-size: 12px;
+  &.textLabel {
+    width: auto;
+    text-align: left;
+  }
+}
+.mat-slide-toggle.toggleBtn .mat-slide-toggle-bar {
+  border: 1px solid var(--border-color) !important;
+}
+
+.primary-container {
+  margin: 5px;
+  margin-bottom: 15px;
+}
+
+.primary-container mat-form-field {
+  margin-right: 10px;
+}
+
+.address-container {
+  margin-bottom: 15px;
+  padding: 5px;
+}
+
+.address-container div mat-form-field {
+  margin-right: 10px;
+}
+
+.address-container div {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.pre-code {
+  margin-top: 25px;
+}
+
+.addBtn {
+  min-width: 36px;
+  padding: 0;
+  margin-left: 10px;
+  .mat-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle !important;
+  }
+}
+::ng-deep {
+  .saveBtn {
+    .mat-button-wrapper {
+      font-weight: bold !important;
+    }
+  }
+}
+.label1 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  text-align: left;
+  letter-spacing: 0px;
+  margin: 0px 0px 20px;
+}
+
+
+.wrapper {
+  padding: 30px 40px !important;
+}
+.legendheader{
+  font-size: var(--title);
+}
+span {
+  font-size: var(--medium-font) !important;
+}
+label {
+  font-size: var(--content) !important;
+}
+
+strong {
+  font-size: var(--content) !important;
+}
+.noopadding {
+  padding: 15px 0 15px 15px !important;
+}
+.noCategoryFound {
+  background-color: var(--backgroud_color);
+  color: #212121;
+  padding: 8px 16px;
+  color: var(--black_color_80);
+  font-weight: bold;
+  white-space: nowrap;
+  font-size: 14px;
+  font-size: var(--medium-font);
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  width: 56rem;
+  margin: 0px;
+}
+.mat-accordion{
+  .mat-expansion-panel{
+    .mat-expansion-panel-header{
+      &:hover{
+        .onHeaderHover{
+         display: flex !important;
+        }
+       }
+    }
+    ul{
+      li{
+        &:hover{
+            .onListHover{
+             display: block !important;
+            }
+        }
+      }
+    }
+  }
+}
+
+.icon-add{
+  display: flex;
+  align-items: center;
+  color: var(--black_color_90) !important;
+  margin-left: 5px;
+  font-size: 16px !important;
+}
+
+@media screen and (max-width: 767px){
+  .inner-container{
+    padding: 0px 0px 5px 15px !important; 
+    margin-top: 0.5rem !important;
+
+    .wrapper{
+      padding: 0vh 2vh 5vh !important;
+      margin-bottom: 55px !important;
+
+      .mobileBtn{
+        padding: 5px 16px !important;
+      }
+
+      .align-items-center{
+        align-items: unset !important;
+      }
+    }
+
+  }
+  
+}

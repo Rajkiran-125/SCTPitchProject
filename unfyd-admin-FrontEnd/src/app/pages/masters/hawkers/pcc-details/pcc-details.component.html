@@ -1,0 +1,104 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <app-steps [steps]="hawkerFormSteps" [id]="path"></app-steps>
+    <div class="wrapper mat-form">
+        <form [formGroup]="form">
+            <legend>PCC Details</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.pccinitiaitondate.errors }">
+                            <mat-label>{{labelName?.InitiaitonDate}}</mat-label>
+                            <input (focus)="pccinitiaitondate.open()" (click)="pccinitiaitondate.open()" readonly
+                                formControlName="pccinitiaitondate" type="text" [matDatepicker]="pccinitiaitondate"
+                                datePickerFormat="DD-MM-YYYY" matInput [min]="minDate"
+                                (dateInput)="initiationDateChange($event.value)">
+                            <mat-datepicker-toggle matSuffix [for]="pccinitiaitondate"></mat-datepicker-toggle>
+                            <mat-datepicker #pccinitiaitondate></mat-datepicker>
+                            <mat-error *ngIf=" f.pccinitiaitondate.errors">
+                                <ng-container *ngIf="f.pccinitiaitondate.errors.required">Initiaiton date is
+                                    required
+                                </ng-container>
+                                <ng-container *ngIf="f.pccinitiaitondate.errors.mustNotMatch ">PCC Initiaiton date cannot be greater than PCC valid from date.</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.pccapprefno.errors }">
+                            <mat-label>{{labelName?.PCCReferenceNumber}}</mat-label>
+                            <input matInput formControlName="pccapprefno">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.PoliceStation}}</mat-label>
+                            <mat-select formControlName="policestationname" #select>
+                                <mat-option *ngFor="let data of policeStationlist" [value]="data.id">
+                                    {{data.policeStationName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.policeverificationstatus.errors }">
+                            <mat-label>{{labelName?.Verificationstatus}}</mat-label>
+                            <mat-select (selectionChange)="statusCheck($event.value)"
+                                formControlName="policeverificationstatus">
+                                <mat-option *ngFor="let data of masterConfig?.policeClearanceStatus" [value]="data.Key">
+                                    {{data.Key}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.pccvalidfromdate.errors }">
+                            <mat-label>{{labelName?.ValidFrom}}</mat-label>
+                            <input (focus)="pccvalidfromdate.open()" (click)="pccvalidfromdate.open()" readonly
+                                formControlName="pccvalidfromdate" type="text" [matDatepicker]="pccvalidfromdate"
+                                datePickerFormat="DD-MM-YYYY" matInput [min]="fromDate"
+                                (dateInput)="fromDateChange($event.value)" [disabled]="fromDatePicker">
+                            <mat-datepicker-toggle matSuffix [for]="pccvalidfromdate"></mat-datepicker-toggle>
+                            <mat-datepicker #pccvalidfromdate></mat-datepicker>
+                            <mat-error *ngIf="f?.pccvalidfromdate?.errors">
+                                <ng-container *ngIf="f?.pccvalidfromdate?.errors?.mustNotMatch ">PCC valid from date cannot be greater than PCC valid to date.</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.pccvalidtodate.errors }">
+                            <mat-label>{{labelName?.ValidTo}}</mat-label>
+                            <input (focus)="pccvalidtodate.open()" (click)="pccvalidtodate.open()"
+                                (dateChange)="statusValueCheck($event.value)" readonly formControlName="pccvalidtodate"
+                                type="text" [matDatepicker]="pccvalidtodate" datePickerFormat="DD-MM-YYYY" matInput
+                                [min]="toDate" [disabled]="toDatePicker">
+                            <mat-datepicker-toggle matSuffix [for]="pccvalidtodate"></mat-datepicker-toggle>
+                            <mat-datepicker #pccvalidtodate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="policeclearcertstatus"
+                                (change)="uploadDocument($event.checked, pccDocument, 'Clearance Certificate')">
+                                {{labelName?.PCCCertificate}}</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.policeclearcertstatus"  #tooltip="matTooltip" matTooltip="View" (click)="viewDocument('Clearance Certificate', 'document')">remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group" *ngIf="userConfig?.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-stroked-button (click)="submit('save')" type="button">Save</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit('next')" type="button">Next >></button>
+            </div>
+        </form>
+    </div>
+</div>

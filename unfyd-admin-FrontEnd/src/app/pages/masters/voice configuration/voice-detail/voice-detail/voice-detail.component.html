@@ -1,0 +1,126 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper" >
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" routerLinkActive="router-link-active"  *ngIf="userConfig?.Cancel" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+            <div class="row ">
+                <div class="col-12">
+                    <span class="d-flex backArrow">
+                        <mat-icon class="gray cursorPointer" (click)="back()" >keyboard_backspace</mat-icon>
+                        <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.VoiceConfiguration}} </legend>
+                      </span>
+
+                      <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="voiceConfigurationsteps" [moduletype]="'voice-configuration'" [id]="path"
+                            [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                            <div class="row marginXDesktop">
+                            <div class="col-lg-2 col-md-2 col-3 text-center pl-0">
+                                <div class="channelIcon cursorPointer" [matMenuTriggerFor]="menu" [ngStyle]="{'background-color': form.value.Profilepic ? common.color[form.value.Profilepic] : 'var(--gray_color)' }">
+                                  <i class="chooseIcon icon-call"
+                                    [ngStyle]="{'background-color': form.value.Profilepic ? common.color[form.value.Profilepic] : 'var(--gray_color)' }"></i>
+                                </div>
+                                <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                                  <div class="row m-2" (click)="$event.stopPropagation()">
+                                    <div class="col-12">
+                                      <span class="selectColor pl-0">Select Icon Color</span>
+                                    </div>
+                                    <div class="col-3 py-2 px-1" *ngFor="let item of common.colorArray">
+                                      <div class="row justify-content-center">
+                                        <div
+                                          class="cursorPointer colorTile d-flex align-items-center justify-content-center fontSize34PX"
+                                          [ngStyle]="{'background': common.color[item], 'height': '30px', 'width': '30px'}"
+                                          [ngClass]="item == form.value.Profilepic ? 'selectedIconOnAddDashboardMatMenu':''"
+                                          (click)="form.controls.Profilepic.patchValue(item); menu.close.emit()">
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </mat-menu>
+                            </div>
+
+                            <div class="col-10">
+                                <div class="form_content">
+                                    <div class="row">
+                                        <div class="col-lg-5 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.ChannelSourceName}}</mat-label>
+                                                <input matInput formControlName="voiceChannelSource">
+                                                <mat-error *ngIf="f.voiceChannelSource.errors">
+                                                    <ng-container *ngIf="f.voiceChannelSource.errors.required">{{labelName?.ChannelSourceName}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.voiceChannelSource?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.voiceChannelSource?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                      </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-5 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.AccountType}}</mat-label>
+                                                <mat-select  formControlName="AccountType">
+                                                  <mat-option *ngFor="let data of AccountType" [value]="data.Value">{{ data.Value }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.AccountType.errors">
+                                                  <ng-container *ngIf="f.AccountType.errors.required">{{labelName?.AccountType}} is required
+                                                  </ng-container>
+                                              </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-10 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.CWM}}</mat-label>
+                                                <input matInput formControlName="CallbackWebhookMessage">
+                                                <mat-error *ngIf="f.CallbackWebhookMessage.errors">
+                                                    <ng-container *ngIf="f.CallbackWebhookMessage.errors.required">{{labelName?.CWM}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.CallbackWebhookMessage?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.CallbackWebhookMessage?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-10 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.CWN}}</mat-label>
+                                                <input matInput formControlName="CallbackWebhookNotification">
+                                                <mat-error *ngIf="f.CallbackWebhookNotification.errors">
+                                                    <ng-container *ngIf="f.CallbackWebhookNotification.errors.required">{{labelName?.CWN}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.CallbackWebhookNotification?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.CallbackWebhookNotification?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        </div>
+
+                        <div class="btn-group my-3" >
+                            <!-- <button  class="btn btn-gray"  *ngIf="(userConfig?.Cancel)" (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">Cancel</button> -->
+                              <button *ngIf="! reset && userConfig?.Reset" class="btn btn-gray" mat-flat-button type="Reset" (click)="resetFunc()">Reset</button>
+                              <button *ngIf="(userConfig?.Save)" class="btn" (click)="savevoice('save')" mat-flat-button color="primary"  type="button">Save</button>
+                              <button *ngIf="(userConfig?.Next)" class="btn" (click)="savevoice('next')" mat-flat-button color="primary"  type="button">Next</button>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>

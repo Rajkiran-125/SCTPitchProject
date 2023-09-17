@@ -1,0 +1,83 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4 mt-3">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="userConfig?.Cancel" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+                <div class="row ">
+                    <div class="col-12">
+                        <span class="d-flex">
+                            <mat-icon class="gray cursorPointer stepbackArrow" (click)="backspace()">keyboard_backspace</mat-icon>
+
+                            <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.EmailConfiguration}}</legend>
+                        </span>
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="emailConfigurationsteps" [moduletype]="'email-configuration'" [id]="path"
+                               [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                            <div class="top_block"></div>
+
+                            <div class="row">
+
+                                <div class="col-lg-8 col-md-8 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Webhook_URL.errors }">
+                                        <mat-label>{{labelName?.WebhookURL}}</mat-label>
+                                        <input matInput formControlName="Webhook_URL" />
+                                        <mat-error *ngIf="f.Webhook_URL.errors">
+                                            <ng-container *ngIf="f.Webhook_URL.errors.required">{{labelName?.WebhookURL}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.Webhook_URL?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                            <ng-container *ngIf="f.Webhook_URL?.errors.pattern">{{labelName?.WebhookURL}} is invalid.
+                                            </ng-container>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                                <div class="row">
+                                <div class="col-lg-8 col-md-8 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Queue_Name.errors }">
+                                        <mat-label>{{labelName?.QueueName}}</mat-label>
+                                        <input matInput formControlName="Queue_Name" />
+                                        <mat-error *ngIf="f.Queue_Name.errors">
+                                            <ng-container *ngIf="f.Queue_Name.errors.required">{{labelName?.QueueName}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.Queue_Name?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Queue_API.errors }">
+                                        <mat-label>{{labelName?.QueueAPI}}</mat-label>
+                                        <input matInput formControlName="Queue_API" />
+                                        <mat-error *ngIf="f.Queue_API.errors">
+                                            <ng-container *ngIf="f.Queue_API.errors.required">{{labelName?.QueueAPI}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.Queue_API?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="Delete_Email_Post_Processing"
+                                (toggleChange)="form.updateValueAndValidity()" labelPosition="before">{{labelName?.DeleteEmailPostProcessing}}</mat-slide-toggle>
+                              </div>
+                        </div>
+                        <div class="btn-group my-3" >
+                            <!-- <button  *ngIf="userConfig?.Cancel" class="btn btn-gray" (click)="back()" routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                              <!-- <button  *ngIf="! reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>              -->
+                              <button *ngIf="userConfig?.SaveAddNew" (click)="saveEmail('saveAddNew')"   class="btn outline"   mat-stroked-button color="primary"    type="button">{{labelName?.SaveAddNew}}</button>
+                              <button  *ngIf="userConfig?.Save" (click)="saveEmail('save')"   class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Save}}</button>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

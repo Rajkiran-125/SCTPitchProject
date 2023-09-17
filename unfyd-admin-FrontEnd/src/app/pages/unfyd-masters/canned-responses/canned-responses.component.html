@@ -1,0 +1,72 @@
+<div class="inner-container">
+  <div class="wrapper">
+    <div style="margin-left: 81%;">
+      <button style="top: 37px" mat-stroked-button class="top-node add-btn" (click)="expandNode()">Expand All</button>
+      <button style="top: 37px" mat-stroked-button class="top-node" (click)="collapseNode()"> Collapse All</button>
+    </div>
+    <div>
+      <app-add-node (addedNode)="addNode($event)" [isTop]="true"></app-add-node>
+      <mat-tree #tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl"
+        class="example-tree mat-tree-position">
+
+
+        <mat-tree-node *matTreeNodeDef="let node">
+          <li class="mat-tree-node borderMain">
+            <span style="position:fixed;" #spanTrigger class="context-menu-trigger" #matTrigger="matMenuTrigger"
+              [matMenuTriggerFor]="contextMenu"></span>
+            <div  (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" [style.left]="contextMenuPosition.x"
+              [style.top]="contextMenuPosition.y">
+              <div class="setBorder"></div>
+              <button mat-icon-button disabled></button>
+              
+              <mat-icon class="type-icon" [attr.aria-label]="node.type + 'icon'">
+                {{ node.type ==='file' ? 'description' : 'folder' }}
+              </mat-icon>
+           
+
+           <input type="button" class="spanHover" value="{{node.Name}}"/> 
+              <mat-menu #contextMenu="matMenu">
+                <app-delete-node (deletedNode)="deleteNode($event)" [currentNode]="node"></app-delete-node>
+                <app-edit-node (edittedNode)="editNode($event)" [currentNode]="node"></app-edit-node>
+                <app-add-node (addedNode)="addChildNode($event)" [isTop]="false" [currentNode]="node"></app-add-node>
+              </mat-menu>
+            </div>
+          </li>
+        </mat-tree-node>
+        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild">
+          <li class="example tree-container borderMain">
+            <span style="position:fixed;" #spanTrigger class="context-menu-trigger" #matTrigger="matMenuTrigger"
+              [matMenuTriggerFor]="contextMenu"></span>
+            <div (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" [style.left]="contextMenuPosition.x"
+              [style.top]="contextMenuPosition.y">
+              <div class="mat-tree-node">
+                <div>
+                  <div class="setBorder2"></div>
+                  <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.Name">
+                    <mat-icon class="mat-icon-rtl-mirror">
+                      {{nestedTreeControl.isExpanded(node) ? 'indeterminate_check_box' : 'add_box'}}
+                    </mat-icon>
+                
+                  </button>
+                  <mat-icon class="type-icon" [attr.aria-label]="node.type + 'icon'">
+                    {{ node.type ==='file' ? 'description' : 'folder' }}
+                  </mat-icon>
+              
+                  <input type="button" class="spanHover" value="{{node.Name}}"/>
+                  <mat-menu #contextMenu="matMenu">
+                    <app-delete-node (deletedNode)="deleteNode($event)" [currentNode]="node"></app-delete-node>
+                    <app-edit-node (edittedNode)="editNode($event)" [currentNode]="node"></app-edit-node>
+                    <app-add-node (addedNode)="addChildNode($event)" [isTop]="false" [currentNode]="node">
+                    </app-add-node>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+            <ul [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)">
+              <ng-container matTreeNodeOutlet></ng-container>
+            </ul>
+          </li>
+        </mat-nested-tree-node>
+      </mat-tree>
+    </div>
+  </div>

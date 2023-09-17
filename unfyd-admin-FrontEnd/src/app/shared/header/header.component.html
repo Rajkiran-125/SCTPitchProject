@@ -1,0 +1,104 @@
+
+<header>
+  <span class="icon-drag-formcontrol d-block d-sm-none mr-3 marleft-neg" (click)="goToSubmenu()" ></span> 
+  <div class="logo" *ngIf="branding?.headerImgStatus"><img [attr.title]="branding?.headertext"
+      [attr.alt]="branding?.headertext" src="{{branding?.headerimg}}"></div>
+  <app-breadcrumb></app-breadcrumb>
+
+  <div class="action">
+    <!-- header desktop menu start-->
+    <div class="d-none d-md-flex">
+      <button *ngIf="userDetails?.RoleType == 'Field Executive' && userDetails?.DayEndStatus == false" class="end"
+        (click)="logout('Day End')" mat-flat-button color="warn">Day End</button>
+      <button mat-icon-button [matMenuTriggerFor]="language" #tooltip="matTooltip" matTooltip="Language">
+        <mat-icon>language</mat-icon>
+      </button>
+      <mat-menu class="dropdown" xPosition="before" #language="matMenu">
+        <ng-container *ngFor="let item of localizationData.languages">
+          <button *ngIf="languagesByTenant.includes(item.LanguageCode) && item.Status"  class="d-flex justify-content-between align-items-center" mat-menu-item
+          (click)="setlanguage(item.LanguageCode)">{{item.ModuleName |titlecase}}
+          <mat-icon class="mr-0" color="primary" *ngIf="item.LanguageCode == langSelected">check</mat-icon>
+        </button>
+        </ng-container>
+   
+      </mat-menu>
+      <button mat-icon-button [matMenuTriggerFor]="settings"  #tooltip="matTooltip" matTooltip="Settings">
+        <mat-icon>settings</mat-icon>
+      </button>
+      <mat-menu class="dropdown" xPosition="before" #settings="matMenu">
+        <button mat-menu-item (click)="setPassword('dashboardchangepassword')">Change Password</button>
+      </mat-menu>
+      <button class="d-none" mat-icon-button #tooltip="matTooltip" matTooltip="Notifications">
+        <mat-icon matBadge="0" matBadgeColor="primary" matBadgeSize="small">notifications_none</mat-icon>
+      </button>
+      <img class="avatar" [src]="UserProfile"  (click)="openProfileMenuDrawer.next(true)" #tooltip="matTooltip" matTooltip="Profile">
+      <mat-menu class="dropdown" xPosition="before" #menu="matMenu">
+        <div class="profile" (click)="$event.stopPropagation()">
+          <img class="profil-img" [src]="UserProfile">
+          <h3>{{userDetails?.FirstName}} {{userDetails?.LastName}}</h3>
+          <h5>{{userDetails?.RoleType}}</h5>
+          <button (click)="logout('')" mat-stroked-button color="warn">Logout</button>
+        </div>
+      </mat-menu>
+    </div>
+    <!-- header desktop menu end-->
+   
+
+
+    <!-- header mobile menu start-->
+    <div class="d-none d-flex d-md-none">
+      <img class="avatar" [src]="UserProfile"  (click)="openProfileMenuDrawer.next(true)" #tooltip="matTooltip" matTooltip="Profile">
+      <mat-menu class="dropdown" xPosition="before" #menu="matMenu">
+        <div class="profile" (click)="$event.stopPropagation()">
+          <img class="profil-img" [src]="UserProfile">
+          <h3>{{userDetails?.FirstName}} {{userDetails?.LastName}}</h3>
+          <h5>{{userDetails?.RoleType}}</h5>
+          <button (click)="logout('')" mat-stroked-button color="warn">Logout</button>
+        </div>
+      </mat-menu>
+      <span class="icon-Menu_Icon mx-3" mat-icon-button [matMenuTriggerFor]="headermenu"></span>
+      <mat-menu #headermenu="matMenu">
+        <div class="d-flex">
+          <button mat-menu-item [matMenuTriggerFor]="language" #tooltip="matTooltip" matTooltip="Language">
+            <mat-icon>language</mat-icon>
+            <span>Language</span>  
+          </button>
+        </div>
+        <div class="d-flex">        
+          <button mat-menu-item [matMenuTriggerFor]="settings"  #tooltip="matTooltip" matTooltip="Settings">
+            <mat-icon>settings</mat-icon>
+            <span>Setting</span>
+          </button>
+        </div>
+      </mat-menu>
+      
+      <mat-menu>
+        <button mat-menu-item>
+        <button *ngIf="userDetails?.RoleType == 'Field Executive' && userDetails?.DayEndStatus == false" class="end"
+          (click)="logout('Day End')" mat-flat-button color="warn">Day End</button>
+        </button>
+        <button mat-menu-item>
+          <button mat-icon-button [matMenuTriggerFor]="settings"  #tooltip="matTooltip" matTooltip="Settings">
+            <mat-icon>settings</mat-icon>
+          </button>
+          <span>Notification</span>
+        </button>
+      </mat-menu>
+      <mat-menu class="dropdown" xPosition="after" #language="matMenu">
+          <ng-container *ngFor="let item of localizationData.languages">
+            <button *ngIf="languagesByTenant.includes(item.LanguageCode) && item.Status"  class="d-flex justify-content-between align-items-center" mat-menu-item
+            (click)="setlanguage(item.LanguageCode)">{{item.ModuleName |titlecase}} 1
+            <mat-icon class="mr-0" color="primary" *ngIf="item.LanguageCode == langSelected">check</mat-icon>
+          </button>
+          </ng-container>
+      </mat-menu>
+      <mat-menu class="dropdown" xPosition="after" #settings="matMenu">
+        <button mat-menu-item (click)="setPassword('dashboardchangepassword')">Change Password</button>
+        <button class="d-none" mat-icon-button #tooltip="matTooltip" matTooltip="Notifications">
+          <mat-icon matBadge="0" matBadgeColor="primary" matBadgeSize="small">notifications_none</mat-icon>
+        </button>
+      </mat-menu>
+    </div>
+    <!-- header mobile menu end-->
+  </div>
+</header>

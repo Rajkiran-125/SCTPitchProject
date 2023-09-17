@@ -1,0 +1,140 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-12 d-flex pr-5">
+        <mat-icon class="cursorPointer gray pt-2" (click)="back()">keyboard_backspace</mat-icon>
+      <!-- </div> -->
+      <!-- <div> -->
+            <mat-accordion class="taskGroup w-100 pl-2 ">
+              <mat-expansion-panel  #panel0="matExpansionPanel" [expanded]="true" class="expansionPanelBorder mb-3" hideToggle>
+                <mat-expansion-panel-header *ngIf="!panel0.expanded" (click)="$event.preventDefault()">
+                  <div class="row justify-content-between w-100 " (click)="$event.preventDefault()">
+                    <div class="col-4 d-flex align-items-center header">
+                      <!-- <div class="header">Diwali Offer</div> -->
+                      <!-- <mat-panel-title> -->
+                        {{taskGroupInfo?.Name | titlecase}}
+                      <!-- </mat-panel-title> -->
+                    </div>
+                    <div class="col-4 d-flex justify-content-between pr-0 pl-5">
+                        <div class="refresh mt-2">
+                          <ui-switch  matTooltip="Status" [(ngModel)]="status" (change)="changeStatus()"
+                          size="small" defaultBgColor="#EAEAEA" checkedLabel="On" uncheckedLabel="Off" checkedTextColor="white"
+                          uncheckedTextColor="red"></ui-switch>
+                        </div>
+                        <div class="dashboardFilterButton" [matTooltip]="labelName?.copy ? labelName?.copy : 'Copy'" (click)="$event.preventDefault();clickedOn('closed');viewData('copyTaskGroupAPI')">
+                          <i class="icon-copy"></i>
+                        </div>
+                        <div class="dashboardFilterButton" [matTooltip]="labelName?.configureAPI ? labelName?.configureAPI : 'Configure API'" (click)="$event.preventDefault();configureApi();clickedOn('closed')">
+                          <i class="icon-channel_configuration"></i>
+                        </div>
+                        <div class="dashboardFilterButton" [matTooltip]="labelName?.edit ? labelName?.edit : 'Edit'" (click)="$event.preventDefault();clickedOn('closed');editTaskGroup()">
+                          <i class="icon-edit"></i>
+                        </div>
+                        <div class="dashboardFilterButton" (click)="$event.preventDefault();panel0.open()">
+                          <i class="icon-arrowDown"></i>
+                        </div>
+                    </div>
+                  </div>
+
+                </mat-expansion-panel-header>
+                <div class="row">
+                  <div class="col-3 doughnutChart p-3 d-grid align-items-center">
+                    <div echarts [options]="option1" class="chartHeight1"></div>
+                  </div>
+                  <div class="col-9 pl-4">
+                    <div class="row d-flex justify-content-between mt-3">
+                      <div class="col-4 d-flex align-items-center">
+                        <div class="header">{{taskGroupInfo?.Name | titlecase}}</div>
+                      </div>
+                      <div class="col-5 d-flex justify-content-between pr-3">
+                          <div class="refresh mt-2">
+                            <ui-switch  matTooltip="Status" [(ngModel)]="status" (change)="changeStatus()"
+                            size="small" defaultBgColor="#EAEAEA" checkedLabel="On" uncheckedLabel="Off" checkedTextColor="white"
+                            uncheckedTextColor="red"></ui-switch>
+                          </div>
+                          <div class="dashboardFilterButton" [matTooltip]="labelName?.copy ? labelName?.copy : 'Copy'"  (click)="viewData('copyTaskGroupAPI')">
+                            <i class="icon-copy"></i>
+                          </div>
+                          <div class="dashboardFilterButton" [matTooltip]="labelName?.configureAPI ? labelName?.configureAPI : 'Configure API'" (click)="configureApi()">
+                            <i class="icon-channel_configuration"></i>
+                          </div>
+                          <div class="dashboardFilterButton" [matTooltip]="labelName?.edit ? labelName?.edit : 'Edit'" (click)="editTaskGroup()">
+                            <i class="icon-edit"></i>
+                          </div>
+                          <div class="dashboardFilterButton" (click)="panel0.close()">
+                            <i class="icon-arrowUp"></i>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row mt-3 rechurnRuleTableHead">
+                      <div class="col-5">
+                        <span>{{labelName?.userGroup  ? labelName?.userGroup : 'User Group'}}</span>
+                      </div>
+                      <div class="col-7">
+                        <div class="row">
+                          <div class="col-5">
+                            {{labelName?.startTime  ? labelName?.startTime : 'Start Time'}}
+                          </div>
+                          <div class="col-5">
+                            {{labelName?.endTime  ? labelName?.endTime : 'End Time'}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-5">
+                        <ng-container *ngFor="let item of taskGroupInfo.UserGroup; let last = last">
+                          <ng-container *ngFor="let item1 of getGroupList">
+                            <span *ngIf="item == item1.GroupID">{{item1.GroupName}} <ng-container *ngIf="item == item1.GroupID && !last">,&nbsp;</ng-container></span>
+                          </ng-container>
+                        </ng-container>
+                      </div>
+                      <div class="col-7">
+                        <div class="row">
+                          <div class="col-5">
+                            {{taskGroupInfo?.StartDate ? (taskGroupInfo?.StartDate | dateFormat) : taskGroupInfo?.StartDate}} {{taskGroupInfo.StartTime}}
+                          </div>
+                          <div class="col-5">
+                            {{taskGroupInfo?.ExpiryDate ? (taskGroupInfo?.ExpiryDate | dateFormat) : taskGroupInfo?.ExpiryDate}} {{taskGroupInfo.ExpiryTime}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row rechurnRuleTableHead mt-1">
+                      <div class="col-12">
+                        {{labelName?.description ? labelName?.description : 'Description'}}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        {{taskGroupInfo.Description}}
+                      </div>
+                    </div>
+                    <div class="row mt-3 mb-2">
+                      <div class="category cursorPointer" (click)="viewData('filtercondition')">
+                        {{labelName?.filterCondition  ? labelName?.filterCondition : 'Filter Condition'}}
+                      </div>
+                      <div class="category cursorPointer" (click)="viewData('sortcondition')">
+                        {{labelName?.sortCondition ? labelName?.sortCondition : 'Sort Condition'}}
+                      </div>
+                      <div class="category cursorPointer" (click)="viewData('rechurnrule')">
+                        {{labelName?.rechurnRule  ? labelName?.rechurnRule : 'Rechurn Rule'}}
+                      </div>
+                      <!-- <div class="category cursorPointer" (click)="viewData('businesshours')">
+                        {{labelName?.businessHours  ? labelName?.businessHours : 'Business Hours'}}
+                      </div> -->
+                    </div>
+                  </div>
+                </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <app-masters [type]="'task'" [edit]="true" [taskGroupId]="path" [taskGroupInfo]="taskGroupInfo"></app-masters>
+      </div>
+    </div>
+  </div>
+</div>

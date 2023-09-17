@@ -1,0 +1,573 @@
+<!-- display labels from here -->
+
+  <!-- <app-loader *ngIf="loader"></app-loader>
+  <div class="allLabels" *ngIf="!loader">
+    <div class="row ">
+      <div class="col-12 d-flex justify-content-between align-items-center">
+      <span class="header">English</span>
+      <div>
+        <div class="buttonContainer" *ngIf="!edit">
+            <div class="dashboardFilterButton" (click)="edit = true">
+              <i matTooltip="Edit" class="icon-edit px-3"></i>
+            </div>
+            <div class="dashboardFilterButton">
+              <i matTooltip="Import" class="icon-import px-3"></i>
+            </div>
+            <div class="dashboardFilterButton">
+              <i matTooltip="Export" class="icon-export px-3"></i>
+            </div>
+
+        </div>
+        <div *ngIf="edit" class="d-flex align-items-center cancelApproveButtons">
+          <button class="btn btn-gray" mat-flat-button type="button" (click)="cancel()">Cancel</button>
+          <button class="btn ml-3" mat-flat-button color="primary" type="button" [disabled]="isLabelChanged()">Send For Approval</button>
+        </div>
+      </div>
+    </div>
+    </div>
+    <mat-accordion class="">
+      <ng-container *ngFor="let item of ParentModule|keyvalue; let first = first">
+        <mat-expansion-panel  #panel1 hideToggle class="border-bottom" [ngClass]="first ? ' border-top':''">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="d-flex justify-content-between">
+              <div>
+                <span>{{item?.key}}</span>
+                <mat-icon class="gray-color">{{panel1.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+              </div>
+              <div>
+                <mat-icon class="gray-color">{{panel1.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+                <span>{{item?.key}}</span>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-accordion class="">
+            <div class="ml-2" *ngFor="let item1 of item.value; let first1 = first">
+              <mat-expansion-panel  #panel2 hideToggle class="border-bottom" [ngClass]="first1 ? ' border-top':''">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="d-flex justify-content-between">
+                    <div>
+                      <span>{{item1}}</span>
+                      <mat-icon class="gray-color">{{panel2.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+                    </div>
+                    <div>
+                      <mat-icon class="gray-color">{{panel2.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+                      <span>{{item1}}</span>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <ng-container *ngFor="let item2 of defaultLabels; let first2 = first;let index2 = index">
+                  <div *ngIf="item2.ParentModule == item.key && item2.ModuleName == item1 && item2.DefaultLabelName"  style="background: var(--backgroud_color);">
+                    <div class="mx-4 py-3 d-flex justify-content-between border-bottom" [ngClass]="first2 ? ' border-top':''" >
+                      <div>
+                        {{item2?.DefaultLabelName}}
+                      </div>
+                      <div *ngIf="item2.TranslatedLabelName">
+                        <div *ngIf="!item2.Edit" (dblclick)="enableEditForLabel(index2)" [ngClass]="item2.IsEdit != item2.TranslatedLabelName ? 'editTextUnderline' : ''">
+                          {{item2?.DefaultLabelName}}
+                        </div>
+                        <div *ngIf="edit && item2.Edit">
+                          <input class="text-right inputLabel" type="text" [(ngModel)]="item2.DefaultLabelName">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </mat-expansion-panel>
+            </div>
+          </mat-accordion>
+        </mat-expansion-panel>
+      </ng-container>
+    </mat-accordion>
+  </div> -->
+<!-- display labels ends here -->
+
+<!-- add exteranla api starts from here -->
+
+
+<!-- <app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="row mb-3">
+      <div class="col-12">
+        <span class="header">Add New</span>
+        </div>
+    </div>
+    <form [formGroup]="form">
+      <div class="row mb-3">
+        <div class="col-12">
+        <mat-form-field appearance="fill">
+          <mat-label>Service Provider Name</mat-label>
+          <input matInput formControlName="serviceProviderName" >
+          <mat-error *ngIf="f.serviceProviderName.errors">
+            <ng-container *ngIf="f.serviceProviderName.errors.required">
+              Service Provider Name is required
+            </ng-container>
+            <ng-container *ngIf="f.serviceProviderName.errors.pattern">Service Provider Name is invalid.
+            </ng-container>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="primary-color font-weight-bold mb-2">Configure Api</div>
+          <app-postman (returnFormValue)="addItem($event)" [applyBorder]="true" [postmanData]="postmanData"></app-postman>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="primary-color font-weight-bold mb-2">Pricing Details</div>
+          <div class="outerClass p-4">
+              <div class="row small-font">
+                <div class="col-6">Characters</div>
+                <div class="col-2">Per 1000 Characters</div>
+                <div class="col-2">Total</div>
+              </div>
+              <div formArrayName="pricingDetails"
+              *ngFor="let item of form.get('pricingDetails')['controls']; let i = index; let first = first">
+              <div class="row"  [formGroupName]="i">
+                <div class="col-3">
+                  <mat-form-field appearance="fill">
+                    <mat-label>From</mat-label>
+                    <input type="number" matInput formControlName="from" (change)="enterPricingTotal(i)">
+                  </mat-form-field>
+                </div>
+                <div class="col-3">
+                  <mat-form-field appearance="fill">
+                    <mat-label>To</mat-label>
+                    <input type="number" matInput formControlName="to" (change)="enterPricingTotal(i)">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <mat-form-field appearance="fill">
+                    <mat-label>select</mat-label>
+                    <input matInput formControlName="perThousandChar" (change)="enterPricingTotal(i)">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <mat-form-field appearance="fill">
+                    <mat-label>select</mat-label>
+                    <input matInput formControlName="total" readonly >
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <div class="dashboardFilterButtonPrimaryOutline cursorPointer" (click)="addPricing()" *ngIf="first">
+                    <i class="icon-add"></i>
+                  </div>
+                  <div class="dashboardFilterButtonGrayOutline cursorPointer" (click)="deletePricing(i)" *ngIf="!first">
+                    <mat-icon class="red-color">delete</mat-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <button id="reset" #reset  class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+          <button class="btn mx-3" mat-flat-button color="primary" (click)="submit('insert')" [disabled]="form.invalid || objectKeys(dataFromPostman).length == 0">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div> -->
+
+<!-- add exteranla api ends from here -->
+
+
+
+<!-- landing dialog of common api start from here -->
+<!-- <app-loader *ngIf="loader"></app-loader>
+<div class="inner-container listOfCommonApi" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="row mb-3">
+      <div class="col-12 d-flex justify-content-between">
+        <span class="header">Settings</span>
+        <div>
+          <button class="btn ml-3" mat-flat-button color="primary" type="button">Add</button>
+        </div>
+      </div>
+    </div>
+      <div class="row matRadioStyleBorder matRadioStyle my-2" *ngFor="let item of allData" >
+        <div class="col-12 w-100 d-flex justify-content-between">
+          <div class="d-flex align-items-center">
+            <span class="headerBlack">{{item?.ServiceProvider}}</span>
+          </div>
+          <div class="d-flex align-items-center">
+              <div class="dashboardFilterButton mr-3" *ngIf="!selectedServiceProviderInfo" (click)="selectedServiceProviderInfo = item.ServiceProvider">
+                <mat-icon class="d-flex align-items-center justify-content-center">remove_red_eye</mat-icon>
+              </div>
+              <div class="dashboardFilterButton mr-3" *ngIf="selectedServiceProviderInfo == item.ServiceProvider" (click)="selectedServiceProviderInfo = ''">
+                <mat-icon class="d-flex align-items-center justify-content-center">close</mat-icon>
+              </div>
+            <mat-radio-button [checked]="item.ServiceProvider == selectedServiceProvider" (click)="setDefault(item.ServiceProvider)"></mat-radio-button>
+          </div>
+        </div>
+
+        <div class="col-12  mt-2" *ngIf="selectedServiceProviderInfo == item.ServiceProvider">
+          <div class="row">
+            <div class="col-12 primary-color font-weight-bold my-1">Configure Api</div>
+          </div>
+          <div class="row">
+            <div class="col-12 my-1">Method: {{item?.Method}}</div>
+            <div class="col-12 my-1">Request URL: {{item?.RequestUrl}}</div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 mb-2">Header</div>
+
+            <div class="col-12">
+              <div class="dataTableToDisplay">
+                <table>
+                    <thead>
+                        <tr>
+                          <th>Key</th>
+                          <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item1 of item.Header">
+                        <td>{{item1.key}}</td>
+                        <td>{{item1.value}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+  </div>
+</div> -->
+<!-- landing dialog of common api ends from here -->
+
+
+<!-- add more languages starts here -->
+
+<!-- <app-loader *ngIf="loader"></app-loader>
+<div class="px-4">
+  <div class="row mb-3" *ngIf="!loader">
+    <span class="header">{{labelName?.AddMoreLanguages}}</span>
+  </div>
+  <div class="row localizationAddMoreButton">
+    <div class="dataTableForLocalizationAddMore w-100">
+      <table>
+          <thead>
+              <tr *ngIf="localizationData.length>0">
+                <th class="column1">{{labelName?.Language}}</th>
+                <th class="column2">{{labelName?.Orientation}}</th>
+                <th class="column3">{{labelName?.View}}</th>
+                <th class="column4">{{labelName?.Default}}</th>
+                <th class="column5">{{labelName?.Status}}</th>
+                <th class="column6"></th>
+              </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of localizationData; let i = index">
+              <ng-container *ngIf="languagesByTenant.includes(item.LanguageCode)">
+                <tr>
+                  <td>{{item?.ModuleName}}</td>
+                  <td class="text-center">
+                    <mat-button-toggle-group [value]="item?.AssignedProperty ? item.AssignedProperty : 'left'"  class="toggleButtons mx-1" name="fontStyle" aria-label="Font Style">
+                      <mat-button-toggle value='left' class="d-flex align-items-center text-center cursorPointer" matTooltip="Align Left" (click)="item.AssignedProperty = 'left'">
+                          <mat-icon class="iconLanguages gray-color mt-3" >format_align_left</mat-icon>
+                      </mat-button-toggle>
+                      <mat-button-toggle value='right' class="d-flex align-items-center text-center cursorPointer" matTooltip="Align Right" (click)="item.AssignedProperty = 'right'">
+                          <mat-icon class="iconLanguages gray-color mt-3" >format_align_right</mat-icon>
+                      </mat-button-toggle>
+                    </mat-button-toggle-group>
+                  </td>
+                  <td class="cursorPointer text-center"><mat-icon matTooltip="{{labelName?.View}}" class="mat-icon-value gray-color" >remove_red_eye</mat-icon></td>
+                  <td class="cursorPointer text-center"><i matTooltip="{{labelName?.Default}}" [ngClass]="item?.AdditionalPropertyValue ? 'primary-color font-weight-bold' : 'gray-color'" class="icon-rightTickInsideCircle mx-1 iconLanguages" (click)="makeDefault(item.ModuleName)"></i></td>
+                  <td class="cursorPointer font-weight-bold" [ngClass]="item?.Status ? 'green-color' : 'gray-color'">{{item?.Status ? labelName?.Active : labelName?.Inactive}}</td>
+                  <td>
+                    <mat-slide-toggle id="toggle{{i}}" #toggle (toggleChange)="enableLanguage(i)" [(ngModel)]="item.Status"
+                    class="toggleBtn ml-3 cursorPointer" color="primary"></mat-slide-toggle>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </tbody>
+      </table>
+    </div>
+  </div>
+</div> -->
+<!-- add more languages ends here -->
+
+<!-- manual add task starts here -->
+<!-- <app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-12">
+        <legend class="size">Add New Task</legend>
+      </div>
+    </div>
+    <form [formGroup]="form">
+      <div class="formGroup mt-3">
+        <div class="row">
+          <div class="col-lg-8 col-md-8 col-sm-12">
+            <mat-form-field appearance="fill" class="dropdownButtonField">
+              <mat-label>{{labelName?.selectCampaign ? labelName?.selectCampaign : 'Select Campaign'}}</mat-label>
+              <mat-select formControlName="selectCampaign">
+                <mat-option value="1">1</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <mat-form-field appearance="fill" class="dropdownButtonField">
+              <mat-label>{{labelName?.taskID ? labelName?.taskID : 'Task ID'}}</mat-label>
+              <input formControlName="taskID" matInput disabled readonly>
+            </mat-form-field>
+          </div>
+          <ng-container *ngIf="taskGroupInfo?.TaskGroupFields?.length > 0">
+            <div *ngFor="let formField of taskGroupInfo?.TaskGroupFields;let i =index" class="col-lg-4 col-md-4 col-sm-12">
+              <div [ngSwitch]="formField.type">
+                <div *ngSwitchCase="'input'">
+                  <div class="" *ngIf="(form.get(formField.nestedControl)?.value == null || form.get(formField.nestedControl)?.value) && form.get(formField.nestedToControl)?.value == formField?.nestedToValue">
+                    <mat-form-field appearance="fill" *ngIf="formField.dataType !== 'hidden'">
+                      <mat-label>{{formField?.label}}</mat-label>
+                      <input matInput [readonly]="formField.LockControl" [type]="formField.dataType" formControlName={{formField.formControlName}}>
+                      <mat-hint class="text-error" *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('required')">
+                        {{formField?.label}} is required
+                      </mat-hint>
+                      <mat-hint class="text-error" *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('pattern')">
+                        {{formField?.label}} is invalid
+                      </mat-hint>
+                    </mat-form-field>
+                    <input *ngIf="formField.dataType === 'hidden'" [type]="formField.dataType"
+                      formControlName={{formField.formControlName}} />
+                  </div>
+                </div>
+
+                <div *ngSwitchCase="'textbox'">
+                  <div class="" *ngIf="(form.get(formField.nestedControl)?.value == null || form.get(formField.nestedControl)?.value) && form.get(formField.nestedToControl)?.value == formField?.nestedToValue">
+                    <mat-form-field appearance="fill" *ngIf="formField.dataType !== 'hidden'">
+                      <mat-label>{{formField?.label}}</mat-label>
+                      <input matInput [disabled]="formField.LockControl" formControlName={{formField.formControlName}}>
+                      <mat-hint class="text-error"
+                        *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('required')">
+                        {{formField?.label}} is required
+                      </mat-hint>
+                      <mat-hint class="text-error"
+                        *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('pattern')">
+                        {{formField?.label}} is invalid
+                      </mat-hint>
+                    </mat-form-field>
+                    <input *ngIf="formField.dataType === 'hidden'" [type]="formField.dataType"
+                      formControlName={{formField.formControlName}} />
+                  </div>
+                </div>
+
+              <div *ngSwitchCase="'checkbox'">
+
+                <div class="">
+                    <mat-checkbox [disabled]="formField.LockControl" (change)="changeCheckboxNestedControlMandatoryStatus(i)" class="formCheckbox" color="primary" formControlName={{formField.formControlName}} [ngClass]="form.get(formField.formControlName)?.touched && form.get(formField.formControlName).errors?.required ?'' : 'mb-3'">{{formField.label}}</mat-checkbox>
+                    <mat-error class="text-error errorFontSize mb-3" *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName).errors?.required">
+                      {{formField?.label}} is required
+                    </mat-error>
+                </div>
+              </div>
+
+                <div *ngSwitchCase="'button'" class="pb-3">
+                  <div class="" *ngIf="(form.get(formField.nestedControl)?.value == null || form.get(formField.nestedControl)?.value) && form.get(formField.nestedToControl)?.value == formField?.nestedToValue">
+                    <button class="btn" mat-flat-button color="primary"
+                    [disabled]="isDisable(i)" (click)="buttonClick(formField.label)"
+                    type="button">{{formField?.label}}</button>
+                  </div>
+                </div>
+
+                <div *ngSwitchCase="'list'">
+                <div class="" *ngIf="formField.Dynamic && (form.get(formField.nestedControl)?.value == null || form.get(formField.nestedControl)?.value) && form.get(formField.nestedToControl)?.value == formField?.nestedToValue">
+                    <div>
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{formField?.label}}</mat-label>
+                            <mat-select [disabled]="formField.LockControl" formControlName={{formField.formControlName}}  (selectionChange)="dropdownChanged(formField.formControlName,formField)">
+                              <ng-container *ngFor="let data of formField.listOfValues | orderBy" >
+                                <mat-option [value]="data.value">
+                                    {{data.key}}
+                                </mat-option>
+                              </ng-container>
+                            </mat-select>
+                            <mat-error class="text-error" *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('required')">
+                              {{formField?.label}} is required
+                            </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                <div class=""
+                  *ngIf="!formField.Dynamic && (form.get(formField.nestedControl)?.value == null || form.get(formField.nestedControl)?.value) && form.get(formField.nestedToControl)?.value == formField?.nestedToValue">
+                  <div>
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{formField?.label}}</mat-label>
+                      <mat-select [disabled]="formField.LockControl" formControlName={{formField.formControlName}}  (selectionChange)="dropdownChanged(formField.formControlName,formField)">
+                        <ng-container *ngFor="let data of formField.listOfValues | orderBy">
+                          <mat-option *ngIf="
+                              (data.parent1FormControl === null && data.parent2FormControl === null && data.parent3FormControl === null)
+                              " [value]="data.value">
+                            {{data.key}}
+                          </mat-option>
+                          <mat-option *ngIf="
+                              (data.parent1FormControl !== null && data.parent2FormControl === null
+                              && data.parent3FormControl === null
+                              && (form.get(data.parent1FormControl)?.value === data.parent1Value))
+                              " [value]="data.value">
+                            {{data.key}}
+                          </mat-option>
+                          <mat-option *ngIf="(data.parent1FormControl !== null && data.parent2FormControl !== null
+                          && data.parent3FormControl === null && (
+                                (form.get(data.parent1FormControl)?.value === data.parent1Value) &&
+                                (form.get(data.parent2FormControl)?.value === data.parent2Value)
+                                ))
+                              " [value]="data.value">
+                            {{data.key}}
+                          </mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <mat-error class="text-error"
+                        *ngIf="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.required">
+                        {{formField?.label}} is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+                <div *ngSwitchCase="'datetime'">
+                  <div class="" *ngIf="(form.get(formField.nestedControl)?.value == null || form.get(formField.nestedControl)?.value) && form.get(formField.nestedToControl)?.value == formField?.nestedToValue">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{formField?.label}}</mat-label>
+                      <input matInput [disabled]="formField.LockControl" [matDatepicker]="dp" readonly formControlName={{formField.formControlName}}>
+                      <mat-datepicker-toggle [disabled]="formField.LockControl" matSuffix [for]="dp"></mat-datepicker-toggle>
+                      <mat-datepicker #dp></mat-datepicker>
+                      <mat-hint class="text-error" *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('required')">
+                        {{formField?.label}} is required
+                      </mat-hint>
+                      <mat-hint class="text-error" *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('pattern')">
+                        {{formField?.label}} is invalid
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="btn-group d-md-block">
+        <button class="btn btn-gray" mat-flat-button>{{labelName?.cancel ? labelName?.cancel : 'Cancel'}}</button>
+        <button class="btn" mat-flat-button color="primary" (click)="addTask()" type="button">{{ labelName?.addTask ? labelName?.addTask : 'Add Task' }}</button>
+    </div>
+    </form>
+  </div>
+</div> -->
+<!-- manual add task ends here -->
+
+
+<!-- sort condition starts here -->
+<!-- <div class="row">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <span matDialogTitle class="addTitle">Filter Condition</span>
+    <mat-icon class="primary-color"  (click)="editTaskGroup('sortcondition')">edit</mat-icon>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <mat-chip-list>
+      <ng-container *ngFor="let item of taskGroupInfo?.TaskGroupFields;let i = index">
+        <mat-chip *ngIf="taskGroupInfo?.SortCondition?.includes(item?.formControlName)">{{item.label}}</mat-chip>
+      </ng-container>
+    </mat-chip-list>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-12 d-flex">
+    <span class="pr-3 orderBy">Order By:</span>
+    <span class="pr-2 toggleLabel">Ascending</span>
+      <mat-slide-toggle  [checked]="taskGroupInfo?.SortConditionOrder" [disabled]="true"  color="primary" class="toggleBtn toggleLabel" style="float: right;"></mat-slide-toggle>
+      <span class="pr-2 toggleLabel">Descending</span>
+  </div>
+</div> -->
+<!-- sort condition ends here -->
+
+<!-- rechurn rule start here -->
+<!-- <div class="row">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <span matDialogTitle class="addTitle">Filter Condition</span>
+    <mat-icon class="primary-color"  (click)="editTaskGroup('sortcondition')">edit</mat-icon>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="row rechurnRuleTableHead">
+      <div class="col-7">
+        <div class="row">
+          <div class="col-4">Task Field</div>
+          <div class="col-4">Condition</div>
+          <div class="col-4">Value</div>
+        </div>
+      </div>
+      <div class="col-5">Action</div>
+    </div>
+    <div class="row rechurnRuleTableField p-2 mb-2" *ngFor="let item of taskGroupInfo?.RechurnRule">
+      <div class="col-7">
+        <div class="row">
+          <div class="col-4">{{item?.taskfield}}</div>
+          <div class="col-4">{{item?.condition}}</div>
+          <div class="col-4">{{item?.value ? item?.value : 'null'}}</div>
+        </div>
+      </div>
+      <div class="col-5">{{item?.actionVal}}</div>
+    </div>
+  </div>
+</div> -->
+<!-- rechurn rule ends here -->
+
+<!-- copy api for add task starts here -->
+<div class="row">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <span matDialogTitle class="addTitle">{{labelName?.taskGroupAPI ? labelName?.taskGroupAPI : 'Task Group API'}}</span>
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="close-btn gray-color icon-copy mr-4"  matRipple (click)="copyData()"></span>
+      <span class="icon-rejected close-btn gray-color" matRipple [mat-dialog-close]="true" > </span>
+    </div>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="abcd">
+      <table>
+        <tr>
+          <td>{{labelName?.url ? labelName?.url : 'URL'}}</td>
+          <td>{{apiData.url}}</td>
+        </tr>
+        <tr>
+          <td>{{labelName?.method ? labelName?.method : 'Method'}}</td>
+          <td>{{apiData.method}}</td>
+        </tr>
+        <tr>
+          <td>{{labelName?.body ? labelName?.body : 'Body'}}</td>
+          <td>{{apiData.body}}</td>
+        </tr>
+        <tr>
+          <td>{{labelName?.sampleRequest ? labelName?.sampleRequest : 'Sample Request'}}</td>
+          <td>{{apiData.sampleRequest}}</td>
+        </tr>
+        <tr>
+          <td>{{labelName?.sampleResponse ? labelName?.sampleResponse : 'Sample Response'}}</td>
+          <td>{{apiData.sampleResponse}}</td>
+        </tr>
+        <tr>
+          <td>{{labelName?.taskGroupFields ? labelName?.taskGroupFields : 'Task Group Fields'}}</td>
+          <td>{{apiData.taskGroupFields}}</td>
+        </tr>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- copy api for add task ends here -->

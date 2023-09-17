@@ -1,0 +1,80 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <div class="row" style="justify-content: space-between;">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <legend>Fee Type</legend>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="tabValue.length>0">
+                    <button class="btn" mat-flat-button color="primary" (click)="openDialog('add', GST)"
+                        type="button">Add</button>
+                </div>
+            </div>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.FeeType.errors }">
+                            <mat-label>Fee Type</mat-label>
+                            <mat-select formControlName="FeeType" (selectionChange)="get($event.value)"
+                               >
+                                <mat-option *ngFor="let data of data;" [value]="data.FeeType">{{data.FeeType}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper-inner" *ngIf="tabValue.length>0">
+                <div class="dataTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let data of tabKey; let i = index">
+                                    <th [ngClass]="data == 'ActionList' || data == 'Created By' || data == 'Created On' || data == 'Modified By' || data == 'HSNCode' || data == 'Modified On' ? 'tabCol' : ''"
+                                        class="column{{ i }}">
+                                        {{
+                                        data == "Actionable" ? "" : data == "SrNo" ? "Sr No" : data == "PaymentType" ?
+                                        "Payment Type" : data
+                                        }}
+                                    </th>
+                                </ng-container>
+                            </tr>
+                            <tr *ngIf="tabValue.length == 0">
+                                <th>No record found</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="tabValue.length>0">
+                            <tr
+                                *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+
+                                <ng-container *ngFor="let val of tabKey; let i = index">
+                                    <td *ngIf="val == 'SrNo'" class="column{{i}}"><span>{{j+1}}</span></td>
+                                    <td *ngIf="val== 'Actionable'" class="{{'column'+i}} action">
+                                        <mat-icon class="delete" #tooltip="matTooltip" matTooltip="Delete"
+                                            (click)="openDialog('delete', data)">delete
+                                        </mat-icon>
+                                    </td>
+                                    <td *ngIf="val !== 'Actionable' && val !== 'HSNCode'  && val !== 'PaymentType' &&  val !== 'SrNo' &&  val !== 'Applicant Id' && val !== 'Is Training Certificate Photo'"
+                                        class="column{{i}}"
+                                        [ngClass]="val == 'Created By' || val == 'Created On' || val == 'Modified By' || val == 'Modified On' ? 'tabCol' : ''">
+                                        <span [innerHtml]="data[tabKey[i]]"></span>
+                                    </td>
+
+                                    <td *ngIf="val == 'PaymentType'" class="{{'column'+i}}"><span>
+                                            <a href="javascript:void(0)"
+                                                (click)="openDialog('edit', data)">{{data[tabKey[i]]}}</a>
+                                        </span></td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+              
+
+            </div>
+            <div class="pagination" *ngIf="tabValue.length>10">
+                <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+        </form>
+    </div>
+</div>

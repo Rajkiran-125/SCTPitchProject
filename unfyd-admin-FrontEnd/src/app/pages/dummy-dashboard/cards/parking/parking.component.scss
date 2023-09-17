@@ -1,0 +1,94 @@
+.displayCenter {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+
+  .circle {
+    overflow: hidden;
+    line-height: 16px;
+    border-radius: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .circle1 {
+    background: var(--purpleColor) 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 6px #0000001a;
+    width: 115px;
+    height: 115px;
+    margin-left: -15% !important;
+    z-index: 1;
+    color: var(--white_color);
+    .span1 {
+      font-size: var(--content);
+      width: auto;
+      display: block;
+      display: inline-block;
+    }
+    .span2 {
+      display: inline-block;
+      text-align: center;
+      font: normal normal normal var(--xxxl-font) Nunito Sans;
+      letter-spacing: 0px;
+    }
+  }
+
+  .circle2 {
+    width: 96px;
+    height: 96px;
+    border: 2px solid var(--unnamed-color-fbad17);
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 6px #0000001a;
+    border: 2px solid var(--purpleColor);
+    margin-top: 11% !important;
+    margin-left: -8% !important;
+    overflow: visible;
+    z-index: 2;
+    .span1 {
+      font-size: var(--content);
+      width: auto;
+      display: block;
+    }
+    .span2 {
+      display: inline-block;
+      text-align: center;
+      font: normal normal normal var(--xxl-font) Nunito Sans;
+      letter-spacing: 0px;
+    }
+  }
+
+  .circle3 {
+    width: 90px;
+    height: 91px;
+    background: #F4EFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 6px #0000001a;
+    margin-top: 28% !important;
+    margin-left: -48% !important;
+    overflow: auto;
+    z-index: 3;
+    .span1 {
+      // font: var(--medium-font) Nunito Sans;
+      // font-size: var(--small-font);
+      font-size: var(--content);
+      // width: min-content;
+      width: auto;
+      display: block;
+      // display: inline-block;
+    }
+    .span2 {
+      display: inline-block;
+      text-align: center;
+      font: normal normal normal var(--xxl-font) Nunito Sans;
+      letter-spacing: 0px;
+    }
+  }
+}
+
+.paddingX10Y20 {
+  padding: 10px 20px !important;
+}
+
+// #one { margin-left: 27px; color: red; background-color: red;}
+// #two { margin-top: -36px; color: blue; background-color: blue;}
+// #three { margin-top: -72px; margin-left: 56px; background-color: green; color: green;}

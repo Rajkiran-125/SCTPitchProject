@@ -1,0 +1,124 @@
+<div class="inner-container">
+  <div class="wrapper">
+    <ng-container *ngIf="paymentSearch">
+      <div class="search-form">
+        <form [formGroup]="form">
+          <legend>Dispositions</legend>
+          <div class="formGroup">
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.businessUnit.errors }">
+                  <mat-label>
+                    Business Unit
+                  </mat-label>
+                  <mat-select formControlName="businessUnit" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="let data of unfydMaster?.disposition?.businessUnit" [value]="data.processid">
+                      {{data.label}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.businessUnit.errors">
+                    <ng-container *ngIf="f.businessUnit.errors.required">Business Unit is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.businessUnit.errors }">
+                  <mat-label>
+                  
+                    Language
+                  </mat-label>
+                  <mat-select formControlName="language" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="let data of unfydMaster?.disposition?.language" [value]="data.languageID">
+                      {{data.label}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.language.errors">
+                    <ng-container *ngIf="f.language.errors.required">Business Unit is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12 btn-group">
+                <button (click)="searchHawker('all')" class="btn" mat-flat-button color="primary"
+                  type="submit">View</button>
+                <button (click)="gotoFormPage('add',null)" class="btn" mat-flat-button color="primary"
+                  type="submit">Add</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+    </ng-container>
+    <ng-container *ngIf="!paymentSearch">
+
+    </ng-container>
+  </div>
+
+</div>
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+
+  <div class="wrapper" style="padding: 0 !important;margin: 10px 0;">
+    <nav class="padding0" mat-tab-nav-bar>
+      <ng-container *ngFor="let data of tabs">
+        <a mat-tab-link [active]="tabSelected == data.label" (click)="changeTab(data.label)" *ngIf="configData[data.tab]" [active]="tabSelected == data.label">
+          {{data.label}}</a>
+      </ng-container>
+    </nav>
+    <app-filter *ngIf="tabValue.length>0" component="" [role]="userDetails.role" [type]="type" [tabValue]="tabValue"
+      [addBtn]="false"></app-filter>
+      <app-loader *ngIf="loader"></app-loader>
+
+    <div class="wrapper px-0 py-0 padding0" *ngIf="!loader">
+      <div class="dataTable">
+        <table>
+          <thead>
+            <tr *ngIf="tabValue.length>0">
+              <ng-container *ngFor="let data of finalField; let i = index">
+                <th *ngIf="((data.value != 'Sub Disposition' && tabSelected == 'Dispositions')
+                && (data.value != 'Sub Sub Disposition' && tabSelected == 'Dispositions'))
+                || (data.value != 'Sub Sub Disposition' && tabSelected == 'Sub Dispositions')
+                || tabSelected == 'Sub Sub Dispositions'" class="column{{i}}">{{data.value}}</th>
+              </ng-container>
+            </tr>
+            <tr *ngIf="noData">
+              <th>No record found</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="tabValue.length>0">
+            <ng-container
+              *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+              <tr>
+                <ng-container *ngFor="let val of finalField; let i = index">
+                  <td *ngIf="val.value == 'Sr No'" class="column{{i}}"><span>{{((page-1)*(itemsPerPage))+(j+1)}}</span>
+                  </td>
+           
+                  <td *ngIf="val.value == 'Actionable'" class="column{{i}}">
+                    <mat-icon class="primary-color" *ngIf="configData?.Edit" (click)="gotoFormPage('edit',data)">edit</mat-icon>
+                    <mat-icon class="primary-color" *ngIf="configData?.Delete" (click)="delete(data)">delete</mat-icon>
+                  </td>
+                  <ng-container *ngIf="((val.value != 'Sub Disposition' && tabSelected == 'Dispositions')
+                  && (val.value != 'Sub Sub Disposition' && tabSelected == 'Dispositions'))
+                  || (val.value != 'Sub Sub Disposition' && tabSelected == 'Sub Dispositions')
+                  || tabSelected == 'Sub Sub Dispositions'">
+                  <td *ngIf="val.value !== 'Sr No' && val.value != 'Actionable'"  class="column{{i}}">
+                    <span>{{! isNumber(data[val.value]) ? (data[val.value] | titlecase):data[val.value]}}</span>
+                  </td>
+                  </ng-container>
+
+                </ng-container>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pagination" *ngIf="tabValue.length>10">
+      <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4 mt-3">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="(userConfig?.Cancel)"  (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+                <div class="row ">
+                    <div class="col-12">
+                        <span class="d-flex backArrow">
+                            <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+                            <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }}  {{labelName?.InstagramDm}}</legend>
+                        </span>
+                        <div class="formGroup">
+                            <div class="masters_block">
+                              <app-steps [steps]="intagramsteps" [moduletype]="'instagram'" [id]="path"
+                              [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                                <div class="row ">
+
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.AccessToken}}</mat-label>
+                                            <input matInput formControlName="AccessToken" />
+                                            <mat-error *ngIf="f.AccessToken.errors"  class="addEllipsis">
+                                            <ng-container *ngIf="f.AccessToken.errors.required">{{labelName?.AccessToken}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.AccessToken?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                            <ng-container *ngIf="f.AccessToken?.errors?.pattern">{{labelName?.AccessToken}} is invalid
+                                            </ng-container>
+                                            <ng-container *ngIf="f.AccessToken?.errors?.checknull1">
+                                                Must be at least 3 characters long.
+                                              </ng-container>
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                  <div class="col-lg-6 col-md-6 col-sm-12">
+                                      <mat-form-field appearance="fill">
+                                          <mat-label>{{labelName?.VerifyTokenName}}</mat-label>
+                                          <input matInput formControlName="VerifyTokenName" />
+                                          <mat-error *ngIf="f.VerifyTokenName.errors"  class="addEllipsis">
+                                          <ng-container *ngIf="f.VerifyTokenName.errors.required">{{labelName?.VerifyTokenName}} is required
+                                          </ng-container>
+                                          <ng-container *ngIf="f.VerifyTokenName?.errors?.checknull">Whitespace not allowed
+                                          </ng-container>
+                                          <ng-container *ngIf="f.VerifyTokenName?.errors?.pattern">{{labelName?.VerifyTokenName}} is invalid
+                                          </ng-container>
+                                          <ng-container *ngIf="f.VerifyTokenName?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                          </ng-container>
+
+                                      </mat-error>
+                                      </mat-form-field> 
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="btn-group my-3" >
+                              <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                                <button *ngIf="(userConfig?.Save)" (click)="saveInstagram('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                                <button  *ngIf=" (userConfig?.Next) " (click)="saveInstagram('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

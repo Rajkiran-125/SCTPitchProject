@@ -1,0 +1,647 @@
+<div class="inner-container">
+  <ng-container *ngIf="masterName == 'dispositions'">
+    <div class="wrapper my-3" *ngIf="
+        (formName == 'add' ||
+          (formName == 'edit' && selectedTab == 'Dispositions')) &&
+        formData != null
+      ">
+     
+     <div class="search-form">
+        <form [formGroup]="form">
+          <legend>Disposition</legend>
+          <div class="formGroup">
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.businessUnit.errors }">
+                  <mat-label> Business Unit </mat-label>
+                  <mat-select formControlName="businessUnit" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="
+                        let data of unfydMaster?.disposition?.businessUnit
+                      " [value]="data.processid">
+                      {{ data.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.businessUnit.errors">
+                    <ng-container *ngIf="f.businessUnit.errors.required">Business Unit is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.language.errors }">
+                  <mat-label> Language </mat-label>
+                  <mat-select formControlName="language" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="let data of unfydMaster?.disposition?.language" [value]="data.languageID">
+                      {{ data.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.language.errors">
+                    <ng-container *ngIf="f.language.errors.required">Language is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{
+                    shake: submittedForm && f.dispositionName.errors
+                  }">
+                  <mat-label>Disposition Name</mat-label>
+                  <input type="text" matInput formControlName="dispositionName" />
+                  <mat-error *ngIf="f.dispositionName.errors">
+                    <ng-container *ngIf="f.dispositionName.errors.required">Disposition Name is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.description.errors }">
+                  <mat-label>Description</mat-label>
+                  <input type="text" matInput formControlName="description" />
+                  <mat-error *ngIf="f.description.errors">
+                    <ng-container *ngIf="f.description.errors.required">Description is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="btn-group">
+              <!-- <button #tooltip="matTooltip" (click)="back()" matTooltip="Back" class="btn btn-gray" mat-flat-button>
+                Cancel
+              </button> -->
+              <button #resetform id="resetform" (click)="reset('form')" class="btn btn-gray" mat-flat-button
+                type="Reset">
+                Reset
+              </button>
+              <button (click)="submit('form')" [disabled]="form.invalid" class="btn" mat-flat-button color="primary"
+                type="submit">
+                {{ formName == "edit" ? "Update" : "Save" }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="wrapper my-3" *ngIf="
+        (formName == 'add' ||
+          (formName == 'edit' && selectedTab == 'Sub Dispositions')) &&
+        formData != null
+      ">
+
+
+      <div class="search-form">
+        <form [formGroup]="formSubDisposition">
+          <legend>Sub Disposition</legend>
+          <div class="formGroup">
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && fs.businessUnit.errors }">
+                  <mat-label> Business Unit </mat-label>
+                  <mat-select formControlName="businessUnit" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="
+                        let data of unfydMaster?.disposition?.businessUnit
+                      " [value]="data.processid">
+                      {{ data.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fs.businessUnit.errors">
+                    <ng-container *ngIf="fs.businessUnit.errors.required">Business Unit is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && fs.language.errors }">
+                  <mat-label> Language </mat-label>
+                  <mat-select formControlName="language" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="let data of unfydMaster?.disposition?.language" [value]="data.languageID">
+                      {{ data.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fs.language.errors">
+                    <ng-container *ngIf="fs.language.errors.required">Business Unit is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{
+                    shake: submittedForm && fs.dispositionName.errors
+                  }">
+                  <mat-label> Disposition Name </mat-label>
+                  <mat-select formControlName="dispositionName" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="let data of dispositionData" [value]="data?.Id">
+                      {{ data.Disposition }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fs.dispositionName.errors">
+                    <ng-container *ngIf="fs.dispositionName.errors.required">Disposition Name is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{
+                    shake: submittedForm && fs.subDispositionName.errors
+                  }">
+                  <mat-label>Sub Disposition Name</mat-label>
+                  <input type="text" matInput formControlName="subDispositionName" />
+                  <mat-error *ngIf="fs.subDispositionName.errors">
+                    <ng-container *ngIf="fs.subDispositionName.errors.required">Sub Disposition Name is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && fs.description.errors }">
+                  <mat-label>Description</mat-label>
+                  <input type="text" matInput formControlName="description" />
+                  <mat-error *ngIf="fs.description.errors">
+                    <ng-container *ngIf="fs.description.errors.required">Description is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="btn-group">
+              <!-- <button #tooltip="matTooltip" (click)="back()" matTooltip="Back" class="btn btn-gray" mat-flat-button>
+                Cancel
+              </button> -->
+              <button #resetformSubDisposition id="resetformSubDisposition" (click)="reset('formSubDisposition')"
+                class="btn btn-gray" mat-flat-button type="Reset">
+                Reset
+              </button>
+              <button (click)="submit('formSubDisposition')" [disabled]="formSubDisposition?.invalid" class="btn"
+                mat-flat-button color="primary" type="submit">
+                {{ formName == "edit" ? "Update" : "Save" }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="wrapper my-3" *ngIf="
+        (formName == 'add' ||
+          (formName == 'edit' && selectedTab == 'Sub Sub Dispositions')) &&
+        formData != null
+      ">
+
+      <div class="search-form">
+        <form [formGroup]="formSubSubDisposition">
+          <legend>Sub Sub Disposition</legend>
+          <div class="formGroup">
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{
+                    shake: submittedForm && fss.businessUnit.errors
+                  }">
+                  <mat-label> Business Unit </mat-label>
+                  <mat-select formControlName="businessUnit" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="
+                        let data of unfydMaster?.subSubDisposition?.businessUnit
+                      " [value]="data.processid">
+                      {{ data.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fss.businessUnit.errors">
+                    <ng-container *ngIf="fss.businessUnit.errors.required">Business Unit is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && fss.language.errors }">
+                  <mat-label> Language </mat-label>
+                  <mat-select formControlName="language" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="
+                        let data of unfydMaster?.subSubDisposition?.language
+                      " [value]="data.languageID">
+                      {{ data.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fss.language.errors">
+                    <ng-container *ngIf="fss.language.errors.required">Business Unit is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{
+                    shake: submittedForm && fss.dispositionName.errors
+                  }">
+                  <mat-label> Disposition Name </mat-label>
+                  <mat-select formControlName="dispositionName" (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="let data of dispositionData" [value]="data?.Id">
+                      {{ data.Disposition }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fss.dispositionName.errors">
+                    <ng-container *ngIf="fss.dispositionName.errors.required">Disposition Name is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{
+                    shake: submittedForm && fss.subDispositionName.errors
+                  }">
+                  <mat-label> Sub Disposition Name </mat-label>
+                  <mat-select formControlName="subDispositionName" [disabled]="
+                      !this.formSubSubDisposition.value.dispositionName
+                    " (selectionChange)="mobileDeviceChange($event.value)">
+                    <mat-option *ngFor="let data of subDispositionValues" [value]="data?.Id">
+                      {{ data["Sub Disposition"] }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fss.subDispositionName.errors">
+                    <ng-container *ngIf="fss.subDispositionName.errors.required">Sub Disposition Name is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{
+                    shake: submittedForm && fss.subSubDispositionName.errors
+                  }">
+                  <mat-label>Sub Sub Disposition Name</mat-label>
+                  <input type="text" matInput formControlName="subSubDispositionName" />
+                  <mat-error *ngIf="fss.subDispositionName.errors">
+                    <ng-container *ngIf="fss.subDispositionName.errors.required">Sub Sub Disposition Name is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && fss.description.errors }">
+                  <mat-label>Description</mat-label>
+                  <input type="text" matInput formControlName="description" />
+                  <mat-error *ngIf="fss.description.errors">
+                    <ng-container *ngIf="fss.description.errors.required">Description is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="btn-group">
+              <!-- <button #tooltip="matTooltip" (click)="back()" matTooltip="Back" class="btn btn-gray" mat-flat-button>
+                Cancel
+              </button> -->
+              <button #resetformSubSubDisposition id="resetformSubSubDisposition"
+                (click)="reset('formSubSubDisposition')" class="btn btn-gray" mat-flat-button type="Reset">
+                Reset
+              </button>
+              <button (click)="submit('formSubSubDisposition')" type="Reset" [disabled]="formSubSubDisposition.invalid"
+                class="btn" mat-flat-button color="primary" type="submit">
+                {{ formName == "edit" ? "Update" : "Save" }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="masterName == 'BusinessHours'">
+    <div class="wrapper my-3 mt-3" *ngIf="
+        (formName == 'edit' || formName == 'add') &&
+        selectedTab == 'Online Hours'">
+      <div class="search-form">
+        <form [formGroup]="formOnlineHrs">
+          <div>
+            <legend>{{formName == 'edit' ? 'Update' : 'Add'}} Online Hours</legend>
+          </div>
+
+          <div class="formGroup">
+
+            <div formArrayName="onHrs">
+              <div class="row" *ngFor="let quantity of onHrs().controls; let i = index" [formGroupName]="i">
+                <div class="col-lg-12 col-md-12 col-sm-12 customdisplayflex">
+                  <div class="col-lg-11 col-md-11 col-sm-11" style="display:flex;">
+                    <div class="col-lg-3 col-md-3 col-sm-12 space">
+                      <mat-form-field appearance="fill">
+                        <mat-label> {{ labelName?.Day }} </mat-label>
+                        <mat-select formControlName="day" (selectionChange)="mobileDeviceChange($event.value)">
+                          <mat-option *ngFor="let data of returnDays(unfydMaster?.onlineHrsAdd?.Day,i,'onHrs')"
+                            [value]="data?.label">
+                            {{ data?.label }}
+                          </mat-option>
+
+                        </mat-select>
+                        <mat-error *ngIf="onHrs().controls[i].get('day').hasError('required')"> {{ labelName?.Day }} is
+                          required </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 space">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{ labelName?.StartTime }}</mat-label>
+                        <input matTimepicker formControlName="startTime" matInput readonly required />
+                        <mat-error *ngIf="onHrs().controls[i].get('startTime').hasError('required')"> {{
+                          labelName?.StartTime }} is required </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12 space">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{ labelName?.EndTime }}</mat-label>
+                        <input matTimepicker matInput formControlName="endTime" readonly required />
+                        <mat-error *ngIf="onHrs().controls[i].get('endTime').hasError('required')"> {{
+                          labelName?.EndTime }} is required </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- {{quantity.message|json}} -->
+                    <!-- <mat-error *ngIf="workTiming.controls[pointIndex].get('beginTime').hasError('required')"> Enter begin time </mat-error> -->
+                    <!-- Groupname?.errors?.checknull -->
+                    <div class="col-lg-4 col-md-4 col-sm-12 space">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{ labelName?.AutoResponse }}</mat-label>
+                        <textarea matInput matInput formControlName="message" maxlength="500" rows="1"></textarea>
+                        <mat-error *ngIf="quantity.get('message').hasError('required')">
+                          <span>Message is required.</span>
+                        </mat-error>
+                         <!-- <mat-error *ngIf="quantity.get('message')?.errors?.maxlength">Cannot be beyond 500 characters.
+                        </mat-error> -->
+                        <mat-hint *ngIf="quantity.get('message')?.value?.length == 500 && quantity.get('message').touched" style="color: #d92e2e;margin: 14px -30px 0px 0px;">
+                          Cannot be beyond 500 characters.
+                        </mat-hint>        
+                        <mat-error *ngIf="quantity.get('message')?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class=" buttonflex">
+                      <div *ngIf="onHrs().controls.length > 1" class="removediv">
+                        <mat-icon (click)="removeOnHrs(i)" class="removematbtn">
+                          delete
+                        </mat-icon>
+                      </div>
+                      <!-- <div *ngIf=" this.formName != 'edit' && onHrs().controls.length < 7 &&  i + 1 == onHrs().controls.length
+                        " style="padding: 2px; padding-top: 4px; 
+                          border-radius: 4px; height: 30px; width: 30px; text-align: center; ">
+                        <mat-icon class="plusicon" (click)="addOnHrs()">
+                          + add_circle
+                        </mat-icon> -->
+                      <div *ngIf=" this.formName != 'edit' && onHrs().controls.length < 7 &&  i + 1 == onHrs().controls.length
+                        " style="padding: 2px; padding-top: 4px; height: 30px; width: 30px; text-align: center; ">
+                        <span class="icon-add" color="primary" (click)="addOnHrs()"></span>
+
+                        <!-- 
+                        <button color="primary" mat-stroked-button (click)="addOnHrs()" class="editBtn addBtnBlue">
+                          <span class="icon-add"></span>
+                        </button> -->
+                        <!-- <mat-icon (click)="addOnHrs()" style="float: right"  color="primary">
+                          add_circle
+                        </mat-icon> -->
+
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-lg-5 col-md-5 col-sm-12">
+                <div class="msgmedia">
+                  <p class="px-0" style="display: inline-block; margin-right: 10px">
+                    {{ labelName?.Message}}
+                  </p>
+                  <mat-slide-toggle (click)="flip()" color="primary" class="toggleBtn" formControlName="sendText">
+                  </mat-slide-toggle>
+                  <p class="px-0" style="display: inline-block">{{ labelName?.Media}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row bot ">
+              <div class="col col-3 p-0 mx-3  uploadimg" [ngClass]="!isDisabled ? 'disabledIT' : ''">
+                <div class="avatar mb-3" (click)="uploadimage.click()">
+                  <div class="uploadTitle" *ngIf="!holidayImg">
+                    <i class="icon-upload"></i>
+                    <strong>{{ labelName?.UploadImage}}</strong>
+                  </div>
+                  <img *ngIf="holidayImg" [src]="holidayImg" />
+                  <input type="file" hidden (change)="directUpload($event)" title="" #uploadimage />
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-group offlineheaderform">
+              <!-- <button *ngIf="userConfig?.Cancel" (click)="closeDialog(false)" (click)="back()" class="btn btn-gray"
+                mat-flat-button>
+                {{ labelName?.Cancel}}
+              </button> -->
+              <button *ngIf=" this.formName != 'edit' && userConfig?.Reset" (click)="reset('formOnlineHrs')"
+                class="btn btn-gray" mat-flat-button type="Reset">
+                {{ labelName?.Reset}}
+              </button>
+              <button *ngIf="formName != 'edit' && (userConfig?.SaveAddNewOnline) "
+                (click)="submit('formOnlineHrsSaveAndAddNew')" class="btn outline" mat-stroked-button color="primary">{{
+                labelName?.SaveAddNew}}</button>
+              <button *ngIf="formName == 'edit' ? (userConfig?.UpdateOnline) : (userConfig?.SaveOnline)"
+                (click)="submit('formOnlineHrs')" class="btn" mat-flat-button color="primary" type="submit">
+                {{formName == 'edit' ? labelName?.Update: labelName?.Save}}
+                <!-- [disabled]="formOnlineHrs.invalid || (formOnlineHrs.valid && ((formOnlineHrs.value.sendText) && (!holidayImg)))" -->
+
+              </button>
+
+              <!-- [disabled]="formOnlineHrs.invalid || (formOnlineHrs.valid && ((formOnlineHrs.value.sendText) && (!holidayImg)))" -->
+
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="wrapper " *ngIf="
+        (formName == 'edit' || formName == 'add') &&
+        selectedTab == 'Offline Days' ">
+      <div class="search-form">
+        <form [formGroup]="formOfflineDays">
+          <div>
+            <legend>{{formName == 'edit' ? 'Update' : 'Add'}} Offline Days</legend>
+          </div>
+
+          <div class="formGroup offlineheaderform">
+            <div class="row mt-4 d-none">
+              <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && fod.sendText.errors }">
+                  <mat-label> {{ labelName?.Select }} </mat-label>
+                  <mat-select formControlName="sendText" (selectionChange)="showImage($event.value)">
+                    <mat-option *ngFor="
+                              let data of unfydMaster?.onlineHrsAdd?.ImageActionIDs
+                            " [value]="data.id">
+                      {{ data.label }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fod?.sendText?.errors" style="margin-top: 15px !important;">
+                    <ng-container *ngIf="fod?.sendText?.errors.required">Required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-12 mb-4" *ngIf="addImage">
+                <div class="profileInfo">
+                  <div class="content">
+                    <div class="avatar avatar-mar">
+                      <div class="avatar">
+                        <mat-icon *ngIf="!profileImg">person</mat-icon>
+                        <img *ngIf="profileImg" [src]="profileImg">
+                        <input formControlName="photographstatus" type="checkbox"
+                          (click)="uploadDocument(true,'UserProfile')">
+                      </div>
+                    </div>
+                  </div>
+                  <mat-error *ngIf="fod?.sendText?.errors" style="margin-top: 15px !important;">
+                    <ng-container *ngIf="fod?.sendText?.errors.required">Required
+                    </ng-container>
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div formArrayName="odDays" class="offlinedays">
+              <div class="row" *ngFor="let quantity of odDays().controls; let i = index" [formGroupName]="i">
+                <div class="col-lg-12 col-md-12 col-sm-12 d-flex pl-0 mb-3">
+                  <div class="col-lg-3 col-md-3 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label> {{ labelName?.Day }} </mat-label>
+                      <mat-select formControlName="day" (selectionChange)="mobileDeviceChange($event.value)">
+                        <mat-option *ngFor="let data of returnDays(unfydMaster?.onlineHrsAdd?.Day,i,'odDays')"
+                          [value]="data?.label">
+                          {{ data?.label }}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="odDays().controls[i].get('day').hasError('required')"
+                        style="margin-top: 15px !important;">
+                        {{ labelName?.Day }} is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{ labelName?.AutoResponse }}</mat-label>
+                      <textarea matInput matInput formControlName="message" maxlength="500" rows="1"></textarea>
+                      <mat-error *ngIf="quantity.get('message').hasError('required')"
+                        style="margin-top: 15px !important;">
+                        <span>Message is required.</span>
+                      </mat-error>
+                      <!-- <mat-error *ngIf="quantity.get('message')?.errors?.maxlength">Cannot be beyond 500 characters.
+                      </mat-error>             -->
+                      <mat-hint *ngIf="quantity.get('message')?.value?.length == 500 && quantity.get('message').touched" style="color: #d92e2e;margin: 14px -30px 0px 0px;">
+                        Cannot be beyond 500 characters.
+                      </mat-hint>         
+                      <mat-error *ngIf="quantity.get('message')?.errors?.checknull1"
+                        style="margin-top: 15px !important;">
+                        Must be at least 3 characters long.
+                      </mat-error>
+                     
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-5 col-md-5 col-sm-12 d-flex align-items-center">
+                    <span class="d-flex">
+                      <mat-checkbox color="primary" formControlName="masterSelected"
+                        (change)="checkUncheckAll($event, i)">All</mat-checkbox>
+                      <div formArrayName="checkBox" style="display: flex">
+                        <ng-container>
+                          <div *ngFor="
+                                let item of newOdDaysCheckBox(i).controls;
+                                let checkIndex = index">
+                            <mat-checkbox color="primary" [formControlName]="checkIndex"
+                              (change)="isAllSelected($event, i, checkIndex)">{{ checkIndex + 1 }}</mat-checkbox>
+                          </div>
+                        </ng-container>
+
+                      </div>
+                    </span>
+                    <mat-hint class="errorMsg" *ngIf="checboxSelectedOrNOt(i) && submittedForm">
+                      Checkbox is required
+                    </mat-hint>
+                  </div>
+                  <div class=" buttonflex">
+                    <div *ngIf="odDays().controls.length > 1" class="removediv">
+                      <mat-icon (click)="removeOdDays(i)" class="removematbtn">
+                        delete
+                      </mat-icon>
+                    </div>
+                    <div *ngIf=" this.formName != 'edit' && odDays().controls.length < 7 && i + 1 == odDays().controls.length
+                      " style="padding: 2px; padding-top: 4px; height: 30px; width: 30px; text-align: center; ">
+                      <span class="icon-add" color="primary" (click)="addOdDays()"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="msgmedia">
+              <div class="switch mb-2">
+                <label class="px-0">{{ labelName?.Message}}</label>
+                <mat-slide-toggle (click)="flip()" color="primary" class="toggleBtn ml-1 pt-1"
+                  formControlName="sendText" (toggleChange)="offlineDaysChangeImageToggle()">
+                </mat-slide-toggle>
+                <label class="px-0">{{ labelName?.Media}}</label>
+              </div>
+            </div>
+
+            <div class="row bot">
+              <div class="col col-3 p-0 mb-3 mx-3  uploadimg"
+                [ngClass]="!formOfflineDays.value.sendText ? 'disabledIT' : ''">
+                <div class="avatar " (click)="uploadimage.click()">
+                  <div class="uploadTitle" *ngIf="!holidayImg">
+                    <i class="icon-upload"></i>
+                    <strong>{{ labelName?.UploadImage}}</strong>
+                  </div>
+                  <img *ngIf="holidayImg" [src]="holidayImg" />
+                  <input type="file" hidden (change)="directUpload($event)" title="" #uploadimage />
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="btn-group onlinehoursbtnfix">
+              <button class="btn btn-gray" mat-flat-button (click)="closeDialog(false)" *ngIf="userConfig?.Cancel">
+                Cancel
+              </button>
+              <button (click)="reset('formOfflineDays')" class="btn btn-gray" mat-flat-button type="Reset"
+                *ngIf="this.formName != 'edit' && userConfig?.Reset">
+                Reset
+              </button>
+              <button class="btn outline" mat-stroked-button color="primary" type="button"
+              (click)="submit('formOfflineDays')" [disabled]="formOfflineDays.invalid || (formOfflineDays.valid && ((formOfflineDays.value.enable) && (!holidayImg)))"
+              *ngIf="formName == 'edit' ? (userConfig?.UpdateAddNew) : (userConfig?.SaveAddNewOffline) ">
+              Save & Add New
+            </button>
+              <button (click)="submit('formOfflineDays')" [disabled]="formOfmessageflineDays.invalid || (formOfflineDays.valid && ((formOfflineDays.value.enable) && (!holidayImg)))" class="btn"
+                mat-flat-button color="primary" type="submit"
+                *ngIf="formName == 'edit' ? (userConfig?.UpdateOffline) : (userConfig?.SaveOffline)">
+                {{ formName == "edit" ? "Update" : "Save" }}
+               
+              </button>
+
+            </div> -->
+
+
+            <div class="btn-group onlinehoursbtnfix">
+              <!-- <button class="btn btn-gray" mat-flat-button (click)="closeDialog(false)" *ngIf="userConfig?.Cancel">{{
+                labelName?.Cancel}}</button> -->
+              <button (click)="reset('formOfflineDays')" class="btn btn-gray" mat-flat-button type="Reset"
+                *ngIf="this.formName != 'edit' && userConfig?.Reset"> {{ labelName?.Reset}} </button>
+
+              <button class="btn outline" mat-stroked-button color="primary" type="submit"
+                (click)="submit('formOfflineDaysSaveAddnew')"
+                *ngIf="formName == 'edit' ? (userConfig?.UpdateAddNew) : (userConfig?.SaveAddNewOffline)">{{
+                labelName?.SaveAddNew}}<!-- [disabled
+          ]="formOfflineDays.invalid || (formOfflineDays.valid && ((formOfflineDays.value.enable) && (!holidayImg)))"  --></button>
+              <button (click)="submit('formOfflineDays')" class="btn" mat-flat-button color="primary" type="submit"
+                *ngIf="formName == 'edit' ? (userConfig?.UpdateOffline) : (userConfig?.SaveOffline)">
+                {{ formName == "edit" ? labelName?.Update: labelName?.Save}}</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+</div>

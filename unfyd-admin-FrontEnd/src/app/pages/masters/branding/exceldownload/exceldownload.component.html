@@ -1,0 +1,105 @@
+
+<div class="inner-container">
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <div class="my-3 legendheader">
+                <legend>Excel Download</legend>
+            </div>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Product Name</mat-label>
+                            <mat-select [(value)]="productID" (selectionChange)="selectedProduct($event.value)"
+                                panelClass="blue-panel">
+                                <mat-option *ngFor="let data of productType" [value]="data?.Id">
+                                    {{data?.ProductName}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Report Name</mat-label>
+                            <mat-select (selectionChange)="selectedReport($event.value)" [(value)]="ReportName">
+                                <mat-option *ngFor="let data of report" [value]="data.ReportName">{{data.ReportName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="btn-group">
+                            <div class="btn-group">
+                                <button (click)="toggleShow()" class="btn" mat-flat-button color="primary"
+                                    type="submit">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="custom-tab " *ngIf="isShown">
+                    <ul class="nav nav-tabs"> 
+                        <li class="nav-item"><a data-target="#Inbound" data-toggle="tab" (click)="tabValueselected=1"
+                                class="nav-link active">Last 7 days</a></li>
+                        <li class="nav-item"><a data-target="#Outbound" data-toggle="tab" (click)="tabValueselected=2"
+                                 class="nav-link">Last 5 weeks</a></li>
+                        <li class="nav-item"><a data-target="#getmonth" data-toggle="tab" (click)="tabValueselected=3"
+                                class="nav-link">Last 3 Months</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="Inbound" class="tab-pane active" *ngIf="tabValueselected==1">
+                            <div class="" style="display: block;width: 100%;" >
+                                <div *ngFor="let data of agents" style="display: flex;justify-content:space-between;padding: 20px 10px;border:1px solid #efefef;border-top:0px solid #efefef;">
+                                <span>{{data.FileName}}</span>
+                                <span>
+                                    <a [routerLink]="data.FilePath" [href]="data.FilePath" target="_self"  (click)="hubDownloadExcel(data.FileName,data.FilePath)" download>
+                                    <mat-icon class="cursorPointer">download</mat-icon>
+                                    </a>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Outbound" class="tab-pane active" *ngIf="tabValueselected==2">
+                         <div class="" style="display: block;width: 100%;">
+                            <div *ngFor="let data of agent" style="display: flex;justify-content:space-between;padding: 20px 10px;border:1px solid #efefef;border-top:0px solid #efefef;">
+                            <span>{{data.FileName}}</span>
+                            <span>
+                                <a [routerLink]="data.FilePath" [href]="data.FilePath" target="_self" (click)="hubDownloadExcel(data.FileName,data.FilePath)" download>
+                                <mat-icon class="cursorPointer">download</mat-icon>
+                                </a>
+                            </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div id="3months" class="tab-pane active" *ngIf="tabValueselected==3">
+                              <div clas="" style="display: block;width: 100%;">
+                                <div *ngFor="let data of get3month" style="display: flex;justify-content:space-between;padding: 20px 10px;border:1px solid #efefef;border-top:0px solid #efefef;">
+                                <span>{{data.FileName}}</span>
+                                <span>
+                                    <a [routerLink]="data.FilePath" [href]="data.FilePath" target="_self" (click)="hubDownloadExcel(data.FileName,data.FilePath)" download>
+                                    <mat-icon class="cursorPointer">download</mat-icon>
+                                    </a>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="getmonth" class="tab-pane" *ngIf="threeMonths==get3month">
+                            <div class="" style="display: block;width: 100%;">
+                                <div *ngFor="let data of get3month"
+                                    style="display: flex;justify-content:space-between;padding: 20px 10px;border:1px solid #efefef;border-top:0px solid #efefef;">
+                                    <span>{{data.FileName}}</span>
+                                    <span>
+                                        <a [routerLink]="data.FilePath" [href]="data.FilePath" target="_self" (click)="hubDownloadExcel(data.FileName,data.FilePath)" download>
+                                        <a (click)="hubDownloadExcel(data.FileName,data.FilePath)">
+                                            <mat-icon class="cursorPointer">download</mat-icon>
+                                        </a>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+ 

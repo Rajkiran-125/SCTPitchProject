@@ -1,0 +1,293 @@
+<div class="container">
+    <div class="row">
+        <div class="col-1 backKey" style="">
+            <mat-icon class="cursorPointer" (click)="back()" >keyboard_backspace</mat-icon>
+        </div>
+        <div class="col-10">
+            <span class="billsHeading">My Training</span>
+            <div class="row">
+                    <mat-accordion class="example-headers-align">
+                        <mat-expansion-panel (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header>
+                                <div class="row">
+                                    <span class="heading">
+                                        Beneficiary Training or Soft skill Training
+                                    </span>
+                                    
+                                    <br><br>
+                                   
+                                </div>
+                                <div class="row" style="margin-left: -41.5%;
+                                margin-top: 3.5em;"  *ngIf="!panelOpenState">
+                                    <span style="margin: -1em 4px;">
+                                        <span class="red bold">Not Completed</span>
+                                        </span>
+                                </div>
+                                
+                            </mat-expansion-panel-header>
+                            
+                            <div class="row" style="margin: -2em 1em 0; display: flex;justify-content: space-between;font-size: medium;">
+                                <div class="col">
+                                    <span class="blue">Date:</span>
+                                    <span class="blueData">15 Dec 2021 to 20 dec 2021</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Venue:</span>
+                                    <span class="blueData">Location name</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Trainer:</span>
+                                    <span class="blueData">Hridyanshu</span>
+                                </div>
+                                <div class="col-12 ">
+                                    <p style="padding: 1em 0;    margin-bottom: 0;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                </div>
+
+                                <div class="col">
+                                    <span class="red bold">Not Completed</span>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <mat-accordion class="example-headers-align">
+                        <mat-expansion-panel (opened)="panelOpenState1 = true"
+                        (closed)="panelOpenState1 = false">
+                            <mat-expansion-panel-header>
+                                <div class="row">
+                                    <span class="heading">
+                                        Beneficiary Training or Soft skill Training
+                                    </span>
+                                    
+                                    <br><br>
+                                   
+                                </div>
+                                <div class="row" style="margin-left: -41.5%;
+                                margin-top: 3.5em;"  *ngIf="!panelOpenState1">
+                                    <span style="margin: -1em 0;">
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        </span>
+                                </div>
+                                
+                            </mat-expansion-panel-header>
+                            
+                            <div class="row" style="margin: -2em 1em 0; display: flex;justify-content: space-between;font-size: medium;">
+                                <div class="col">
+                                    <span class="blue">Date:</span>
+                                    <span class="blueData">15 Dec 2021 to 20 dec 2021</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Venue:</span>
+                                    <span class="blueData">Location name</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Trainer:</span>
+                                    <span class="blueData">Hridyanshu</span>
+                                </div>
+                                <div class="col-12 ">
+                                    <p style="padding: 1em 0;    margin-bottom: 0;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                </div>
+
+                                <div class="col">
+                                    <span class="green bold">Completed</span>
+                                </div>
+
+                                <div class="col-12" style="margin: 1em -4px 1em;">
+                                    <span style="">
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        </span>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <mat-accordion class="example-headers-align">
+                        <mat-expansion-panel (opened)="panelOpenState2 = true"
+                        (closed)="panelOpenState2 = false">
+                            <mat-expansion-panel-header>
+                                <div class="row">
+                                    <span class="heading">
+                                        Beneficiary Training or Soft skill Training
+                                    </span>
+                                    
+                                    <br><br>
+                                   
+                                </div>
+                                <div class="row" style="margin-left: -41.5%;
+                                margin-top: 3.5em;"  *ngIf="!panelOpenState2">
+                                    <span style="margin: -1em 0;">
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        </span>
+                                </div>
+                                
+                            </mat-expansion-panel-header>
+                            
+                            <div class="row" style="margin: -2em 1em 0; display: flex;justify-content: space-between;font-size: medium;">
+                                <div class="col">
+                                    <span class="blue">Date:</span>
+                                    <span class="blueData">15 Dec 2021 to 20 dec 2021</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Venue:</span>
+                                    <span class="blueData">Location name</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Trainer:</span>
+                                    <span class="blueData">Hridyanshu</span>
+                                </div>
+                                <div class="col-12 ">
+                                    <p style="padding: 1em 0;    margin-bottom: 0;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                </div>
+
+                                <div class="col">
+                                    <span class="green bold">Completed</span>
+                                </div>
+
+                                <div class="col-12" style="margin: 1em -4px 1em;">
+                                    <span style="">
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        </span>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <mat-accordion class="example-headers-align">
+                        <mat-expansion-panel (opened)="panelOpenState3 = true"
+                        (closed)="panelOpenState3 = false">
+                            <mat-expansion-panel-header>
+                                <div class="row">
+                                    <span class="heading">
+                                        Beneficiary Training or Soft skill Training
+                                    </span>
+                                    
+                                    <br><br>
+                                   
+                                </div>
+                                <div class="row" style="margin-left: -41.5%;
+                                margin-top: 3.5em;"  *ngIf="!panelOpenState3">
+                                    <span style="margin: -1em 0;">
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        </span>
+                                </div>
+                                
+                            </mat-expansion-panel-header>
+                            
+                            <div class="row" style="margin: -2em 1em 0; display: flex;justify-content: space-between;font-size: medium;">
+                                <div class="col">
+                                    <span class="blue">Date:</span>
+                                    <span class="blueData">15 Dec 2021 to 20 dec 2021</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Venue:</span>
+                                    <span class="blueData">Location name</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Trainer:</span>
+                                    <span class="blueData">Hridyanshu</span>
+                                </div>
+                                <div class="col-12 ">
+                                    <p style="padding: 1em 0;    margin-bottom: 0;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                </div>
+
+                                <div class="col">
+                                    <span class="green bold">Completed</span>
+                                </div>
+
+                                <div class="col-12" style="margin: 1em -4px 1em;">
+                                    <span style="">
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        </span>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <mat-accordion class="example-headers-align">
+                        <mat-expansion-panel (opened)="panelOpenState4 = true"
+                        (closed)="panelOpenState4 = false">
+                            <mat-expansion-panel-header>
+                                <div class="row">
+                                    <span class="heading">
+                                        Beneficiary Training or Soft skill Training
+                                    </span>
+                                    
+                                    <br><br>
+                                   
+                                </div>
+                                <div class="row" style="margin-left: -41.5%;
+                                margin-top: 3.5em;"  *ngIf="!panelOpenState4">
+                                    <span style="margin: -1em 0;">
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        </span>
+                                </div>
+                                
+                            </mat-expansion-panel-header>
+                            
+                            <div class="row" style="margin: -2em 1em 0; display: flex;justify-content: space-between;font-size: medium;">
+                                <div class="col">
+                                    <span class="blue">Date:</span>
+                                    <span class="blueData">15 Dec 2021 to 20 dec 2021</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Venue:</span>
+                                    <span class="blueData">Location name</span>
+                                </div>
+                                <div class="col">
+                                    <span class="blue">Trainer:</span>
+                                    <span class="blueData">Hridyanshu</span>
+                                </div>
+                                <div class="col-12 ">
+                                    <p style="padding: 1em 0;    margin-bottom: 0;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                </div>
+
+                                <div class="col">
+                                    <span class="green bold">Completed</span>
+                                </div>
+
+                                <div class="col-12" style="margin: 1em -4px 1em;">
+                                    <span style="">
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #036db7"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        <i class="fa-solid fa-star" style="margin: 2px; color: #d2d2d2"></i>
+                                        </span>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </div>
+        <div class="col-1"></div>
+    </div>
+</div>

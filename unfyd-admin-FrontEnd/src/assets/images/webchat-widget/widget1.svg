@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="94" viewBox="0 0 80 94">
+  <g id="Group_12227" data-name="Group 12227" transform="translate(-1264 -428)">
+    <g id="Rectangle_2641" data-name="Rectangle 2641" transform="translate(1264 428)" fill="#fff" stroke="#b4b4b4" stroke-width="1">
+      <path d="M5,0H75a5,5,0,0,1,5,5V94a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V5A5,5,0,0,1,5,0Z" stroke="none"/>
+      <path d="M5,.5H75A4.5,4.5,0,0,1,79.5,5V93a.5.5,0,0,1-.5.5H1A.5.5,0,0,1,.5,93V5A4.5,4.5,0,0,1,5,.5Z" fill="none"/>
+    </g>
+    <g id="Rectangle_2646" data-name="Rectangle 2646" transform="translate(1264 428)" fill="#fff" stroke="#b4b4b4" stroke-width="1">
+      <path d="M5,0H75a5,5,0,0,1,5,5V22a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V5A5,5,0,0,1,5,0Z" stroke="none"/>
+      <path d="M5,.5H75A4.5,4.5,0,0,1,79.5,5V21a.5.5,0,0,1-.5.5H1A.5.5,0,0,1,.5,21V5A4.5,4.5,0,0,1,5,.5Z" fill="none"/>
+    </g>
+    <g id="Group_12229" data-name="Group 12229" transform="translate(1269 433)">
+      <g id="Ellipse_233" data-name="Ellipse 233" fill="#fff" stroke="#b4b4b4" stroke-width="1">
+        <circle cx="6" cy="6" r="6" stroke="none"/>
+        <circle cx="6" cy="6" r="5.5" fill="none"/>
+      </g>
+      <line id="Line_50" data-name="Line 50" x2="12" transform="translate(15.5 3.5)" fill="none" stroke="#b4b4b4" stroke-width="1"/>
+      <line id="Line_51" data-name="Line 51" x2="22" transform="translate(15.5 7.5)" fill="none" stroke="#b4b4b4" stroke-width="1"/>
+      <g id="Ellipse_234" data-name="Ellipse 234" transform="translate(65 3)" fill="#b4b4b4" stroke="#b4b4b4" stroke-width="1">
+        <circle cx="2.5" cy="2.5" r="2.5" stroke="none"/>
+        <circle cx="2.5" cy="2.5" r="2" fill="none"/>
+      </g>
+      <g id="Ellipse_235" data-name="Ellipse 235" transform="translate(56 3)" fill="#b4b4b4" stroke="#b4b4b4" stroke-width="1">
+        <circle cx="2.5" cy="2.5" r="2.5" stroke="none"/>
+        <circle cx="2.5" cy="2.5" r="2" fill="none"/>
+      </g>
+    </g>
+    <g id="Rectangle_2643" data-name="Rectangle 2643" transform="translate(1269 465.649)" fill="#fff" stroke="#b4b4b4" stroke-width="1">
+      <path d="M0,0H32a5,5,0,0,1,5,5V5a5,5,0,0,1-5,5H5A5,5,0,0,1,0,5V0A0,0,0,0,1,0,0Z" stroke="none"/>
+      <path d="M1,.5H32A4.5,4.5,0,0,1,36.5,5V5A4.5,4.5,0,0,1,32,9.5H5A4.5,4.5,0,0,1,.5,5V1A.5.5,0,0,1,1,.5Z" fill="none"/>
+    </g>
+    <path id="Rectangle_2644" data-name="Rectangle 2644" d="M5,0H37a0,0,0,0,1,0,0V5a5,5,0,0,1-5,5H5A5,5,0,0,1,0,5V5A5,5,0,0,1,5,0Z" transform="translate(1302 481.541)" fill="#b4b4b4"/>
+    <g id="Rectangle_2645" data-name="Rectangle 2645" transform="translate(1269 497.432)" fill="#fff" stroke="#b4b4b4" stroke-width="1">
+      <path d="M0,0H32a5,5,0,0,1,5,5V5a5,5,0,0,1-5,5H5A5,5,0,0,1,0,5V0A0,0,0,0,1,0,0Z" stroke="none"/>
+      <path d="M1,.5H32A4.5,4.5,0,0,1,36.5,5V5A4.5,4.5,0,0,1,32,9.5H5A4.5,4.5,0,0,1,.5,5V1A.5.5,0,0,1,1,.5Z" fill="none"/>
+    </g>
+  </g>
+</svg>

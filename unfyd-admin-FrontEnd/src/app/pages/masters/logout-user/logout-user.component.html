@@ -1,0 +1,37 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <ng-container>
+            <app-loader *ngIf="loader"></app-loader>
+            <div class="dataTable">
+                <table>
+                    <thead>
+                        <tr *ngIf="tabValue.length>0">
+                                <th class="column{{i}}" *ngFor="let data of tabKey; let i = index">{{data}}</th>
+                        </tr>
+                        <tr *ngIf="noData">
+                            <th>No record found</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="tabValue.length>0">
+                        <ng-container
+                            *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                            <tr>
+                                <ng-container *ngFor="let val of tabKey; let i = index">
+                                    <td *ngIf="val == 'Actionable'" class="column{{i}}">
+                                        <span (click)="forcelogout()" #value><mat-icon style="color: red;">power_settings_new</mat-icon></span>
+                                    </td>
+                                    <td class="column{{i}}">
+                                        <span><a >{{data[tabKey[i]]}}</a></span>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" *ngIf="tabValue.length>10">
+                <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+        </ng-container>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+.pointer{
+    cursor: pointer;
+}
+h1 {
+    font-size: var(--extralarge-font);
+    font-weight: bold;
+}
+
+.circle{
+    height: 70px !important;
+    width: 70px !important;
+    font-size: var(--large-font);
+}
+
+.bgGray{
+    background-color: var(--gray_color_60);
+}
+
+.smallText{
+    font-size: var(--small-font);
+    color: #B4B4B4;
+}
+
+.extraLargeFont{
+    font-size: var(--extralarge-font);
+    color: #053C6D;
+}
+
+.color0{
+    background-color: #36BC9B40;
+    color: #36BC9B;
+}
+.color1{
+    background-color: #F5BA4140;
+    color: #F5BA41;
+}
+.color2{
+    background-color: #4B89DC40;
+    color: #4B89DC;
+}
+.color3{
+    background-color: #967BDC40;
+    color: #967BDC;
+}
+.color4{
+    background-color: #ED556440;
+    color: #ED5564;
+}
+.border{
+    border-radius: 0px !important;
+}

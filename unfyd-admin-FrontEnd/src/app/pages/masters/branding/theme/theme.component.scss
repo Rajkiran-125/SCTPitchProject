@@ -1,0 +1,44 @@
+::ng-deep{
+  .normal-dropdown{
+    .mat-form-field-appearance-fill .mat-form-field-flex{
+      display: flex;
+      align-items: center;
+    }
+    .mat-form-field-wrapper{
+      padding-bottom: 0 !important;
+    }
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+      background-color: white;
+  }
+
+  }
+
+    .mat-form-field-flex{
+      border: 1px solid var(--gray_color);
+      border-radius: 5px;
+      padding: 5px;
+    }
+}
+
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: unset;
+}
+
+.colorPickerdiv{
+  border: 1px solid var(--gray_color);
+  border-radius: 5px;
+  padding: 5px;
+  .colorInput{
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+  }
+}
+
+.legendheader {
+  font-size: var(--title);
+}
+.themeImg{
+  width: 100%;
+}

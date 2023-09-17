@@ -1,0 +1,36 @@
+.check-box {
+  background-color: rgba(0, 0, 0, 0.04);
+  padding: 0 10px;
+  border-radius: 5px;
+  border: 1px solid #efefef;
+}
+.btn-group {
+  //display: flex;
+  // flex-direction: row-reverse;
+}
+.btn-group .btn {
+  margin-inline-end: 10px;
+}
+.wrapper form .checkbox {
+  padding: 6px 0 !important;
+}
+td {
+  display: flex !important;
+}
+label {
+  margin-bottom: 0 !important;
+}
+::ng-deep {
+  .wrapper {
+    max-height: inherit!important;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+  ::ng-deep {
+    .wrapper {
+      padding: 10px!important;
+    }
+  }
+}

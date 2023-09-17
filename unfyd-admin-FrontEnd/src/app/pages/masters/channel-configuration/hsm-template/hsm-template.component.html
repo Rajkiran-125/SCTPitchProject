@@ -1,0 +1,624 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="inner-container p-4" *ngIf="filter == 'hsm'">
+      <div class="wrapper">
+  <!-- {{hasChecked.length >0|json}} -->
+  <app-filter [hasChecked]="hasChecked" [component]="''" [role]="userDetails.role" type="hsm-template"
+  [tabValue]="tabValue" [addBtn]="true" [ChannelIdInput]="ChannelIdInput"
+  [ChannelUniqueCodeInput]="ChannelUniqueCodeInput">
+</app-filter>
+<div *ngIf="hsmtoggleval == 'table'">
+  <div class="px-0 py-0">
+    <div class="dataTable" style="overflow: auto;">
+      <table>
+        <thead>
+          <tr *ngIf="tabValue.length!==0">
+            <ng-container *ngFor="let data of finalField; let i = index">
+              <!-- {{data.value|json}} -->
+              <th *ngIf="data.value !== 'CHECKBOX' " [ngClass]="!data.checked ? 'tabCol' : ''"
+                class="{{'column'+i}}" (click)="sortUsers(data.value, data.order)">
+                <ng-container class="Header_All" *ngIf="data.value == 'Sr No' else else_content">
+                  <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary"
+                    [indeterminate]="hasChecked.length >0 && !allSelected"
+                    [checked]="hasChecked.length >0 && allSelected" [disabled]="!data.CHECKBOX && maxNo"
+                    (change)="bulkCheckboxCheck($event.checked, data)"></mat-checkbox>
+                </ng-container>
+                <ng-template #else_content>{{data.value == 'Actionable' ? 'Action' : data.value}}
+                  <span [ngSwitch]="data.order">
+                    <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                    <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                  </span>
+                </ng-template>
+              </th>
+            </ng-container>
+          </tr>
+          <tr *ngIf="tabValue.length == 0">
+            <th>No record found</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="tabValue.length>0">
+          <ng-container
+            *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage:currentpage  }; let j = index">
+            <tr>
+              <ng-container *ngFor="let val of finalField; let i = index">
+                <td *ngIf="val.value == 'Sr No'" [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}}">
+                  <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary" [disabled]="!data.CHECKBOX && maxNo"
+                    (change)="singleCheckboxCheck($event.checked, data)"></mat-checkbox>
+                </td>
+                <td *ngIf="val.value == 'Actionable'" class="{{'column'+i}} action">
+                  <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                  <mat-menu #menu="matMenu" class="master_action">
+                    <button *ngIf="userConfig?.PreviewHSM && hasChecked.length == 0" mat-menu-item
+                      (click)="viewPreview(data[finalField[i].value],data[val.value],'true')">
+                      <mat-icon>remove_red_eye</mat-icon>
+                      <span>{{labelName?.View}}</span>
+                    </button>
+                    <button *ngIf="userConfig?.EditHSM && hasChecked.length == 0" mat-menu-item
+                      (click)="hsmForm()" [routerLink]="['/masters/channel-configuration/hsm-template/edit']"
+                      [queryParams]="{ filter: 'edit-hsm',Id : data.Actionable,channelid : ChannelIdInput, uniquecode : ChannelUniqueCodeInput}">
+                      <mat-icon>edit</mat-icon>
+                      <span>{{labelName?.Edit}}</span>
+                    </button>
+                    <button *ngIf="userConfig?.DeleteHSM " mat-menu-item
+                      (click)="deletehsm(data[finalField[i].value])">
+                      <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                      <span>{{labelName?.Delete}}</span>
+                    </button>
+                  </mat-menu>
+                </td>
+                <td *ngIf="val.value !== 'Sr No' && val.value !== 'Actionable' && val.value !== 'Body'"
+                  [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}} textwrap">
+                  <span
+                    [matTooltip]="data[val.value] && data[val.value].toString().length > 20 ? data[val.value] : ''">{{data[val.value]
+                    == '' ? '-' :data[val.value] == ' ' ?'-':
+                    data[val.value]}}</span>
+                </td>
+                <td *ngIf="val.value == 'Body'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                  class="column{{i}} textwrap">
+                  <span
+                    [matTooltip]="data[val.value] && data[val.value].length > 10 ? convertToPlain(data[val.value]) : ''"><span>
+                      {{convertToPlain(data[val.value])}}</span></span>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" *ngIf="tabValue.length>itemsPerPage">
+      <pagination-controls (pageChange)="currentpage = $event" previousLabel="" nextLabel="">
+      </pagination-controls>
+    </div>
+    <input type="hidden"
+      *ngFor="let data of paginationArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentpage }">
+  </div>
+</div>
+<div *ngIf="hsmtoggleval == 'card'">
+  <div class="wrapper px-0 py-0">
+    <div style="overflow: hidden; font-size: 12px;">
+      <table>
+        <thead>
+        </thead>
+        <tbody *ngIf="tabValue.length>0">
+          <tr class="row">
+            <ng-container
+              *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage:currentpage  }; let j = index">
+              <th>
+                <div class="col-12" style="margin-top: 10px;">
+                  <div class="cardfirstlayer ">
+                    {{data.TemplateName}}
+                    <mat-icon [matMenuTriggerFor]="menu" style="float: right;">more_horiz</mat-icon>
+                    <mat-menu #menu="matMenu" class="master_action">
+                      <button *ngIf="userConfig?.PreviewHSM" mat-menu-item
+                        (click)="viewPreview(data.Actionable,data.Actionable,'true')">
+                        <mat-icon>remove_red_eye</mat-icon>
+                        <span>{{labelName?.View}}</span>
+                      </button>
+                      <button *ngIf="userConfig?.EditHSM" mat-menu-item (click)="hsmForm()"
+                        [routerLink]="['/masters/channel-configuration/hsm-template/edit']"
+                        [queryParams]="{ filter: 'edit-hsm',Id : data.Actionable,channelid : ChannelIdInput, uniquecode : ChannelUniqueCodeInput}">
+                        <mat-icon>edit</mat-icon>
+                        <span>{{labelName?.Edit}}</span>
+                      </button>
+                      <button *ngIf="userConfig?.DeleteHSM " mat-menu-item (click)="deletehsm(data.Actionable)">
+                        <mat-icon class="red-color cursorPointer">delete</mat-icon>
+                        <span>{{labelName?.Delete}}</span>
+                      </button>
+                    </mat-menu>
+                  </div>
+                  <div class="cardsecondlayer">
+                    <img src="{{data.MessageHeaderValue}}" *ngIf="data.Messageheader == 'Image'"
+                      class="cardimg" />
+                    <video *ngIf="data.Messageheader  == 'Video'" class="cardvideo" controls>
+                      <source src="{{data.MessageHeaderValue}}">
+                    </video>
+                    <img *ngIf="data.Messageheader == 'Document'"
+                      src="../../../../../../assets/images/icons/documentfile.png" class="carddoc" />
+                    <img *ngIf="data.Messageheader == 'Text'"
+                      src="../../../../../../assets/images/icons/documentfile.png" class="carddoc" />
+                    <img *ngIf="data.Messageheader == 'Location'"
+                      src="../../../../../../assets/images/icons/documentfile.png" class="carddoc" />
+                  </div>
+                  <div class="cardthirdlayer">
+                    {{data.NameSpace}}
+                  </div>
+                </div>
+              </th>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" *ngIf="tabValue.length>itemsPerPage">
+      <pagination-controls (pageChange)="currentpage = $event" previousLabel="" nextLabel="">
+      </pagination-controls>
+    </div>
+    <input type="hidden"
+      *ngFor="let data of paginationArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentpage }">
+  </div>
+</div>
+  </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="preview">
+  </div>
+</div>
+<div class="inner-container">
+  <div class="wrapper" (preview)="update($event)" *ngIf="filter == 'add-hsm' || filter == 'edit-hsm'">
+    <div class="row">
+      <div class="col-1 text-center pl-2">
+        <mat-icon class="gray" (click)="backClicked()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-lg-7 col-md-11 col-11 pl-2">
+        <legend>
+          {{ filter == 'add-hsm' ? 'Add New' : 'Update' }} HSM Template
+        </legend>
+        <div class="search-form">
+          <form [formGroup]="form">
+            <div class="formGroup">
+              <div class="row">
+                <div class="col-lg-11 col-md-12 col-sm-12">
+                  <mat-form-field appearance="fill" [ngClass]="{'shake' : submittedForm && f.template.errors}">
+                    <mat-label>{{labelName?.TemplateName}}</mat-label>
+                    <input matInput formControlName="template">
+                    <mat-error *ngIf="f.template?.errors">
+                      <ng-container *ngIf="f.template?.errors?.required">{{labelName?.TemplateName}} is required
+                      </ng-container>
+                      <ng-container *ngIf="f.template?.errors?.pattern">Only contains lowercase alphanumeric and
+                        underscore
+                      </ng-container>
+                      <ng-container *ngIf="f.template?.errors?.maxlength">Cannot be beyond 30 characters
+                      </ng-container>
+                      <ng-container *ngIf="f.template?.errors?.checknull1">Must be at least 3 characters
+                        long.</ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-11 col-md-12 col-sm-12">
+                  <mat-form-field appearance="fill" [ngClass]="{'shake' : submittedForm && f.space.errors}">
+                    <mat-label>{{labelName?.NameSpace}}</mat-label>
+                    <input matInput formControlName="space">
+                    <mat-error *ngIf="f.space.errors">
+                      <ng-container *ngIf="f.space.errors.required">Name is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.space?.errors?.checknull1">Must be at least 3 characters long.</ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-11 col-md-12 col-sm-12" style="padding-bottom: 10px;">
+                  <mat-label appearance="fill" [ngClass]="{'shake' : submittedForm && f.messageheader.errors}"
+                    style="font-size: 14px;font-family: Nunito Sans, Regular;" class="mb-2">
+                    {{labelName?.Messageheader}}
+                  </mat-label>
+                  <br />
+                  <mat-radio-group formControlName="messageheader">
+                    <mat-radio-button style="font-size: 14px; font-family: Nunito Sans, Regular;"
+                      (change)="gallery($event)" value="Image">{{labelName?.Image}}</mat-radio-button>
+                    <mat-radio-button style="font-size: 14px; font-family: Nunito Sans, Regular;"
+                      (change)="gallery($event)" value="Document">{{labelName?.Document}}</mat-radio-button>
+                    <mat-radio-button style="font-size: 14px; font-family: Nunito Sans, Regular;"
+                      (change)="gallery($event)" value="Video">{{labelName?.Video}}</mat-radio-button>
+                    <mat-radio-button style="font-size: 14px; font-family: Nunito Sans, Regular;"
+                      (change)="gallery($event)" value="Location">{{labelName?.Location}}</mat-radio-button>
+                    <mat-radio-button style="font-size: 14px; font-family: Nunito Sans, Regular;"
+                      (change)="gallery($event)" value="Text">{{labelName?.Text}}</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                  *ngIf="MessageHeaderRequired == true"> {{labelName?.Messageheader}} is Required</mat-hint>
+              </div>
+              <div class="row">
+                <div class="col-lg-11 col-md-12 col-sm-12" *ngIf="labelname=='Image'">
+                  <mat-form-field appearance="fill" [ngClass]="{'shake' : submittedForm && f.messageheaderval.errors}">
+                    <mat-label>{{labelName?.ImageURL}}</mat-label>
+                    <input matInput type="url" formControlName="messageheaderval" [value]="msgImg"
+                      (input)="msgImg=$event.target.value" (valueChange)="onChange($event,'Image')">
+                    <mat-error *ngIf="f.messageheaderval.errors">
+                      <ng-container *ngIf="f.messageheaderval.errors.required">Image URL is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-11 col-md-12 col-sm-12" *ngIf="labelname=='Document'">
+                  <mat-form-field appearance="fill" [ngClass]="{'shake' : submittedForm && f.messageheaderval.errors}">
+                    <mat-label>{{labelName?.DocumentURL}}</mat-label>
+                    <input matInput type="url" formControlName="messageheaderval" [value]="msgImg"
+                      (keyup)="documentformat(this.form.value.messageheaderval)" (input)="msgImg=$event.target.value"
+                      (valueChange)="onChange($event,'Document')">
+                    <mat-error *ngIf="f.messageheaderval.errors">
+                      <ng-container *ngIf="f.messageheaderval.errors.required">{{labelName?.DocumentURL}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-11 col-md-12 col-sm-12" *ngIf="labelname=='Video'">
+                  <mat-form-field appearance="fill" [ngClass]="{'shake' : submittedForm && f.messageheaderval.errors}">
+                    <mat-label>{{labelName?.VideoURL}}</mat-label>
+                    <input matInput type="url" formControlName="messageheaderval" [value]="msgImg"
+                      (keyup)="videoformat(this.form.value.messageheaderval)" (input)="msgImg=$event.target.value"
+                      (valueChange)="onChange($event,'Video')">
+                    <mat-error *ngIf="f.messageheaderval.errors">
+                      <ng-container *ngIf="f.messageheaderval.errors.required">{{labelName?.VideoURL}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-11 col-md-12 col-sm-12" *ngIf="labelname=='Location'">
+                  <mat-form-field appearance="fill" [ngClass]="{'shake' : submittedForm && f.messageheaderval.errors}">
+                    <mat-label>{{labelName?.LocationEarlyaccessURL}}</mat-label>
+                    <input matInput type="url" formControlName="messageheaderval" [value]="msgImg"
+                      (input)="msgImg=$event.target.value" (valueChange)="onChange($event,'Location')">
+                    <mat-error *ngIf="f.messageheaderval.errors">
+                      <ng-container *ngIf="f.messageheaderval.errors.required">{{labelName?.LocationEarlyaccessURL}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-11 col-md-12 col-sm-12" *ngIf="labelname=='Text'">
+                  <mat-form-field appearance="fill" [ngClass]="{'shake' : submittedForm && f.messageheaderval.errors}">
+                    <mat-label>{{labelName?.Text}}</mat-label>
+                    <input matInput formControlName="messageheaderval" [value]="msgImg"
+                      (input)="msgImg=$event.target.value" (valueChange)="onChange($event,'Text')">
+                    <mat-error *ngIf="f.messageheaderval.errors">
+                      <ng-container *ngIf="f.messageheaderval.errors.required">{{labelName?.Text}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-11 col-md-12 col-sm-12" style="font-size: 13px;">
+                  <div [ngxSummernote]="ngxconfig" formControlName="body"></div>
+                  <span *ngIf="f.body.errors && f.body.touched">
+                    <span style="color: red;" *ngIf="f.body.errors.required">Message body is required</span>
+                  </span>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 10px;">
+                <div class="col-lg-8 col-md-12 col-sm-12">
+                  <div style="border: 1px solid  #efefef;border-radius: 10px;">
+                    <label
+                      style="font-family: Nunito Sans, Regular;font-size: 14px;padding:15px">{{labelName?.Placeholders}}</label>
+                    <button (click)="removeplace(1)" *ngIf="place().controls.length !== 1 "
+                      class="btn-gray placeholderremove">
+                      <span class="minusfont">-</span></button>
+                    <button *ngIf="place().controls.length == 1 " [disabled]=true class="btn-gray placeholderremove">
+                      <span class="minusfont">-</span></button>
+                    <span class="placeholdercount">
+                      {{place().controls.length}}
+                    </span>
+                    <button type="button" *ngIf="place().controls.length < 5 " (click)="addplace()"
+                      class="btn-gray placeholderadd">
+                      <span class="addfont">+</span></button>
+                    <button type="button" *ngIf="place().controls.length == 5 " [disabled]=true
+                      class="btn-gray placeholderadd">
+                      <span class="addfont">+</span></button>
+                    <div formArrayName="place">
+                      <div *ngFor="let val of place().controls; let i= index " [formGroupName]="i">
+                        <div class="row placeholderboxpadding">
+                          <div class="col-lg-5 col-md-5 col-4 placeholderbox">
+                            <mat-form-field appearance="fill" style="width: 90px;text-align: center;">
+                              <mat-label> {{labelName?.Parameters}}</mat-label>
+                              <input type="text" matInput formControlName="parameters" readonly>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-6 col-md-5 col-8" style="padding-right: 10px;">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.Placeholders}} </mat-label>
+                              <input type="text" matInput formControlName="holders">
+                              <mat-error
+                                *ngIf="place().controls[i].get('holders').hasError('required')">{{labelName?.Placeholders}}
+                                is required</mat-error>
+                              <mat-error *ngIf="val.get('holders')?.errors?.cannotContainSpace">Whitespace not
+                                allowed.</mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 hsmcheckbox">
+                    <mat-checkbox color="primary" formControlName="hsmcheckbox">
+                      System HSM
+                    </mat-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-11 col-md-12 col-sm-12">
+                  <div class="mt-3 mb-2" style="display: flex;">
+                    <textarea placeholder="Footer" #invite
+                      style="flex:1;background: var(--backgroud_color);height: 100px;    font-weight: 900;"
+                      resizable="auto" [maxLength]="MAXCHAR" [value]="value" (keyup)="TypeFooter()"
+                      (valueChange)="onValueChange($event)" formControlName="footer" class="textarea"></textarea>
+                    <span class="counter">{{ MAXCHAR - invite.value.length }}/60</span>
+                  </div>
+                </div>
+              </div>
+              <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;" *ngIf="footerRequired == true">Footer
+                is required</mat-hint>
+              <div class="row" style="padding-left: 15px;padding-right: 15px;">
+                <div class="col-lg-11 col-md-12 col-sm-12" style="border: 1px solid #efefef;border-radius: 10px;">
+                  <div style="padding: 15px 3px;">
+                    <mat-label style="padding-right: 40px;">{{labelName?.Action}}</mat-label>
+                    <mat-radio-group formControlName="action">
+                      <mat-radio-button (change)="actions($event)" value="QuckReply"
+                        style="font-family: Nunito Sans, Regular;font-size: 14px;">{{labelName?.QuickReplys}}</mat-radio-button>
+                      <mat-radio-button (change)="actions($event)" value="Listoption"
+                        style="font-family: Nunito Sans, Regular;font-size: 14px;">{{labelName?.Listoption}}</mat-radio-button>
+                      <mat-radio-button (change)="actions($event)" value="Calltoaction"
+                        style="font-family: Nunito Sans, Regular;font-size: 14px;">{{labelName?.Calltoaction}}</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                    *ngIf="ActionRequired == true">{{labelName?.Action}} is Required</mat-hint>
+                  <div *ngIf="actionname=='QuckReply'">
+                    <div formArrayName="QuckReply">
+                      <button (click)="removeQuckReply(1)" *ngIf="QuckReply().controls.length !== 1"
+                        class=" btn-gray placeholderremove">
+                        <span class="minusfont">-</span></button>
+                      <button *ngIf="QuckReply().controls.length == 1" [disabled]=true
+                        class=" btn-gray placeholderremove">
+                        <span class="minusfont">-</span></button>
+                      <span class="placeholdercount">
+                        {{QuckReply().controls.length}}
+                      </span>
+                      <button type="button" *ngIf="QuckReply().controls.length < 3 " (click)="addQuckReply()"
+                        class="btn-gray placeholderadd"><span class="addfont">+</span></button>
+
+                      <button type="button" *ngIf="QuckReply().controls.length == 3 " class="btn-gray placeholderadd"
+                        [disabled]=true><span class="addfont">+</span></button>
+                      <div *ngFor="let quantity of QuckReply().controls; let i= index " [formGroupName]="i">
+                        <div class="row placeholderboxpadding mt-2 justify-content-center">
+                          <div class="col-lg-3 col-md-5 col-5">
+                            <mat-form-field appearance="fill" class="keyTextField">
+                              <mat-label> {{labelName?.KeyName}}</mat-label>
+                              <input type="text" matInput formControlName="keyname" readonly>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-5 col-md-5 col-7" style="padding: 0;">
+                            <mat-form-field appearance="fill">
+                              <mat-label> {{labelName?.ButtonCaption}}</mat-label>
+                              <input type="text" matInput formControlName="buttoncaption">
+                              <mat-error
+                                *ngIf="QuckReply()?.controls[i]?.get('buttoncaption')?.hasError('required')">{{labelName?.ButtonCaption}}
+                                is required</mat-error>
+                              <mat-error *ngIf="quantity.get('buttoncaption')?.errors?.cannotContainSpace">Whitespace not
+                                allowed.</mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="actionname=='Listoption'">
+                    <div formArrayName="Listoption">
+                      <button (click)="removeListoption(1)" *ngIf="Listoption().controls.length !== 1 "
+                        class=" btn-gray placeholderremove">
+                        <span class="minusfont">-</span></button>
+                      <button *ngIf="Listoption().controls.length == 1 " [disabled]=true
+                        class=" btn-gray placeholderremove">
+                        <span class="minusfont">-</span></button>
+                      <span class="placeholdercount">
+                        {{Listoption().controls.length}}
+                      </span>
+                      <button type="button" *ngIf="Listoption().controls.length < 3 " (click)="addListoption()"
+                        class="btn-gray placeholderadd"><span class="addfont">+</span></button>
+
+                      <button type="button" *ngIf="Listoption().controls.length == 3 " [disabled]=true
+                        class="btn-gray placeholderadd"><span class="addfont">+</span></button>
+                      <div *ngFor="let quantity of Listoption().controls; let i= index " [formGroupName]="i">
+                        <div class="row placeholderboxpadding mt-2">
+                          <!-- <div class="col-lg-2 col-md-4 col-2">
+                          </div> -->
+
+                          <div class="col-lg-3 col-md-5 col-2">
+                            <mat-form-field appearance="fill" class="ListkeyTextField">
+                              <mat-label> {{labelName?.KeyName}}</mat-label>
+                              <input type="text" matInput formControlName="keyname" readonly>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-4 col-md-5 col-5">
+                            <mat-form-field appearance="fill" class="ListHeaderField">
+                              <mat-label>{{labelName?.Header}} </mat-label>
+                              <input type="text" matInput formControlName="listHeader">
+                              <mat-error
+                                *ngIf="Listoption()?.controls[i]?.get('listHeader')?.hasError('required')">{{labelName?.Header}}
+                                is required</mat-error>
+                              <mat-error *ngIf="quantity.get('listHeader')?.errors?.cannotContainSpace">Whitespace not
+                                allowed.</mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-5 col-md-4 col-5">
+                            <mat-form-field appearance="fill">
+                              <mat-label> {{labelName?.Description}}</mat-label>
+                              <input type="text" matInput formControlName="listDescription">
+                              <mat-error
+                                *ngIf="Listoption()?.controls[i]?.get('listDescription')?.hasError('required')">{{labelName?.Description}}
+                                is required</mat-error>
+                              <mat-error *ngIf="quantity.get('listDescription')?.errors?.cannotContainSpace">Whitespace
+                                not allowed.</mat-error>
+                              <mat-error *ngIf="quantity.get('listDescription')?.errors?.checknull1">Must be at least 3
+                                characters long.</mat-error>
+                              <mat-error
+                                *ngIf="Listoption()?.controls[i]?.get('listDescription')?.hasError('minlength')">Must be
+                                at least 3 characters long.</mat-error>
+                              <mat-error
+                                *ngIf="Listoption()?.controls[i]?.get('listDescription')?.hasError('maxlength')">Cannot be
+                                beyond 300 characters.</mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="actionname=='Calltoaction'">
+                    <div formArrayName="Calltoaction">
+                      <button (click)="removeCalltoaction(1)" *ngIf="Calltoaction().controls.length !== 1"
+                        class=" btn-gray placeholderremove">
+                        <span class="minusfont">-</span></button>
+
+                      <button *ngIf="Calltoaction().controls.length == 1" [disabled]=true
+                        class=" btn-gray placeholderremove">
+                        <span class="minusfont">-</span></button>
+
+
+                      <span class="placeholdercount">
+                        {{Calltoaction().controls.length}}
+                      </span>
+
+
+                      <button type="button" *ngIf="Calltoaction().controls.length < 3 " (click)="addCalltoaction()"
+                        class="btn-gray placeholderadd">
+                        <span class="addfont">+</span>
+                      </button>
+
+                      <button type="button" *ngIf="Calltoaction().controls.length == 3 " [disabled]=true
+                        class="btn-gray placeholderadd">
+                        <span class="addfont">+</span>
+                      </button>
+
+                      <div *ngFor="let quantity of Calltoaction().controls; let i= index " [formGroupName]="i">
+                        <div class="row placeholderboxpadding mt-2">
+
+                        <!-- <div class="col-lg-2 col-md-4 col-2 3">
+                          </div> -->
+                          <div class="col-lg-5 col-md-5 col-5 ">
+
+                            <mat-form-field appearance="fill" class=" ">
+                              <mat-label> {{labelName?.KeyName}}</mat-label>
+                              <input type="text" matInput formControlName="keyname" readonly>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-6 col-md-6 col-7" style="padding: 0;">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.URL}}</mat-label>
+                              <input type="text" matInput formControlName="url">
+                              <mat-error
+                                *ngIf="Calltoaction()?.controls[i]?.get('url')?.hasError('required')">{{labelName?.URL}}
+                                is required</mat-error>
+                              <mat-error *ngIf="quantity.get('url')?.errors?.cannotContainSpace">Whitespace not
+                                allowed.</mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row d-none d-block d-md-none">
+              <div class="col-lg-6 col-md-6 col-12">
+                <button class="btn btn-gray btnwidth mr-2" (click)="backClicked()" mat-flat-button
+                type="Reset">{{labelName?.Cancel}}</button>
+                <button *ngIf="reset ? (userConfig?.UpdateHSM) : (userConfig?.SaveHSM)" class="btn btnwidth" mat-flat-button
+                color="primary" type="button" (click)="submit('add')">{{ filter == 'add-hsm' ?labelName?.Save :
+                labelName?.Update }}</button>
+              </div>
+              <div class="col-lg-6 col-md-6 col-12 mt-2">
+                <button *ngIf=" filter == 'add-hsm'  && userConfig?.Reset" (click)="ResetFunc()" id="reset" #reset
+                class="btn btn-gray btnwidth mr-2" mat-flat-button type="Reset">{{labelName?.Reset}}</button>
+                <button class="btn outline btnwidth" *ngIf="(userConfig?.SaveAddNewHSM) && filter == 'add-hsm' " mat-stroked-button
+                color="primary" (click)="submit('saveAndAddNew')">{{labelName?.SaveAddNew}}</button>
+              </div>
+            </div>
+             <div class="btn-group d-none d-md-block">
+              <button class="btn btn-gray" (click)="backClicked()" mat-flat-button
+                type="Reset">{{labelName?.Cancel}}</button>
+              <button *ngIf=" filter == 'add-hsm'  && userConfig?.Reset" (click)="ResetFunc()" id="reset" #reset
+                class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button>
+              <button class="btn outline" *ngIf="(userConfig?.SaveAddNewHSM) && filter == 'add-hsm' " mat-stroked-button
+                color="primary" (click)="submit('saveAndAddNew')">{{labelName?.SaveAddNew}}</button>
+              <button *ngIf="reset ? (userConfig?.UpdateHSM) : (userConfig?.SaveHSM)" class="btn" mat-flat-button
+                color="primary" type="button" (click)="submit('add')">{{ filter == 'add-hsm' ?labelName?.Save :
+                labelName?.Update }}</button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-12 col-sm-12">
+        <div id="custom-div">
+          <div class="row">
+            <div class="col-12">
+              <div class="inner-container p-4">
+                <legend class="primary-color font-weight-bold" style="font-size: 18px;">HSM Preview</legend>
+              </div>
+            </div>
+          </div>
+          <div class="row" class="containerrow">
+            <div class="container">
+              <div class="box mobileImg">
+                <div class="stack-top" style="background:var(--gray-dark);">
+                  <img *ngIf="labelname=='Image' && msgImg !== ''" [src]="msgImg"
+                    style="padding: 3px;border-radius: 11px;width: 100%;height: 100px;" alt="">
+
+                  <video #video id="video" *ngIf="labelname=='Video'" width="100%" controls
+                    style="padding: 3px;border-radius: 9px;">
+                    <source [src]="msgImg">
+                  </video>
+
+                  <div style="margin-top: 7px;">
+                    <span *ngIf="labelname== 'Document'" class="bodyText">
+
+
+                      <img *ngIf="docfileext == 'pdf'" src="../../../../../../assets/images/icons/pdficon.png"
+                        style="height: 81px;width: 84px;margin-left: 31px;border-radius: 4px;" />
+                      <img *ngIf="docfileext == 'docx'" src="../../../../../../assets/images/icons/docicon.png"
+                        style="height: 81px;width: 84px;margin-left: 31px;border-radius: 4px;" />
+                      <img *ngIf="docfileext == 'xlsx'" src="../../../../../../assets/images/icons/excelicon.png"
+                        style="height: 81px;width: 84px;margin-left: 31px;border-radius: 4px;" />
+
+                      <a href='{{msgImg}}' target="_blank">{{msgImg}}</a>
+
+
+                    </span>
+                  </div>
+
+                  <map *ngIf="labelname== 'Location'" name=""> <a href='{{msgImg}}' target="_blank">{{msgImg}}</a>
+                  </map>
+
+                  <div style="margin-top: 7px;">
+                    <span *ngIf="labelname== 'Text'" class="bodyText">{{msgImg}}</span>
+                  </div>
+
+
+                  <div style="margin-top: 5px;">
+                    <div class="bodyText" [innerHTML]="this.form.value.body"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

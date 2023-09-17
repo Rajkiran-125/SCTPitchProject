@@ -1,0 +1,7 @@
+<div class="breadcrumb justify-content-between">
+  <ul>
+    <li><a routerLink="{{parentUrl}}">{{parentMenu}}</a></li>
+    <li *ngIf="childMenu" routerLinkActive="router-link-active" class="d-none d-md-block"><a routerLink="{{childUrl}}">{{childMenu}}</a>
+    </li>
+  </ul>
+</div>

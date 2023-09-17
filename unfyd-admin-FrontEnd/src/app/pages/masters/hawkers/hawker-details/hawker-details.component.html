@@ -1,0 +1,172 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="action-bar">
+        <div class="action-area mr-2">
+            <a mat-raised-button color="primary" (click)="back()" #tooltip="matTooltip" matTooltip="Back">
+                <mat-icon class="cursorPointer">keyboard_backspace</mat-icon>
+            </a>
+        </div>
+        <div class="action-area mr-2" *ngIf="userConfig?.Edit">
+            <a mat-raised-button color="primary" (click)="action('edit')" #tooltip="matTooltip" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+            </a>
+        </div>
+        <div class="action-area" *ngIf="userConfig?.Block && RegistrationStatus == 'Blacklisted'">
+            <a style="width:44px; text-decoration: none;" mat-raised-button color="primary" (click)="activeReactive('Reactivate')" #tooltip="matTooltip" matTooltip="Reactive">
+            <i class="icon-reactive" style="font-size: 15px;"></i>
+            </a>
+        </div>
+        <div class="action-area" *ngIf="userConfig?.Block && RegistrationStatus == 'Active'">
+            <a mat-raised-button color="primary" (click)="activeReactive('Blacklist')" #tooltip="matTooltip" matTooltip="Blacklist">
+                <mat-icon>block</mat-icon>
+            </a>
+        </div>
+        
+    </div>
+    <div class="wrapper">
+    
+        <app-steps [steps]="hawkerDetailsSteps" [id]="path" [tab]="tab"></app-steps>
+
+        <form>
+            <ng-container *ngIf="tab == 'contact'">
+                <div class="row details" *ngFor="let group of data">
+                    <ng-container *ngFor="let item of group | keyvalue : keepOrder">
+                        <div class="col-lg-2 col-md-2 col-sm-12"
+                            *ngIf="item.key !== 'Present Address' && item.key !== 'Permanent Address' && item.key !== 'Communication Address'">
+                            <p title={{item.value}}>
+                                <small>{{item.key}}</small>
+                                <strong class="text-wrap">{{item.value == null || item.value == '' ? '-' : item.value == true ? 'Yes' : item.value == false ? 'No' : item.value}}</strong>
+
+                                <span *ngIf="(item.key == 'Photo ID' && item.value == true) 
+                        || (item.key == 'Address Proof' && item.value == true)
+                        || (item.key == 'Signature' && item.value == true)">
+                                    <mat-icon class="view cursorPointer" (click)="viewDocument(
+                                    item.key == 'Photo ID' ? 'Id Proof' : item.key
+                                    , 'document')" #tooltip="matTooltip" matTooltip="View">
+                                        remove_red_eye</mat-icon>
+                                </span>
+                            </p>
+                        </div>
+                        <ng-container
+                            *ngIf="item.key == 'Present Address' || item.key == 'Permanent Address' || item.key == 'Communication Address'">
+                            <legend class="col col-12 legend normal-font font-bold">{{item.key}}</legend>
+                            <div class="col-lg-2 col-md-2 col-sm-12"
+                                *ngFor="let item of item.value | keyvalue : keepOrder">
+                                <p title={{item.value}}>
+                                    <small>{{item.key}}</small>
+                                    <strong class="text-wrap">{{item.value == null || item.value == '' ? '-' : item.value == true ? 'Yes' : item.value == false ? 'No' : item.value}}
+                                    </strong>
+                                </p>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <div *ngIf="tab !== 'contact' && tab !== 'documents' && tab !== 'payment'" class="row details">
+                <ng-container *ngFor="let item of data | keyvalue : keepOrder">
+                    <div class="col-lg-2 col-md-2 col-sm-12" *ngIf="item.key !== 'id'">
+                        <p title={{item.value}}>
+                            <small>{{item.key}}</small>
+                            <strong class="text-wrap">{{item.value == null || item.value == '' ? '-' : item.value == true ? 'Yes' : item.value == false ? 'No' : item.value}}</strong>
+
+                            <span *ngIf="(item.key == 'Specially Abled' && item.value == true) 
+                        || (item.key == 'Covid Vaccination Certificate' && item.value == true)
+                        || (item.key == 'PCC Certificate' && item.value == true)
+                        || (item.key == 'Medical Certificate' && item.value == true)">
+                                <mat-icon class="view cursorPointer" (click)="viewDocument(
+                                    item.key == 'Covid Vaccination Certificate' ? 'Covid Vaccination' : 
+                                    item.key == 'PCC Certificate' ? 'Clearance Certificate' :
+                                    item.key == 'Medical Certificate' ? 'Medical Clearance Report' : item.key
+                                    , 'document')" #tooltip="matTooltip" matTooltip="View">
+                                    remove_red_eye</mat-icon>
+                            </span>
+                        </p>
+                    </div>
+                </ng-container>
+            </div>
+            <ng-container *ngIf="tab ==  'documents'">
+                <app-filter component="document" [role]="userDetails.role" [totalCount]="tabValue.length" [type]="path"
+                    [tabValue]="tabValue"></app-filter>
+
+                <div class="dataTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let data of tabKey; let i = index">
+                                    <th class="column{{ i }}">{{data == 'Actionable' ? '' : data}}</th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="tabValue.length>0">
+                                <tr
+                                    *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+
+                                    <ng-container *ngFor="let val of tabKey; let i = index">
+                                        <td *ngIf="val == 'Sr No'" class="column{{ i }}"><span>{{j+1}}</span></td>
+                                        <td *ngIf="val == 'Actionable'" class="column{{ i }} action">
+                                            <mat-icon class="view" (click)="viewDocument(data[tabKey[i+1]], 'document')"
+                                                #tooltip="matTooltip" matTooltip="View">remove_red_eye</mat-icon>
+                                        </td>
+                                        <td *ngIf="val == 'Print'" class="column{{ i }}">
+                                            <button class="btn sm-btn" mat-flat-button color="primary" type="button">
+                                                <mat-icon>print</mat-icon><span>Print</span>
+                                            </button>
+                                        </td>
+                                        <td *ngIf="val !== 'Sr No' && val !== 'Actionable' && val !== 'Print'"
+                                            class="column{{ i }}">
+                                            <span [innerHtml]="data[tabKey[i]]"></span>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="tabValue.length==0">
+                                <tr>
+                                    <td [attr.colspan]="tabKey.length">No Data Found</td>
+                                </tr>
+                            </ng-container>
+
+                        </tbody>
+                    </table>
+                </div>
+            </ng-container>
+            <app-payment *ngIf="tab == 'payment' && componentData" [hawkerDetails]="componentData"></app-payment>
+
+            <app-stock *ngIf="tab == 'other' && componentData" [hawkerDetails]="componentData"></app-stock>
+
+        </form>
+
+    </div>
+    <div class="wrapper wrapper-padding"  *ngIf="userDetails.RoleType == 'Supervisor' && RegistrationStatus == 'Pending-Supervisor' && tab == 'personal' || userDetails.RoleType == 'ER Officer' && RegistrationStatus == 'Pending-ER' && tab == 'personal'">
+        <form [formGroup]="form">
+            <div class="formGroup">
+                <div class="row">
+
+                    <div class="col col-12">
+                        <div class="btn-group" style="margin-bottom: 18.8px;">
+                            <button class="btn btn-gray" mat-flat-button type="button"
+                                (click)="remarkValidation('Reject')">Reject</button>
+                            <button class="btn" mat-flat-button color="primary" type="button"
+                                (click)="submit('Approved')">Approve</button>
+                        </div>
+                    </div>
+                    <div class="col col-4">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': Remarkstatus }">
+                            <mat-label>Remark</mat-label>
+                            <textarea rows="5" formControlName="remarks" matInput minlength="3" maxlength="50"
+                                appTitleCase></textarea>
+                            <mat-error *ngIf="Remarkstatus == true">For rejection remark is mandatory</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+    <div class="pagination" *ngIf="tabValue.length>10 && tab == 'documents'">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+
+    
+</div>

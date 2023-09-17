@@ -1,0 +1,100 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <ng-container *ngIf="paymentSearch">
+            <div class="search-form">
+                <form [formGroup]="form">
+                    <legend>Training Report</legend>
+                    <div class="formGroup">
+                        <div class="row">
+                       
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"
+                                    [ngClass]="{ 'shake': submittedForm && f.fromDate.errors }">
+                                    <mat-label>From Date</mat-label>
+                                    <input (focus)="fromDate?.open()" (click)="fromDate?.open()" readonly
+                                        formControlName="fromDate" type="text" [matDatepicker]="fromDate"
+                                        [max]="maxDate" [min]="minDate" matInput>
+                                    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #fromDate></mat-datepicker>
+                                    <mat-error *ngIf="submittedForm && f.fromDate.errors">
+                                        <ng-container *ngIf="f.fromDate.errors.required">From Date is required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill"
+                                    [ngClass]="{ 'shake': submittedForm && f.toDate.errors }">
+                                    <mat-label>Till Date</mat-label>
+                                    <input (focus)="toDate.open()" (click)="toDate.open()" readonly
+                                        formControlName="toDate" type="text" [matDatepicker]="toDate" [max]="maxDate"
+                                        [min]="minDate" matInput>
+                                    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #toDate></mat-datepicker>
+                                    <mat-error *ngIf="submittedForm && f.toDate.errors">
+                                        <ng-container *ngIf="f.toDate.errors.required">To date is required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button (click)="reset()" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                            <button (click)="searchHawker()" [disabled]="form.invalid" class="btn" mat-flat-button color="primary"
+                                type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+           
+            <app-loader *ngIf="loader"></app-loader>
+
+            
+        </ng-container>
+     
+    </div>
+</div>
+<div class="inner-container" *ngIf="!loader">
+    <app-filter *ngIf="tabValue.length>0" component=""  [role]="userDetails.role" [type]="type" [tabValue]="tabValue" [addBtn]="false"></app-filter>
+        <div class="wrapper px-0 py-0">
+            <div class="dataTable">
+        <table>
+            <thead>
+                <tr *ngIf="tabValue.length>0">
+                    <ng-container *ngFor="let data of finalField; let i = index">
+                        <th class="column{{i}}" >{{data.value}}</th>
+                    </ng-container>
+                </tr>
+                <tr *ngIf="noData">
+                    <th>No record found</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="tabValue.length>0">
+                <ng-container
+                    *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                    <tr>
+                        <ng-container *ngFor="let val of finalField; let i = index">
+                            <td *ngIf="val.value == 'Sr No'" class="column{{i}}"><span>{{((page-1)*(itemsPerPage))+(j+1)}}</span></td>
+                            <td *ngIf="val.value !== 'Sr No' && val.value != 'Training Start Date' && val.value != 'Training End Date'"
+                                class="column{{i}}">
+                                <span>{{data[val.value] == '' ? '-' :data[val.value] == ' ' ?'-': data[val.value]}}</span>
+                            </td>
+                            <td *ngIf="val.value == 'Training Start Date' || val.value == 'Training End Date'" 
+                                class="column{{i}}">
+                                <span>
+                                    {{data[val.value] | date:'mediumDate':'+0000'}}
+                                </span>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+   
+</div>
+<div class="pagination" *ngIf="tabValue.length>10">
+    <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+</div>
+</div>

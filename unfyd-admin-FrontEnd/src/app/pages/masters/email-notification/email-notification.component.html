@@ -1,0 +1,67 @@
+<div class="inner-container">
+    <div class="wrapper pt-5">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <form [formGroup]="agentForm">
+                    <legend>Agent Notifications</legend>
+                    <div class="agent-listview" formArrayName="agent">
+                        <ul class="list" *ngFor="let user of agentForm.get('agent')!['controls']; let i = index"
+                            formGroupName="{{ i }}">
+                            <li class="list-items">
+                                <div class="menus">
+                                    <div class="list-ttl">
+                                        {{user.value.textfield}}
+                                    </div>
+                                    <div class="action">
+                                        <span class="check">
+                                            <mat-checkbox color="primary" [checked]='user.value.ConfigValue == "true" ? true : false'
+                                                formControlName="agentChecked" class="example-margin">
+                                            </mat-checkbox>
+                                        </span>
+                                        <span class="edit">
+                                            <button (click)="editpanel(user.value)">
+                                                <mat-icon>edit</mat-icon>
+                                            </button></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <form [formGroup]="contcactForm">
+                    <legend>Contact Notifications</legend>
+                    <div class="agent-listview" formArrayName="contact">
+                        <ul class="list" *ngFor="let user of contcactForm.get('contact')!['controls']; let i = index"
+                            formGroupName="{{ i }}">
+                            <li class="list-items">
+                                <div class="menus">
+                                    <div class="list-ttl">
+                                        {{user.value.textfield}}
+                                    </div>
+                                    <div class="action">
+                                        <span class="check">
+                                            <mat-checkbox color="primary" [checked]="user.value.ConfigValue"
+                                                formControlName="agentChecked" class="example-margin">
+                                            </mat-checkbox>
+                                        </span>
+                                        <span class="edit">
+                                            <button (click)="editpanel(user.value)">
+                                                <mat-icon>edit</mat-icon>
+                                            </button></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div>
+                    <button class="btn" mat-flat-button (click)="Save()" color="primary" type="button">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

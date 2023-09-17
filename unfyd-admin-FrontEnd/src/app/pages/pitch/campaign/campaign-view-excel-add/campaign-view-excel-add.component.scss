@@ -1,0 +1,159 @@
+.campDetail{
+    h3{
+        font-weight: bold;
+    }
+    border: 1px solid #EAEAEA;
+    border-radius: 10px;
+    padding: 1rem;
+    span{
+        font-size: var(--content) !important;
+    }
+}
+
+.import-container {
+    // background: var(--gray_color_80);
+    // padding: 5px;
+    margin: 5px 15px;
+    // border-radius: 10px;
+    // border: var(--border); 
+    width: 100%;
+  }
+
+  .import-container:hover .condition-del-btn{
+    display: block;
+    color: red;
+  }
+
+  .dropdownButtonField::ng-deep{
+    .mat-form-field-wrapper{
+      .mat-form-field-flex{
+        border: 1px solid var(--primary_color);
+        color: var(--primary_color);
+      }
+    }
+  }
+
+  .excel-dow-button img{
+    border: 1px solid var(--gray_color_80);
+    border-radius: 5px;
+    padding: 13px;	
+    margin: 10px 0px 0px -10px;
+    background: var(--gray_color_60);
+  }
+
+  .import-list-container {
+    position: relative;
+    background: var(--gray_color_60);
+    box-shadow: none!important;
+    padding: 30px 20px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+    border: var(--border); 
+    height: auto;
+    .import-list-uploadfile{
+     
+      margin: auto;
+      margin-top: 3rem;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      // margin-bottom: 3.5rem;
+      p{
+        color: var(--gray_color);
+        font-size: var(--content);
+        font-family: var(--nunito-font);
+  
+      }
+    }
+  }
+
+  .input-upload-file{	
+    margin:auto;	
+    margin-top: -8rem;	
+      opacity: 0;	
+    height: 12rem;
+    width:100%;
+    background: gray;
+  }
+
+
+::ng-deep .mat-expansion-panel{
+    box-shadow: none;
+}
+.audienceList ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex{
+    background-color: var(--gray_color_60);
+    pointer-events: none;
+}
+
+.upload-btn {
+    border: 1px solid var(--gray_color);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: var(--content);
+    color: var(--primary_color);
+    background: var(--white_color);
+    font-family: var(--nunito-font);
+  }
+
+
+  .audienceList mat-label{
+    color: #B4B4B4 !important;
+    font-weight: bold;
+    font-size: small;
+  }
+  .dropdownButtonField mat-label{
+    color: #053c6d !important;
+    font-weight: bold;
+  }
+
+  .btn-group ::ng-deep .mat-form-field-infix{
+    background-color: #053c6d;
+    width: 33px;
+    height: 38px;
+    border-radius: 0px 5px 5px 0px;
+    margin-left: 0.1rem;
+    margin-top: -1px;
+  }
+
+  .uploaded-file {
+    position: relative;
+    background-color: var(--white_color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: var(--border);
+    span {
+        font-size: var(--small-font) ;
+    }
+  }
+
+  .dropdownButtonField ::ng-deep .mat-select-arrow{
+    color: #053c6d;
+  }
+  .btn-group ::ng-deep .mat-select-arrow{
+    color: #fff;
+  }
+
+  .btn-group ::ng-deep .mat-select-arrow-wrapper{
+    margin: 0px 7px 6px 5px;
+  }
+
+ .btn-group {
+    .btn:nth-child(1) {
+      font-weight: bold;
+    }
+}
+ .btn-group {
+    .btn:nth-child(2) {
+      min-width: 100px;
+      border-radius: 5px 0px 0px 5px !important;
+    }
+}
+// ::ng-deep  .mat-select-panel .mat-option{
+//     height: 1.5em !important;
+// }
+// ::ng-deep .cdk-overlay-pane{
+//     top: 688.25px !important;
+//     left: 597.594px !important;
+// }
+

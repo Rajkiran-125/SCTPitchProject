@@ -1,0 +1,106 @@
+.mat-btn {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin: 8.4px 0;
+
+    &.blue {
+        color: var(--primary_color);
+    }
+
+    &.red {
+        color: var(--universalRed);
+    }
+
+    &.no-mar {
+        margin: 0 8px;
+    }
+}
+
+::ng-deep {
+    .setting-accordion {
+        .mat-expansion-panel {
+            background-color: var(--white_color);
+
+            .mat-expansion-panel-body {
+                padding: 0 24px 16px;
+            }
+        }
+    }
+
+    .wrapper form legend {
+        font-size: 14px;
+        font-weight: 400;
+        color: rgba(0, 0, 0, .87);
+        margin-bottom: 5px;
+    }
+
+    .mat-button-toggle-group {
+        margin-right: 12px;
+
+        .mat-button-toggle-label-content {
+            width: 48.76px;
+            line-height: 34.81px;
+            text-align: center;
+        }
+    }
+
+    .mat-tab-group {
+        margin-bottom: 18.8125px;
+
+        .mat-tab-header {
+            margin-bottom: 0;
+            background-color: var(--white_color);
+            margin: 0px -20px;
+
+            .mat-tab-label-container {
+                .mat-tab-list {
+                    .mat-tab-labels {
+                        .mat-tab-label {
+                            min-width: auto;
+                            margin: 0 9.40625px;
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        .mat-tab-body-wrapper {
+            .mat-tab-body {
+                // height: 201px;
+                height: auto;
+                padding: 20px 0px 0px;
+
+                .mat-tab-body-content {
+                    overflow-x: hidden;
+                }
+            }
+        }
+    }
+}
+
+.sub-accordion-fields{
+    ::ng-deep{
+      .mat-form-field{
+        .mat-form-field-wrapper{
+          .mat-form-field-flex{
+            padding: 0px !important;
+            .mat-form-field-infix{
+              border-top: 2px solid transparent !important;
+              padding: 10px;
+              padding-bottom: 10px !important;
+    
+              .mat-select-arrow-wrapper {
+                transform: translateY(0%);
+              }
+            }
+          }
+        }
+      }
+     }
+  }
+.mat-icon[disabled] {
+    color: #999999;
+    cursor: not-allowed;
+  }

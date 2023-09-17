@@ -1,0 +1,47 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="wrapper">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <legend>Fee</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.FeeType.errors }">
+                            <mat-label>{{labelName?.FeeType}}</mat-label>
+                            <input matInput formControlName="FeeType"/>
+                            <mat-error *ngIf="f.FeeType.errors">
+                                <ng-container *ngIf="f.FeeType.errors.required">FeeType id required</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.FeeAmount.errors }">
+                            <mat-label>{{labelName?.FeeAmount}}</mat-label>
+                            <input type="text" matInput formControlName="FeeAmount" appTitleCase/>
+                            <mat-error *ngIf="f.FeeAmount.errors">
+                                <ng-container *ngIf="f.FeeAmount.errors.pattern">FeeAmount no. is invalid</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.GST.errors }">
+                            <mat-label>{{labelName?.GST}}</mat-label>
+                            <mat-select formControlName="GST">
+                                <mat-option *ngFor="let data of ddgst;let i=index" [value]="ddgst[i]['HSNCode']">{{ddgst[i]['GST']}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.GST.errors">
+                                <ng-container *ngIf="f.GST.errors.pattern">HSN Code is invalid</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group"  *ngIf="config?.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button class="btn btn-gray" *ngIf="!reset" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-flat-button color="primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

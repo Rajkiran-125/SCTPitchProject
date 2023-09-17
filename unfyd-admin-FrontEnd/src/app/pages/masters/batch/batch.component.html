@@ -1,0 +1,66 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="wrapper">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <legend>Batch</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.batchid.errors }">
+                            <mat-label>Batch Id</mat-label>
+                            <input matInput formControlName="batchid" />
+                            <mat-error *ngIf="f.batchid.errors">
+                                <ng-container *ngIf="f.batchid.errors.required">BatchId id is required</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.capacity.errors }">
+                            <mat-label>Capacity</mat-label>
+                            <input matInput formControlName="capacity" />
+                            <mat-error *ngIf="f.capacity.errors">
+                                <ng-container *ngIf="f.capacity.errors.required">Capacity is required</ng-container>
+                                <ng-container *ngIf="f.capacity.errors.pattern">Capacity is invalid</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.batchstartdate.errors }">
+                            <mat-label>Batch Start Date</mat-label>
+                            <input datePickerFormat="DD-MM-YYYY" (focus)="batchstartdate.open()"
+                                (click)="batchstartdate.open()" readonly formControlName="batchstartdate" type="text"
+                                [matDatepicker]="batchstartdate" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="batchstartdate"></mat-datepicker-toggle>
+                            <mat-datepicker #batchstartdate></mat-datepicker>
+                            <mat-error *ngIf=" f.batchstartdate.errors">
+                                <ng-container *ngIf="f.batchstartdate.errors.required">Batch Start Date is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.batchenddate.errors }">
+                            <mat-label>Batch End Date</mat-label>
+                            <input datePickerFormat="DD-MM-YYYY" (focus)="batchenddate.open()"
+                                (click)="batchenddate.open()" readonly formControlName="batchenddate" type="text"
+                                [matDatepicker]="batchenddate" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="batchenddate"></mat-datepicker-toggle>
+                            <mat-datepicker #batchenddate></mat-datepicker>
+                            <mat-error *ngIf=" f.batchenddate.errors">
+                                <ng-container *ngIf="f.batchenddate.errors.required">Batch End Date is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group" *ngIf="config?.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button class="btn btn-gray" *ngIf="!reset" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-flat-button color="primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

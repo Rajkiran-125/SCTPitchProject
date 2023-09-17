@@ -1,0 +1,98 @@
+.iconHeaderOnCard{
+    color: white;
+      position: absolute;
+      top: -18%;
+      font-size: 30px;
+      border-radius: 50%;
+      padding: 13px;
+  }
+.main-container{
+  overflow: auto;
+  overflow-x: hidden;
+  height: 68vh;
+  .iconsForAction{
+    .editIcon{
+      color: var(--gray_color_70);
+    }
+  }
+  .part{
+    margin: 0 0 20px;
+    .contentHeader{
+      font-size: var(--content_title);
+      font-weight: bold;
+      margin: 0 0 10px;
+    }
+    .singleRow{
+      margin: 0 0 10px;
+      .rowTitle{
+        line-height: 8px;
+        font-size: 10px;
+      }
+      .rowValue{
+        font-size: var(--content_title);
+        .addEllipsis{
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: block;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}
+.fontmargin{
+    font-size: 16px;
+    margin-top: 8px;
+}
+.custom-tab{
+  .nav-tabs{
+    .btn-one{
+      width: 180px;
+      border-radius: 0px;
+      border: 0px
+    }
+    .btn-two{
+      border-radius: 0px;
+      width:120px;
+      border: 0px
+    }
+  }
+}
+.darkWrapper:hover {
+  box-shadow: unset !important;
+}
+
+@media screen and (max-width:767px) {
+  .inner-container{
+    .wrapper{
+      padding: 10px 15px 10px 15px !important;
+    }
+  }
+  ::ng-deep{
+    .custom-tab{
+      .nav-tabs{
+        .btn-one{
+          width: 150px !important;
+          padding: 0 5px !important;
+          border-radius: 0px;
+          border: 0px
+        }
+        .btn-two{
+          border-radius: 0px;
+          width:120px;
+          border: 0px
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width:768px) and (max-width:991px) {
+  .wrapper{
+    padding: 10px 15px;
+    padding-left: 0 !important;
+  }
+  .arrow{
+    padding-left: 25px !important;
+  }
+}

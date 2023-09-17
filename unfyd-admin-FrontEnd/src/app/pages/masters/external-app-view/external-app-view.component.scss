@@ -1,0 +1,101 @@
+
+
+.outerCard{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    .card{
+      background: #FFFFFF 0% 0% no-repeat padding-box;
+      // box-shadow: 0 2px 5px 1px #403c4429;
+      box-shadow: 0px 0px 6px #0000001A;
+      border-radius: 15px;
+      padding: 20px !important;
+      border: 1px solid #EAEAEA;
+      .icons{
+          background-color: var(--backgroud_color);
+          padding: 10px;
+          font-size: var(--extralarge-font);
+          color: var(--primary_color);
+          border: 1px solid var(--gray_color_80);
+          border-radius: 50px;
+      }
+      .more{
+        // font-size: 16px;
+        color: var(--gray_color);
+        margin-right: -10px;
+      }
+      .cardContent{
+        margin: 10px 0 0;
+        .cardHeading{
+          font-size: var(--medium-font);
+          color: var(--primary_color);
+        }
+        .cardInnerContent{
+          font-size: var(--small-font);
+          color: var(--gray_color_50);
+        }
+      }
+  
+    }
+  }
+  
+  .addForm{
+    background-color: var(--white_color);
+    border-radius: 5px !important;
+    color: var(--primary_color);
+    box-shadow: none;
+    border: 1px solid var(--gray_color);
+  }
+  
+  .header{
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--header);
+    text-align: left;
+    letter-spacing: 0px;
+    // margin : 0px 0px 20px;
+  }
+  
+  ::ng-deep{
+  
+    .blue-dropdown{
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .cards{
+    margin-bottom: 20px;
+    background-color: var(--white_color);
+    box-shadow: 0px 0px 6px #0000001a;
+    padding: 15px;
+    border: var(--border);
+    border-radius: 15px;
+  }
+  .more_icon{
+    color: var(--gray_color);
+  }
+  .cardInnerDescription,
+  .cardInnerContent{
+    font-size: 12px;
+  }
+
+  .cardInnerDescription{
+    color: #212121;
+  }
+  .cardInnerContent{
+    color: #707070;
+  }
+
+  
+  @media screen and (max-width: 767px){
+    .inner-container{
+      padding: 5px 0px 5px 15px !important; 
+  
+      .wrapper{
+        padding: 0vh 1vh 0vh !important;
+        margin-bottom: 0px !important;
+      }
+    }
+    
+  }

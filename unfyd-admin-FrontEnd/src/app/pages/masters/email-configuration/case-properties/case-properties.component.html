@@ -1,0 +1,97 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4 mt-3">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="userConfig?.Cancel" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+                <div class="row ">
+                    <!-- <div class="col-1 text-center">
+                            <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+                    </div> -->
+                    <div class="col-12">
+                        <span class="d-flex">
+                            <mat-icon class="gray cursorPointer stepbackArrow" (click)="backspace()">keyboard_backspace</mat-icon>
+
+                            <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.EmailConfiguration}} </legend>
+                        </span>
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="emailConfigurationsteps" [moduletype]="'email-configuration'" [id]="path"
+                               [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                            <div class="top_block"></div>
+
+                            <div class="row">
+
+                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.Case_Priority.errors }">
+                                        <mat-label>{{labelName?.CasePriority}}</mat-label>
+                                        <mat-select formControlName="Case_Priority">
+                                            <mat-option *ngFor="let item of filteredList2" [value]="item.Key">
+                                                <span class="fontSizeContent">{{item.Value}}</span>
+                                              </mat-option>
+                                          </mat-select>
+                                          <mat-error *ngIf="f.Case_Priority.errors">
+                                            <ng-container *ngIf="f.Case_Priority.errors.required">{{labelName?.CasePriority}}  is required
+                                            </ng-container>
+                                        </mat-error>
+
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.Case_Category.errors }">
+                                        <mat-label>{{labelName?.CaseCategory}}</mat-label>
+                                        <mat-select formControlName="Case_Category">
+                                            <mat-option *ngFor="let item of filteredList1" [value]="item.Key">
+                                                <span class="fontSizeContent">{{item.Value}}</span>
+                                              </mat-option>
+                                          </mat-select>
+                                          <mat-error *ngIf="f.Case_Category.errors">
+                                            <ng-container *ngIf="f.Case_Category.errors.required">{{labelName?.CaseCategory}}  is required
+                                            </ng-container>
+                                        </mat-error>
+
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.Channel_Source.errors }">
+                                        <mat-label>{{labelName?.ChannelSource}}</mat-label>
+                                        <input matInput formControlName="Channel_Source" />
+                                        <mat-error *ngIf="f.Channel_Source.errors">
+                                            <ng-container *ngIf="f.Channel_Source.errors.required">{{labelName?.ChannelSource}}  is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.Channel_Source.errors.pattern">{{labelName?.ChannelSource}} Should be Email
+                                            </ng-container>
+                                            <ng-container *ngIf="f.Channel_Source?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="Ack_Delivery_Notification"
+                                    (toggleChange)="form.updateValueAndValidity()" labelPosition="before">{{labelName?.AckDeliveryNotification}}</mat-slide-toggle>
+                                  </div>
+                                  <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="Channel_Priority"
+                                    (toggleChange)="form.updateValueAndValidity()" labelPosition="before">{{labelName?.ChannelPriority}}</mat-slide-toggle>
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="btn-group my-3" >
+                            <!-- <button   *ngIf="userConfig?.Cancel" class="btn btn-gray" (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                              <!-- <button *ngIf="! reset" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button>              -->
+                              <button *ngIf="userConfig?.Save" (click)="saveEmail('save')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Save}}</button>
+                              <button *ngIf="userConfig?.Next" (click)="saveEmail('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next}}</button>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

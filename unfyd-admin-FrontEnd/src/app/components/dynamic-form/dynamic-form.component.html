@@ -1,0 +1,12 @@
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+
+    <ng-container *ngFor="let formField of formFields">
+      <app-dynamic-form-input [input]="formField" [form]="form"></app-dynamic-form-input>
+    </ng-container>
+      <button mat-flat-button class="btn btn-form btn-block btn-curve" color="primary" type="submit" [disabled]="form.invalid">{{button}}</button>
+  </form>
+
+  <div *ngIf="payLoad" class="form-group">
+    <strong>Here's the payload</strong><br>{{payLoad}}
+  </div>
+  

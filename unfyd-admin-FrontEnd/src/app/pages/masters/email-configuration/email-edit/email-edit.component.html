@@ -1,0 +1,347 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper" style="padding-left: 30px;">
+
+    <div class="row my-3">
+      <div class="col-1 text-center">
+        <mat-icon class="gray cursorPointer" [routerLink]="['/masters/channel-configuration/email-configuration/view/34']">keyboard_backspace
+        </mat-icon>
+      </div>
+
+      <div class="col-11">
+        <div class="row mb-4">
+            <div class="col-lg-1 col-md-1 col-3">
+            <div class=" icon-email iconHeaderOnCard" [ngStyle]="{'background': common.color[profilepic]}"></div>
+        </div>
+        <div class="col-5 primary-color font-weight-bold fontmargin">
+            <span>{{channel?.username ? channel?.username : '-'}}</span>
+        </div>
+
+        </div>
+        <div class="wrapper darkWrapper"
+          style="overflow:hidden;    background: white !important;padding: 0px !important;">
+          <div class="custom-tab ">
+            <ul class="nav nav-tabs px-3 pt-2 pb-0" style="background: var(--backgroud_color)">
+              <button mat-stroked-button class="btn-one" (click)="EmailFunc()"
+                [ngStyle]="{'border-bottom': emailval === true ? '3px solid var(--primary_color)' : 'white' ,'color': emailval === true ? 'var(--primary_color)' : 'black'}">
+                {{labelName?.EmailConfiguration}}</button>
+                <button mat-stroked-button class="btn-two" (click)="EmailTemplateFunc()"
+                [ngStyle]="{'border-bottom': emailtempval === true ? '3px solid var(--primary_color)' : 'white' ,'color': emailtempval === true ? 'var(--primary_color)' : 'black'}">
+                {{labelName?.EmailTemplate}}</button>
+            </ul>
+          </div>
+
+
+        <div *ngIf = "emailtempval == true">
+        <app-email-template [inputfilter] = 'emailInput' [ChannelIdInput] = 'local'  [ChannelUniqueCodeInput] = 'uniqueid'></app-email-template>
+        </div>
+
+        <div *ngIf="emailval">
+          <!-- <div > -->
+            <div class="main-container p-2">
+              <div class="row justify-content-end">
+                <div class="col-3 d-flex justify-content-end iconsForAction">
+                  <mat-icon  class="mx-2 cursorPointer editIcon" (click)="editPage()">edit</mat-icon>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-9 col-md-9 col-12">
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.AccountCredentials}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-3">
+                          <span>{{labelName?.AccountType}}</span>
+                        </div>
+                        <div class="col-3">
+                          <span>{{labelName?.Host}}</span>
+                        </div>
+
+                        <div class="col-3">
+                            <span>{{labelName?.Port}}</span>
+                          </div>
+                          <div class="col-3">
+                            <span>{{labelName?.AccountType}}</span>
+                          </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-3 addEllipsis">
+                          <span>{{channel?.AccountType ? channel?.AccountType : '-'}}</span>
+                        </div>
+                        <div class="col-3 addEllipsis">
+                            <span>{{channel?.host ? channel?.host : '-'}}</span>
+                          </div>
+                          <div class="col-3 addEllipsis">
+                            <span>{{channel?.Port ? channel?.Port : '-'}}</span>
+                          </div>
+                          <div class="col-3 addEllipsis">
+                            <span>{{channel?.AuthenticationType ? channel?.AuthenticationType : '-'}}</span>
+                          </div>
+                         </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-3">
+                            <span>{{labelName?.Username}}</span>
+                          </div>
+                        <div class="col-3" *ngIf="channel?.AuthenticationType == 'TLS'">
+                          <span>{{labelName?.TLSProtocol}}</span>
+                        </div>
+                        <div class="col-3" *ngIf="channel?.AuthenticationType == 'SSL'">
+                          <span>{{labelName?.SSLProtocol}}</span>
+                        </div>
+                        <div class="col-3">
+                            <span>{{labelName?.OAuthClientID}}</span>
+                          </div>
+                          <div class="col-3">
+                            <span>{{labelName?.OAuthTenantID}}</span>
+                          </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-3 addEllipsis">
+                            <span>{{channel?.username ? channel?.username : '-'}}</span>
+                          </div>
+                          <div class="col-3 addEllipsis" *ngIf="channel?.AuthenticationType == 'TLS'">
+                            <span>{{channel?.TLS ? channel?.TLS : '-'}}</span>
+                          </div>
+                          <div class="col-3 addEllipsis" *ngIf="channel?.AuthenticationType == 'SSL'">
+                            <span>{{channel?.SSL ? channel?.SLS : '-'}}</span>
+                          </div>
+                          <div class="col-3 addEllipsis">
+                            <span>{{channel?.Client ? channel?.Client : '-'}}</span>
+                          </div>
+                          <div class="col-3 addEllipsis">
+                            <span>{{channel?.Tenant ? channel?.Tenant : '-'}}</span>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.AttachmentSettings}}</span>
+                    </div>
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.MaxAttachmentSize}}</span>
+                        </div>
+                        <div class="col-8">
+                          <span>{{labelName?.AllowedExtension}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Max_Attachment_Size ? channel?.Max_Attachment_Size : '-'}}</span>
+                        </div>
+                        <div class="col-8 addEllipsis">
+                          <span>{{channel?.Allowed_Extension ? channel?.Allowed_Extension : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 singleRow">
+                        <div class="row rowTitle">
+                          <div class="col-4">
+                            <span>{{labelName?.MIMEType}}</span>
+                          </div>
+                          <div class="col-8">
+                            <span>{{labelName?.AllowAttachment}}</span>
+                          </div>
+                        </div>
+                        <div class="row rowValue">
+                          <div class="col-4 addEllipsis">
+                            <span>{{channel?.MIME_Type ? channel?.MIME_Type : '-'}}</span>
+                          </div>
+                          <div class="col-8 addEllipsis">
+                            <span>{{channel?.Allow_Attachment ? channel?.Allow_Attachment : '-'}}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                  </div>
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.CaseProperties}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.CasePriority}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.CaseCategory}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.ChannelSource}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Case_Priority ? channel?.Case_Priority : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Case_Category ? channel?.Case_Category : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Channel_Source ? channel?.Channel_Source : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.AckDeliveryNotification}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.ChannelPriority}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Ack_Delivery_Notification ? channel?.Ack_Delivery_Notification : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Channel_Priority ? channel?.Channel_Priority : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.GeneralSettings}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-3">
+                          <span>{{labelName?.NotificationEmailID}}</span>
+                        </div>
+                        <div class="col-3">
+                         <span>{{labelName?.CaseCategory}}</span>
+                        </div>
+                        <div class="col-3">
+                        <span>{{labelName?.ExtractEmailType}}</span>
+                        </div>
+                        <div class="col-3">
+                        <span>{{labelName?.ExtractDate}}</span>
+                        </div> 
+                    </div>
+                    <div class="row rowValue">
+                        <div class="col-3 addEllipsis">
+                          <span>{{channel?.Notification_ID ? channel?.Notification_ID : '-'}}</span>
+                        </div>
+                        <div class="col-3 addEllipsis">
+                        <span>{{channel?.Category ? channel?.Category : '-'}}</span>
+                        </div>
+                        <div class="col-3 addEllipsis">
+                        <span>{{channel?.Extract_Email_Type ? channel?.Extract_Email_Type : '-'}}</span>
+                        </div>
+                        <div class="col-3 addEllipsis">
+                        <span>{{channel?.Extract_Date ? channel?.Extract_Date : '-'}}</span>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-3">
+                            <span>{{labelName?.ExtractTime}}</span>
+                          </div>
+                          <div class="col-3">
+                           <span>{{labelName?.DeleteEmailPostProcessing}}</span>
+                          </div>
+                          <div class="col-3">
+                          <span>{{labelName?.CreateCaseifEmailMarkedinCC}}</span>
+                          </div>
+                          <div class="col-3">
+                          <span>{{labelName?.EmailandCaseCountComparison}}</span>
+                          </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-3 addEllipsis">
+                        <span>{{channel?.Extract_Time ? channel?.Extract_Time : '-'}}</span>
+                        </div>
+                        <div class="col-3 addEllipsis">
+                        <span>{{channel?.Delete_Email ? channel?.Delete_Email : '-'}}</span>
+                        </div>
+                        <div class="col-3 addEllipsis">
+                        <span>{{channel?.Create_Case ? channel?.Create_Case : '-'}}</span>
+                        </div>
+                        <div class="col-3 addEllipsis">
+                        <span>{{channel?.Email_Case ? channel?.Email_Case : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.EmailRoutingDetails}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.WebhookURL}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.QueueName}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Webhook_URL ? channel?.Webhook_URL : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Queue_Name ? channel?.Queue_Name : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.QueueAPI}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.DeleteEmailPostProcessing}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Queue_API ? channel?.Queue_API : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Delete_Email_Post_Processing ? channel?.Delete_Email_Post_Processing : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="emailtempval == true">
+              <!-- <app-hsm-template [inputfilter]='hsminput'></app-hsm-template> -->
+            </div>
+
+
+
+            <div class="formGroup">
+            </div>
+
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>

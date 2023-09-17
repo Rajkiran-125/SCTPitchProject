@@ -1,0 +1,248 @@
+
+<div class="outerBody" [ngStyle]="{'height': !isFullScreen ? '35vh':'35vh','max-height': !isFullScreen ? '35vh':'35vh'}">
+  <div class="dashboardHeader d-flex justify-content-between">
+
+
+
+    <div class="dashboardTitle">
+      <span class="dashboard-card-header">{{(chartandGraph?.header ? chartandGraph?.header : 'Header')}}</span>
+    </div>
+    <mat-menu #menu1="matMenu" class="w-100  overflow-hidden d-flex align-items-center" xPosition="after">
+      <ng-container *ngFor="let item of chartandGraph?.customFilterValues">
+        <div class="row m-1 dashboardCustomFilter"
+          *ngIf="item?.customFilterField && !(item?.customFilterField.trim().length === 0)"
+          (click)="$event.stopPropagation()" (click)="filterFieldSelected(item?.customFilterField)">
+          <div class="col-8 customFilterText">
+            {{item?.customFilterField }}
+          </div>
+          <div class="col-4" [ngClass]="customFilterFieldSelected == item?.customFilterField ? '':'invisible'">
+            <i class="icon-approved customFilterIcon"></i>
+          </div>
+        </div>
+      </ng-container>
+
+    </mat-menu>
+
+    <div class="d-flex" style="align-items: flex-start;">
+      <div class=" normal-dropdown d-flex align-items-center mx-1"
+        *ngIf="chartandGraph?.customFilter && chartandGraph?.customFilterValues.length > 0">
+        <mat-form-field appearance="fill" class="borderToDropDown">
+          <mat-select class="inputText dateFilter" panelClass="normal-panel"
+            disableOptionCentering [(ngModel)]="customFilterFieldSelected" (selectionChange)="selectedOptionValue()">
+            <ng-container *ngFor="let item of chartandGraph?.customFilterValues; let i = index">
+              <mat-option *ngIf="item?.customFilterField && !(item?.customFilterField.trim().length === 0)"
+                [value]="item?.customFilterField" class="dateDropDown">
+                {{item?.customFilterField}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class=" normal-dropdown d-flex align-items-center mx-1" *ngIf="chartandGraph?.displayDateFilter">
+        <mat-form-field appearance="fill" class="borderToDropDown">
+          <mat-select class="inputText dateFilter" 
+            (selectionChange)="selectedOptionValue()" panelClass="normal-panel" disableOptionCentering
+            [(ngModel)]="selectedDateFilterValue">
+            <mat-option *ngFor="let data of chartandGraph.dateFilter; let i = index" [value]="data"
+              class="dateDropDown">
+              {{data |titlecase}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <mat-icon class="cardMore" [matMenuTriggerFor]="menu2">more_vert</mat-icon>
+      <mat-menu #menu2="matMenu" class="w-100  overflow-hidden d-flex align-items-center cardMoreFetures"
+        xPosition="before">
+        <div class="row m-1 cardMoreFetures">
+          <div class="col-12 d-flex align-items-center" (click)="editCard()">
+            <mat-icon class="gray">edit</mat-icon>
+            <span>Edit</span>
+          </div>
+        </div>
+        <div class="d-none row m-1 cardMoreFetures" *ngIf="userConfig?.Delete">
+          <div class="col-12 d-flex align-items-center" (click)="deleteCard()">
+            <mat-icon class="red-color">delete</mat-icon>
+            <span>Delete</span>
+          </div>
+        </div>
+      </mat-menu>
+    </div>
+  </div>
+
+  <div class="chart" (click)="openDrillDown()"
+    [ngClass]="chartandGraph?.chartAndGraph == 'Venn' ? 'padding0': dashboardControlTypeSelected == 'List' ? 'padding0' : chartandGraph?.chartAndGraph == 'GaugeWithProgressBars' ? 'padding0':''">
+    <div *ngIf="chartandGraph?.chartAndGraph == 'DoughnutChart' ||
+                chartandGraph?.chartAndGraph == 'LineChart' ||
+                chartandGraph?.chartAndGraph == 'StackedLineChart' ||
+                chartandGraph?.chartAndGraph == 'Gauge' ||
+                chartandGraph?.chartAndGraph == 'BarChart'">
+      <div echarts [options]="option1" class="chartHeight" [ngStyle]="{ height : (chartandGraph?.chartAndGraph == 'Gauge' && chartandGraph?.textBelowGaugeCount && chartandGraph.showDateChangePart) ? '19vh':
+      (chartandGraph?.chartAndGraph == 'Gauge' && chartandGraph?.textBelowGaugeCount && !chartandGraph.showDateChangePart) ? '24vh':
+      chartandGraph.showDateChangePart ? '22vh':'26vh' }"></div>
+    </div>
+    <div *ngIf="chartandGraph?.chartAndGraph == 'BarChartIconOnTop'"
+      [ngStyle]="(chartandGraph?.sectionBelowBarChartIconOnTop && chartandGraph.showDateChangePart)? {'height':'16vh'}:
+              (!chartandGraph?.sectionBelowBarChartIconOnTop && chartandGraph.showDateChangePart)? {'height':'22vh'}:
+              (chartandGraph?.sectionBelowBarChartIconOnTop && !chartandGraph.showDateChangePart)? {'height':'19vh'}:
+              (!chartandGraph?.sectionBelowBarChartIconOnTop && !chartandGraph.showDateChangePart)? {'height':'25vh'}:{'height':'22vh'} " style="position: relative;"
+      class="d-flex justify-content-center align-items-center">
+      <highcharts-chart *ngIf="chartandGraph?.chartAndGraph == 'BarChartIconOnTop' && option" #chart1
+        [Highcharts]="Highcharts" [options]="option" [callbackFunction]="chartCallback" [(update)]="updateFlag"
+        [runOutsideAngular]="true" style="width: 100%;display:block;height: 16vh;">
+      </highcharts-chart>
+    </div>
+    <div *ngIf="chartandGraph?.chartAndGraph == 'LicenseUsageBarChart'"
+      class="d-flex align-items-center justify-content-center"
+      [ngStyle]="chartandGraph.showDateChangePart? {'height':'22vh'} : {'height':'25vh'}">
+      <highcharts-chart [Highcharts]="Highcharts" [options]="option2" style="width: 100%;display:block;height: 22vh;">
+      </highcharts-chart>
+    </div>
+    <div *ngIf="chartandGraph?.chartAndGraph == 'StackedBarChart' && option"
+      class="d-flex align-items-center justify-content-center"
+      [ngStyle]="chartandGraph.showDateChangePart? {'height':'22vh'} : {'height':'25vh'}">
+      <highcharts-chart #chart [Highcharts]="Highcharts" [options]="option" [callbackFunction]="chartCallback"
+        [(update)]="updateFlag" [runOutsideAngular]="true" style="width: 100%;display:block;height: 22vh;">
+      </highcharts-chart>
+    </div>
+    <div class="row mx-0 py-0 text-center aht"
+      *ngIf="chartandGraph?.chartAndGraph == 'Gauge' && chartandGraph?.textBelowGaugeCount"
+      [ngStyle]="{'color': common.color[chartandGraph.textBelowGaugeColor]}">
+      {{chartandGraph?.textBelowGaugeCountText | uppercase}} {{gaugeTextBelowGraphData}}
+    </div>
+    <div class="row venn" *ngIf="chartandGraph?.chartAndGraph == 'Venn'"
+      [ngStyle]="{ height : chartandGraph.showDateChangePart ? '22vh':'24vh' }">
+      <div class="col-12 displayCenter">
+        <div class="circle circle1" [ngStyle]="{'background':common.color[chartandGraph.blocks[0].backgroundColor]}">
+          <div class="">
+            <span class="span1">{{chartandGraph.blocks[0].header ? chartandGraph.blocks[0].header : 'Block 1'}}</span>
+            <span class="span2" matTooltip="{{vennBlock1}}">{{common.roundNumberTilltwoPosition(vennBlock1)}}</span>
+          </div>
+        </div>
+        <div class="circle circle2" [ngStyle]="{'border-color':common.color[chartandGraph.blocks[0].backgroundColor]}">
+          <div class="">
+            <span class="span1">{{chartandGraph.blocks[1].header ? chartandGraph.blocks[1].header : 'Block 2'}}</span>
+            <span class="span2" matTooltip="{{vennBlock2}}">{{common.roundNumberTilltwoPosition(vennBlock2)}}</span>
+          </div>
+        </div>
+        <div class="circle circle3"
+          [ngStyle]="{'background':common.secondayColor[chartandGraph.blocks[0].backgroundColor]}">
+          <div class="">
+            <span class="span1">{{chartandGraph.blocks[2].header ? chartandGraph.blocks[2].header : 'Block 3'}}</span>
+            <span class="span2" matTooltip="{{vennBlock3}}">{{common.roundNumberTilltwoPosition(vennBlock3)}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feedBackInfo"
+      *ngIf="chartandGraph?.chartAndGraph == 'BarChartIconOnTop' && chartandGraph?.sectionBelowBarChartIconOnTop">
+      <div class="">
+        <span>{{chartandGraph.sectionBelowBarChartIconOnTopLeftText ?
+          chartandGraph.sectionBelowBarChartIconOnTopLeftText : 'Left
+          Block'}}-{{sectionBelowBarChartIconOnTopLeftValue}}</span>
+      </div>
+      <div class="">
+        <span>{{chartandGraph.sectionBelowBarChartIconOnTopRightText ?
+          chartandGraph.sectionBelowBarChartIconOnTopRightText : 'Right
+          Block'}}-{{sectionBelowBarChartIconOnTopRightValue}}
+          ({{ (!sectionBelowBarChartIconOnTopLeftValue || !sectionBelowBarChartIconOnTopRightValue) ? 0 :
+          ((sectionBelowBarChartIconOnTopRightValue/sectionBelowBarChartIconOnTopLeftValue)*100).toFixed(2)}}%)</span>
+      </div>
+    </div>
+
+    <div *ngIf="dashboardControlTypeSelected == 'List'" [ngClass]="!chartandGraph?.displayListHeader ? 'margin6px':''">
+      <div class="row smallFont mx-0" *ngIf="chartandGraph?.displayListHeader">
+        <ng-container *ngFor="let item of chartandGraph?.blocks; let i =index">
+          <div *ngIf="item.visible" class="col-{{item?.columnWidth}} p-0 ellipsis gray"
+            matTooltip="{{(item?.header ? item?.header : 'Column'+(i+1)) |titlecase}}">
+            {{(item?.header ? item?.header : 'Column'+(i+1)) |titlecase}}
+          </div>
+        </ng-container>
+      </div>
+      <div class="listRows" [ngStyle]="{'height': chartandGraph?.displayListHeader && !fullScreenEnabled ? '23vh':
+                      chartandGraph?.displayListHeader && fullScreenEnabled ? '22vh':
+                      !chartandGraph?.displayListHeader && !fullScreenEnabled ? '23vh':
+                      !chartandGraph?.displayListHeader && fullScreenEnabled ? '22vh': '23vh'}">
+        <div *ngFor="let item of [0,1,2,3,4] | slice: 0 : 5">
+          <div class="row mx-0 border-top padding10">
+            <div class="col-{{item1?.columnWidth}} p-0 marginY12px text-left ellipsis"
+              *ngFor="let item1 of chartandGraph?.blocks;let i=index">
+              <ng-container *ngIf="item1.visible">
+                <ng-container *ngIf="listData.length > item; else dataNotAvailable">
+                  <span *ngIf="item1.displayType == 'text'" matTooltip="{{listData[item][item1?.header] ?
+                    listData[item][item1?.header] : '-' }}">{{listData[item][item1?.header] ?
+                    listData[item][item1?.header] : '-' }}</span>
+                  <span *ngIf="item1.displayType == 'icon'">
+                    <i *ngIf="!listData[item][item1?.header]" class="icon-user_details gray"></i>
+                    <img class="displayTypeIcon" *ngIf="item1.displayType == 'icon' && listData[item][item1?.header]"
+                      [src]="listData[item][item1?.header] ? listData[item][item1?.header] : ''" alt="">
+
+                  </span>
+                </ng-container>
+                <ng-template #dataNotAvailable>
+                  <span>-</span>
+                </ng-template>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <div *ngIf="chartandGraph?.chartAndGraph == 'GaugeWithProgressBars'">
+      <!-- class="chartHeightGaugeWithProgressBars" -->
+        <div echarts [options]="option1"
+        [ngStyle]="{ height : (chartData.length == 0 && !chartandGraph.showDateChangePart) ? 'calc(33vh - 100px); ' :
+                              (chartData.length == 0 && chartandGraph.showDateChangePart) ? 'calc(30vh - 100px); ' :
+                              (chartData.length == 1 && !chartandGraph.showDateChangePart) ? 'calc(30vh - 100px); ' :
+                              (chartData.length == 1 && chartandGraph.showDateChangePart) ? 'calc(26vh - 100px); ' :
+                              (chartData.length == 2 && !chartandGraph.showDateChangePart) ? 'calc(26vh - 100px); ' :
+                              (chartData.length == 2 && chartandGraph.showDateChangePart) ? 'calc(23vh - 100px); ' :
+                              (chartData.length == 3 && !chartandGraph.showDateChangePart) ? 'calc(24vh - 100px); ' :
+                              (chartData.length == 3 && chartandGraph.showDateChangePart) ? 'calc(20vh - 100px); ' :
+                              (chartData.length == 4 && !chartandGraph.showDateChangePart) ? 'calc(21vh - 100px); ' :
+                              (chartData.length == 4 && chartandGraph.showDateChangePart) ? 'calc(17vh - 100px); ' :
+                              (chartData.length == 5 && !chartandGraph.showDateChangePart) ? 'calc(18vh - 100px); ' :
+                              (chartData.length == 5 && chartandGraph.showDateChangePart) ? 'calc(14vh - 100px); ' : 'calc(30vh - 100px); '
+                             }"></div>
+        <div class="row px-4" *ngFor="let chartDataItem of chartData">
+          <!-- <div class="col-12 d-flex justify-content-between align-items-center px-4">
+            <div class="row"> -->
+              <div class="col-3 px-0 ellipsis">
+                <span class="pr-3" matTooltip="{{chartDataItem.name}}">{{chartDataItem.name}}</span>
+              </div>
+              <div class="col-7 d-flex align-items-center w-100 px-0">
+                <!-- <div class="d-flex align-items-center w-75"> -->
+                  <mat-progress-bar class="matProgress" mode="determinate" [color]="chartDataItem.color" [value]="chartDataItem.value"></mat-progress-bar>
+                <!-- </div> -->
+              </div>
+              <div class="col-2 px-0">
+                <span class="pl-3">{{chartDataItem.value}}%</span>
+              </div>
+            <!-- </div>
+          </div> -->
+        </div>
+    </div>
+
+  </div>
+
+  <div class="bottomDate" *ngIf="chartandGraph.showDateChangePart">
+    <mat-icon class="cursorPointer" (click)="changeDate('prev')"
+      [ngClass]="backDisable ? 'disabledIT' :'cursorPointer'">keyboard_arrow_left</mat-icon>
+
+    <div class="actualDate">
+      <!-- {{week.transform(currentDateTime)}} -->
+      <span class="" *ngIf="selectedDateFilterValue == 'Hour'">{{ currentDateTime | date:'HH'}}</span>
+      <span class="" *ngIf="selectedDateFilterValue == 'Day'">{{ currentDateTime | dateFormat}}</span>
+        <span class="" *ngIf="selectedDateFilterValue == 'Week'">{{ common.returnWeek(currentDateTime)}} Week</span>
+      <!-- <span class="" *ngIf="selectedDateFilterValue == 'Week'">{{ week.transform(currentDateTime) (common.nthNumber(week.transform(currentDateTime)))}}</span> -->
+      <span class="" *ngIf="selectedDateFilterValue == 'Month'">{{ currentDateTime | date : 'MMM yyyy'}}</span>
+      <span class="" *ngIf="selectedDateFilterValue == 'Year'">{{ currentDateTime | date:'yyyy'}}</span>
+    </div>
+    <mat-icon [ngClass]="nextDisable ? 'disabledIT' :'cursorPointer'"
+      (click)="changeDate('next')">keyboard_arrow_right</mat-icon>
+
+
+  </div>
+
+</div>

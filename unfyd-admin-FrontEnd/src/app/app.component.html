@@ -1,0 +1,118 @@
+<!-- <full-calendar [options]="calendarOptions"></full-calendar>
+ -->
+
+<ng-container>
+  <app-print></app-print>
+  <app-header (mousemove)="logoutEvent($event)" (openProfileMenuDrawer)="openProfileMenu($event)"
+    *ngIf="sessionContent && hawkerID == null && !fullScreenDashboard"></app-header>
+
+  <mat-sidenav-container (mousemove)="logoutEvent($event)" (click)="closeProfileMenu(true)"
+    [ngClass]="fullScreenDashboard ? 'sessionFullScreenDashboard' : sessionContent ? 'session' : ''" autosize>
+    <mat-sidenav #sidenav mode="side" @onOff [opened]="sessionContent ? true : false"
+      *ngIf="!auth.getHawker() && hawkerID == null && !fullScreenDashboard" class="MainSidebar"
+      [ngClass]="isMobileSubMenu ? 'mobileSidebarShow' : 'mobileSidebarHide'">
+      <app-aside *ngIf="sessionContent"></app-aside>
+    </mat-sidenav>
+    <mat-sidenav-content class="sidenavMobile">
+      <div class="d-flex hideUnhideMenu" *ngIf="isChild[0]?.ModuleUrl == 'pitch/audience/list'">
+        <mat-icon class="gray cursorPointer forwardArrow my-1 ml-n3" *ngIf="!arrow"
+          (click)="closeMenu()">arrow_backward</mat-icon>
+        <mat-icon class="gray cursorPointer backwardArrow my-1 ml-n3" *ngIf="arrow"
+          (click)="openMenu()">arrow_forward</mat-icon>
+        <div *ngIf="arrow">&nbsp; &nbsp; &nbsp; &nbsp;</div>
+      </div>
+
+      <!-- <ng-container *ngIf="!auth.getHawker() && isChild?.length>0 && !isDashboard && !fullScreenDashboard"> -->
+      <ng-container
+        *ngIf="boolValue == false ? boolValue : !auth.getHawker() && isChild?.length>0 && !isDashboard && !fullScreenDashboard">
+        <mat-nav-list class="sub-links mobileFooterSidebarHide" *ngIf="sessionContent && hawkerID == null"
+          [ngClass]="isMobileSubMenu ? 'mobileSidebarShow' : 'mobileSidebarHide'">
+          <div id="sidenav-links">
+            <ul>
+              <li *ngFor="let menu of isChild | orderBy:'Modulename'; let i = index">
+                <a *ngIf="!reports" routerLinkActive="active" [routerLink]="menu.ModuleUrl" (click)="redirectToLink()">
+                  <i [ngClass]="menu.Icon"></i>
+                  <caption>
+                    <strong>{{menu.Modulename}}</strong>
+                    <span *ngIf="menu?.Description" class="mat-nav-content" #tooltip="matTooltip"
+                      [matTooltip]="menu?.Description" matTooltipPosition="right">{{menu?.Description | slice:0:100}}
+                      {{menu?.Description.length > 100 ? '...' : ''}}
+                    </span>
+                  </caption>
+                </a>
+                <a *ngIf="reports" routerLinkActive="active" (click)="changeReport(menu)">
+                  <i [ngClass]="menu.Icon"></i>
+                  <caption>
+                    <strong>{{menu.Modulename}}</strong>
+                    <span *ngIf="menu?.Description" class="mat-nav-content" #tooltip="matTooltip"
+                      [matTooltip]="menu?.Description" matTooltipPosition="right">{{menu?.Description | slice:0:100}}
+                      {{menu?.Description.length > 100 ? '...' : ''}}
+                    </span>
+                  </caption>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </mat-nav-list>
+      </ng-container>
+      <main [ngClass]="isMobileSubMenu ? 'mobileContentHide' : 'mobileContentShow'">
+        <router-outlet></router-outlet>
+        <mat-sidenav class='slidebar' *ngIf="common.isAuthUserAvailable()" (click)="$event.stopPropagation()"
+          #openProfileMenuDrawer [mode]="'side'" [opened]="openSetting" position="end" [disableClose]="true">
+
+          <div class="userprofile">
+            <div class="userpic">
+              <div *ngIf="!userProfileStrore.ProfilePic" class="logoprofile">
+                <mat-icon>person</mat-icon>
+              </div>
+              <img *ngIf="userProfileStrore.ProfilePic" [src]="userProfileStrore.ProfilePic" class="profileimg">
+            </div>
+            <div>
+              <div class="profilecontent ">{{userProfileStrore.FirstName |titlecase}} {{userProfileStrore.LastName
+                |titlecase}}
+              </div>
+              <div class="mt-2">
+                <div class="profileinfo">
+                  <mat-label>Employee ID : {{userProfileStrore.EmployeeId}}</mat-label>
+                </div>
+                <div class="profileinfo">
+                  <mat-label>Email ID : {{userProfileStrore.EmailId}}</mat-label>
+                </div>
+                <div class="profileinfo1">
+                  <mat-label>Mobile No : {{userProfileStrore.ContactNumber}}</mat-label>
+                </div>
+              </div>
+            </div>
+            <div class="icon-ForceLogout  cursorPointer logouticon " (click)="logoutProfile()"></div>
+          </div>
+          <div class="myinfo">
+            <mat-label><B>My Info</B></mat-label>
+          </div>
+          <div class="myInfo">
+            <mat-label>Skills : </mat-label>
+            <span>{{userProfileStrore.SkillId}}</span>
+          </div>
+          <div class="myInfo">
+            <mat-label>Groups :</mat-label>
+            <span>{{userProfileStrore.GroupId}}</span>
+          </div>
+          <div class="myInfo">
+            <mat-label>Languages :</mat-label>
+            <span>{{userProfileStrore.LanguageCode}}</span>
+          </div>
+          <div class="myInfo">
+            <mat-label>CC Location :</mat-label>
+            <span>{{userProfileStrore.CCLocationId}}</span>
+          </div>
+          <div class="myInfo1">
+            <mat-label>Channels : </mat-label>
+            <span style="vertical-align: sub;"><span
+                [innerHtml]="userProfileStrore?.ChannelId">{{userProfileStrore.ChannelId}}</span></span>
+          </div>
+        </mat-sidenav>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <app-footer [ngClass]="sessionContent == false ? 'sticky' : 'app-footer'"></app-footer>
+  <notifier-container></notifier-container>
+</ng-container>

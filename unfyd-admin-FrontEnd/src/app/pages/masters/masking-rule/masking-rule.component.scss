@@ -1,0 +1,93 @@
+.wrapper{
+  padding-left: 0px !important;
+ // margin-top: 20px !important;
+}
+
+
+legend {
+  color: var(--primary_color) !important;;
+  font-weight: bold;
+}
+
+.inactive {
+  color: var(--universalRed);
+}
+
+.active {
+  color: var(--universalGreen);
+}
+.btn-gray {
+  font-weight: bold;
+  color: var(--black_color_70) !important;
+}
+
+.previewButton {
+  border: 1px solid var(--primary_color);
+  background: transparent !important;
+  color: var(--primary_color) !important;
+  font-weight: bold;
+}
+
+form {
+  width: 100% !important;
+  .formGroup {
+    background: #ffffff 0% 0% no-repeat padding-box;
+    border-radius: 15px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+  }
+  .outline {
+    border: 1px solid var(--primary_color) !important;
+    color: var(--primary_color) !important;;
+    font-weight: bold;
+  }
+}
+
+:ng-deep {
+  .dropDown {
+    .mat-form-field-wrapper {
+      padding-bottom: 0 !important;
+    }
+  }
+}
+.size {
+  font-size: var(--title);
+}
+.customContainer{
+  margin-left: 14vh  !important;
+}
+.pl-5 {
+  padding-right: 0px !important;
+}
+.outline {
+  border: 1px solid var(--primary_color);
+  background: var(--white_color) !important;
+  color: var(--primary_color) !important;
+  font-weight: bold;
+}
+.legendheader{
+  font-size: var(--title);
+}
+span {
+  font-size: var(--content_title) !important;
+}
+
+
+@media screen and (max-width:767px) {
+  .inner-container{
+    padding: 0px 0px 5px 0px !important; 
+    margin-top: 0.5rem !important;
+
+    .wrapper{
+      padding: 0vh 2vh 0vh !important;
+      margin-bottom: 55px !important;
+    }
+  }
+}
+
+@media screen and (min-width:768px) and (max-width:767px) {
+  .btn-group{
+    .btn{
+      min-width: 85px !important;
+    }
+  } 
+}

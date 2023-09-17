@@ -1,0 +1,475 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-1 text-center backarrow">
+          <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+        </div>
+        <div class="col-lg-9 col-md-10 col-10 pl-0 allclass">
+          <div class="row">
+            <div class="col-lg-8 col-md-8 col-7">
+            <legend *ngIf="ActionValueOne?.ControlName == null" class="size hubmaster">
+            Add New Privilege
+          </legend>
+
+          <legend *ngIf="copyWithId != null" class="size hubmaster">
+            Add New Privilege
+          </legend>
+
+          <legend *ngIf="ActionValueOne?.ControlName != null && copyWithId == null" class="size hubmaster">
+            Update Privilege
+          </legend>
+          </div>
+          <div class="col-lg-4 col-md-4 col-5 text-right">
+          <button  mat-button  class=" gray addBtn editBtn mr-2"  *ngIf=" HubId !== null && !EditAddModule"  (click) = "EditAddMoreModuleForm()" ><mat-icon>edit</mat-icon></button>
+          <button mat-button class="addBtnBlue" (click) = "ShowAddMoreModuleForm()" *ngIf="HubId !== null && ShowAddModule == false"><mat-icon>add</mat-icon></button>  
+        </div>
+          <!-- <div class="col-1" >
+          <button mat-stroked-button class="editBtn addBtnBlue" (click) = "ShowAddMoreModuleForm()" *ngIf="HubId !== null && ShowAddModule == false"><mat-icon>add</mat-icon></button>
+          </div> -->
+
+        </div>
+          
+          
+          <div class="formGroup mt-2">
+           <div *ngIf="HubId == null">
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 dropDown">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{ labelName?.Name }}</mat-label>
+                    <input matInput formControlName="Name" [disabled]="HubId" />
+                    <mat-error *ngIf="f?.Name?.errors">
+                      <ng-container *ngIf="f?.Name?.errors.required">
+                        Name is required
+                      </ng-container>
+                      <!-- <ng-container *ngIf="f.Name?.errors?.checknull">
+                        Whitespace not allowed.
+                      </ng-container> -->
+                      <ng-container *ngIf="f.Name?.errors?.checknull1">
+                       Must be at least 3 characters long
+                      </ng-container>
+                      <ng-container *ngIf="f.Name?.errors?.pattern">{{ labelName?.Name }} is invalid.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 dropDown">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{ labelName?.Description }}</mat-label>
+                    <input matInput formControlName="Description" maxlength="500"/>
+                    <mat-error *ngIf="f.Description.errors">
+                      <!-- <ng-container *ngIf="f.Description.errors.minlength">
+                        Must be at least 3 characters long.
+                      </ng-container> -->
+                      <ng-container *ngIf="f.Description.errors.required">
+                        Description is required
+                      </ng-container>
+                      <ng-container *ngIf="f.Description.errors.checknull1">
+                        Must be at least 3 characters long
+                      </ng-container>
+                      <ng-container *ngIf="f.Description?.errors?.pattern">{{ labelName?.Description }} is invalid.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>                          
+          </div>
+
+
+            <div *ngIf="HubId !== null && !EditAddModule" style="margin-bottom: 20px;">
+                  <div class="row">     
+                    <div class="col-lg-3 col-md-12 col-4">          
+                        <span>{{ labelName?.Name }}</span>   
+                    </div>                                      
+                    <div class="col-lg-3 col-md-12 col-4">                 
+                        <span>{{ labelName?.Description }}</span>                              
+                    </div>                      
+                  </div>
+
+                  <div class="row">     
+                    <div class="col-lg-3 col-md-12 col-4">          
+                        <b class = "formfont">{{formNameValue}}</b>                  
+                    </div>                  
+                 
+                    <div class="col-lg-3 col-md-12 col-4">                 
+                    <b class = "formfont">{{form.value.Description}}</b>
+                    </div>                    
+                  </div>                                        
+           </div>
+
+
+           <div *ngIf="EditAddModule">
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 dropDown">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ labelName?.Name }}</mat-label>
+                  <input matInput formControlName="Name" [disabled]="HubId" />
+                  <mat-error *ngIf="f?.Name?.errors">
+                    <ng-container *ngIf="f?.Name?.errors.required">
+                      Name is required
+                    </ng-container>
+                    <ng-container *ngIf="f.Name?.errors?.checknull">Whitespace not allowed.
+                    </ng-container>
+                    <ng-container *ngIf="f.Name?.errors?.pattern">{{ labelName?.Name }} is invalid.
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 dropDown">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ labelName?.Description }}</mat-label>
+                  <input matInput formControlName="Description" />
+                  <mat-error *ngIf="f.Description.errors">
+                    <ng-container *ngIf="f.Description.errors.required">
+                      Description is required
+                    </ng-container>
+                    <!-- <ng-container *ngIf="f.Description.errors.minlength">
+                      Must be at least 3 characters long.
+                    </ng-container> -->
+                    <ng-container *ngIf="f.Description.errors.maxlength">
+                      Cannot be beyond 300 characters.
+                    </ng-container>
+                    <ng-container *ngIf="f.Description?.errors?.checknull1">
+                      Must be at least 3 characters long
+                    </ng-container>
+                    <ng-container *ngIf="f.Description?.errors?.pattern">{{ labelName?.Description }} is invalid.
+                    </ng-container>
+                    
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+         
+          
+     
+<div *ngIf=" HubId == null"  class="divbackground" >
+                      <div class="text">
+                        <span>{{ labelName?.AddMoreModule}}</span>
+                      </div>
+                                <div class="row">
+                                  <div class="col-5">
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>{{ labelName?.Category }}</mat-label>
+                                      <mat-select (selectionChange)="
+                                          getSubCategory($event.value); getModule($event.value)
+                                        " formControlName="Category">
+                                        <mat-option *ngFor="let data of categories" [value]="data.ModuleGroupping">
+                                          {{ data.ModuleGroupping }}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class="col-5">
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>{{ labelName?.Subcategory }}</mat-label>
+                                      <mat-select (selectionChange)="getModule($event.value)" formControlName="Subcategory"
+                                        [disabled]="subcategory.length == 0">
+                                        <mat-option *ngFor="let data of subcategory" [value]="data.SubModuleGroupping">
+                                          {{ data.SubModuleGroupping }}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                    
+                                <div class="row">
+                                  <div class="col-5">
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>{{ labelName?.ModuleName }}</mat-label>
+                                      <mat-select formControlName="ModuleName" (selectionChange)="getActionList($event.value)">
+                                        <mat-option *ngFor="let data of modules" [value]="data.Id">
+                                          {{ data.Module }}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                    
+                                  <div class="col-5">
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>{{ labelName?.Actionable }}</mat-label>
+                                      <mat-select formControlName="Action" disableOptionCentering multiple class="actionable-main">
+                                        <div class="selectAll">
+                                          <mat-checkbox color="primary" class="mat-option w-100" [checked]="common.isChecked(action,form.value.Action)"
+                                            (click)="$event.stopPropagation()" (change)="toggleSelection($event)">
+                                            Select All
+                                          </mat-checkbox>
+                                        </div>
+                                        <mat-option *ngFor="let data of action" [value]="data.ActionList">
+                                          {{ data.ActionList }}</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                    
+                                  <div class="col-2">
+                                    <button class="btn addbuttonmodule" mat-flat-button color="primary" (click)="addValueItem()" type="button" [disabled]="
+                                        !this.form.value.Category ||
+                                        !this.form.value.ModuleName ||
+                                        !this.form.value.Action
+                                      ">
+                                      {{ labelName?.Add}}
+                                    </button>
+                                  </div>
+                                </div>
+                    
+                              </div> 
+
+                    
+<div *ngIf="ShowAddModule && HubId !== null"  class="divbackground"  >
+  <div class="row">
+                         
+    <div class="col-lg-11 col-md-11 col-10 text">
+     <span>{{ labelName?.AddMoreModule}}</span>
+     </div>
+     <div class="col-1">
+       <span class="crosscancel cursorPointer" (click) = "CancelAddMoreModuleForm()">X</span>
+     </div>
+            
+</div>
+            <div class="row">
+              <div class="col-5">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ labelName?.Category }}</mat-label>
+                  <mat-select (selectionChange)="
+                      getSubCategory($event.value); getModule($event.value)
+                    " formControlName="Category">
+                    <mat-option *ngFor="let data of categories" [value]="data.ModuleGroupping">
+                      {{ data.ModuleGroupping }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-5">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ labelName?.Subcategory }}</mat-label>
+                  <mat-select (selectionChange)="getModule($event.value)" formControlName="Subcategory"
+                    [disabled]="subcategory.length == 0">
+                    <mat-option *ngFor="let data of subcategory" [value]="data.SubModuleGroupping">
+                      {{ data.SubModuleGroupping }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-5">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ labelName?.ModuleName }}</mat-label>
+                  <mat-select formControlName="ModuleName" (selectionChange)="getActionList($event.value)">
+                    <mat-option *ngFor="let data of modules" [value]="data.Id">
+                      {{ data.Module }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-5">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ labelName?.Actionable }}</mat-label>
+                  <mat-select formControlName="Action" disableOptionCentering multiple class="actionable-main">
+                    <div class="selectAll">
+                      <mat-checkbox color="primary" class="mat-option w-100" [checked]="common.isChecked(action,form.value.Action)"
+                        (click)="$event.stopPropagation()" (change)="toggleSelection($event)">
+                        Select All
+                      </mat-checkbox>
+                    </div>
+                    <mat-option *ngFor="let data of action" [value]="data.ActionList">
+                      {{ data.ActionList }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-2">
+                <button class="btn addbuttonmodule" mat-flat-button color="primary" (click)="addValueItem()" type="button" [disabled]="
+                    !this.form.value.Category ||
+                    !this.form.value.ModuleName ||
+                    !this.form.value.Action
+                  ">
+                  {{ labelName?.Add}}
+                </button>
+           
+              </div>
+            </div>
+
+          </div>                    
+         
+	    <div class="col-lg-12 col-md-9 col-sm-12" style="padding: 0;">
+
+     
+      <app-filter [hasChecked]="hasChecked" component="" [role]="userDetails.role" [type]="type" [tabValue]="tabValue"  [isFilterOnCreate] = "isFilterOnCreate"
+      [addBtn]="'true'"  ></app-filter>
+
+            <div class="wrapper1 px-0 py-0" *ngIf = "tabValue.length > 0">
+              <div class="dataTable" style="overflow: auto;">
+           
+                <table>
+                  <thead>
+                    <tr>
+                      <ng-container *ngFor="let data of finalField; let i = index">
+                        <th *ngIf="data.value !== 'CHECKBOX'" [ngClass]="!data.checked ? 'tabCol' : ''"
+                          class="{{'column'+i}}" (click)="sortUsers(data.value, data.order)">
+                          <span [ngSwitch]="data.order">
+                            <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                            <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                        </span>
+                          <ng-container *ngIf="data.value == 'Sr No'; else else_content">
+                            <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary" [ngModelOptions]="{standalone: true}"
+                              [indeterminate]="hasChecked.length >0 && !allSelected"
+                              [checked]="hasChecked.length >0 && allSelected" [disabled]="!data.CHECKBOX && maxNo"
+                              (change)="bulkCheckboxCheck($event.checked, data)"></mat-checkbox>
+      
+                          </ng-container>
+                          <ng-template #else_content>
+                            {{data.value == 'Actionable' ? 'Action' :
+                            data.value == 'ModuleName' ? 'Module' :
+                            data.value == 'SubModuleGroupping' ? 'Sub Category' :
+                            data.value == 'ModuleGroupping' ? 'Category' :
+                            data.value == 'ActionList' ? 'Action List' :
+                            data.value == 'ControlName' ? 'Control Name' :                            
+                             data.value}}
+                          </ng-template>
+                        </th>
+                      </ng-container>
+                    </tr>
+                    <tr *ngIf="tabValue.length == 0">
+                      <th>No record found</th>
+                    </tr>
+                  </thead>
+
+                  <tbody *ngIf="tabValue.length>0">
+                    <tr *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page } ; let j = index">
+                      <ng-container *ngFor="let val of finalField; let i = index">
+      
+                        <td *ngIf="val.value == 'Sr No' " class="column{{i}}" [ngClass]="!val.checked ? 'tabCol' : ''">
+                          <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary"  [ngModelOptions]="{standalone: true}"
+                            (change)="singleCheckboxCheck($event.checked, data)"></mat-checkbox>
+                        </td>
+                       
+                      <td *ngIf="val.value == 'Actionable'   && userDetails.UserName === 'unfyd-admin' " class="column{{i}}" [ngClass]="!val.checked ? 'tabCol' : ''">
+                        <mat-icon (click)="DeleteAction(data)" class="red-color cursorPointer">delete_outline</mat-icon>                    
+                       </td>
+                       
+                       <td *ngIf="val.value == 'Actionable' && userDetails.UserName !== 'unfyd-admin'" class="column{{i}}" [ngClass]="!val.checked ? 'tabCol' : ''">
+                        -                  
+                       </td>
+
+                        <td *ngIf="val.value !== 'Sr No' && val.value !== 'Actionable'  && val.value !== 'ActionList'"
+                          [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                        
+                          
+                          <span [matTooltip]="data[val.value] && data[val.value].length > 20 ? data[val.value] : ''">{{data[val.value] == '' ? '' :
+                                    data[val.value] == ' ' ?'':
+                                    data[val.value] == 'NULL' ?'':
+                                    data[val.value]}}</span>                                                                                                                                                  
+                                                                                
+                        </td>
+                        
+                        <td *ngIf=" val.value == 'ActionList' && EditAddModule == false"
+                        [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                        <span [matTooltip]="data[val.value] && data[val.value].length > 15 ? data[val.value] : ''"  title=" {{data[val.value]}} " matTooltipPosition="right" >{{data[val.value] == '' ? '-' :data[val.value] == ' ' ?'-':
+                          data[val.value]}}</span>                        
+                        </td>
+                          
+                        <td *ngIf=" val.value == 'ActionList' && EditAddModule == true"   [matMenuTriggerFor]="menu" class="cursorPointer" (click)="EditActionListTable(data)"
+                        [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                        <span [matTooltip]="data[val.value] && data[val.value].length > 15 ? data[val.value] : ''" title=" {{data[val.value]}} " matTooltipPosition="right" >{{data[val.value] == '' ? '-' :data[val.value] == ' ' ?'-':
+                          data[val.value]}}</span><span style="color: #b4b4b4;">˅</span>                         
+                           
+                          <mat-menu #menu="matMenu" class="master_action cursorPointer" style="overflow: hidden;">                            
+                            <div  class="row" style="overflow: hidden;margin: 0;"> 
+        
+                                 <div class="col-lg-12" (click)="$event.stopPropagation()">
+                                       <mat-form-field appearance="fill"  style="margin: 13px 21px -5px 3px;">
+                                         <mat-label>{{ labelName?.Actionable }}</mat-label>
+                                         <mat-select formControlName="EditActionTableValue" #mySelect (selectionChange)="SAVEEditActionListTable(data)" disableOptionCentering multiple class="actionable-main">
+                                           <mat-option *ngFor="let data of EditActionTable" [value]="data.ActionList">
+                                             {{ data.ActionList }}</mat-option>
+                                         </mat-select>
+                                       </mat-form-field>                              
+                                 </div>
+                           </div>
+                           </mat-menu>
+                        </td>
+                      </ng-container>
+                    </tr>
+                    
+                  </tbody>
+                 
+                </table>
+              </div>       
+                <div class="pagination" *ngIf="tabValue.length>10">
+                  <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+                </div>
+            </div>
+        
+      </div>
+      
+      <div class="row d-none d-block d-md-none">
+        <div class="col-lg-6 col-md-6 col-12">
+          <!-- <button *ngIf="copyWithId == null "  class="btn btn-gray btnwidth mr-2" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+          <!-- <button   class="btn btn-gray" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+
+          <button  class="btn btn-gray btnwidth" mat-flat-button type="Reset"  *ngIf="HubId == null "  (click)="resetfunc()">
+              {{labelName?.Reset}}
+          </button>
+          <button *ngIf="HubId != null " class="btn btnwidth" mat-flat-button
+              color="primary" (click)="update('')" type="button">
+              {{labelName?.Update}}
+          </button>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12 mt-2">
+          <button class="btn outline btnwidth mr-2" *ngIf="ActionValueOne?.ControlName == null"
+          mat-stroked-button type="button" (click)="save('addNew')">
+          {{labelName?.SaveAddNew}}
+          </button>
+          <button *ngIf="ActionValueOne?.ControlName == null " class="btn btnwidth" mat-flat-button
+          color="primary" (click)="save('')" type="button">
+          {{labelName?.Save}}
+          </button>
+
+          <button *ngIf="copyWithId != null " class="btn btnwidth" mat-flat-button
+          color="primary" (click)="save('')" type="button">
+          {{labelName?.Save}}
+          </button>
+        </div>
+      </div>
+
+       <div class="btn-group d-none d-md-block" style="padding-top: 10px;">
+            <!-- <button *ngIf="copyWithId == null "  class="btn btn-gray" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+            <!-- <button  *ngIf="copyWithId == null " class="btn btn-gray" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+
+            <button  class="btn btn-gray" mat-flat-button type="Reset"  *ngIf="HubId == null "  (click)="resetfunc()">
+                {{labelName?.Reset}}
+            </button>
+            <button *ngIf="HubId != null " class="btn" mat-flat-button
+                color="primary" (click)="update('')" type="button">
+                {{labelName?.Update}}
+            </button>
+            <button class="btn outline" *ngIf="ActionValueOne?.ControlName == null"
+                mat-stroked-button type="button" (click)="save('addNew')">
+                {{labelName?.SaveAddNew}}
+            </button>
+            <button *ngIf="ActionValueOne?.ControlName == null " class="btn" mat-flat-button
+                color="primary" (click)="save('')" type="button">
+                {{labelName?.Save}}
+            </button>
+            <button *ngIf="copyWithId != null " class="btn btnwidth" mat-flat-button
+            color="primary" (click)="save('')" type="button">
+            {{labelName?.Save}}
+            </button>
+
+        </div>
+      </div>
+    <!-- </form> -->
+  </div>
+</div>

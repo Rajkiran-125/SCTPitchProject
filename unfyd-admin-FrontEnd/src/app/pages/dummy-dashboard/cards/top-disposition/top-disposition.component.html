@@ -1,0 +1,74 @@
+<div>
+  <div class="row m-0  d-flex align-items-center">
+    <div class="col-8 p-0 text-left">
+      <span class="font-bold mediumFont">Top Dispositions</span>
+    </div>
+    <div class="col-4 p-0 text-right d-flex align-items-center">
+      <select class="form-control rounded smallSelect smallFontText" id="exampleFormControlSelect1"
+        [(ngModel)]="selectedGrievance"
+        (change)="getInformation(spname,innerSpName,selectedGrievance);selectedOptionValue();nextDisable = true">
+        <option>Day</option>
+        <option>Month</option>
+        <option>Year</option>
+      </select>
+    </div>
+  </div>
+  <div class="row smallFont mx-0">
+    <div class="col-3 p-0">
+      Rank
+    </div>
+    <div class="col-5 p-0 ">
+      Category
+    </div>
+    <div class="col-4 p-0  text-right">
+      Clicks
+    </div>
+  </div>
+  <div class="cardHeight">
+    <div class="align-center">
+      <div class="row mx-0 border-top" *ngFor="let item of data  | slice:0:5;let i=index"
+        [ngClass]="item.label == 'Failed' ? 'text-danger':''">
+        <div class="col-3 p-0 marginY12px text-left">
+          {{item?.Rank}}
+        </div>
+        <div class="col-7 p-0 marginY12px text-left">
+          {{item?.Disposition}}
+        </div>
+        <div class="col-2 p-0 marginY12px text-right">
+          {{item?.Interactions}}
+        </div>
+      </div>
+      <ng-container *ngIf="data.length < 5">
+        <div class="row mx-0 border-top" *ngFor="let item of numSequence(5-data.length);let i=index">
+          <div class="col-3 p-0 marginY12px text-left">
+            -
+          </div>
+          <div class="col-7 p-0 marginY12px text-left">
+            -
+          </div>
+          <div class="col-2 p-0 marginY12px text-right">
+            -
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  
+
+  <div class="row m-0 d-none">
+    <div class="col-2 p-0">
+      <mat-icon class="cursorPointer" (click)="changeDate('prev')">keyboard_arrow_left</mat-icon>
+    </div>
+    <div class="col-8 text-center dashboardDate smallFont">
+      <span class="" *ngIf="selectedGrievance == 'Day'">{{ hawkerAppDate | dateFormat}}</span>
+      <span class="" *ngIf="selectedGrievance == 'Month'">{{ hawkerAppDate | date : 'MMM yyyy'}}</span>
+      <span class="" *ngIf="selectedGrievance == 'Year'">{{ hawkerAppDate | date:'yyyy'}}</span>
+    </div>
+    <div class="col-2 p-0 text-right">
+      <span [ngClass]="nextDisable ? 'disabledIT' :'cursorPointer'">
+        <mat-icon (click)="changeDate('next')">keyboard_arrow_right</mat-icon>
+      </span>
+    </div>
+  </div>
+</div>

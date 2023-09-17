@@ -1,0 +1,86 @@
+<div class="infoCards">
+  <div class="width20 cardBlue">
+    <div class="abcd">
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[0].title | titlecase }}</div>
+      <div class="cardValue marginBottom10PX cursorPointer" (click)="openDrillDown('Total Entered','Total Entered')">{{ data?.TotalEntered ? data?.TotalEntered : 0 }}</div>
+    </div>
+    <div class="card-right end">
+      <div echarts [options]="options5" class="chartHeight3"></div>
+    </div>
+    </div>
+    <div class="Uf-clear"></div>
+    <div class="d-flex justify-content-between cardName">
+      <span class="cursorPointer" (click)="openDrillDown('Entered Today','Entered Today')">Today-{{data?.EnteredToday ? data?.EnteredToday : 0}}</span><span class="cursorPointer" (click)="openDrillDown('Entered Previous','Entered Previous')">Previous-{{data?.EnteredPrevious ? data?.EnteredPrevious : 0}}</span>
+      </div>
+  </div>
+
+  <div class="width20 green">
+   
+    <div class="abcd">
+
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[1].title | titlecase }}</div>
+      <div class="cardValue marginBottom10PX cursorPointer" (click)="openDrillDown('Total Closed','Total Closed')">{{ data?.TotalClosed ? data?.TotalClosed : 0 }}</div>
+    </div>
+    <div class="card-right end">
+      <div echarts [options]="options1" class="chartHeight3"></div>
+    </div>
+    </div>
+    <div class="Uf-clear"></div>
+    <div class="d-flex justify-content-between cardName">
+      <span class="cursorPointer" (click)="openDrillDown('Closed Today','Closed Today')">Today-{{ data?.ClosedToday ? data?.ClosedToday : 0 }}</span><span class="cursorPointer" (click)="openDrillDown('Pending Queue Closed','Pending Queue Closed')">Previous-{{ data?.PendingQueueClosed ? data?.PendingQueueClosed : 0 }}</span>
+      </div>
+ 
+  </div>
+
+  <div class="width20 goldYellow">
+    <div class="abcd">
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[2].title | titlecase }}</div>
+      <div class="cardValue marginBottom10PX cursorPointer" (click)="openDrillDown('Total Queue','Total Queue')">{{ data?.TotalQueue ? data?.TotalQueue : 0 }}</div>
+    </div>
+    <div class="card-right end">
+      <div class="imgInside">
+        <span class="dullYellowBackground">{{ !data?.LongestInQueue ? '00:00:00' : data?.LongestInQueue }}</span>
+      </div>
+    </div>
+  </div>
+    <div class="Uf-clear"></div>
+    <div class="d-flex justify-content-between cardName">
+      <span>Avg-{{ data?.AvgQueueTime ? data?.AvgQueueTime : '00:00:00' }}</span><span>Max-{{ data?.MaxQueueTime ? data?.MaxQueueTime : '00:00:00' }}</span>
+      </div>
+    </div>
+
+  <div class="width20 maroon">
+    <div class="abcd">
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[3].title | titlecase }}</div>
+      <div class="cardValue marginBottom10PX cursorPointer" (click)="openDrillDown('Dropped','Dropped')">{{ !data?.Abandoned ? 0 : !data?.Overruled ? 0: data?.Abandoned + data?.Overruled }}</div>
+    </div>
+    <div class="card-right end">
+      <div echarts [options]="options3" class="chartHeight3"></div>
+    </div>
+    </div>
+    <div class="Uf-clear"></div>
+    <div class="d-flex justify-content-between cardName">
+      <span class="cursorPointer" (click)="openDrillDown('Abandoned','Abandoned')">Abandoned-{{ data?.Abandoned == null ? 0 : data?.Abandoned }}</span><span class="cursorPointer" (click)="openDrillDown('Overruled','Overruled')">Overruled-{{ data?.Overruled == null ? 0 : data?.Overruled }}</span>
+      </div>
+  </div>
+
+  <div class="width20 purple">
+    <div class="abcd">
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[4].title | titlecase }}</div>
+      <div class="cardValue marginBottom10PX cursorPointer" (click)="openDrillDown('Active Sessions','Active Sessions')">{{ data1?.ActiveSession ? data1?.ActiveSession: 0 }}</div>
+    </div>
+    <div class="card-right end">
+      <div echarts [options]="options4" class="chartHeight3"></div>
+    </div>
+    </div>
+    <div class="Uf-clear"></div>
+    <div class="d-flex justify-content-between cardName">
+      <span>Capacity-{{ data1?.Capacity ? data1?.Capacity : 0 }}</span><span>Available-{{ data1?.AvailbleSession ? data1?.AvailbleSession : 0 }}</span>
+      </div>
+  </div>
+</div>

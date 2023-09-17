@@ -1,0 +1,37 @@
+<ng-container *ngIf="getPrint.type == 'receipt'">
+    <div class="receipt">
+        <div class="header">
+            <div class="logo">
+                <img src="assets/images/logo.png">
+            </div>
+            <h4>Money Receipt</h4>
+        </div>
+        <div class="body">
+            <ul>
+                <li><strong>Receipt No. :</strong><span>{{getPrint.data['Actionable']}}</span></li>
+                <li><strong>Receipt Date :</strong><span>{{getPrint.data['Date']}}</span></li>
+                <li *ngIf="getPrint.data['Fee Type'] == 'Registration'"><strong>Application No.
+                        :</strong><span>{{getPrint.data['Registration No']}}</span></li>
+                <li><strong>Amount Received with thanks {{getPrint.data['Amount'] | currency : '&#8377; '}}</strong></li>
+                <li><strong>({{getPrint.data['Amount'] | amountToWord}})</strong></li>
+            </ul>
+            <p *ngIf="getPrint.data['Fee Type'] == 'Registration'"><strong>Received from {{getPrint.data['First
+                    Name']}},</strong> towards {{getPrint.data['Fee Type']}} fee under the project of "converting unauthorized hawkers
+                into skilled organized hawkers through skill development programs over Eastern Railway"</p>
+            <ng-container *ngIf="getPrint.data['Fee Type'] !== 'Registration'">
+                <p><strong>Received from {{getPrint.data['First Name']}},</strong> towards {{getPrint.data['Fee Type']}} Renewal Fee <br>
+                    valid till 30 days from the date of receipt under the project of “converting unauthorized hawkers
+                    into
+                    skilled organized hawkers through skill development programs over Eastern Railway”</p>
+                <p><strong>Application No. :</strong><span>{{getPrint.data['Registration No']}}</span></p>
+            </ng-container>
+        </div>
+        <div class="footer">
+            <div class="receiptSignature">
+                <span>---------------------------------------------------</span>
+                <strong>Signature with Seal</strong>
+            </div>
+            <div class="info">This is a computer generated receipt.</div>
+        </div>
+    </div>
+</ng-container>

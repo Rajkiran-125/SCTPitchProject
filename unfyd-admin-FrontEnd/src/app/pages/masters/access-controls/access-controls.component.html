@@ -1,0 +1,28 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+    
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+      <span style="position:fixed;" #spanTrigger class="context-menu-trigger"  #matTrigger="matMenuTrigger" [matMenuTriggerFor]="contextMenuOne"></span>
+      <div (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" class="mat-tree-border">
+      <span>{{node.Label}}</span>
+       
+        <span>{{node.ControlType}}</span>
+        <span *ngIf="node.ControlType? getHTMLControl(node.ControlType) :''"></span>
+        <mat-menu #contextMenuOne="matMenu"><button mat-menu-item (click)="addChildNode(node)"><span>Create</span></button></mat-menu>
+      </div>
+    </mat-tree-node>
+    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <div class="mat-tree-node">
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.Label">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          <span>{{node.Label}}</span>
+        </div>
+   
+        <div [class.example-tree-invisible]="!treeControl.isExpanded(node)" role="group">
+          <ng-container matTreeNodeOutlet></ng-container>
+      </div>
+    </mat-nested-tree-node>
+  </mat-tree>
+  

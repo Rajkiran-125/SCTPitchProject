@@ -1,0 +1,12 @@
+<div class="sideBar" [ngClass]="checkAsideMenu ? 'smallSideNav' : 'bigSideNav ' ">
+    <div class="sidebarContent">
+        <mat-nav-list class="mobileNavList">
+            <mat-list-item *ngFor="let data of configMenu" (click)="goTo(data)" [routerLinkActive]="'active'"
+            #tooltip="matTooltip" [matTooltip]="data.ModuleGroupping" matTooltipPosition="right" [ngClass]="data.ModuleGroupping == selectedMenuOption ? 'selectedMenuOption' : ''">
+            <i [ngClass]="data.Icon"></i>
+            <span class="ml-2" [ngClass]="checkAsideMenu ? 'd-none' : 'd-none d-block d-md-none ' ">{{data.ModuleGroupping}}</span>
+        </mat-list-item>
+        </mat-nav-list>
+    </div>
+</div>
+

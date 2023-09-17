@@ -1,0 +1,110 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <app-steps [steps]="hawkerFormSteps" [id]="path"></app-steps>
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend>Medical Details</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.medicaltestinitiationdate.errors }">
+                            <mat-label>{{labelName?.TestInitiationdate}}</mat-label>
+                            <input (focus)="medicaltestinitiationdate.open()" (click)="medicaltestinitiationdate.open()" readonly
+                                formControlName="medicaltestinitiationdate" type="text" [matDatepicker]="medicaltestinitiationdate"
+                                datePickerFormat="DD-MM-YYYY" matInput [min]="minDate"
+                                (dateInput)="initiationDateChange($event.value)">
+                            <mat-datepicker-toggle matSuffix [for]="medicaltestinitiationdate"></mat-datepicker-toggle>
+                            <mat-datepicker #medicaltestinitiationdate></mat-datepicker>
+                            <mat-error *ngIf=" f.medicaltestinitiationdate.errors">
+                                <ng-container *ngIf="f.medicaltestinitiationdate.errors.required">Initiaiton date is
+                                    required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.medicalteststatus.errors }">
+                            <mat-label>{{labelName?.TestStatus}}</mat-label>
+                            <mat-select (selectionChange)="statusCheck($event.value)"
+                                formControlName="medicalteststatus">
+                                <mat-option *ngFor="let data of masterConfig?.medicalTestStatus" [value]="data.Key">
+                                    {{data.Key}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.medicaltestdate.errors }">
+                            <mat-label>{{labelName?.TestDate}}</mat-label>
+                            <input (focus)="medicaltestdate.open()" (click)="medicaltestdate.open()" readonly
+                                formControlName="medicaltestdate" type="text" [matDatepicker]="medicaltestdate"
+                                datePickerFormat="DD-MM-YYYY" matInput [min]="fromDate"
+                                (dateInput)="fromDateChange($event.value)" [disabled]="fromDatePicker">
+                            <mat-datepicker-toggle matSuffix [for]="medicaltestdate"></mat-datepicker-toggle>
+                            <mat-datepicker #medicaltestdate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.medicaltestreferencenumber.errors }">
+                            <mat-label>{{labelName?.TestReferenceNumber}}</mat-label>
+                            <input matInput formControlName="medicaltestreferencenumber">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.medicaltestresultdate.errors }">
+                            <mat-label>{{labelName?.TestResultDate}}</mat-label>
+                            <input (focus)="medicaltestresultdate.open()" (click)="medicaltestresultdate.open()"
+                                (dateChange)="statusValueCheck($event.value)" readonly formControlName="medicaltestresultdate"
+                                type="text" [matDatepicker]="medicaltestresultdate" datePickerFormat="DD-MM-YYYY" matInput
+                                [min]="toDate" [disabled]="toDatePicker">
+                            <mat-datepicker-toggle matSuffix [for]="medicaltestresultdate"></mat-datepicker-toggle>
+                            <mat-datepicker #medicaltestresultdate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.HospitalName}}</mat-label>
+                            <mat-select formControlName="hospital"
+                                (selectionChange)="getDoctorName($event.value)">
+                                <mat-option *ngFor="let data of hospitalNameList" [value]="data.hospitalName">
+                                    {{data.hospitalName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.DoctorName}}</mat-label>
+                            <mat-select formControlName="doctor">
+                                <mat-option *ngFor="let data of doctorList" [value]="data.doctorName">
+                                    {{data.doctorName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>                    
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="medicaltestreportuploadstatus"
+                            (change)="uploadDocument($event.checked, medicalDocument, 'Medical Clearance Report')">
+                            {{labelName?.MedicalCertificate}}</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.medicaltestreportuploadstatus"  #tooltip="matTooltip" matTooltip="View"
+                                (click)="viewDocument('Medical Clearance Report', 'document')">remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group" *ngIf="userConfig?.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-stroked-button (click)="submit('save')" type="button">Save</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit('next')" type="button">Next >></button>
+            </div>
+        </form>
+    </div>
+</div>

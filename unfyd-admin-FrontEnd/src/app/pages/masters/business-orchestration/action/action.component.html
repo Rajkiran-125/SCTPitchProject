@@ -1,0 +1,79 @@
+<div class="row" [formGroup]="apiChecker">
+    <div class="col-4">
+        <mat-form-field appearance="fill">
+            <mat-label>{{labelName?.OfflineAction}} {{apiChecker.value.offline_action}}</mat-label>
+            <mat-select formControlName="offline_action">
+                <mat-option *ngFor="let data of offlineList" [value]="data.Key">
+                    {{data.Value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="col-8">
+        <div class="d-flex align-items-center mt-2">
+  
+        </div>
+        <mat-icon class="mat-btn red-color"
+            (click)="removeCondition(otherObj.parent, otherObj.child, 'action')"
+            *ngIf="otherObj.count !== 1"
+            matTooltip="Remove">delete_outline</mat-icon>
+            <mat-icon class="mat-btn primary-color add"
+                (click)="addCondition(otherObj.parent, 'action')" *ngIf="otherObj.last"
+                matTooltip="Add">add</mat-icon>
+    </div>
+    <ng-container *ngIf="apiChecker.value['offline_action'] !== ''">
+        <!-- <ng-container *ngIf="apiChecker.value.offline_action === 'SendQueue'"> -->
+          <!-- End Session -->
+        <!-- <div class="col-4">
+            <mat-label ngClass="labelBeforeSlide">{{labelName?.Message}}</mat-label>
+            <mat-slide-toggle formControlName="media_status" color="primary"
+                disableRipple="true" class="toggleBtn">{{labelName?.Media}}</mat-slide-toggle>
+        </div>
+        <div class="col-2 avatar" *ngIf="apiChecker.value['media_status']">
+          <div class="uploadTitle" >
+            <i class="icon-upload"></i> <strong class="mx-1">{{labelName?.Upload}}</strong></div>
+            <img *ngIf="apiChecker.value['media_url']" [src]="apiChecker.value['media_url']" >
+            <input #media  type="file" (change)="directUpload($event, 600, 600, apiChecker.get('media_url'))">
+        </div>
+        <div [ngClass]="apiChecker.value['media_status'] === true ? 'col-6' : 'col-8'">
+            <mat-form-field appearance="fill">
+                <mat-label>{{labelName?.Messagetocustomer}}</mat-label>
+                <input matInput formControlName="message"
+                    appTitleCase>
+            </mat-form-field>
+        </div> -->
+        <!-- </ng-container> -->
+        <ng-container *ngIf="apiChecker.value.offline_action === 'SendQueue'">
+            <div class="col-4">
+                <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.ToWhom}}</mat-label>
+                    <mat-select formControlName="whom"
+                        (selectionChange)="changeEvent($event.value)">
+                        <mat-option *ngFor="let data of whom_list"
+                            [value]="data.Key">{{data.Value}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <ng-container *ngIf="group_name && actionGroup.length>0">
+                <div class="col-1 equalTo">=</div>
+                <div  *ngIf="apiChecker.value.whom"  class="col-4">
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{apiChecker.value.whom}}</mat-label>
+                        <mat-select formControlName="group">
+                            <mat-option
+                                *ngFor="let data of actionGroup"
+                                [value]="data.value">{{data.label}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </ng-container>
+        </ng-container>
+            <!-- <div class="col-12 pb-3" *ngIf="apiChecker.value.offline_action === 'DefaultRule' || apiChecker.value.offline_action === 'EndSession'">
+                 <app-api-module (formvalue)="formvalue($event)"
+    [apiChecker]="apiChecker" [patchValue]=""></app-api-module>
+    </div> -->
+  
+    </ng-container>
+    <!-- <div class="col-12" *ngIf="form.get('routing_condition')['at'](otherObj.parent).get('action')['controls'].length>1 && !otherObj.last"><hr></div> -->
+    <div class="col-12" *ngIf="!otherObj.last"><hr></div>
+    </div>
+  

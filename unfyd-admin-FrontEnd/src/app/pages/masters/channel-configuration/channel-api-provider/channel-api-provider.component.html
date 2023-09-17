@@ -1,0 +1,241 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper py-4 mt-3">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="(userConfig?.Cancel)" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+        <div class="row ">
+          <div class="col-12">
+            <span class="d-flex backArrow">
+              <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+              <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} WhatsApp Account</legend>
+            </span>
+          <div class="formGroup">
+            <div class="masters_block">
+              <app-steps [steps]="channelConfigurationSteps" [moduletype]="'channelConfiguration'" [id]="path"
+                [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+              <div class="top_block"></div>
+              <div class="row paddingX5">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.SendMessageLength}}</mat-label>
+                    <input matInput formControlName="Send_Message_Length" (keypress)="numericOnly($event)" type="number" min = 0 max =1000/>
+                    <mat-error *ngIf="f.Send_Message_Length.errors">
+                      <ng-container *ngIf="f.Send_Message_Length.errors.required">Send Message Length is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Send_Message_Length.errors.pattern">Send Message Length accept only numbers.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.SendMessageUrl}}</mat-label>
+                    <input matInput formControlName="Send_Message_URL" />
+                    <mat-error *ngIf="f.Send_Message_URL.errors">
+                      <ng-container *ngIf="f.Send_Message_URL.errors.required">Send Message is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Send_Message_URL?.errors?.checknull">Whitespace not allowed.
+
+                      </ng-container>
+                      <ng-container *ngIf="f.Send_Message_URL?.errors.pattern">Send Message URL is
+                        invalid.
+                    </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="Enable_Quick_Reply"
+                    (change)="changeQuickReply()" labelPosition="before">{{labelName?.QuickReplyEnable}}</mat-slide-toggle>
+
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Enable_Quick_Reply">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.QuickReply}}</mat-label>
+                    <input matInput formControlName="Quick_Reply_Length" (keypress)="numericOnly($event)" type="number" min = 0 max =1000/>
+                    <mat-error *ngIf="f.Quick_Reply_Length.errors">
+                      <ng-container *ngIf="f.Quick_Reply_Length.errors.required">Quick Reply(length) is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Quick_Reply_Length.errors.pattern">Quick Reply(length) accept only
+                        numbers.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Enable_Quick_Reply">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.QuickReplyTitle}}</mat-label>
+                    <input matInput formControlName="Quick_Reply_Title_Length" (keypress)="numericOnly($event)" type="number" min = 0 max =1000/>
+                    <mat-error *ngIf="f.Quick_Reply_Title_Length.errors">
+                      <ng-container *ngIf="f.Quick_Reply_Title_Length.errors.required">Quick Reply Title(length) is
+                        required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Quick_Reply_Title_Length.errors.pattern">Quick Reply Title(length) accept only
+                        numbers.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Enable_Quick_Reply">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.QuickReplyUrl}}</mat-label>
+                    <input matInput formControlName="Quick_Reply_URL" />
+                    <mat-error *ngIf="f.Quick_Reply_URL.errors">
+                      <ng-container *ngIf="f.Quick_Reply_URL.errors.required">Quick Reply is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Quick_Reply_URL?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                      <ng-container *ngIf="f.Send_Message_URL?.errors.pattern">Quick Reply URL is
+                        invalid.
+                    </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="Enable_List_Options"
+                    labelPosition="before" (change)="changeListOptions()">{{labelName?.ListOptionsEnable}}
+                  </mat-slide-toggle>
+
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12" *ngIf="form.value.Enable_List_Options">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.ListOptionsUrl}}</mat-label>
+                    <input matInput formControlName="List_Options_URL" />
+                    <mat-error *ngIf="f.List_Options_URL.errors">
+                      <ng-container *ngIf="f.List_Options_URL.errors.required">{{labelName?.ListOptionsUrl}}
+                      </ng-container>
+                      <ng-container *ngIf="f.List_Options_URL?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                      <ng-container *ngIf="f.List_Options_URL?.errors.pattern">List Options URL is
+                        invalid.
+                    </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12" *ngIf="form.value.Enable_List_Options">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.ListOptions}}</mat-label>
+                    <input matInput formControlName="List_Options_Length" (keypress)="numericOnly($event)" type="number" min = 0 max =1000/>
+                    <mat-error *ngIf="f.List_Options_Length.errors">
+                      <ng-container *ngIf="f.List_Options_Length.errors.required">List Options(length) is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.List_Options_Length.errors.pattern">List Options(length) accept only numbers.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-label class="mr-2 fontSizeContentTitle">{{labelName?.AuthType}}</mat-label>
+                  <mat-radio-group aria-label="Select an option" formControlName="Auth_Type" (change)="changeAuthType()">
+                    <mat-radio-button value="basic">{{labelName?.Basic}}</mat-radio-button>
+                    <mat-radio-button value="tokenBased">{{labelName?.TokenBased}}</mat-radio-button>
+                  </mat-radio-group>
+                  <mat-error *ngIf="f.Auth_Type.errors && f.Auth_Type.touched">
+                    <small *ngIf="f.Auth_Type.errors.required">Auth Type is required.
+                    </small>
+                  </mat-error>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Auth_Type == 'basic'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.BasicAuthToken}}</mat-label>
+                    <input matInput formControlName="authtoken" />
+                    <mat-error *ngIf="f.authtoken.errors">
+                      <ng-container *ngIf="f.authtoken.errors.required">Basic Auth Token is required.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Auth_Type == 'tokenBased'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.TokenURL}}</mat-label>
+                    <input matInput formControlName="Token_URL" />
+                    <mat-error *ngIf="f.Token_URL.errors">
+                      <ng-container *ngIf="f.Token_URL?.errors?.required">Token URL is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Token_URL?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                      <ng-container *ngIf="f.Token_URL?.errors.pattern">Token URL is
+                        invalid.
+                    </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Auth_Type == 'tokenBased'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.TokenValidityDuration}}</mat-label>
+                    <input matInput formControlName="tokenValidityDuration" type="time" step="1" value="13:30" class="inputtimeIcon inputInsideTextLeftAlign" />
+                    <mat-error *ngIf="f.tokenValidityDuration.errors">
+                      <ng-container *ngIf="f.tokenValidityDuration?.errors?.required">Token Validity Duration is required.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Auth_Type == 'tokenBased'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.TokenTransactionAPI}}</mat-label>
+                    <input matInput formControlName="Token_Transaction_API" />
+                    <mat-error *ngIf="f.Token_Transaction_API.errors">
+                      <ng-container *ngIf="f.Token_Transaction_API?.errors?.required">Token Transaction API is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Token_Transaction_API?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Auth_Type == 'tokenBased'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.UserName}}</mat-label>
+                    <input matInput formControlName="Token_Username" />
+                    <mat-error *ngIf="f.Token_Username.errors">
+                      <ng-container *ngIf="f.Token_Username?.errors?.required">User Name is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Token_Username?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Auth_Type == 'tokenBased'">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.Password}}</mat-label>
+                    <input matInput formControlName="Token_Password" [type]="hide ? 'password' : 'text'" />
+                    <span matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                      [attr.aria-pressed]="hide">
+                      <mat-icon [ngClass]="hide ? 'gray' : ''">{{hide ? 'visibility_off' :
+                        'visibility'}}</mat-icon>
+                    </span>
+                    <mat-error *ngIf="f.Token_Password.errors">
+                      <ng-container *ngIf="f.Token_Password?.errors?.required">Password is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Token_Password?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+            </div>
+            <div class="btn-group my-3" >
+              <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                <button *ngIf="(userConfig?.Save)" (click)="savewhatsapp('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                <button  *ngIf=" (userConfig?.Next) " (click)="savewhatsapp('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

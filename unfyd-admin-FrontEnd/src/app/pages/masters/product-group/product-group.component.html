@@ -1,0 +1,457 @@
+
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div [ngClass]="isDialog === true ? 'py-4':'wrapper py-4'">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="isDialog == false" (click)="back()"></span>
+    </div>
+    <div class="row" *ngIf="productId == null">
+      <div class="col-1 text-center backarrow">
+        <mat-icon class="cursorPointer gray my-3" (click)="back()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-lg-11 col-md-10 col-10 pl-0">
+        <legend class="my-3 size"> {{productId == null ? 'Add New Product Group':'Update Product Group'}}</legend>
+
+        <legend class="groupTitle1"><span>{{labelName?.Group}}</span></legend>
+        <div class=" darkWrapper1">
+          <form [formGroup]="form">
+            <div class="formGroup">
+              <div class="group">
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.GroupName}}</mat-label>
+                      <input matInput formControlName="Groupname" appTitleCase>
+                      <mat-error *ngIf="f.Groupname.errors">
+                        <ng-container *ngIf="f.Groupname?.errors?.required">{{labelName?.GroupName}} is required.
+                        </ng-container>
+                        <ng-container *ngIf="f.Groupname?.errors?.pattern">{{labelName?.GroupName}} is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f.Groupname?.errors?.checknull1">Must be at least 3 characters long.
+                        </ng-container>
+                  
+                    </mat-error>
+                    </mat-form-field>
+                  </div>
+
+
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.Description}}</mat-label>
+                      <input matInput formControlName="description" appTitleCase maxlength="500">
+                      <mat-error *ngIf="f.description.errors">                              
+                        <ng-container *ngIf="f.description.errors.pattern">{{labelName?.Description}}  is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f.description.errors.minlength">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                        <ng-container *ngIf="f.description.errors.maxlength">
+                          Cannot be beyond 500 characters.
+                        </ng-container>
+                        <ng-container *ngIf="f.description?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                    </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="btn-group">
+              <!-- <button class="btn btn-gray btn-width80" (click)="back()" routerLinkActive="router-link-active" mat-flat-button type="Reset">Cancel</button> -->
+              <button  id="reset" #reset    class="btn btn-gray btn-width80" mat-flat-button (click)="resetproductgroup()" type="button">Reset</button>   
+              <button mat-raised-button class="width-100 btn-width80" color="primary" type="button" *ngIf="userConfig?.Save"
+                (click)="submitproduct('add')">{{labelName?.Save}}</button>
+            </div>
+          </form>
+        </div>
+        <legend class="groupTitle1"><span> {{labelName?.Category}}</span></legend>
+        <div class="darkWrapper1">
+          <form [formGroup]="form">
+            <div class="formGroup">
+              <div class="group">
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.ProductGroup}}</mat-label>
+                      <mat-select formControlName="ProductGroup">
+                        <mat-option *ngFor="let data of filteredList1" [value]="data['Actionable']">
+                          {{data['Group Name']}}
+                        </mat-option>
+                       
+                      </mat-select>
+                      <mat-error *ngIf="f.ProductGroup.errors">
+                        <ng-container *ngIf="f.ProductGroup.errors.required">{{labelName?.ProductGroup}} is required.</ng-container>
+                        <!-- <ng-container *ngIf="f.ProductGroup?.errors?.checknull">Whitespace not allowed.
+                        </ng-container> -->
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.CategoryName}}</mat-label>
+                      <input matInput formControlName="Categoryname" appTitleCase >
+                      <mat-error *ngIf="f.Categoryname.errors">
+                        <ng-container *ngIf="f.Categoryname.errors.required">{{labelName?.CategoryName}} is required.
+                        </ng-container>
+                        <ng-container *ngIf="f.Categoryname.errors.pattern">{{labelName?.CategoryName}} is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f.Categoryname?.errors?.checknull1">Must be at least 3 characters long.
+                        </ng-container>
+                    </mat-error>
+                    </mat-form-field>
+                  </div>
+
+
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.Description}}</mat-label>
+                      <input matInput formControlName="decrip" appTitleCase maxlength="500">
+                      <mat-error *ngIf="f.decrip.errors">                              
+                        <ng-container *ngIf="f.decrip.errors.pattern">{{labelName?.Description}}  is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f.decrip.errors.minlength">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                        <ng-container *ngIf="f.decrip.errors.maxlength">
+                          Cannot be beyond 500 characters.
+                        </ng-container>
+                        <ng-container *ngIf="f.decrip?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                    </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="btn-group">
+              <!-- <button class="btn btn-gray btn-width80" (click)="back()" routerLinkActive="router-link-active" mat-flat-button type="Reset">Cancel</button> -->
+              <button  id="reset" #reset    class="btn btn-gray btn-width80" mat-flat-button (click)="resetcategory()" type="button">Reset</button>    
+              <button mat-raised-button class="width-100 btn-width80 ml-2" color="primary" type="button" *ngIf="userConfig?.Save"
+                (click)="submitproductcategory('add')">{{labelName?.Save}}</button>
+            </div>
+          </form>
+        </div>
+
+        <legend class="groupTitle1"><span>{{labelName?.SubCategory}}</span></legend>
+        <div class=" darkWrapper1">
+
+          <form [formGroup]="form">
+            <div class="formGroup">
+
+              <div class="group">
+                <div class="row">
+
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.ProductGroup}}</mat-label>
+                      <mat-select formControlName="ProductGroup3"
+                        (selectionChange)="getcategorydropdwon(form.value.ProductGroup3)">
+                        <mat-option *ngFor="let data of filteredList1" [value]="data['Actionable']">
+                          {{data['Group Name']}}
+                        </mat-option>
+                      
+                      </mat-select>
+                      <mat-error *ngIf="f.ProductGroup3.errors">
+                        <ng-container *ngIf="f.ProductGroup3.errors.required">Product Group is required.</ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.CategoryName}}</mat-label>
+                      <mat-select formControlName="categ">
+                        <mat-option *ngFor="let data of filteredList2" [value]="data['Actionable']">
+                          {{data['Category Name']}}
+                        </mat-option>                      
+                      </mat-select>
+                      <mat-error *ngIf="f.categ.errors">
+                        <ng-container *ngIf="f.categ.errors.required">{{labelName?.CategoryName}} is required.</ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.SubCategory}} </mat-label>
+                      <input matInput formControlName="subcategoryname" appTitleCase>
+                      <mat-error *ngIf="f.subcategoryname.errors">
+                        <ng-container *ngIf="f.subcategoryname.errors.required">{{labelName?.SubCategory}} is required.
+                        </ng-container>
+                        <ng-container *ngIf="f.subcategoryname.errors.pattern">{{labelName?.SubCategory}} is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f.subcategoryname?.errors?.checknull1">Must be at least 3 characters long.
+                        </ng-container>
+                    </mat-error>
+                    </mat-form-field>
+                  </div>
+
+
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.Description}}</mat-label>
+                      <input matInput formControlName="des" appTitleCase maxlength="500">
+                      <mat-error *ngIf="f.des.errors">                              
+                        <ng-container *ngIf="f.des.errors.pattern">{{labelName?.Description}}  is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f.des.errors.minlength">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                        <ng-container *ngIf="f.des.errors.maxlength">
+                          Cannot be beyond 500 characters.
+                        </ng-container>
+                        <ng-container *ngIf="f.des?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                    </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="btn-group">
+              <!-- <button class="btn btn-gray btn-width80" (click)="back()" routerLinkActive="router-link-active" mat-flat-button type="button">Cancel</button> -->
+              <button  id="reset" #reset    class="btn btn-gray btn-width80" mat-flat-button (click)="resetsubcategory()" type="button">Reset</button>    
+              <button mat-raised-button class="width-100 btn-width80 ml-2" color="primary" type="button" *ngIf="userConfig?.Save"
+                (click)="submitsubcategory('add')">{{labelName?.Save}}</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+    <div class="row" *ngIf="(productId !== null) ">
+      <div class="col-1 text-center backarrow">
+        <mat-icon class="cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-lg-11 col-md-11 col-10 pl-0">
+        <legend class="size"> Update Product Group</legend>
+        <div class="row" *ngIf="this.productCategory == 'GET_PRODUCT_GROUP'">
+          <legend class="groupTitle1"><span>{{labelName?.Group}}</span></legend>
+          <div class=" darkWrapper1">
+            <form [formGroup]="form">
+              <div class="formGroup">
+                <div class="group">
+                  <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.GroupName}}</mat-label>
+                        <input matInput formControlName="Groupname" appTitleCase >
+                        <mat-error *ngIf="f.Groupname.errors">
+                          <ng-container *ngIf="f.Groupname.errors.required">{{labelName?.GroupName}} is required.
+                          </ng-container>
+                          <ng-container *ngIf="f.Groupname.errors.pattern">{{labelName?.GroupName}} is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f.Groupname?.errors?.checknull1">Must be at least 3 characters long.
+                          </ng-container>                    
+                      </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.Description}}</mat-label>
+                        <input matInput formControlName="description" appTitleCase maxlength="500">
+                        <mat-error *ngIf="f.description.errors">                              
+                          <ng-container *ngIf="f.description.errors.pattern">{{labelName?.Description}}  is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f.description.errors.minlength">
+                            Must be at least 3 characters long.
+                          </ng-container>
+                          <ng-container *ngIf="f.description.errors.maxlength">
+                            Cannot be beyond 500 characters.
+                          </ng-container>
+                          <ng-container *ngIf="f.description?.errors?.checknull1">
+                            Must be at least 3 characters long.
+                          </ng-container>
+                      </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="btn-group">
+                <!-- <button class="btn btn-gray btn-width80" (click)="backproduct()"  mat-flat-button type="button"  style="margin-right: 15px;">Cancel</button> -->
+                <button mat-raised-button class="width-100 btn-width80" color="primary" type="button" 
+                  (click)="submitproduct('update')">{{labelName?.Update}}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="this.productCategory == 'GET_CATEGORY' ">
+          <legend class="groupTitle1"><span> {{labelName?.Category}}</span></legend>
+          <div class="darkWrapper1">
+            <form [formGroup]="form">
+              <div class="formGroup">
+                <div class="group">
+                  <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.ProductGroup}}</mat-label>
+                        <mat-select formControlName="ProductGroup">
+                          <mat-option *ngFor="let data of product" [value]="data['Actionable']">
+                            {{data['Group Name']}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f.ProductGroup.errors">
+                          <ng-container *ngIf="f.ProductGroup.errors.required">Product Group is required.</ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.CategoryName}}</mat-label>
+                        <input matInput formControlName="Categoryname" appTitleCase >
+                        <mat-error *ngIf="f.Categoryname.errors">
+                          <ng-container *ngIf="f.Categoryname.errors.required">Category Name is required.
+                          </ng-container>
+                          <ng-container *ngIf="f.Categoryname.errors.pattern">Category Name is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f.Categoryname?.errors?.checknull1">Must be at least 3 characters long.
+                          </ng-container>
+                    
+                      </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.Description}}</mat-label>
+                        <input matInput formControlName="decrip" appTitleCase maxlength="500">
+                        <mat-error *ngIf="f.decrip.errors">                              
+                          <ng-container *ngIf="f.decrip.errors.pattern">{{labelName?.Description}}  is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f.decrip.errors.minlength">
+                            Must be at least 3 characters long.
+                          </ng-container>
+                          <ng-container *ngIf="f.decrip.errors.maxlength">
+                            Cannot be beyond 500 characters.
+                          </ng-container>
+                          <ng-container *ngIf="f.decrip?.errors?.checknull1">
+                            Must be at least 3 characters long.
+                          </ng-container>
+                      </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="btn-group">
+                <!-- <button class="btn btn-gray btn-width80" (click)="backCate()" routerLinkActive="router-link-active" mat-flat-button type="button" style="margin-right: 15px;">Cancel</button> -->
+                <button mat-raised-button class="width-100 btn-width80" color="primary" type="button"
+                  (click)="submitproductcategory('update')">{{labelName?.Update}}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="this.productCategory == 'GET_SUB_CATEGORY'">
+          <legend class="groupTitle1"><span>{{labelName?.SubCategory}}</span></legend>
+          <div class=" darkWrapper1">
+
+            <form [formGroup]="form">
+              <div class="formGroup">
+
+                <div class="group">
+                  <div class="row">
+
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.ProductGroup}}</mat-label>
+                        <mat-select formControlName="ProductGroup3"
+                          (selectionChange)="getcategorydropdwon(form.value.ProductGroup3)">
+                          <mat-option *ngFor="let data of product" [value]="data['Actionable']">
+                            {{data['Group Name']}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f.ProductGroup3.errors">
+                          <ng-container *ngIf="f.ProductGroup3.errors.required">Product Group is required.</ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.CategoryName}}</mat-label>
+                        <mat-select formControlName="categ">
+                          <mat-option *ngFor="let data of category" [value]="data['Actionable']">
+                            {{data['Category Name']}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f.categ.errors">
+                          <ng-container *ngIf="f.categ.errors.required">Category Name is required.</ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.SubCategory}} </mat-label>
+                        <input matInput formControlName="subcategoryname" appTitleCase>
+                        <mat-error *ngIf="f.subcategoryname.errors">
+                          <ng-container *ngIf="f.subcategoryname.errors.required">{{labelName?.SubCategory}} is required.
+                          </ng-container>
+                          <ng-container *ngIf="f.subcategoryname.errors.pattern">{{labelName?.SubCategory}} is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f.subcategoryname?.errors?.checknull1">Must be at least 3 characters long.
+                          </ng-container>
+                        
+                      </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.Description}}</mat-label>
+                        <input matInput formControlName="des" appTitleCase maxlength="500">
+                        <mat-error *ngIf="f.des.errors">                              
+                          <ng-container *ngIf="f.des.errors.pattern">{{labelName?.Description}}  is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f.des.errors.minlength">
+                            Must be at least 3 characters long.
+                          </ng-container>
+                          <ng-container *ngIf="f.des.errors.maxlength">
+                            Cannot be beyond 500 characters.
+                          </ng-container>
+                          <ng-container *ngIf="f.des?.errors?.checknull1">
+                            Must be at least 3 characters long.
+                          </ng-container>
+                      </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="btn-group">
+                <!-- <button class="btn btn-gray btn-width80" (click)="backSubcate()" mat-flat-button type="button" style="margin-right: 15px;">Cancel</button> -->
+                <button mat-raised-button class="width-100 btn-width80" color="primary" type="button" 
+                  (click)="submitsubcategory('update')">{{labelName?.Update}}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>

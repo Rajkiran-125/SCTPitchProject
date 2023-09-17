@@ -1,0 +1,68 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container p-4" *ngIf="!loader">
+    <legend class="primary-color font-weight-bold">Product</legend>
+    <app-filter component="productView" [role]="userDetails.role" type="productView" [tabValue]="tabValue" [addBtn]="true">
+    </app-filter>
+    <div class="wrapper px-0 py-0">
+        <div class="dataTable" style="overflow: auto;">
+            <table>
+                <thead>
+                    <tr *ngIf="tabValue.length>0">
+                        <ng-container *ngFor="let data of finalField; let i = index">
+                            <th [ngClass]="!data.checked ? 'tabCol' : ''" class="column{{i}}">
+                                {{data.value == 'Actionable' ? 'Action' : data.value}}
+                            </th>
+                        </ng-container>
+                    </tr>
+                    <tr *ngIf="noData">
+                        <th>No record found</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="tabValue.length>0">
+                    <ng-container *ngFor="let data of tabValue | filter: search; let j = index">
+                        <tr>
+                            <ng-container *ngFor="let val of finalField; let i = index">
+                                <td *ngIf="val.value == 'Sr No' && val.value !== 'Actionable' 
+                                && val.value !== 'Status'"
+                                    [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                                    <span>{{((currentpage-1)*(itemsPerPage))+(j+1)}}</span>
+                                </td>
+                                <td *ngIf="val.value == 'Actionable'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                                    class="{{'column'+i}} action">
+                                    <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                                    <mat-menu #menu="matMenu" class="master_action">
+                                        <button mat-menu-item
+                                            (click)="contactAction(data[finalField[i].value], 'productView')">
+                                            <mat-icon>edit</mat-icon>
+                                            <span>Edit</span>
+                                        </button>
+                                        <button mat-menu-item (click)="openDialog('delete', data[finalField[i].value])">
+                                            <mat-icon>delete</mat-icon>
+                                            <span>Delete</span>
+                                        </button>
+                                    </mat-menu>
+                                </td>
+                                <td *ngIf="val.value !== 'Sr No' && val.value !== 'Actionable' && val.value !== 'Status'"
+                                    [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                                    <span>{{data[val.value] == null ? '-' :
+                                        data[val.value]}}</span>
+                                </td>
+                                <td *ngIf="val.value == 'Status'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                                    class="column{{i}}">
+                                    <span #tooltip="matTooltip" [matTooltip]="data[val.value] == true ? 'Active' : 'In-Active'">
+                                        {{data[val.value] == true ? 'Active' : 'In-Active'}}</span>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination" *ngIf="paginationArray.length>10">
+            <pagination-controls (pageChange)="pageChange($event)" previousLabel="" nextLabel="">
+            </pagination-controls>
+        </div>
+        <input type="hidden"
+            *ngFor="let data of paginationArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentpage }">
+    </div>
+</div>

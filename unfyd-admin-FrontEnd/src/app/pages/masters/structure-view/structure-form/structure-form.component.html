@@ -1,0 +1,94 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="row pl-1">
+  <div class="col-8 pr-0" *ngIf="!loader">
+    <div [ngClass]="isDialog === true ? '':'wrapper '">
+      <div *ngIf="isDialog" class="d-flex justify-content-end">
+        <span class="icon-rejected" (click)="back()"></span>
+      </div>
+      <div class="row">
+        <div class="col-1 text-center backarrow ">
+          <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon>
+        </div>
+        <div class="col-lg-11 col-md-11 col-11 pl-0">
+          <legend class="size">{{ id ? 'Update' :'Add New' }} Structure</legend>
+          <form [formGroup]="form">
+            <div class="row">
+              <div class="col-12">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.structureName ? labelName?.structureName : 'Structure Name'}}</mat-label>
+                  <input matInput formControlName="structurename" minlength="3" [readonly]="id">
+                  <mat-error *ngIf="f.structurename.errors">
+                    <ng-container *ngIf="f.structurename.errors.required">
+                      {{labelName?.structureName ? labelName?.structureName : 'Structure Name'}} is required
+                    </ng-container>
+                    <ng-container *ngIf="f.structurename.errors.minlength">
+                      {{masters?.MinLengthMessage}}
+                    </ng-container>
+                    <ng-container *ngIf="f.structurename.errors.maxlength">
+                      {{masters?.MaxLengthMessage1}}
+                    </ng-container>
+                    <ng-container *ngIf="f.structurename.errors.pattern">{{labelName?.structureName ? labelName?.structureName : 'Structure Name'}} is invalid.
+                    </ng-container>
+                    <ng-container *ngIf="f.structurename.errors.checknull1">Whitespace not allowed.
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.description ? labelName?.description : 'Description'}}</mat-label>
+                  <textarea matInput formControlName="description" maxlength="500" rows="1"></textarea>
+                  <mat-error *ngIf="f.description.errors">
+                    <ng-container *ngIf="f.description.errors.required">
+                      {{labelName?.description ? labelName?.description : 'Description'}} is required
+                    </ng-container>
+                    <ng-container *ngIf="f.description.errors.minlength">
+                      {{masters.MinLengthMessage}}
+                    </ng-container>
+                    <ng-container *ngIf="f.description.errors.maxlength">
+                      {{masters.MaxLengthMessage1}}
+                    </ng-container>
+                    <ng-container *ngIf="f.description.errors.pattern">{{labelName?.description ? labelName?.description : 'Description'}} is invalid.
+                    </ng-container>
+                    <ng-container *ngIf="f.description.errors.checknull1">Whitespace not allowed.
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-12">
+                <div class="row px-3">
+                  <div class="col-12 formBorder py-3">
+                    <app-create-form (exportAllFormControls)="changesDone($event)" [resetform]="resetform"  (resetTask)="resetTaskGroup($event)" [allFormControl]="form.value.jsondata" [selectedIndex]="selectedIndex" [systemDefinedFields]="true" [userDefinedFields]="true" [structure]="true"></app-create-form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="row mt-3">
+            <div class="col-12">
+              <div class="btn-group d-none d-md-block">
+                <button *ngIf="!id && userConfig?.Reset" class="btn btn-gray" mat-flat-button (click)="reset()" >{{labelName?.reset ? labelName?.reset : 'Reset'}}</button>
+                <button *ngIf="(!id) && (userConfig?.SaveAddNew)" class="btn outline" mat-stroked-button color="primary" (click)="submit('saveAndAddNew')">{{labelName?.saveAddNew ? labelName?.saveAddNew : 'Save & Add New'}}</button>
+                <button *ngIf="(id ? (userConfig?.Update) : (userConfig?.Save))" class="btn" mat-flat-button color="primary" (click)="submit('add')" type="button">{{ id ? (labelName?.update ? labelName?.update : 'Update') : (labelName?.generate ? labelName?.generate : 'Generate') }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-4 backgroundColor">
+    <div class="row mt-4">
+      <div class="col-12 mt-1">
+        <span class="header ml-3">{{ labelName?.preview ? labelName?.preview : 'Preview' }}</span>
+        <!-- <div class="legend">
+          <span class="previewSubHeader">{{ labelName?.preview ? labelName?.preview : 'Preview' }}</span>
+        </div> -->
+      </div>
+      <div class="col-12">
+        <app-form-preview [item]="dummyAllFormControl" (newItemEvent)="changesDone1($event)"
+        (selectedIndex)="selectedIndexValue($event)"></app-form-preview>
+      </div>
+    </div>
+  </div>
+</div>

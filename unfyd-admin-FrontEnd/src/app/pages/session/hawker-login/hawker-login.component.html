@@ -1,0 +1,49 @@
+<div class="loginBg">
+    <div class="loginWrapper">
+        <div class="loginSlider">
+            <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
+                <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+                    <div class="slideContent">
+                        <img src="{{ slide.img }}" alt="" width="100%">
+                        <h2>{{slide.title}}</h2>
+                        <p>{{slide.description}}</p>
+                    </div>
+                </div>
+            </ngx-slick-carousel>
+
+        </div>
+        <div class="loginPanel">
+            <div class="logo">
+                <img src="assets/images/logo.png" />
+            </div>
+            <h4>Beneficiary Name</h4>
+  <form [formGroup]="form" class="mat-form">
+      <div>
+        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.username.errors }">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" type="text">
+            <mat-icon matPrefix>person_outline</mat-icon>
+            <mat-error *ngIf="submittedForm && f.username.errors">
+                <ng-container *ngIf="f.username.errors.required">Username is required</ng-container>
+            </mat-error>
+          </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.password.errors }">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
+            <mat-icon matPrefix>lock_outline</mat-icon>
+            <span matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </span>            
+            <mat-error *ngIf="submittedForm && f.password.errors">
+                <ng-container *ngIf="f.password.errors.required">Password is required</ng-container>
+            </mat-error>
+          </mat-form-field>
+      </div>
+    <button mat-flat-button class="btn btn-form btn-block btn-curve" color="primary" type="submit" (click)="submit()"><span class="spinner" *ngIf="loader"></span> {{loader ? 'Loading...' : 'Login'}}</button>
+
+  </form>
+        </div>
+    </div>
+</div>

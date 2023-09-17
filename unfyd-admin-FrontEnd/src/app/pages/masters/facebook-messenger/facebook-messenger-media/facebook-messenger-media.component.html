@@ -1,0 +1,77 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4 mt-3">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected"(click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+                <div class="row ">
+                    <div class="col-12">
+                        <span class="d-flex backArrow">
+                            <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+                            <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.FacebookChat}}</legend>
+                        </span>
+                    <div class="formGroup">
+                        <div class="masters_block">
+                          <app-steps [steps]="facebookMessengerConfigurationsteps" [moduletype]="'facebook-messenger'" [id]="path"
+                              [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                            <div class="row">
+
+                                <div class="col-lg-8 col-md-8 col-sm-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.MediaDownloadAPI}}</mat-label>
+                                        <input matInput formControlName="MediaDownloadAPI" />
+                                        <mat-error *ngIf="f.MediaDownloadAPI.errors">
+                                          <ng-container *ngIf="f.MediaDownloadAPI.errors.required">{{labelName?.MediaDownloadAPI}} is
+                                              required
+                                          </ng-container>
+                                          <ng-container *ngIf="f.MediaDownloadAPI?.errors?.checknull">Whitespace not allowed
+                                          </ng-container>
+                                          <ng-container *ngIf="f.MediaDownloadAPI.errors.pattern">{{labelName?.MediaDownloadAPI}} is
+                                            invalid
+                                        </ng-container>
+                                        <ng-container *ngIf="f.MediaDownloadAPI?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                          </ng-container>
+
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                              </div>
+                                <div class="row">
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.StorageLocation}}</mat-label>
+                                        <input matInput formControlName="StorageLocation" />
+
+                                        <mat-error *ngIf="f.StorageLocation.errors">
+                                          <ng-container *ngIf="f.StorageLocation.errors.required">{{labelName?.StorageLocation}} is
+                                              required
+                                          </ng-container>
+                                          <ng-container *ngIf="f.StorageLocation?.errors?.checknull">Whitespace not allowed
+                                        </ng-container>
+                                        <ng-container *ngIf="f.StorageLocation.errors.pattern">{{labelName?.StorageLocation}} is
+                                            Invalid
+                                        </ng-container>
+                                        <ng-container *ngIf="f.StorageLocation?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                          </ng-container>
+
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="btn-group my-3" >
+                          <!-- <button  class="btn btn-gray"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                            <button *ngIf="(userConfig?.Save)" (click)="saveFacebook('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                            <button  *ngIf=" (userConfig?.Next) " (click)="saveFacebook('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper py-4 mt-3">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="(userConfig?.Cancel)" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+        <div class="row ">
+          <div class="col-12">
+            <span class="d-flex backArrow">
+              <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+              <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} WhatsApp Account</legend>
+            </span>
+          <div class="formGroup">
+            <div class="masters_block">
+              <app-steps [steps]="channelConfigurationSteps" [moduletype]="'channelConfiguration'" [id]="path"
+                [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+              <div class="top_block"></div>
+              <div class="row paddingX5">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.SendHSM}}</mat-label>
+                    <input matInput formControlName="Send_HSM" />
+                    <mat-error *ngIf="f.Send_HSM.errors">
+                      <ng-container *ngIf="f.Send_HSM.errors.required">Send HSM (WhatsApp Provider) is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.Send_HSM.errors.pattern">Send HSM (WhatsApp Provider) accept only numbers.
+                      </ng-container>
+                      <ng-container *ngIf="f.Send_HSM?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.StoreHSMOBMessage}}</mat-label>
+                    <input matInput formControlName="storeHSM" />
+                    <mat-error *ngIf="f.storeHSM.errors">
+                      <ng-container *ngIf="f.storeHSM.errors.required">Store HSM OB Message is required.
+                      </ng-container>
+                      <ng-container *ngIf="f.storeHSM?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="btn-group my-3" >
+              <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+              <button *ngIf="userConfig?.SaveAddNew" class="btn outline"   mat-stroked-button color="primary"  (click)="savewhatsapp('next')">{{labelName?.SaveAddNew }}</button>
+                <button *ngIf="(userConfig?.Save)" (click)="savewhatsapp('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

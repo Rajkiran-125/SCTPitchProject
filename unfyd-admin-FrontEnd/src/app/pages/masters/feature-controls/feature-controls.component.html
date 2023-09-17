@@ -1,0 +1,394 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div>
+    <form [formGroup]="form">
+      <ng-container>
+        <div class="row">
+          <div class="col-lg-3 col-col-md-3 col-sm-12 left-panel pt-3">
+            <div class="paddingBotttomToDropDown" >
+              <div class="blue-dropdown">
+                <mat-form-field appearance="fill">
+                  <mat-label>Application</mat-label>
+                  <mat-select [(ngModel)]="productName" [ngModelOptions]="{standalone: true}"
+                    (selectionChange)="selectedProduct($event.value); addModuleButton = false" panelClass="blue-panel">
+                    <mat-option *ngFor="let data of productType" [value]="data.Id">
+                      {{data.ProductName}}</mat-option>
+                  </mat-select>
+                  <mat-hint *ngIf="addApp" class="red-color">
+                    <ng-container> Select Application</ng-container>
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="backgroundWhite margin10">
+              <mat-form-field appearance="fill" >
+                <mat-label>{{labelName?.Role}}</mat-label>
+                <mat-select [(ngModel)]="role" [ngModelOptions]="{standalone: true}" disableOptionCentering
+                  (selectionChange)="selectedRole($event.value); addModuleButton = false">
+                  <ng-container *ngFor="let data of profileType">
+                    <ng-container *ngIf="productName != 10">
+                  <mat-option  [value]="data.Id">{{data.SubType}}
+                  </mat-option>
+                </ng-container>
+                <ng-container *ngIf="productName == 10">
+                  <mat-option *ngIf="data.Id != 1 " [value]="data.Id">{{data.SubType}}
+                  </mat-option>
+                </ng-container>
+              </ng-container>
+                </mat-select>
+                <mat-hint *ngIf="addForm" class="red-color">
+                  <ng-container>{{labelName?.SelectRole}}</ng-container>
+                </mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="row backgroundWhite">
+              <div class="col-10 pl-0">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.AccessControl}}</mat-label>
+                  <mat-select [(ngModel)]="accessControl" [ngModelOptions]="{standalone: true}" disableOptionCentering
+                    (selectionChange)="getModule($event.value); addModuleButton = false">
+                    <mat-option *ngFor="let data of accessControls" [value]="data.Id">{{data.ControlName}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-hint *ngIf="acesscontrolError" class="red-color">
+                    <ng-container>{{labelName?.SelectAccessControl}}</ng-container>
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="col-2 pr-0">
+                <span>
+                  <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2"
+                    style="width:40px;font-weight: bold;" (click)="addAccessControl()"><span class="icon-add"></span></button>
+                </span>
+              </div>
+            </div>
+            <div class="mb-3">
+            <div class="row" *ngIf="accessControl && accessControl != ''">
+              <div class="col-10 px-0 pl-1 d-flex align-items-center font-weight-bold">
+                <span>{{labelName?.AddModule}}</span>
+              </div>
+              <div class="col-2 pr-0">
+                <button mat-raised-button *ngIf="!addModuleButton" class="font-weight-bold mat-focus-indicator width-100 mat-raised-button mat-button-base"
+                style="width:40px;font-weight: bold;"  (click)="addModuleButton = !addModuleButton; moduleform()"><span class="icon-add"></span></button>
+                <button mat-raised-button *ngIf="addModuleButton" class="font-weight-bold mat-focus-indicator width-100 mat-raised-button mat-button-base"
+                style="width:40px;font-weight: bold;"  (click)="addModuleButton = !addModuleButton; clearvalidator()"><span class="icon-rejected"></span></button>
+              </div>
+            </div>
+            </div>
+            <ng-container *ngIf="addModuleButton">
+              <div class="row">
+                <div class="col-12 px-0 backgroundWhite">
+                  <mat-form-field appearance="fill" >
+                    <mat-label>{{labelName?.ModuleName}}</mat-label>
+                    <input matInput formControlName="modulename" (keyup)="modulename()" >
+                    <mat-error *ngIf="f?.modulename?.errors">
+                      <ng-container *ngIf="f?.modulename?.errors?.required">
+                        {{labelName?.ModuleName}} is required
+                      </ng-container>
+                      <ng-container *ngIf="f?.modulename?.errors?.pattern">{{labelName?.ModuleName}} is invalid.
+                      </ng-container>
+                      <ng-container *ngIf="f?.modulename?.errors?.checknull1">
+                        Must be at least 3 characters long
+                      </ng-container>
+                      <ng-container *ngIf="f?.modulename?.errors?.checknull">Whitespace not allowed.
+                      </ng-container>
+                    </mat-error>
+                    <mat-hint class="mat-error" style="font-size: 11px;" *ngIf="errorval == true">{{labelName?.ModuleName}} is Required</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- {{this.form.value.modulename.trim().length}} -->
+              <div class="row">
+                <div class="col-9 pl-0 backgroundWhite">
+                  <mat-form-field appearance="fill" >
+                    <mat-label>{{labelName?.ModuleKey}}</mat-label>
+                    <input matInput formControlName="moduleKey" (keyup)="modulekey()">
+                    <mat-error *ngIf="f?.moduleKey?.errors ">
+                      <ng-container *ngIf="f?.moduleKey?.errors?.required">
+                        {{labelName?.ModuleKey}} is required
+                      </ng-container>
+                      <ng-container *ngIf="f?.moduleKey?.errors?.pattern">{{labelName?.ModuleKey}} is invalid.
+                      </ng-container>
+                    </mat-error>
+                    <mat-hint class="mat-error" style="font-size: 11px;" *ngIf="errorvalue == true">{{labelName?.ModuleKey}} is Required</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-3 px-0">
+                  <button mat-raised-button color="primary" class="font-weight-bold mat-focus-indicator width-100 mat-raised-button mat-button-base"
+                  style="width:70px;"  (click)="saveParentModule()">{{labelName?.Save}}</button>
+                </div>
+              </div>
+            </ng-container>
+            <div class="list-items">
+
+
+              <div *ngIf="hideModule && productModule">
+                <ul>
+                  <li *ngFor="let mod of moduleObj; let i = index"  [ngClass]="mod.ModuleName == selectedMenuOption ? 'selectedMenuOption' : 'unselectedOpton'">
+                    <div class="list-container">
+                      <div class="d-flex align-items-center displayData"   (click)="getChildModule(mod)">
+                        <span class="icon-feature_controls mr-2"></span>
+                        <span class="tree-list-menu p-0" *ngIf="editModuleIndex != mod.Id " data-toggle="'tooltip'" data-placement="'bottom'" title="{{mod.ModuleName}}"> {{mod.ModuleName}}</span>
+                        <input type="text" class="inputInside"  [(ngModel)]="editModuleNameVar" [ngModelOptions]="{standalone: true}" *ngIf="editModuleIndex == mod.Id" (click)="$event.stopPropagation()">
+                      </div>
+                      <div class="d-flex">
+                        <!-- [ngClass]="mod.ModuleName !== selectedMenuOption ?  'disabledIT' : 'cursorPointer'" -->
+                        <mat-slide-toggle color="primary" class="toggleBtn"
+                          (change)="updateParentStatus(mod.Id,$event)" checked={{mod.Status}} *ngIf="editModuleIndex != mod.Id">
+                        </mat-slide-toggle>
+                        <mat-icon class="cursorPointer gray" (click) = "editModuleNameVar = mod.ModuleName; editModuleIndex = mod.Id" *ngIf="(this.userDetails.UserName == 'unfyd-admin'?true:false) && editModuleIndex != mod.Id">edit</mat-icon>
+                        <mat-icon class="red-color cursorPointer" (click) = "deleteModule(mod.Id)" *ngIf="(this.userDetails.UserName == 'unfyd-admin'?true:false) && editModuleIndex != mod.Id">delete</mat-icon>
+                        <mat-icon class="cursorPointer" *ngIf="editModuleIndex == mod.Id" (click)="editModuleIndex = undefined ; editModuleNameVar = mod.ModuleName">close</mat-icon>
+                        <mat-icon class="cursorPointer" *ngIf="editModuleIndex == mod.Id" (click)="editModuleName(mod)">done</mat-icon>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 right-panel">
+            <div *ngIf="childModule" >
+              <div class="row" >
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                  <mat-label class="h4">{{lblParentModule}}</mat-label>
+                </div>
+                <div  class="col-lg-6 col-md-6 col-sm-6" style="display: flex;flex-direction: row-reverse;">
+                  <button *ngIf="userConfig?.Update && IsChildAvail" mat-raised-button    [disabled]="isDisabled"
+                    class="mat-focus-indicator width-100 mat-raised-button mat-button-base mat-primary mb-2 ml-2"
+                    (click)="updateChildModule()">{{labelName?.Update}}</button>
+                    <button *ngIf="userConfig?.Add && lblParentModule" mat-raised-button [disabled]="isDisabled"
+                    class="mat-focus-indicator width-100 mat-raised-button mat-button-base mat-primary mb-2 "
+                    (click)="addChildModule(parentcontrolid,lblParentModule)">{{labelName?.Add}}</button>
+                </div>
+
+              </div>
+            </div>
+
+            <div style="padding:10px 15px;" *ngIf="IsChildAvail" style="background-color: #ccc;">
+              <mat-tree   [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree" >
+
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle  >
+                  <div style="width:100%;">
+                    <li class="mat-tree-node borderMain">
+                      <span  [ngClass]=" !isDisabled ? 'disabledIT' : 'cursorPointer'"style="position:fixed;" #spanTrigger class="context-menu-trigger"
+                        #matTrigger="matMenuTrigger" [matMenuTriggerFor]="contextMenuOne"></span>
+                      <div (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" class="mat-tree-border"
+                        style="width:100%;display:flex;justify-content: space-between;align-items:center;height:40px;">
+
+                        <span style="flex: 1;">{{node.Name}}</span>
+                        <span style="margin-right:5px;">
+
+                          <span>
+                              <div *ngIf="node.ControlType == 'Textbox'">
+                                <input autocomplete="off" type="text" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled"
+                                  [(ngModel)]="dummyValues[node.Id].AssignedValue"
+                                  style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:400px; max-width:400px !important;padding: 5px;"
+                                  matInput />
+                              </div>
+                            <div *ngIf="node.ControlType == 'Toggle'">
+                              <mat-slide-toggle color="primary" class="toggleBtn"  [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" [disabled]="isDisabled"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId);nestedTreeControl.collapse(node)"
+
+                                ></mat-slide-toggle>
+                            </div>
+
+                            <div *ngIf="node.ControlType == 'Number'">
+                              <input autocomplete="off" type="number" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" min="0" max="999"
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:200px;padding: 5px;"
+                                matInput />
+                            </div>
+                            <div *ngIf="node.ControlType == 'DatePicker'" class="multiselectChild">
+                              <input class="DatePicker_input"
+                                 readonly type="text" [disabled]="isDisabled"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="dummyValues[node.Id].AssignedValue"
+                                [matDatepicker]="Date" [min]="minDate"
+                                matInput>
+                              <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+                              <mat-datepicker #Date></mat-datepicker>
+                            </div>
+
+                            <div *ngIf="node.ControlType == 'TimeControl'" >
+                              <input readonly [disabled]="isDisabled"
+                              value="{{dummyValues[node.Id].AssignedValue?.hour ? dummyValues[node.Id].AssignedValue?.hour > 9 ? dummyValues[node.Id].AssignedValue?.hour : '0'+dummyValues[node.Id].AssignedValue?.hour : '00'}}:{{dummyValues[node.Id].AssignedValue?.minute ? dummyValues[node.Id].AssignedValue?.minute > 9 ? dummyValues[node.Id].AssignedValue?.minute : '0'+dummyValues[node.Id].AssignedValue?.minute : '00'}}:{{dummyValues[node.Id].AssignedValue?.second ? dummyValues[node.Id].AssignedValue?.second > 9 ? dummyValues[node.Id].AssignedValue?.second : '0'+dummyValues[node.Id].AssignedValue?.second : '00'}}"
+                                     >
+                                  <mat-icon class="timerIconPosition" [ngClass]=" isDisabled ? 'disabledIT' : 'cursorPointer'" [matMenuTriggerFor]="menu4">access_time</mat-icon>
+                                 <mat-menu #menu4="matMenu" class="w-100 px-2  d-flex align-items-center " xPosition="before">
+                                  <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                                    $event.stopPropagation();" [(ngModel)]="dummyValues[node.Id].AssignedValue"  [ngModelOptions]="{standalone: true}" [seconds]="true" [hourStep]="1"
+                                    [minuteStep]="1" [secondStep]="1">
+                                  </ngb-timepicker>
+                                </mat-menu>
+
+                            </div>
+
+
+                            <div *ngIf="node.ControlType == 'Dropdown'" class="featureControlFropdown">
+                              <mat-select matInput
+                                style="margin-right: 65px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; max-width:210px;height:30px;"
+                                [ngModelOptions]="{standalone: true}" [disabled]="isDisabled"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" #selected>
+                                <mat-option *ngFor="let items of node.ConfigValue" [value]="items.Value">
+                                  {{ items.Value }}
+                                </mat-option>
+                              </mat-select>
+                            </div>
+                            <div *ngIf="node.ControlType == 'MultiSelect'" class="multiselectChild">
+                              <mat-select multiple color="primary" multiple [ngModelOptions]="{standalone: true}" [disabled]="isDisabled"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" #selected
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:200px;height:30px;">
+                                <mat-option *ngFor="let items of node.ConfigValue" [value]="items.Value"
+                                  color="primary">
+                                  {{ items.Value }}
+                                </mat-option>
+                              </mat-select>
+                            </div>
+                          </span>
+                        </span>
+                        <mat-menu  #contextMenuOne="matMenu">
+                          <button *ngIf="userConfig?.Create" [disabled]="isDisabled" mat-menu-item (click)="addChildNode(node)">
+                            <mat-icon>add</mat-icon>
+                            <span>{{labelName?.Create}}</span>
+                          </button>
+                          <button *ngIf="userConfig?.Modify" [disabled]="isDisabled" mat-menu-item (click)="editChildNode(node)">
+                            <mat-icon>edit</mat-icon>
+                            <span>{{labelName?.Modify}}</span>
+                          </button>
+                          <button *ngIf="userConfig?.Delete" [disabled]="isDisabled" mat-menu-item (click)="deleteNode(node)">
+                            <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                            <span>{{labelName?.Delete}}</span>
+                          </button>
+                        </mat-menu>
+                      </div>
+                    </li>
+                  </div>
+                </mat-tree-node>
+                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild" >
+                  <div class="mat-tree-node">
+                    <li class="mat-tree-node borderMain">
+                      <span [ngClass]=" !isDisabled ? 'disabledIT' : 'cursorPointer'" style="position:fixed;" #spanTrigger class="context-menu-trigger"
+                        #matTrigger="matMenuTrigger" [matMenuTriggerFor]="contextMenuTwo"></span>
+                      <div (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" class="mat-tree-border"
+                        style="width:100%;display:flex;justify-content: space-between;align-items:center;height:40px;">
+
+                        <span style="flex: 1;">{{node.Name}}</span>
+                        <span>
+
+                          <span>
+                            <div *ngIf="node.ControlType == 'Textbox'" class="d-flex justify-content-center align-items-center w-100">
+                              <input autocomplete="off" type="text" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue"
+                                style="margin-right: 10px;margin-top: -3px;border: 1px solid #ccc;border-radius: 5px;width:360px; max-width:400px !important;padding:5px;"
+                                matInput />
+                            </div>
+                           <div *ngIf="node.ControlType == 'Toggle'">
+                              <mat-slide-toggle color="primary" class="toggleBtn" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId);nestedTreeControl.collapse(node)"></mat-slide-toggle>
+                            </div>
+                            <div *ngIf="node.ControlType == 'Number'">
+                              <input autocomplete="off" type="number" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" min="0" max="999"
+                                style="margin-right: 10px;margin-top: -3px;border: 1px solid #ccc;border-radius: 5px; max-width:50px;"
+                                matInput />
+                            </div>
+                            <div *ngIf="node.ControlType == 'Dropdown'" class="featureControlFropdown">
+                              <mat-select matInput
+                                style="margin-right: 65px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; max-width:210px;height:30px;"
+                                [ngModelOptions]="{standalone: true}" [disabled]="isDisabled" [(ngModel)]="dummyValues[node.Id].AssignedValue"
+                                #selected>
+                                <mat-option *ngFor="let items of node.ConfigValue" [value]="items.Value">
+                                  {{ items.Value }}
+                                </mat-option>
+                              </mat-select>
+                            </div>
+                            <div *ngIf="node.ControlType == 'DatePicker'" class="multiselectChild">
+                              <!-- <mat-form-field appearance="fill"> -->
+                                <input class="DatePicker_input" [datePickerFormat]="dateFormat" (focus)="Date.open()" (click)="Date.open()"
+                                  readonly type="text" [ngModelOptions]="{standalone: true}"
+                                  [(ngModel)]="dummyValues[node.Id].AssignedValue" [matDatepicker]="Date"
+                                   [min]="minDate" [disabled]="isDisabled"
+
+                                  matInput>
+                                <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+                                <mat-datepicker #Date></mat-datepicker>
+                              <!-- </mat-form-field> -->
+                            </div>
+
+                            <div *ngIf="node.ControlType == 'TimeControl'" >
+                              <input readonly  [disabled]="isDisabled"
+                              value="{{dummyValues[node.Id].AssignedValue?.hour ? dummyValues[node.Id].AssignedValue?.hour > 9 ? dummyValues[node.Id].AssignedValue?.hour : '0'+dummyValues[node.Id].AssignedValue?.hour : '00'}}:{{dummyValues[node.Id].AssignedValue?.minute ? dummyValues[node.Id].AssignedValue?.minute > 9 ? dummyValues[node.Id].AssignedValue?.minute : '0'+dummyValues[node.Id].AssignedValue?.minute : '00'}}:{{dummyValues[node.Id].AssignedValue?.second ? dummyValues[node.Id].AssignedValue?.second > 9 ? dummyValues[node.Id].AssignedValue?.second : '0'+dummyValues[node.Id].AssignedValue?.second : '00'}}"
+                                 >
+
+                                 <mat-icon class="timerIconPositionparent" [ngClass]=" isDisabled ? 'disabledIT' : 'cursorPointer'" [matMenuTriggerFor]="menu1">access_time</mat-icon>
+                                 <mat-menu #menu1="matMenu" class="w-100 px-2  d-flex align-items-center "
+                                  xPosition="before">
+
+                                  <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                                    $event.stopPropagation();" [(ngModel)]="dummyValues[node.Id].AssignedValue"  [ngModelOptions]="{standalone: true}" [seconds]="true" [hourStep]="1"
+                                    [minuteStep]="1" [secondStep]="1">
+                                  </ngb-timepicker>
+                                </mat-menu>
+                            </div>
+
+                            <div *ngIf="node.ControlType == 'MultiSelect'" class="multiselect">
+                              <mat-select multiple color="primary" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" #selected
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:200px;height:30px;"
+                                color="primary">
+                                <mat-option *ngFor="let items of node.ConfigValue" [value]="items.Value"
+                                  color="primary">
+                                  {{ items.Value }}
+                                </mat-option>
+                              </mat-select>
+                            </div>
+                          </span>
+                        </span>
+
+                        <button mat-icon-button matTreeNodeToggle class=""   [attr.aria-label]="'Toggle ' + node.Name"
+                        [disabled] = "(dummyValues[node.Id].AssignedValue == false) || (isDisabled)"        >
+                          <mat-icon class="mat-icon-rtl-mirror">
+                            {{nestedTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                          </mat-icon>
+                        </button>
+
+                        <mat-menu #contextMenuTwo="matMenu">
+                          <button *ngIf="userConfig?.Create" [disabled]="isDisabled" mat-menu-item (click)="addChildNode(node)">
+                            <mat-icon>add</mat-icon>
+                            <span>{{labelName?.Create}}</span>
+                          </button>
+                          <button *ngIf="userConfig?.Modify" [disabled]="isDisabled" mat-menu-item (click)="editChildNode(node)">
+                            <mat-icon>edit</mat-icon>
+                            <span>{{labelName?.Modify}}</span>
+                          </button>
+
+                        </mat-menu>
+                      </div>
+                    </li>
+
+
+                  </div>
+
+                  <div [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)" role="group" class="bg">
+                    <ng-container matTreeNodeOutlet></ng-container>
+                  </div>
+                </mat-nested-tree-node>
+              </mat-tree>
+            </div>
+            <!-- <div class="col-lg-9 col-md-9 col-sm-9" *ngIf="!IsChildAvail"> -->
+              <div class="col-lg-9 col-md-9 col-sm-9" *ngIf="!lblParentModule">
+              <mat-label class="h4">No data found</mat-label>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      </ng-container>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,328 @@
+
+<div class="inner-container">
+    <div *ngIf="!loader">
+        <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 py-4">
+                        <div class="row" style="padding:0!important;margin:0!important;">
+                            <div class="col-lg-1 col-md-1 col-sm-1 mt-2" style="float:left;text-align:right;" >
+                                <mat-icon class="gray cursorPointer" [routerLink]="['/masters/campaign-field-mapping']">keyboard_backspace</mat-icon>
+                            </div>
+                            <div class="col-lg-11 col-md-11 col-sm-11" style="float:left;">
+                                <mat-form-field appearance="fill" >
+                                    <mat-label>{{labelName?.SelectCampaign}}</mat-label>
+                                    <mat-select matInput [(ngModel)]="selectCampaignField">
+                                        <mat-option *ngFor="let items of campaignDetails" [value]="items.Actionable">{{items.CampaignName}}</mat-option>
+
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row" style="padding:0!important;margin:0!important;">
+                            <div class="col-lg-1 col-md-1 col-sm-1" style="float:left;"></div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.SystemDefinedFields}}</mat-label>
+                                    <mat-select multiple matInput [(ngModel)]="systemDefinedFields">
+                                        <mat-option *ngFor="let items of systemFields?.Fields" (click)="systemDefinedFieldsMethod()" value={{items?.Key}}>{{items?.Value}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.UserDefinedFields}}</mat-label>
+                                        <mat-select multiple matInput [(ngModel)]="userDefinedFields">
+                                            <mat-option *ngFor="let items of systemFields?.userFields" (click)="userDefinedFieldsMethod()" value={{items?.Key}}>{{items?.Value}}</mat-option>
+                                        </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-lg-1 col-md-1 col-sm-1" style="float:left;"></div>
+                            <div class="col-lg-11 col-md-11 col-sm-11 field-height">
+                                <div *ngFor="let item of allFormControl; let i = index">
+                                    <div class=" col-lg-12 col-md-12 col-sm-12 my-1"
+                                    *ngIf="item.defineField != 'SystemDefinedField'">
+                                      <div class="AddFormControls">
+                                        <div class="form-bg">
+                                        <div class="mainFormControl">
+                                          <div class="text-right">
+                                          
+                                          </div>
+                                          <div class="row m-0 p-0">
+                                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                              <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.PlaceHolder}}</mat-label>
+                                                <input type="text" [(ngModel)]="item.label" (keyup)="addFormControlName(i)" appTitleCase matInput>
+
+                                                <mat-hint class="error" *ngIf="checkRegex(regex.alphabet,item.label) == false">
+                                                  {{labelName?.PlaceHolder}} is required and must be alphabets only.
+                                                </mat-hint>
+                                              </mat-form-field>
+                                            
+                                            </div>
+                                          </div>
+                                          <div class="row m-0 p-0 mb-3">
+                                            <div class="col-12 types">
+                                              <span class="mr-3 font-weight-bold">{{labelName?.Type}}</span>
+                                              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" color="primary"
+                                                [(ngModel)]="item.type" (change)="changeControlType(i)">
+                                                <mat-radio-button class="example-radio-button" *ngFor="let type of formControlTypes" [value]="type">
+                                                  {{type | titlecase}}
+                                                </mat-radio-button>
+                                              </mat-radio-group>
+                                            </div>
+                                          </div>
+                                          <div  *ngIf="item.type == 'textbox'">
+                                            <div class="row m-0 p-0">
+                                              <div class="col-12">
+                                                <mat-form-field appearance="fill">
+                                                  <mat-label>{{labelName?.RegularExpression}}</mat-label>
+                                                      <mat-select [(ngModel)]="item.regularExpression">
+                                                          <mat-option *ngFor="let data of regularExp | orderBy: 'Key'"
+                                                              [value]="data.Value">
+                                                              {{data.Key}}
+                                                          </mat-option>
+                                                      </mat-select>
+                                                </mat-form-field>
+                                              </div>
+                                            </div>
+                                            <div class="row m-0 p-0">
+                                              <div class="col-12">
+                                                <mat-form-field appearance="fill">
+                                                  <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                                                  <input type="text" [(ngModel)]="item.value" matInput>
+                                                  <mat-hint class="error" *ngIf="item.regularExpression != null && item.value != null && item.value != ''">
+                                                    <ng-container *ngIf="checkRegex(item.regularExpression,item.value) == false">
+                                                      {{labelName?.DefaultValue}} is not as per Regular expressions.
+                                                    </ng-container>
+                                                  </mat-hint>
+                                                </mat-form-field>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <div  *ngIf="item.type == 'list'">
+                                            <div class="row m-0 p-0">
+                                              <div class="col-6">
+                                                <mat-form-field appearance="fill">
+                                                  <mat-label>{{labelName?.ParentList}}</mat-label>
+                                                      <mat-select [(ngModel)]="item.parent">
+                                                          <mat-option *ngFor="let data of filterParentDropDown(item.formControlName) | orderBy" [value]="data">
+                                                              {{data}}
+                                                          </mat-option>
+                                                      </mat-select>
+                                                </mat-form-field>
+                                              </div>
+                                         
+                                              <div class="col-6">
+                                                <mat-form-field appearance="fill">
+                                                  <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                                                      <mat-select [(ngModel)]="item.value">
+                                                          <mat-option *ngFor="let data of defaultValueForDropDown(i) | orderBy" [value]="data.option">
+                                                              {{data.option}}
+                                                          </mat-option>
+                                                      </mat-select>
+                                                 
+                                                </mat-form-field>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <div  *ngIf="item.type == 'checkbox'">
+                                            <div class="row m-0 p-0">
+
+                                              <div class="col-6">
+                                                <mat-form-field appearance="fill">
+                                                  <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                                                  <mat-select [(ngModel)]="item.value">
+                                                    <mat-option [value]="true">{{labelName?.Checked}}</mat-option>
+                                                    <mat-option [value]="false">{{labelName?.Unchecked}}</mat-option>
+                                                </mat-select>
+                                                </mat-form-field>
+                                              </div>
+
+
+                                              <div class="col-6">
+                                                <mat-form-field appearance="fill">
+                                                  <mat-label>{{labelName?.NestedControl}}</mat-label>
+                                                      <mat-select [(ngModel)]="item.nestedControlOfWhom" (selectionChange)="setNestedParentControl(item.nestedControlOfWhom,item.formControlName,i)" multiple>
+                                                          <mat-option *ngFor="let data of filterNestedControls(i)" [value]="data">
+                                                              {{data}}
+                                                          </mat-option>
+                                                      </mat-select>
+                                                </mat-form-field>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          <div *ngIf="item.type == 'datetime'">
+                                            <div class="row m-0 p-0">
+
+                                              <div class="col-6">
+                                                <mat-form-field appearance="fill">
+                                                  <mat-label>{{labelName?.DateFormat}}</mat-label>
+                                                  <mat-select [(ngModel)]="item.dateFormat">
+                                                    <mat-option *ngFor="let item of dateFormats" [value]="item.Key">{{item?.Value}}</mat-option>
+                                                </mat-select>
+                                                </mat-form-field>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        
+                                          <div class="row m-0 p-0" *ngIf="item.type != 'button'">
+                                            <div class="col-12 mandatory">
+                                            
+                                                <span class="">{{labelName?.Mandatory}}</span>
+                                                &nbsp;&nbsp;<mat-slide-toggle color="primary" [(ngModel)]="item.mandatory" class="toggleBtn"></mat-slide-toggle>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="innerFormControl">
+                                          <span class="">
+                                            &nbsp;
+                                          </span>
+                                        </div>
+                                      </div>
+                                        <div *ngIf="item.type == 'list'" class="addAttributeFormArea">
+                                          <div *ngIf="item.type == 'list'" class="list">
+                                            <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                                              <span class="AttributeListValues">{{labelName?.AttributeListValues}}</span>
+                                              <mat-icon class="primary-color cursorPointer" (click)="addAttribute(item.formControlName,i)">add</mat-icon>
+                                            </div>
+                                            <div class="d-flex align-items-center options" *ngFor="let item2 of item.listOfValues;let k = index">
+                                             
+                                              <div class="d-contents">
+                                                <div class="col-3 pr-1 flex1" *ngIf="item2.parent3FormControl">
+                                                  <mat-form-field appearance="fill">
+                                                    <mat-label>{{labelName?.ParentList}} 3</mat-label>
+                                                        <mat-select [(ngModel)]="item2.parent3Value">
+                                                            <mat-option *ngFor="let data of returnParentDropDown(item2.parent3FormControl) | orderBy" [value]="data.option">
+                                                                {{data.option}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                  </mat-form-field>
+                                                </div>
+                                                <div class="col-3 pr-1 flex1" *ngIf="item2.parent2FormControl">
+                                                  <mat-form-field appearance="fill">
+                                                    <mat-label>{{labelName?.ParentList}} 2</mat-label>
+                                                        <mat-select [(ngModel)]="item2.parent2Value">
+                                                            <mat-option *ngFor="let data of returnParentDropDown(item2.parent2FormControl) | orderBy" [value]="data.option">
+                                                                {{data.option}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                  </mat-form-field>
+                                                </div>
+                                                <div class="col-3 pr-1 flex1" *ngIf="item2.parent1FormControl">
+                                                  <mat-form-field appearance="fill">
+                                                    <mat-label>{{labelName?.ParentList}} 1</mat-label>
+                                                        <mat-select [(ngModel)]="item2.parent1Value">
+                                                            <mat-option *ngFor="let data of returnParentDropDown(item2.parent1FormControl) | orderBy" [value]="data.option">
+                                                                {{data.option}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                  </mat-form-field>
+                                                </div>
+                                                <div class="col-3 pr-1 flex1" >
+                                                  
+                                                  <mat-form-field appearance="fill">
+                                                    <mat-label>{{labelName?.TypeHere}}</mat-label>
+                                                    <input type="text" [(ngModel)]="item.listOfValues[k].option" matInput>
+                                                  </mat-form-field>
+                                                </div>
+                                              </div>
+                                              <span class="pl-3" (click)="deleteListOfValues(i,k)">
+                                                <mat-icon class="deleteIcon">delete</mat-icon>
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <div *ngIf="item.type == 'button'" class="addAttributeFormArea">
+                                          <div *ngIf="item.type == 'button'" class="list">
+                                            <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                                              <span class="AttributeListValues">{{labelName?.APIConfiguration}}</span>
+                                            </div>
+                                            <div class="row APIUrl">
+                                              <div class="col-12 d-flex align-items-center mt-1">
+                                                <span class="text mr-2" style="margin-top:-10px!important;">{{labelName?.APIUrl}}</span>
+                                                <div class="inputText" style="width:100%;">
+                                                  <mat-form-field appearance="fill">
+                                                    <mat-label>URL</mat-label>
+                                                    <input type="text" [(ngModel)]="item.apiUrl" matInput>
+                                                  </mat-form-field>
+                                                </div>
+                                              </div>
+                                              <div class="col-12 d-flex align-items-center my-3">
+                                                <span class="text mr-2" style="margin-top:-10px!important;">{{labelName?.Method}}</span>
+                                                <div class="inputText normal-dropdown"  style="width:100%;">
+                                                  <mat-form-field appearance="fill">
+                                                
+                                                    <mat-select [(ngModel)]="item.apiMethod" panelClass="normal-panel">
+                                                      <mat-option *ngFor="let data of apiMethod | orderBy: 'Key'"
+                                                          [value]="data.Value">
+                                                          {{data.Key}}
+                                                      </mat-option>
+                                                      </mat-select>
+                                                  </mat-form-field>
+                                              </div>
+                                             
+                                              </div>
+                                            </div>
+                                            <div class="attributeBorder row d-flex justify-content-between m-0 p-0 mb-2">
+                                              <span class="AttributeListValues">{{labelName?.AddHeader}}</span>
+                                              <mat-icon class="primary-color cursorPointer" (click)="addHeader(item.formControlName,i)">add</mat-icon>
+                                            </div>
+                                           
+
+                                            <div class="row  d-flex align-items-center options" *ngFor="let item2 of item.buttonHeaders;let k = index">
+                                              <div class="col-5 APIUrl d-flex align-items-center">
+                                                <span class="text mr-2" style="margin-top:-20px!important;">{{labelName?.Key}}</span>
+                                                <div class="inputText w-80">
+                                                  <mat-form-field appearance="fill">
+                                                    <input type="text" [(ngModel)]="item2.Key" matInput>
+                                                  </mat-form-field>
+                                                </div>
+                                              </div>
+                                              <div class="col-5 APIUrl d-flex align-items-center">
+                                                <span class="text mr-2" style="margin-top:-20px!important;">{{labelName?.Value}}</span>
+                                                <div class="inputText w-80">
+                                                  <mat-form-field appearance="fill">
+                                                    <input type="text" [(ngModel)]="item2.Value" matInput>
+                                                  </mat-form-field>
+                                                </div>
+                                              </div>
+                                              <span class="mx-2" style="margin-top:-20px!important;" (click)="deleteButtonHeader(i,k)">
+                                                <mat-icon class="deleteIcon">delete</mat-icon>
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                   
+                                    </div>
+                                  </div>
+                                <div class="btn-group mt-3" >
+                                    <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                                    <button class="btn" mat-flat-button color="primary" (click)="submitCampaign()" type="button">Save</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 preview">
+                        <div>
+                            <span class="previewSubHeader">{{ labelName?.preview }}</span>
+                          </div>
+                          <div>
+                            <app-form-preview [item]="allFormControl"></app-form-preview>
+                        
+                          </div>
+                      
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>

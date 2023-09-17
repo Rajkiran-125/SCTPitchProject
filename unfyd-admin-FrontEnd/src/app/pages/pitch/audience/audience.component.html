@@ -1,0 +1,87 @@
+<!-- <div *ngFor="let data of audienceTabs">{{data.label}}</div> -->
+<div class="my-2" mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let data of audienceTabs" (click)="onTabChange(data.tab)"
+        [active]="tab == data.tab" class="userNavtab">
+        {{data.label}} </a>
+</div>
+<!-- {{audienceTabs|json}} -->
+
+<div class="pt-2 px-4 audienceListTable" *ngIf="tab == 'List'">
+    <app-pitch-table [tabValue]="tabValue" [type]="type"></app-pitch-table>
+</div>
+
+<div class="px-3 scrollbar" *ngIf="tab == 'Structure'" >
+    <div class="row p-0 m-2 mt-3">
+        <div class="col-10">
+            <div class="d-flex justify-content-between align-items-center px-3">
+                <span>
+                    Total 100 templates
+                </span>
+                <button class="btn outline primary-button smallBtn" mat-stroked-button color="primary" 
+                [routerLink]="['/pitch/audience/list-type/expert-mode']"> Add New</button>
+            </div> 
+            <div class="row p-0 m-0">
+                <div class="col-4" *ngFor="let structure of structureList">
+                    <div class="structure-card" >
+                        <div class="structure-header">
+                            <label>{{structure.StructureName}}</label>
+                            <mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                        </div>
+                        <div class="structure-body">
+                            <p>Lorem ipsum dolor set amet</p>
+                        </div>
+                        <div class="structure-footer">Created on 25/06/23</div>
+                    </div>
+                </div>
+                <!-- <div class="col-4">
+                    <div class="structure-card">
+                        <div class="structure-header">
+                            <label>Structure</label>
+                            <mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                        </div>
+                        <div class="structure-body">
+                            <p>Lorem ipsum dolor set amet</p>
+                        </div>
+                        <div class="structure-footer">Created on 25/06/23</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="structure-card">
+                        <div class="structure-header">
+                            <label>Structure</label>
+                            <span><i>more</i></span>
+                        </div>
+                        <div class="structure-body">
+                            <p>Lorem ipsum dolor set amet</p>
+                        </div>
+                        <div class="structure-footer">Created on 25/06/23</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="structure-card">
+                        <div class="structure-header">
+                            <label>Structure</label>
+                            <span><i>more</i></span>
+                        </div>
+                        <div class="structure-body">
+                            <p>Lorem ipsum dolor set amet</p>
+                        </div>
+                        <div class="structure-footer">Created on 25/06/23</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="structure-card">
+                        <div class="structure-header">
+                            <label>Structure</label>
+                            <span><i>more</i></span>
+                        </div>
+                        <div class="structure-body">
+                            <p>Lorem ipsum dolor set amet</p>
+                        </div>
+                        <div class="structure-footer">Created on 25/06/23</div>
+                    </div>
+                </div> -->
+            </div> 
+        </div>  
+    </div>
+</div>

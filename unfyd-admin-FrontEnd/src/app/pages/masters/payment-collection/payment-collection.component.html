@@ -1,0 +1,148 @@
+<nav mat-tab-nav-bar>
+    <ng-container *ngFor="let data of paymentCollection">
+       
+    <ng-container ></ng-container>
+        <a mat-tab-link 
+        [active]="tabSelected == data.label"  (click)="changeTab(data.label)" 
+        *ngIf="( showPaymentCollectionTab &&data.label == 'Payment Summary') || ( showCollectionSummaryTab && data.label == 'Collection Summary')"> {{data.label}} </a>
+        
+    </ng-container>
+   
+</nav>
+
+<div class="inner-container">
+    <div class="wrapper" *ngIf="showPaymentCollectionTab && tabSelected == 'Payment Summary'">
+        <ng-container *ngIf="paymentSearch">
+            <div class="search-form">
+                <form [formGroup]="form">
+                    <legend>Search</legend>
+                    <div class="formGroup">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Applicant No.</mat-label>
+                                    <input type="text" matInput formControlName="hawkerid" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Registration No.</mat-label>
+                                    <input type="text" matInput formControlName="registrationno" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>First Name</mat-label>
+                                    <input type="text" matInput formControlName="firstname" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Middle Name</mat-label>
+                                    <input type="text" matInput formControlName="middlename" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Last Name</mat-label>
+                                    <input type="text" matInput formControlName="lastname" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Mobile Number</mat-label>
+                                    <input type="text" matInput formControlName="mobilenumber" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>From Date</mat-label>
+                                    <input (focus)="fromDate?.open()" (click)="fromDate?.open()" readonly
+                                        formControlName="fromDate" type="text" [matDatepicker]="fromDate"
+                                        [max]="maxDate" [min]="minDate" matInput>
+                                    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #fromDate></mat-datepicker> 
+                                    <mat-error *ngIf="f?.fromDate?.errors">
+                                        <ng-container *ngIf="f?.fromDate?.errors?.mustNotMatch && f?.toDate?.touched">To date cannot be greater than From date.</ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>To Date</mat-label>
+                                    <input (focus)="toDate.open()" (click)="toDate.open()" readonly
+                                        formControlName="toDate" type="text" [matDatepicker]="toDate" [max]="maxDate"
+                                        [min]="minDate" matInput>
+                                    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #toDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button (click)="reset()" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                            <button (click)="searchHawker()" class="btn" mat-flat-button color="primary"
+                                type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <app-filter *ngIf="tabValue.length>0" component="payment-collection" [role]="userDetails.role" [totalCount]="tabValue.length"
+                [type]="'PaymentCollection'" [tabValue]="tabValue">
+            </app-filter>
+            <app-loader *ngIf="loader"></app-loader>
+
+            <div class="dataTable">
+                <table>
+                    <thead>
+                        <tr *ngIf="tabValue.length>0">
+                            <th class="column{{i}}" *ngFor="let data of tabKey; let i = index">{{data}}</th>
+                        </tr>
+                        <tr *ngIf="noData">
+                            <th>No record found</th>
+                        </tr>
+                    </thead>
+
+                    <tbody *ngIf="tabValue.length>0">
+                        <ng-container
+                            *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                            <tr>
+                                <ng-container *ngFor="let val of tabKey; let i = index">
+                                    <td *ngIf="val == 'Sr No'" class="column{{i}}"><span>{{j+1}}</span></td>
+                                    <td *ngIf="val !== 'Sr No' && val !== 'Applicant No.' && val !== 'Action'"
+                                        class="column{{i}}">
+                                        <span>{{val == 'Discount' && data[tabKey[i]] !== null ? '₹ ' :
+                                            ''}}{{data[tabKey[i]]}}</span>
+                                    </td>
+                                    <td *ngIf="val == 'Applicant No.'" class="column{{i}}">
+                                        <span><a href="javascript:void(0)"
+                                                (click)="openComponent(data)">{{data[tabKey[i]]}}</a></span>
+                                    </td>
+                                    <td *ngIf="val == 'Action'" class="column{{i}}">
+                                        <button [disabled]="data[tabKey[i]]" *ngIf="data[tabKey[i]]" mat-icon-button>
+                                            <i class="icon-discount"></i>
+                                        </button>
+                                        <button *ngIf="!data[tabKey[i]]" mat-icon-button (click)="applyDiscount(data)">
+                                            <i class="icon-discount"></i>
+                                        </button>
+
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" *ngIf="tabValue.length>10">
+                <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!paymentSearch">
+            <app-payment [hawkerDetails]="data"></app-payment>
+
+        </ng-container>
+    </div>
+    <div class="wrapper" style="padding: 0 !important" *ngIf="tabSelected == 'Collection Summary'">
+        <app-collection-summary></app-collection-summary>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="stepper-wrapper">
+    <ul [ngClass]="tab ? 'tab-steps' : 'form-steps'" class="stepper-item completed">
+        <li *ngFor="let data of steps">
+            <ng-container *ngIf="moduletype == 'channelConfiguration' || moduletype == 'email-configuration' || moduletype == 'facebook-configuration' || moduletype == 'facebook-messenger' || moduletype == 'twitter-configuration' ||
+            moduletype == 'telegram'  || moduletype == 'twitter-dm' || moduletype == 'instagram' || moduletype == 'intagram-messenger'|| moduletype == 'voice-configuration' || moduletype == 'viber-configuration' ; else other_content">
+                <a routerLinkActive="active" [routerLink]="(uniqueid) ? data.link+'/'+id+'/'+action+'/'+uniqueid : data.link1">
+                    <i *ngIf="data.icon" class="icon-{{data.icon}}"></i>
+                    <label>{{data.label}}</label>
+                </a>
+            </ng-container>
+
+            <ng-template #other_content>
+                <ng-container *ngIf="isDialog === false ">
+                    <a [routerLinkActive]="'active'"  [routerLink]="((data.link == '/masters/tenant/update' && !id) ||
+                    (data.link == '/masters/users/personal-details/update' && !id) ||
+                    (data.link == '/masters/business-orchestration/update' && !id) ) ? data.link1 : data.link+'/'+id">
+                        <i *ngIf="data.icon" class="icon-{{data.icon}}"></i>
+                        <label>{{data.label}}</label>
+                    </a>
+                </ng-container>
+                <ng-container *ngIf="isDialog === true " >
+                  <a [routerLinkActive]="'active'" [ngClass]="tabSelected == data.label ? 'activeCircle' : ''"   (click)="addnewsteps(data.label)">
+                      <i *ngIf="data.icon" class="icon-{{data.icon}}"></i>
+                      <label>{{data.label}}</label>
+                  </a>
+                </ng-container>
+            </ng-template>
+
+        </li>
+      </ul>
+</div>
+

@@ -1,0 +1,91 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader" >
+    <div [ngClass]="isDialog === true ? '':'wrapper'">
+      <div class="d-flex justify-content-end">
+        <span class="icon-rejected" *ngIf="isDialog == false" (click)="back()"></span>
+      </div>
+      <form [formGroup]="form">
+      <div class="row">
+        <div class="col-1 text-center backarrow ">
+          <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon>
+        </div>
+        <div class="col-lg-7 col-md-10 col-9 pl-0">
+            <legend class="size">{{ reset ? 'Update' :'Add New' }} Contact Center Location</legend>
+              <div class="formGroup mt-3">
+                  <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12">
+                          <mat-form-field appearance="fill"
+                          [ngClass]="{ 'shake': submittedForm && f.ContactLocation.errors }">
+                              <mat-label>{{labelName?.ContactCenterLocation}}</mat-label>
+                              <input matInput formControlName="ContactLocation" appTitleCase>                          
+                          <mat-error *ngIf="f.ContactLocation?.errors">
+                            <ng-container *ngIf="f.ContactLocation?.errors?.required">{{labelName?.ContactCenterLocation}} is required.
+                            </ng-container>
+                            <ng-container *ngIf="f.ContactLocation?.errors?.pattern">{{labelName?.ContactCenterLocation}} is invalid.
+                            </ng-container>
+                            <!-- <ng-container *ngIf="f.ContactLocation?.errors?.checknull">Whitespace not allowed.
+                            </ng-container> --> 
+                            <ng-container *ngIf="f.ContactLocation?.errors.checknull1">
+                              Must be at least 3 characters long.
+                            </ng-container>
+                            <ng-container *ngIf="f.ContactLocation?.errors.checknull">
+                              Whitespace not allowed.
+                            </ng-container>
+                            <!-- <ng-container *ngIf="f.ContactLocation?.errors.minlength">
+                              Must be at least 3 characters long.
+                            </ng-container> -->
+                        </mat-error>
+                      </mat-form-field>
+                      </div>
+                      </div>
+                      <div class="row">
+
+                      <div class="col-lg-12 col-md-12 col-sm-12">
+                        <mat-form-field appearance="fill"
+                        [ngClass]="{ 'shake': submittedForm && f.ContactDescription.errors }">
+                            <mat-label>{{labelName?.Description}}</mat-label>
+                            <textarea rows="5" formControlName="ContactDescription" matInput maxlength="500"></textarea> 
+                            <mat-error *ngIf="f.ContactDescription?.errors">                              
+                              <ng-container *ngIf="f.ContactDescription?.errors?.pattern">{{labelName?.Description}}  is invalid.
+                              </ng-container>
+                              <ng-container *ngIf="f.ContactDescription?.errors.minlength">
+                                Must be at least 3 characters long.
+                              </ng-container>
+                              <ng-container *ngIf="f.ContactDescription?.errors?.maxlength">
+                                Cannot be beyond 500 characters.
+                              </ng-container>
+                              <ng-container *ngIf="f.ContactDescription?.errors?.checknull1">
+                                Must be at least 3 characters long.
+                              </ng-container>
+                          </mat-error>                          
+                        </mat-form-field>
+                    </div>
+                  </div>
+              </div>
+              <div class="row d-none d-block d-md-none">
+                <div class="col-lg-6 col-md-6 col-12">
+                  <!-- <button  class="btn btn-gray btnwidth mr-2" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button>  -->
+                  <button *ngIf="reset ? (userConfig?.Update) : (userConfig?.Save)" class="btn btnwidth" mat-flat-button color="primary"  type="button" (click)="submit('add')">{{ reset ?  labelName?.Update : labelName?.Save }}</button>                
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 mt-2">
+                  <button  *ngIf="!reset && userConfig?.Reset" id="reset" #reset    class="btn btn-gray btnwidth" mat-flat-button type="Reset">{{labelName?.Reset}}</button>
+                  <button *ngIf="(userConfig?.SaveAddNew) && !reset" class="btn outline btnwidth ml-2"   type="button"  color="primary" (click)="submit('saveAndAddNew')">{{labelName?.SaveAddNew}}</button>
+                </div>
+              </div>
+
+              <div class="btn-group d-none d-md-block">
+                <!-- <button  class="btn btn-gray" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button>  -->
+                <button  *ngIf="!reset && userConfig?.Reset" id="reset" #reset    class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button>
+                <button *ngIf="(userConfig?.SaveAddNew) && !reset" class="btn outline"   type="button"  color="primary" (click)="submit('saveAndAddNew')">{{labelName?.SaveAddNew}}</button>
+                <button *ngIf="reset ? (userConfig?.Update) : (userConfig?.Save)" class="btn" mat-flat-button color="primary"  type="button" (click)="submit('add')">{{ reset ?  labelName?.Update : labelName?.Save }}</button>                
+              </div>
+
+        </div>
+        <div class="col-4">
+
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>

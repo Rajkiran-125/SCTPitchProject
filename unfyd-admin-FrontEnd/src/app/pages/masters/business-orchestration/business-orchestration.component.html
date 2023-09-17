@@ -1,0 +1,403 @@
+<div class="inner-conainer">
+  <div class="wrapper py-5">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" (click)="back()"></span>
+    </div>
+    <div class="row bg-white">
+      <div>
+        <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-10 pl-3">
+        <legend class="primary-color font-weight-bold size">{{boId  == undefined ? 'Add New' : 'Update'}} {{labelName?.RoutingRule}}
+        </legend>
+
+        <div class="formGroup mt-4" *ngIf="form" #formDirective="ngForm" [formGroup]="form">
+          <div class="col-3 pl-0 blue-dropdown" >
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.Application}} </mat-label>
+              <mat-select disabled="true" panelClass="blue-panel"  formControlName="appname">
+                <mat-option  *ngFor="let data of product; let i = index" [value]="data.Id">
+                  {{data.ProductName}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="f.appname.errors">
+                <ng-container *ngIf="f.appname.errors.required">
+                  {{labelName?.Application}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <mat-accordion class="setting-accordion">
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="header-title">{{labelName?.RoutingRuleDetails}}</span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="max_75">
+                <fieldset class="row">
+                  <div class="col-8">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.RuleName}}</mat-label>
+                      <input matInput  [readonly]="boId" [ngClass]="boId  ? 'disabledIT' : 'cursorPointer'"  formControlName="name" appTitleCase>
+                      <mat-error *ngIf="f.name.errors">
+                        <ng-container *ngIf="f.name.errors.required">
+                          {{labelName?.RuleName}} is required
+                        </ng-container>
+                        <ng-container *ngIf="f.name.errors.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="f?.name?.errors?.pattern">
+                          {{labelName?.RuleName}} is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f?.name?.errors?.maxlength">
+                          Cannot be beyond 500 characters.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.RulePriority}}</mat-label>
+                      <input  (keypress)="common.numericOnly($event)" placeholder="00"  min="0" matInput formControlName="priority" type="number">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.Description}}</mat-label>
+                      <input matInput formControlName="description">
+                      <mat-error *ngIf="f.description.errors">
+                        <ng-container *ngIf="f.description.errors.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="f?.description?.errors?.pattern">
+                          {{labelName?.Description}} is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f?.description?.errors?.maxlength">
+                          Cannot be beyond 300 characters.
+                        </ng-container>
+                        <ng-container *ngIf="f.description?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.Channel}}</mat-label>
+                      <mat-select matinput matInput formControlName="channel"
+                        (selectionChange)="getChannelSource($event.value)">
+                        <mat-select-trigger *ngIf="form.controls?.channel.value" class="d-flex align-items-center">
+                          <ng-container *ngFor="let data of channelType">
+                            <ng-container *ngIf="form.controls?.channel.value == data.ChannelId">
+                              <span [innerHtml]="data?.ChannelIcon"></span>
+                              <span>{{data.ChannelName}}</span>
+                            </ng-container>
+                          </ng-container>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let data of channelType; let i = index" [value]="data.ChannelId">
+                          <span [innerHtml]="data.ChannelIcon"></span>
+                          <span>{{data.ChannelName}}</span>
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="f.channel.errors">
+                        <ng-container *ngIf="f.channel.errors.required">
+                          {{labelName?.Channel}} is required
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.ChannelSource}}</mat-label>
+                      <mat-select formControlName="source">
+                        <mat-option *ngFor="let data of channelSource; let i = index" [value]="data.ChannelSourceId">
+                          {{data.ChannelSourceName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </fieldset>
+              </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="header-title">{{labelName?.Routing}}</span>
+                </mat-panel-title>
+                <!-- <mat-slide-toggle disableRipple="true" labelPosition="before" class="toggleBtn"
+                  color="primary"></mat-slide-toggle> -->
+              </mat-expansion-panel-header>
+              <fieldset>
+
+                <div class="row" formGroupName="customer_profile">
+                  <div class="col-12 border_bottom">
+                    <span>{{labelName?.GetCustomerProfile}}</span>
+                    <mat-slide-toggle disableRipple="true" labelPosition="before" class="toggleBtn" color="primary"
+                      formControlName="isTrue">
+                    </mat-slide-toggle>
+                  </div>
+                  <div class="col-12 mb-2" *ngIf="form.value.customer_profile.isTrue">
+                    <div class="gray_bg">
+                      <app-api-module #apimodule (formvalue)="formvalue($event)" [apiChecker]="form.get('customer_profile')"
+                        [patchValue]="patchValueObj?.CustomerProfile"></app-api-module>
+
+                      <div class="pb-2 mb-2 d-flex justify-content-between align-items-center">
+                        <span>{{labelName?.TokenGeneration}}</span>
+                        <mat-slide-toggle disableRipple="true" labelPosition="before" class="toggleBtn" color="primary"
+                          formControlName="token_generation_isTrue"></mat-slide-toggle>
+                      </div>
+                      <fieldset formGroupName="token_generation"
+                        *ngIf="form.value.customer_profile.token_generation_isTrue">
+                        <app-api-module (formvalue)="formvalue($event)"
+                          [apiChecker]="form.controls.customer_profile.get('token_generation')"
+                          [patchValue]="patchValueObj?.CustomerProfile.token_generation"></app-api-module>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset style="  border-top: 1px solid #eaeaea;  ">
+
+                <div class="row" formGroupName="blacklist">
+                  <div class="col-12 border_bottom">
+                    <span>{{labelName?.CheckBlacklist}}</span>
+                    <mat-slide-toggle disableRipple="true" labelPosition="before" class="toggleBtn" color="primary"
+                      formControlName="isTrue"></mat-slide-toggle>
+                  </div>
+                  <div class="col-12 mb-2" *ngIf="form.value.blacklist.isTrue">
+                    <div class="gray_bg">
+                      <div class="row">
+                        <div class="col-3">
+                          <span>
+                            <mat-label ngClass="labelBeforeSlide">{{labelName?.Message}}</mat-label>
+                            <mat-slide-toggle formControlName="media_status" color="primary" disableRipple="true"
+                              class="toggleBtn">{{labelName?.Media}}</mat-slide-toggle>
+                          </span>
+                        </div>
+                        <div class="col-2 avatar" *ngIf="form.value.blacklist.media_status">
+                          <div class="uploadTitle" >
+                            <i class="icon-upload"></i> <strong class="mx-1">{{labelName?.Upload}}</strong></div>
+                          <!-- <mat-icon *ngIf="!form.value.blacklist.media_url"></mat-icon> -->
+                          <img *ngIf="form.value.blacklist.media_url" [src]="form.value.blacklist.media_url" >
+                          <input #media  type="file" (change)="directUpload($event, 600, 600, form.get('blacklist').get('media_url'))">
+                        </div>
+                        <div [ngClass]="form.value.blacklist.media_status ? 'col-7' : 'col-9'">
+                          <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.Messagetocustomer}}</mat-label>
+                            <input matInput formControlName="message" appTitleCase>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset formGroupName="holiday_business_hour">
+                <div class="row">
+                  <div class="col-12 border_bottom">
+                    <span>{{labelName?.CheckHolidayandBusinessHour}}</span>
+                    <mat-slide-toggle disableRipple="true" labelPosition="before" class="toggleBtn" color="primary"
+                      formControlName="isTrue"></mat-slide-toggle>
+                  </div>
+                  <div class="col-12 mb-2" *ngIf="form.value.holiday_business_hour.isTrue">
+                    <div class="gray_bg">
+                      <div class="row">
+                        <div class="col-12" formArrayName="action"
+                          *ngFor="let item of form.get('holiday_business_hour').get('action')['controls']; let i = index; let first = first; let last = last">
+                          <div class="row" [formGroupName]="i">
+                            <div class="col-4">
+                              <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.OfflineAction}}</mat-label>
+                                <mat-select formControlName="offline_action">
+                                  <mat-option
+                                    *ngFor="let data of reduceOfflineList(i, form.value['holiday_business_hour']['action'])"
+                                    [value]="data.Key">
+                                    {{data.Value}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-8">
+                              <mat-icon *ngIf="form.get('holiday_business_hour').get('action')['controls'].length>1"
+                                class="mat-btn red" (click)="remove(i, 'holiday_business_hour_action')"
+                                matTooltip="Remove">delete_outline</mat-icon>
+                              <mat-icon class="mat-btn primary-color add" (click)="add('holiday_business_hour_action')"
+                                *ngIf="last" matTooltip="Add">add</mat-icon>
+                            </div>
+                            <ng-container
+                              *ngIf="form.value['holiday_business_hour']['action'][i]['offline_action'] !== ''">
+                              <!-- <ng-container
+                                *ngIf="form.value['holiday_business_hour']['action'][i]['offline_action'] === offline_list[0].Key">
+                                <div class="col-3">
+                                  <mat-label ngClass="labelBeforeSlide">{{labelName?.Message}}</mat-label>
+                                  <mat-slide-toggle formControlName="media_status" color="primary" disableRipple="true"
+                                    class="toggleBtn">{{labelName?.Media}}</mat-slide-toggle>
+                                </div>
+                                <div class="col-2 avatar"
+                                  *ngIf="form.value['holiday_business_hour']['action'][i]['media_status']">
+                                  <div class="uploadTitle" >
+                                    <i class="icon-upload"></i> <strong class="mx-1">{{labelName?.Upload}}</strong></div>
+                                    <img *ngIf="form.value['holiday_business_hour']['action'][i]['media_url']" [src]="form.value['holiday_business_hour']['action'][i]['media_url']" >
+                                  <input #media  type="file"
+                                    (change)="directUpload($event, 600, 600, form.get('holiday_business_hour').get('action')['controls'][i].get('media_url'))">
+                                </div>
+                                <div
+                                  [ngClass]="form.value['holiday_business_hour']['action'][i]['media_status'] === true ? 'col-7' : 'col-9'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Messagetocustomer}}</mat-label>
+                                    <input matInput formControlName="message" appTitleCase>
+                                  </mat-form-field>
+                                </div>
+                              </ng-container> -->
+                              <ng-container
+                              *ngIf="form.value['holiday_business_hour']['action'][i]['offline_action'] === offline_list[0].Key">
+                              <div class="col-3">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>{{labelName?.ToWhom}}</mat-label>
+                                  <mat-select formControlName="whom" (selectionChange)="changeEvent($event.value, i)">
+                                    <mat-option *ngFor="let data of whom_list" [value]="data.Key">{{data.Value}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <ng-container *ngIf="group_name[i] && actionGroup[i].length>0">
+                                <div class="col-1 equalTo">=</div>
+                                <div class="col-3" *ngIf="form?.value['holiday_business_hour']['action'][i]['whom']">
+                                  <!-- {{form?.value['holiday_business_hour']['action'][i]['whom']| json}} -->
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{form?.value['holiday_business_hour']['action'][i]['whom']}}</mat-label>
+                                    <mat-select formControlName="group">
+                                      <mat-option *ngFor="let data of actionGroup[i]"
+                                        [value]="data.value">{{data.label}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </ng-container>
+                            </ng-container>
+
+                              <!-- <ng-container
+                                *ngIf="form.value['holiday_business_hour']['action'][i]['offline_action'] === offline_list[2].Key || form.value['holiday_business_hour']['action'][i]['offline_action'] === offline_list[1].Key">
+                                <div class="col-12 pb-3">
+                                  <app-api-module (formvalue)="formvalue($event)"
+                                    [apiChecker]="form.get('holiday_business_hour').get('action')['controls'][i]"
+                                    [patchValue]="patchValueObj?.HolidayBusinessHour.action[i]"></app-api-module>
+                                </div>
+
+                              </ng-container> -->
+                            </ng-container>
+                            <div class="col-12"
+                              *ngIf="form.get('holiday_business_hour').get('action')['controls'].length>1 && !last">
+                              <hr>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+
+                <div class="row" formGroupName="nlp">
+                  <div class="col-12  border_bottom">
+                    <span>{{labelName?.NLP}}</span>
+                    <mat-slide-toggle disableRipple="true" labelPosition="before" class="toggleBtn" color="primary"
+                      formControlName="isTrue"></mat-slide-toggle>
+                  </div>
+                  <div class="col-12 mb-2" *ngIf="form.value.nlp.isTrue">
+                    <div class="gray_bg">
+                      <app-api-module (formvalue)="formvalue($event)" [apiChecker]="form.get('nlp')"
+                        [patchValue]="patchValueObj?.Nlp"></app-api-module>
+
+                      <div class="pb-2 mb-2"><mat-slide-toggle disableRipple="true" labelPosition="before"
+                          class="toggleBtn" color="primary" formControlName="token_generation_isTrue">{{labelName?.TokenGeneration}}</mat-slide-toggle></div>
+                      <fieldset formGroupName="token_generation" *ngIf="form.value.nlp.token_generation_isTrue">
+                        <app-api-module (formvalue)="formvalue($event)"
+                          [apiChecker]="form.controls.nlp.get('token_generation')"
+                          [patchValue]="patchValueObj?.Nlp.token_generation"></app-api-module>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                <div class="row">
+                  <div class="col-12 border_bottom"
+                    [ngClass]="form.get('routing_condition')['controls'].length == 0 ? '': ''">
+                    <span>{{labelName?.RoutingCondition}}</span>
+                    <mat-icon class="mat-btn blue no-mar" (click)="add('routing_condition')"
+                      matTooltip="Add">add</mat-icon>
+                  </div>
+                  <div class="col-12" *ngIf="form.get('routing_condition')['controls'].length>0">
+                    <div class="gray_bg">
+                      <div class="sub-accordion">
+                        <mat-accordion>
+                          <mat-expansion-panel [expanded]="true" formArrayName="routing_condition"
+                            *ngFor="let item of form.get('routing_condition')['controls']; let i = index; let first = first">
+                            <mat-expansion-panel-header>
+                              <mat-panel-title>{{form.value['routing_condition'][i]['name']
+                                == '' ? 'Condition' :
+                                form.value['routing_condition'][i]['name']}}</mat-panel-title>
+                                <mat-icon *ngIf="form.get('routing_condition')['controls'].length>1"
+                                  class="mat-btn red" (click)="remove(i, 'routing_condition')"
+                                  matTooltip="Remove">delete_outline</mat-icon>
+                            </mat-expansion-panel-header>
+                            <div class="row" [formGroupName]="i">
+                              <div class="col-10">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>{{labelName?.ConditionName}}</mat-label>
+                                  <input matInput formControlName="name" appTitleCase>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-12" formArrayName="condition"
+                                *ngFor="let item of form.get('routing_condition')['at'](i).get('condition')['controls']; let j = index; let first = first; let last = last">
+                                <app-condition (conditionvalue)="conditionvalue($event)"
+                                  (addCondition1)="addCondition1($event)" (removeCondition1)="removeCondition1($event)"
+                                  [formGroupName]="j"   [channelvalue]="form.value.channel"
+                                  [otherObj]="{parent: i, child: j, first: first, last: last, count: form.value.routing_condition[i].condition.length}"
+                                  [apiChecker]="form.get('routing_condition')['at'](i).get('condition')['controls'][j]"
+                                  [patchValue]="patchValueObj?.RoutingCondition[i].condition[j]"></app-condition>
+
+
+                              </div>
+                              <div class="col-12">
+                                <hr>
+                              </div>
+                              <div class="col-12 static_label">{{labelName?.Action}}</div>
+                              <div class="col-12" formArrayName="action"
+                                *ngFor="let item of form.get('routing_condition')['at'](i).get('action')['controls']; let j = index; let first = first; let last = last">
+                                <app-action (actionvalue)="actionvalue($event)" (addCondition1)="addCondition1($event)"
+                                  (removeCondition1)="removeCondition1($event)" [formGroupName]="j"
+                                  [otherObj]="{parent: i, child: j, first: first, last: last, count: form.value.routing_condition[i].action.length}"
+                                  [apiChecker]="form.get('routing_condition')['at'](i).get('action')['controls'][j]"
+                                  [patchValue]="patchValueObj?.RoutingCondition[i].action[j]"
+                                  [offlineList]="reduceOfflineList(j, form.value['routing_condition'][i]['action'])"></app-action>
+
+                              </div>
+                              <div class="col-12">
+                                <hr>
+                              </div>
+                              <app-flushing #flushingmodule (resetbo)="resetBO(i)" [apiChecker]="form?.get('routing_condition')['at'](i)?.get('flushing')"
+                                [patchValue]="patchValueObj?.RoutingCondition[i].flushing"></app-flushing>
+
+                            </div>
+                          </mat-expansion-panel>
+                        </mat-accordion>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <div class="btn-group">
+            <button *ngIf="!boId && userConfig?.Reset" (click)="Reset()" class="btn btn-gray Reset" mat-flat-button  (clcik)="Reset()" type="Reset">{{labelName?.Reset}}</button>
+            <button *ngIf=" (userConfig?.SaveAddNew) && !boId" class="btn outline" mat-stroked-button color="primary" type="button"
+              (click)="submit('saveAndAddNew', formDirective)">{{labelName?.SaveAddNew}}</button>
+            <button  class="btn Save" mat-flat-button color="primary" type="button" *ngIf="boId ? (userConfig?.Update) : (userConfig?.Save)"
+              (click)="submit('add', formDirective)">{{boId == undefined ? labelName?.Save : labelName?.Update}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

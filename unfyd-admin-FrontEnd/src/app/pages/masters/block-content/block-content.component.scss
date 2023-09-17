@@ -1,0 +1,39 @@
+.outline {
+    border: 1px solid var(--primary_color) !important;
+    color: var(--primary_color);
+    font-weight: bold;
+  }
+.size{
+    font-size: 16px !important;
+}
+
+.toggleButtonBlockContent{
+  mat-button-toggle{
+    height: 36px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.inner-container{
+  .wrapper{
+    //padding: 6vh 2vh 0vh;
+    padding-left: 0px;
+  }
+}
+
+@media screen and (max-width:767px) {
+  .negmar10{
+    margin-left: -15px;
+  }
+
+  .inner-container{
+    .wrapper{
+      form{
+        .formGroup{
+          margin-bottom: 0px !important;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,685 @@
+{{form.value |json}}
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-5">
+
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-1 text-center">
+                    <mat-icon class="gray cursorPointer pl-4"
+                        [routerLink]="['/masters/contact']">keyboard_backspace</mat-icon>
+                </div>
+                <div class="col-11">
+                    <legend>{{path == null ? 'Add New Contact':'Update Contact'}}</legend>
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="ContactSteps" [id]="path == null ? '': path"></app-steps>
+
+                            <div class="row">
+
+                                <div class="col-4 contactNoWithCountryCode">
+                                    <!-- <mat-form-field appearance="fill">
+                                        <mat-label>Contact No</mat-label>
+                                        <input matInput formControlName="contactno">
+                                        <mat-error *ngIf="f.contactno.errors">
+                                            <ng-container *ngIf="f.contactno?.errors?.required">Contact No is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.contactno.errors.maxlength">
+                                                Maximum length is 10
+                                            </ng-container>
+                                          
+                                        </mat-error>
+                                    </mat-form-field> -->
+                                    <mat-select class="countrycodeDropdown" formControlName="countrycode"
+                                        (selectionChange)="selectCountry($event.value)">
+                                        <mat-select-trigger>
+                                            <i
+                                                class="flag-icon flag-icon-{{countryCodeSelected?.country_code | lowercase}} textwrap"></i>
+                                            +{{countryCodeSelected?.dial_code}}
+                                        </mat-select-trigger>
+                                        {{data | json}}
+                                        <ng-container *ngFor="let data of countryCode | orderBy: 'dial_code'">
+                                            <mat-option *ngIf="allowedISD.includes((data?.dial_code).toString())"
+                                                [value]="data">
+                                                <i
+                                                    class="flag-icon flag-icon-{{data?.country_code | lowercase}} textcase "></i>
+                                                +{{data?.dial_code}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-form-field appearance="fill"
+                                        [ngClass]="{ 'shake': submittedForm && f.contactno.errors }">
+                                        <mat-label>Contact Number</mat-label>
+                                        <input matInput formControlName="contactno" (keypress)="numericOnly($event)"
+                                            (keyup)="valPhone(countryCodeSelected)" [(ngModel)]="phone">
+                                        <span matPrefix class="countryFlag"></span>
+
+                                        <mat-error *ngIf="f.contactno.errors">
+                                            <ng-container *ngIf="f.contactno.errors.required"> Contact No is required
+                                            </ng-container>
+                                            <!-- <ng-container *ngIf="f.contactno.errors.pattern">Contact No Invalid No.
+                                            </ng-container> -->
+                                            <ng-container *ngIf="f.contactno.errors.minlength">
+                                                Mininmum length is {{phminlength}}
+                                            </ng-container>
+                                            <ng-container *ngIf="f.contactno.errors.maxlength">
+                                                Maximum length is {{phmaxlength}}
+                                            </ng-container>
+
+                                        </mat-error>
+                                        <mat-hint class="mat-error" *ngIf="phvalid == false">Contact No. is
+                                            Invalid</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Alternate No</mat-label>
+                                        <input matInput formControlName="alternateno">
+                                        <mat-error *ngIf="f.alternateno.errors">
+                                            <ng-container *ngIf="f.alternateno?.errors?.required">Alternate No is
+                                                required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.alternateno.errors.maxlength">
+                                                Maximum length is 10
+                                            </ng-container>
+                                            <ng-container *ngIf="f.alternateno.errors.pattern">Contact No. is
+                                                Invalid
+                                            </ng-container>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- <mat-select class="countrycodeDropdown" formControlName="countrycode1"
+                                    (selectionChange)="selectCountryForAlternateNo($event.value)">
+                                    <mat-select-trigger>
+                                        <i
+                                            class="flag-icon flag-icon-{{countryCodeAlternateNo?.country_code | lowercase}} textwrap"></i>
+                                        +{{countryCodeAlternateNo?.dial_code}}
+                                    </mat-select-trigger>
+                                    {{data | json}}
+                                    <ng-container *ngFor="let data of countryCode | orderBy: 'dial_code'">
+                                        <mat-option *ngIf="allowedISD.includes((data?.dial_code).toString())"
+                                            [value]="data">
+                                            <i
+                                                class="flag-icon flag-icon-{{data?.country_code | lowercase}} textcase "></i>
+                                            +{{data?.dial_code}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select> -->
+                                    <!-- <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.alternateno.errors }">
+                                <mat-label>Alternate Number</mat-label>
+                                <input matInput formControlName="alternateno" (keypress)="numericOnly($event)"
+                                    (keyup)="alternatePhone(countryCodeAlternateNo)" [(ngModel)]="phone1">
+                                <span matPrefix class="countryFlag"></span>
+
+                                <mat-error *ngIf="f.alternateno.errors">
+                                    <ng-container *ngIf="f.alternateno.errors.required"> is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.alternateno.errors.pattern">Invalid No.
+                                    </ng-container>
+                                    <ng-container *ngIf="f.alternateno.errors.minlength">
+                                        Mininmum length is {{phminlength}}
+                                    </ng-container>
+                                    <ng-container *ngIf="f.alternateno.errors.maxlength">
+                                        Maximum length is {{phmaxlength}}
+                                    </ng-container>
+
+                                </mat-error>
+                                <mat-hint class="mat-error" *ngIf="phvalid == false">Contact No. is
+                                    Invalid</mat-hint>
+                            </mat-form-field> -->
+                                </div>
+
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Alternate No</mat-label>
+                                        <input matInput formControlName="emergencyno">
+                                        <mat-error *ngIf="f.emergencyno.errors">
+                                            <ng-container *ngIf="f.emergencyno?.errors?.required">Alternate No is
+                                                required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.emergencyno.errors.maxlength">
+                                                Maximum length is 10
+                                            </ng-container>
+                                            <ng-container *ngIf="f.emergencyno.errors.pattern">Contact No. is
+                                                Invalid
+                                            </ng-container>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- <mat-select class="countrycodeDropdown" formControlName="countrycode2"
+                                    (selectionChange)="selectCountryForEmergencyNo($event.value)">
+                                    <mat-select-trigger>
+                                        <i
+                                            class="flag-icon flag-icon-{{countryCodeEmergencyNo?.country_code | lowercase}} textwrap"></i>
+                                        +{{countryCodeEmergencyNo?.dial_code}}
+                                    </mat-select-trigger>
+                                    <ng-container *ngFor="let data of countryCode | orderBy: 'dial_code'">
+                                        <mat-option *ngIf="allowedISD.includes((data?.dial_code).toString())"
+                                            [value]="data">
+                                            <i
+                                                class="flag-icon flag-icon-{{data?.country_code | lowercase}} textcase "></i>
+                                            +{{data?.dial_code}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select> -->
+                                    <!-- <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.emergencyno.errors }">
+                                <mat-label>Alternate Number</mat-label>
+                                <input matInput formControlName="emergencyno" (keypress)="numericOnly($event)"
+                                    (keyup)="emergencyPhone(countryCodeEmergencyNo)" [(ngModel)]="phone2">
+                                <span matPrefix class="countryFlag"></span>
+
+                                <mat-error *ngIf="f.emergencyno.errors">
+                                    <ng-container *ngIf="f.emergencyno.errors.required"> is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.emergencyno.errors.pattern">Invalid No.
+                                    </ng-container>
+                                    <ng-container *ngIf="f.emergencyno.errors.minlength">
+                                        Mininmum length is {{phminlength}}
+                                    </ng-container>
+                                    <ng-container *ngIf="f.emergencyno.errors.maxlength">
+                                        Maximum length is {{phmaxlength}}
+                                    </ng-container>
+
+                                </mat-error>
+                                <mat-hint class="mat-error" *ngIf="phvalid == false">Contact No. is
+                                    Invalid</mat-hint>
+                            </mat-form-field> -->
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>WhatsApp</mat-label>
+                                        <input matInput formControlName="email">
+
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-4" style="padding-left: 20px;">
+                                    <button class="btn outline" mat-flat-button color="primary" type="button"
+                                        *ngIf="place().controls.length < 3" (click)="addplace(i)">Add
+                                        More </button>
+
+                                    <!-- <div formArrayName="place"> -->
+
+                                    <!-- </div> -->
+
+                                    <!-- <div class="col-4" *ngIf="form.value.channeldropdown">
+                                    <mat-form-field appearance="fill" >
+                                        <mat-label>Instagram</mat-label>
+                                        <input matInput formControlName="instagram">
+
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-4" *ngIf="form.value.channeldropdown">
+                                    <mat-form-field appearance="fill" >
+                                        <mat-label>Facebook</mat-label>
+                                        <input matInput formControlName="facebook">
+
+                                    </mat-form-field>
+                                </div> -->
+                                </div>
+
+                                <!-- <div class="col-4">
+                                    <div formArrayName="place" *ngFor="let val of place().controls; let i= index " >
+                                        <div [formGroupName]="i">
+    
+                                            <div *ngIf=" !channelSelected[i]">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Channel</mat-label>
+                                                    <mat-select formControlName="channeldropdown"
+                                                        (selectionChange)="addToMessage($event.value,i)">
+                                                        <mat-select-trigger *ngIf="form.controls?.channeldropdown.value"
+                                                            class="d-flex align-items-center">
+                                                            <ng-container *ngFor="let item2 of userChannelName">
+                                                                <ng-container
+                                                                    *ngIf="form.controls?.channeldropdown.value == item2.ChannelId">
+                                                                    <span [innerHtml]="item2?.ChannelIcon"></span>
+                                                                    <span>{{item2.ChannelName}}</span>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </mat-select-trigger>
+                                                        <mat-option *ngFor="let data of userChannelName"
+                                                            [value]="data.ChannelId"><span
+                                                                [innerHtml]="data?.ChannelIcon"></span>{{data.ChannelName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+    
+    
+                                            <div *ngIf="form.value.channeldropdown && channelSelected[i]">
+                                                <div>
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label></mat-label>
+                                                        <span [innerHtml]="channelData?.ChannelIcon"></span>
+                                                        <input matInput formControlName="channeltext">
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>                                        
+                                            </div>
+    
+                                        </div>
+                                </div> -->
+                                <div class="col-4"></div>
+
+                                <div class="col-4 d-flex">
+                                    <div formArrayName="place" *ngFor="let val of place().controls; let i= index "
+                                        class="mr-4">
+                                        <div [formGroupName]="i">
+
+                                            <div *ngIf="!channelSelected[i]">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Channel</mat-label>
+                                                    <mat-select formControlName="channeldropdown"
+                                                        (selectionChange)="addToMessage($event.value,i)">
+                                                        <!-- *ngIf="form.controls?.channeldropdown.value" -->
+                                                        <mat-select-trigger class="d-flex align-items-center">
+                                                            <ng-container *ngFor="let item2 of userChannelName">
+                                                                <!-- form.controls?.channelGroup?.controls[i].controls?.channelid -->
+                                                                <ng-container
+                                                                    *ngIf="form.controls?.place?.controls[i].controls?.channeldropdown.value == item2.ChannelId">
+                                                                    <!-- *ngIf="form.controls?.channeldropdown.value == item2.ChannelId"> -->
+                                                                    <span [innerHtml]="item2?.ChannelIcon"></span>
+                                                                    <span>{{item2.ChannelName}}</span>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </mat-select-trigger>
+                                                        <mat-option *ngFor="let data of userChannelName"
+                                                            [value]="data.ChannelId"><span
+                                                                [innerHtml]="data?.ChannelIcon"></span>{{data.ChannelName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div *ngIf="form.value.channeldropdown && channelSelected[i]">
+                                                <div>
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label></mat-label>
+                                                        <!-- <span [innerHtml]="channelData?.ChannelIcon"></span> -->
+                                                        <!-- <span [innerHtml]="channelData?.ChannelIcon"></span> -->
+
+                                                        <ng-container *ngFor="let item2 of userChannelName">
+                                                            <!-- form.controls?.channelGroup?.controls[i].controls?.channelid -->
+                                                            <ng-container
+                                                                *ngIf="form.controls?.place?.controls[i].controls?.channeldropdown.value == item2.ChannelId">
+                                                                <!-- *ngIf="form.controls?.channeldropdown.value == item2.ChannelId"> -->
+                                                                <span [innerHtml]="item2?.ChannelIcon"></span>
+                                                                <span>{{item2.ChannelName}}</span>
+                                                            </ng-container>
+                                                        </ng-container>
+
+                                                        <input matInput formControlName="channeltext" [disabled]=""
+                                                            readonly>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="row" style="padding-left: 20px;">
+                                <button class="btn outline" mat-flat-button color="primary" type="button">Add
+                                    More</button>
+
+                            </div> -->
+                            <div class="row">
+                                <!-- <div style="padding-left: 20px;">
+                                    <button class="btn outline" mat-flat-button color="primary" type="button"
+                                        (click)="addAction = true">Add
+                                        More </button>
+                                </div> -->
+                                <!-- <div class="col-4" *ngIf="addAction">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Channel</mat-label>
+                                        <mat-select formControlName="channeldropdown"
+                                            (selectionChange)="addToMessage($event.value)">
+                                            <mat-select-trigger *ngIf="form.controls?.channeldropdown.value"
+                                                class="d-flex align-items-center">
+                                                <ng-container *ngFor="let item2 of userChannelName">
+                                                    <ng-container
+                                                        *ngIf="form.controls?.channeldropdown.value == item2.ChannelId">
+                                                        <span [innerHtml]="item2?.ChannelIcon"></span>
+                                                        <span>{{item2.ChannelName}}</span>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </mat-select-trigger>
+                                            <mat-option *ngFor="let data of userChannelName"
+                                                [value]="data.ChannelId"><span
+                                                    [innerHtml]="channelData.ChannelIcon"></span>{{channelData.ChannelName}}
+                                            </mat-option>
+                                        </mat-select>
+
+                                    </mat-form-field>
+                                </div> -->
+
+                                <!-- <div class="col-4" *ngIf="form.value.channeldropdown">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label></mat-label>
+                                        <input matInput formControlName="channeltext">
+
+                                    </mat-form-field>
+                                </div> -->
+
+                            </div>
+
+                            <div class="row" style="padding-left: 20px;padding-top: 15px;padding-bottom: 15px;">
+                                <span>Present Address</span>
+                            </div>
+
+                            <div formGroupName="presentContact">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>House No./Flat No./Building Name</mat-label>
+                                            <input matInput formControlName="housename">
+                                            <mat-error
+                                                *ngIf="form.controls.presentContact.get('housename').hasError('required')">
+                                                <ng-container
+                                                    *ngIf="form.controls.presentContact.get('housename').hasError('required')">
+                                                    House No./Flat No./Building Name is required
+                                                </ng-container>
+                                                <!-- <ng-container *ngIf="f.housename?.errors?.checknull">Whitespace not allowed.
+                                                </ng-container> -->
+                                            </mat-error>
+                                            <mat-error
+                                            *ngIf="form.controls.presentContact.get('housename').errors?.checknull">Whitespace
+                                            not allowed.
+
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Street Name</mat-label>
+                                            <input matInput formControlName="streetname">
+                                            <mat-error
+                                                *ngIf="form.controls.presentContact.get('streetname').hasError('required')">
+                                                <ng-container
+                                                    *ngIf="form.controls.presentContact.get('streetname').hasError('required')">
+                                                    Street Name is required
+                                                </ng-container>
+
+                                            </mat-error>
+                                            <mat-error
+                                            *ngIf="form.controls.presentContact.get('streetname').errors?.checknull">Whitespace
+                                            not allowed.
+
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Landmark</mat-label>
+                                            <input matInput formControlName="landmark">
+                                            <mat-error
+                                                *ngIf="form.controls.presentContact.get('landmark').hasError('required')">
+                                                <ng-container
+                                                    *ngIf="form.controls.presentContact.get('landmark').hasError('required')">
+                                                    Landmark is required
+                                                </ng-container>
+
+                                            </mat-error>
+                                            <mat-error
+                                            *ngIf="form.controls.presentContact.get('landmark').errors?.checknull">Whitespace
+                                            not allowed.
+
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Country</mat-label>
+                                            <mat-select formControlName="countryname"
+                                                (selectionChange)="getPresentStates($event.value)" #select1>
+                                                <!-- <mat-option value="1">Option1</mat-option>
+                                                <mat-option value="2">Option2</mat-option> -->
+                                                <mat-select-filter class="two" (openedChange)="openedChange($event)"
+                                                    [placeholder]="'Search'" [displayMember]="'CountryName'"
+                                                    [array]="country" (filteredReturn)="countryfilter1 =$event">
+                                                </mat-select-filter>
+                                                <mat-option *ngFor="let data of countryfilter1;"
+                                                    [value]="data.CountryID">{{data.CountryName}}
+                                                </mat-option>
+                                                <mat-error
+                                                    *ngIf="form.controls.presentContact.get('countryname').hasError('required') && submittedForm">
+                                                    <ng-container
+                                                        *ngIf="form.controls.presentContact.get('countryname').hasError('required')">
+                                                        Country Name is required
+                                                    </ng-container>
+
+                                                </mat-error>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>State</mat-label>
+                                            <mat-select formControlName="state"
+                                                (selectionChange)="getPresentDistrict($event.value)" #select2>
+                                                <!-- <mat-option value="1">Option1</mat-option>
+                                                <mat-option value="2">Option2</mat-option> -->
+                                                <mat-select-filter class="two" [placeholder]="'Search'"
+                                                    [displayMember]="'StateName'" [array]="filterepresentStates"
+                                                    (filteredReturn)="searchState =$event"></mat-select-filter>
+                                                <mat-option *ngFor="let data of searchState;" [value]="data.StateID">
+                                                    {{data.StateName}}
+                                                </mat-option>
+
+                                            </mat-select>
+                                            <mat-error
+                                                *ngIf="form.controls.presentContact.get('state').hasError('required') && submittedForm">
+                                                <ng-container
+                                                    *ngIf="form.controls.presentContact.get('state').hasError('required')">
+                                                    State is required
+                                                </ng-container>
+
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>District</mat-label>
+                                            <mat-select formControlName="district"
+                                                (selectionChange)="getPresentPincode($event.value)" #select3>
+                                                <!-- <mat-option value="1">Option1</mat-option>
+                                                <mat-option value="2">Option2</mat-option> -->
+                                                <mat-select-filter class="two" [placeholder]="'Search'"
+                                                    [displayMember]="'Districtname'" [array]="filtereddistrict"
+                                                    (filteredReturn)="searchdistrict =$event"></mat-select-filter>
+                                                <mat-option *ngFor="let data of searchdistrict;"
+                                                    [value]="data.DistrictId">{{data.Districtname}}
+                                                </mat-option>
+
+                                            </mat-select>
+                                            <mat-error
+                                                *ngIf="form.controls.presentContact.get('district').hasError('required') && submittedForm">
+                                                <ng-container
+                                                    *ngIf="form.controls.presentContact.get('district').hasError('required')">
+                                                    District is required
+                                                </ng-container>
+
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Pincode</mat-label>
+                                            <!-- <input matInput formControlName="pincode" [(ngModel)]="pincodevar" #select4> -->
+                                            <mat-select formControlName="pincode" [(ngModel)]="pincodevar" #select4>
+                                                <mat-select-filter class="two" [placeholder]="'Search'"
+                                                    [displayMember]="'Pincode'" [array]="filtereddPincode"
+                                                    (filteredReturn)="searchzipcode =$event"></mat-select-filter>
+                                                <mat-option *ngFor="let data of searchzipcode;" [value]="data.Pincode">
+                                                    {{data.Pincode}}
+                                                </mat-option>
+
+                                            </mat-select>
+                                            <mat-error
+                                                *ngIf="form.controls.presentContact.get('pincode').hasError('pincode') && submittedForm">
+                                                <ng-container
+                                                    *ngIf="form.controls.presentContact.get('pincode').hasError('pincode')">
+                                                    Pincode is required
+                                                </ng-container>
+
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="padding-left: 20px;padding-top: 15px;padding-bottom: 15px;">
+                                <!-- <span>Present Address</span> -->
+
+
+                                <div style="padding-left:500px">
+                                    <mat-checkbox class="example-margin" color="primary" [checked]="checked"
+                                        formControlName="sameaddress" value="checked"
+                                        (change)="samePresentAddPermanent($event.checked)">Same as present address
+                                    </mat-checkbox>
+                                </div>
+
+
+                            </div>
+
+                            <div formGroupName="duplicateContact" *ngIf="permanentForm">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>House No./Flat No./Building Name</mat-label>
+                                            <input matInput formControlName="housename">
+
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Street Name</mat-label>
+                                            <input matInput formControlName="streetname">
+
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Landmark</mat-label>
+                                            <input matInput formControlName="landmark">
+
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Country</mat-label>
+                                            <mat-select formControlName="countryname"
+                                                (selectionChange)="getPresentStates2($event.value)" #select5>
+                                                <!-- <mat-option value="1">Option1</mat-option>
+                                                <mat-option value="1">Option2</mat-option> -->
+
+                                                <mat-select-filter class="two" [placeholder]="'Search'"
+                                                    [displayMember]="'CountryName'" [array]="country"
+                                                    (filteredReturn)="filteredcountry2 =$event"></mat-select-filter>
+                                                <mat-option *ngFor="let data of filteredcountry2;"
+                                                    [value]="data.CountryID">{{data.CountryName}}
+                                                </mat-option>
+
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>State</mat-label>
+                                            <mat-select formControlName="state"
+                                                (selectionChange)="getPresentDistrict2($event.value)" #select6>
+                                                <!-- <mat-option value="1">Option1</mat-option>
+                                                <mat-option value="1">Option2</mat-option> -->
+
+                                                <mat-select-filter class="two" [placeholder]="'Search'"
+                                                    *ngIf="select6.focused" [displayMember]="'StateName'"
+                                                    [array]="filterepresentStates2"
+                                                    (filteredReturn)="searchstate1 =$event"></mat-select-filter>
+                                                <mat-option *ngFor="let data of searchstate1;" [value]="data.StateID">
+                                                    {{data.StateName}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>District</mat-label>
+                                            <mat-select formControlName="district"
+                                                (selectionChange)="getPresentPincode2($event.value)" #select7>
+                                                <!-- <mat-option value="1">Option1</mat-option>
+                                                <mat-option value="1">Option2</mat-option> -->
+                                                <mat-select-filter class="two" [placeholder]="'Search'"
+                                                    [displayMember]="'Districtname'" [array]="filtereddistrict2"
+                                                    (filteredReturn)="searchdistrict2 =$event"></mat-select-filter>
+                                                <mat-option *ngFor="let data of searchdistrict2;"
+                                                    [value]="data.DistrictId">{{data.Districtname}}
+                                                </mat-option>
+
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Pincode</mat-label>
+                                            <!-- <input matInput formControlName="pincode" [(ngModel)]="pincodevar" #select4> -->
+                                            <mat-select formControlName="pincode" #select8>
+                                                <mat-select-filter class="two" [placeholder]="'Search'"
+                                                    [displayMember]="'Pincode'" [array]="filtereddPincode2"
+                                                    (filteredReturn)="searchzipcode2 =$event"></mat-select-filter>
+                                                <mat-option *ngFor="let data of searchzipcode2;" [value]="data.Pincode">
+                                                    {{data.Pincode}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-gray" type="button" (click)="contactCancle()">Cancel</button>
+                            <button class="btn btn-gray" mat-flat-button type="Reset" *ngIf="!path">Reset</button>
+                            <button class="btn" mat-flat-button color="primary" type="button"
+                                (click)="submit()">Save</button>
+                            <!-- <button class="btn" mat-flat-button color="primary" type="button"
+                                *ngIf="path && userConfig?.Update" (click)="next()">Update</button> -->
+                            <button class="btn outline" mat-flat-button color="primary" type="button"
+                                (click)="next()" *ngIf="!path">Save & Add New</button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

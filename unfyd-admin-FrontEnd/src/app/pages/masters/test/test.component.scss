@@ -1,0 +1,39 @@
+//  filter condition starts here
+
+.rechurnRuleTableHead{
+    font-size: var(--content);
+    color: var(--gray);
+}
+.rechurnRuleTableField{
+    border: 1px solid var(--gray_color_80);
+    background-color: var(--backgroud_color);
+    border-radius: 5px;
+}
+//  filter condition ends here
+.abcd{
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  tr td:first-child {
+  width: 12em;
+  min-width: 12em;
+  max-width: 12em;
+  word-break: break-all;
+  text-align: center;
+  color: var(--gray_color_50);
+}
+tr td:nth-child(2) {
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  word-break:break-word;
+}
+}

@@ -1,0 +1,164 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <app-steps [steps]="hawkerFormSteps" [id]="path"></app-steps>
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend>Other Details</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.Products}}</mat-label>
+                            <input matInput formControlName="productsservices" appTitleCase>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.OperatingCoach}}</mat-label>
+                            <input matInput formControlName="coachtrainoperatingstn" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.BatchId}}</mat-label>
+                            <mat-select formControlName="batchid">
+                                <mat-option *ngFor="let data of batchList" [value]="data.BatchId">
+                                    {{data.BatchId}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div> 
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.RefferdBy}}</mat-label>
+                            <mat-select formControlName="refferdby">
+                                <mat-option *ngFor="let data of unionList" [value]="data['Actionable']">
+                                    {{data['Union Name']}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div> 
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ERSubmissionDate}}</mat-label>
+                            <input (focus)="appsubmissiondatetoadmin.open()" (click)="appsubmissiondatetoadmin.open()"
+                                readonly formControlName="appsubmissiondatetoadmin" type="text"
+                                [matDatepicker]="appsubmissiondatetoadmin" datePickerFormat="DD-MM-YYYY" matInput
+                                [min]="minDate" [disabled]="(userDetails.RoleType == 'Call Center Executive' || userDetails.RoleType == 'Admin') ? false : true">
+                            <mat-datepicker-toggle matSuffix [for]="appsubmissiondatetoadmin"></mat-datepicker-toggle>
+                            <mat-datepicker #appsubmissiondatetoadmin></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ApprovalStatus}}</mat-label>
+                            <input matInput formControlName="appapprovalstatusfromadmin" disabled readonly appTitleCase>
+
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ApprovalDate}}</mat-label>
+                            <input (focus)="appapprovaldatebyadmin.open()" (click)="appapprovaldatebyadmin.open()"
+                                readonly formControlName="appapprovaldatebyadmin" type="text"
+                                [matDatepicker]="appapprovaldatebyadmin" datePickerFormat="DD-MM-YYYY" matInput
+                                disabled>
+                            <mat-datepicker-toggle matSuffix [for]="appapprovaldatebyadmin"></mat-datepicker-toggle>
+                            <mat-datepicker #appapprovaldatebyadmin></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.RegistrationLocation}}</mat-label>
+                            <input matInput formControlName="registrationlocation" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="form.value.registrationno !== ''">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.RegistrationNumber}}</mat-label>
+                            <input matInput formControlName="registrationno" readonly appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.IDCardIssued}}</mat-label>
+                            <input (focus)="receiptdate.open()" (click)="receiptdate.open()" readonly
+                                formControlName="receiptdate" type="text" [matDatepicker]="receiptdate"
+                                datePickerFormat="DD-MM-YYYY" matInput disabled>
+                            <mat-datepicker-toggle matSuffix [for]="receiptdate"></mat-datepicker-toggle>
+                            <mat-datepicker #receiptdate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.UniformIssued}}</mat-label>
+                            <input (focus)="uniformreceipt.open()" (click)="uniformreceipt.open()" readonly
+                                formControlName="uniformreceipt" type="text" [matDatepicker]="uniformreceipt"
+                                datePickerFormat="DD-MM-YYYY" matInput disabled>
+                            <mat-datepicker-toggle matSuffix [for]="uniformreceipt"></mat-datepicker-toggle>
+                            <mat-datepicker #uniformreceipt></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.LifeInsuranceStatus}}</mat-label>
+                            <mat-select formControlName="lifeinsurancestatus"
+                                (selectionChange)="lifeinsurance($event.value)">
+                                <mat-option *ngFor="let data of masters.lifeInsurance" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="lifeinsurancefieldsStatus">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.PolicyNumber}}</mat-label>
+                            <input matInput formControlName="policynumber" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="lifeinsurancefieldsStatus">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.PolicyProvider}}</mat-label>
+                            <input matInput formControlName="policyprovider" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="lifeinsurancefieldsStatus">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.CoverDetails}}</mat-label>
+                            <input matInput formControlName="coverdetails" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="lifeinsurancefieldsStatus">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.FromDate}}</mat-label>
+                            <input (focus)="fromdate.open()" (click)="fromdate.open()" readonly
+                                formControlName="fromdate" type="text" [matDatepicker]="fromdate"
+                                datePickerFormat="DD-MM-YYYY" matInput [min]="minDate">
+                            <mat-datepicker-toggle matSuffix [for]="fromdate"></mat-datepicker-toggle>
+                            <mat-datepicker #fromdate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="lifeinsurancefieldsStatus">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ToDate}}</mat-label>
+                            <input (focus)="todate.open()" (click)="todate.open()" readonly formControlName="todate"
+                                type="text" [matDatepicker]="todate" datePickerFormat="DD-MM-YYYY" matInput
+                                [min]="minDate">
+                            <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                            <mat-datepicker #todate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group" *ngIf="userConfig?.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button  *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-stroked-button (click)="submit('save')" type="button">Save</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit('next')" type="button">Next
+                    >></button>
+            </div>
+        </form>
+    </div>
+</div>

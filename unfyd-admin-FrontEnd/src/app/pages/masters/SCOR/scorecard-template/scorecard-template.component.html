@@ -1,0 +1,394 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form" *ngIf="!loader">
+            <div class="row">
+                <div class="col-1 ">
+                    <mat-icon class="cursorPointer gray backarrow" (click)="back()">keyboard_backspace</mat-icon>
+                </div>
+                <div class="col-10 pl-0">
+                    <legend *ngIf="ID == null">Add New Scorecard Template</legend>
+                    <legend *ngIf="ID != null">Update Scorecard Template</legend>
+                    <div class="formGroup mt-3">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Channel}}</mat-label>
+                                    <mat-select formControlName="Channel" (selectionChange)="getChannelSource($event.value)" [(value)]="ChannelName">
+                                      <mat-select-trigger>
+                                        <ng-container *ngFor="let data2 of userChannelName">
+                                          <span *ngIf="data2?.ChannelId == ChannelName" [innerHtml]="data2?.ChannelIcon"></span>
+                                          <span *ngIf="data2?.ChannelId == ChannelName" [innerHtml]="data2?.ChannelName"></span>
+                                        </ng-container>
+                                      </mat-select-trigger>
+                                      <mat-option *ngFor="let data of userChannelName" [value]="data.ChannelId">
+                                        <span [innerHtml]="data.ChannelIcon"></span>{{data.ChannelName}}
+                                      </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.channelsource.errors">
+                                        <ng-container *ngIf="f.channelsource?.errors?.required">Channel is
+                                            required.</ng-container>
+                                    </mat-error>
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.ChannelSource}}</mat-label>
+                                    <mat-select formControlName="channelsource">
+                                        <mat-option *ngFor="let data of ChannelSourceArr"
+                                            [value]="data.ChannelSourceId">{{data.ChannelSourceName}}</mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.channelsource.errors">
+                                        <ng-container *ngIf="f.channelsource?.errors?.required">Channel Source is
+                                            required.</ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Name}}</mat-label>
+                                    <input matInput formControlName="Name">
+                                    <mat-error *ngIf="f.Name?.errors">
+                                        <ng-container *ngIf="f.Name?.errors?.required">Name is required.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Name?.errors?.pattern">Name is invalid.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Name?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Name?.errors?.checknull1">Must be at least 3 characters long.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Description}}</mat-label>
+                                    <input matInput formControlName="description" maxlength="500" >
+                                    <mat-error *ngIf="f.description?.errors">
+                                        <ng-container *ngIf="f.description?.errors?.pattern">Description is invalid.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.description?.errors.minlength">
+                                            Must be at least 3 characters long.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.description?.errors?.maxlength">
+                                            Cannot be beyond 500 characters.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.description?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                        </ng-container>
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-3 col-md-3 col-12 d-flex justify-content-between">
+                                <div class="d-flex" style="align-items: baseline; flex:1">
+                                    <span class="box-lable">{{labelName?.RatingType}}</span>
+                                 </div>
+                                <div class="parentdiv parentdivWidth">
+                                    <div class="child1" style="display: flex;justify-content: space-between;">
+                                        <div class="child2" style="font-size: 12px;">
+                                            <p>{{labelName?.YesNo}}</p>
+                                        </div>
+                                        <div class="child3">
+                                            <input type="radio" formControlName="starRating" value="Yes/No"
+                                                (click)="toggleRadioSelection('Yes/No')">
+
+                                        </div>
+                                    </div>
+                                    <div class="child4" style="display: flex;">
+                                        <div class="toggle-btn">
+                                            <div class="on-off-toggle">
+                                                <input class="on-off-toggle__input" type="checkbox" id="bopis" />
+                                                <label for="bopis" class="on-off-toggle__slider"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-12">
+                                <div class="parentdiv"
+                                    style="border: 1px solid #cccc;border-radius: 10px;padding: 11px 12px;">
+                                    <div class="child1" style="display: flex;justify-content: space-between;">
+                                        <div class="child2" style="font-size: 12px;">
+                                            <p>{{labelName?.YesNoStar}}</p>
+                                        </div>
+                                        <div class="child3">
+                                            <input type="radio" formControlName="starRating"
+                                                value="Yes/No & Star Rating"
+                                                (click)="toggleRadioSelection('Yes/No & Star Rating')">
+
+                                        </div>
+                                    </div>
+                                    <div class="child4" style="display: flex;">
+                                        <div class="toggle-btn">
+                                            <div class="on-off-toggle">
+                                                <input class="on-off-toggle__input" type="checkbox" id="bopisrv" />
+                                                <label for="bopisrv" class="on-off-toggle__slider"></label>
+                                            </div>
+                                        </div>
+                                        <div class="child6">
+                                            <div class="child6">
+                                                <mat-icon>star</mat-icon>
+                                                <mat-icon>star</mat-icon>
+                                                <mat-icon>star</mat-icon>
+                                                <mat-icon>star</mat-icon>
+                                                <mat-icon>star</mat-icon>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-12 my-4" style="align-items: center;">
+                                <mat-checkbox color="primary" value="Not Applicable (NA)" formControlName="NotApplicableBox">
+                                    {{labelName?.NotApplicable}}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;" *ngIf="ActionRequired == true && (form.value.starRating == '' || form.value.starRating == null)">Plesae Select a RatingType</mat-hint>
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="example-action-buttons d-flex justify-content-between">
+                                    <label><b>{{labelName?.Category}}</b></label>
+                                    <mat-icon class="addBtnBlue" color="Primary" (click)="addItem()">add</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formGroup mt-3">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 raviCon">
+                                <mat-accordion class="" style="width: 70%;" formArrayName="AddingField"
+                                    *ngFor="let item of AddingField?.controls; let i = index;"
+                                    class="scroreCardAccordion">
+                                    <mat-expansion-panel #panel1 class="expansionPanelBorder mb-3" [formGroupName]="i" [expanded]="panelOpenState[i]" (opened)="panelOpenState[i] = true" (closed)="panelOpenState[i] = false">
+                                        <mat-expansion-panel-header class="d-flex justify-content-between">
+                                            <span>{{item.get('Category').value && item.get('Category').value.length > 0
+                                                ? item.get('Category').value : "Category List " + (i+1) + ""}}</span>
+                                            <span class="float-right">
+                                                <span class="mr-2">{{(item.get('Weightage').value !== "" && item.get('Weightage').value !== null) ? item.get('Weightage').value + '%' : ''}}</span>
+                                                <span class="mr-2"><mat-icon class="red-color cursorPointer"
+                                                        (click)="removeGroup(i)"
+                                                        *ngIf="AddingField.length > 1">delete_outline</mat-icon></span>
+                                            </span>
+                                        </mat-expansion-panel-header>
+
+                                        <div class="row mb-1">
+                                            <div class="col-lg-8 col-md-6 col-sm-12">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>{{labelName?.Category}}</mat-label>
+                                                    <input matInput formControlName="Category">
+                                                    <mat-error *ngIf="item.get('Category').errors">
+                                                        <ng-container
+                                                            *ngIf="item.get('Category').errors?.required">Category is
+                                                            required.
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="item.get('Category').errors?.pattern">Category is
+                                                            invalid.
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="item.get('Category').errors?.checknull">Whitespace
+                                                            not
+                                                            allowed.
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="item.get('Category').errors?.checknull1"> Must be at least 3 characters long.
+                                                        </ng-container>
+
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>{{labelName?.Weightage}}</mat-label>
+                                                    <input matInput placeholder="00%" type="number" min="1" max="100"
+                                                        formControlName="Weightage" (change)="DisplayWeightage(i)">
+
+                                                    <mat-error *ngIf="item.get('Weightage').errors">
+                                                        <ng-container
+                                                            *ngIf="item.get('Weightage').errors.required">Weightage is
+                                                            required.
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item.get('Weightage').errors.max">Weightage
+                                                            should not be greater than 100.
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-1">
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>{{labelName?.Guidelines}}</mat-label>
+                                                    <textarea rows="5" formControlName="Description2" maxlength="1000"
+                                                        matInput></textarea>
+                                                    <mat-error *ngIf="item.get('Description2').errors">
+                                                        <ng-container
+                                                            *ngIf="item.get('Description2').errors.pattern">Description
+                                                            is invalid.
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item.get('Description2').errors.maxlength">
+                                                            Cannot be beyond 1000 characters.
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="item.get('Description2').errors.checknull1">
+                                                            Must be at least 3 characters long.
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+
+                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>{{labelName?.Exception}}</mat-label>
+                                                    <textarea rows="5" formControlName="Exception" maxlength="1000" matInput></textarea>
+                                                    <mat-error *ngIf="item.get('Exception').errors">
+                                                        <ng-container
+                                                            *ngIf="item.get('Exception').errors?.pattern">Exception is
+                                                            invalid.
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item.get('Exception').errors?.maxlength">
+                                                            Cannot be beyond 1000 characters.
+                                                        </ng-container>
+                                                        <ng-container *ngIf="item.get('Exception').errors?.checknull1">
+                                                            Must be at least 3 characters long.
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-4">
+                                            <div class="col-2">
+                                                <mat-checkbox [id]="i" color="primary"
+                                                    formControlName="IsFatal">{{labelName?.Fatal}}</mat-checkbox>
+
+
+                                            </div>
+
+                                            <div class="col-4" *ngIf="item.get('IsFatal').value == true">
+
+                                                    <span class="mr-4">
+                                                        <input class="mr-2" type="radio" [id]="i"
+                                                            formControlName="radioval" value="Overall"
+                                                            (change)="toggleCheckboxSelection(i,'Overall')" />
+                                                        <label for="sample">{{labelName?.Overall}}</label>
+                                                    </span>
+                                                    <span>
+                                                        <input class="mr-2" type="radio" [id]="i"
+                                                            formControlName="radioval" value="CategoryWise"
+                                                            (change)="toggleCheckboxSelection(i,'CategoryWise')" />
+                                                        <label for="sample">{{labelName?.CategoryWise}}</label>
+                                                    </span>
+                                                    <!-- <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;" *ngIf="FatalRequired == true && (item.get('radioval').value == '' || item.get('radioval').value == null)">Plesae Select a Value</mat-hint> -->
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-8 col-md-6 col-sm-12">
+                                                <label for="" style="font-size: 11px;">{{labelName?.Criteria}}</label>
+                                            </div>
+                                            <div class="col-lg-2 col-md-6 col-sm-12">
+                                                <label for="" style="font-size: 11px;">{{labelName?.Weightage}}</label>
+                                            </div>
+                                            <div class="col-lg-1 col-md-6 col-sm-12">
+                                                {{ (countWt[i] ? countWt[i] : '00') + '/' + (totalWt[i] ? totalWt[i] : '00') }}
+                                            </div>
+                                        </div>
+                                        <div formArrayName="accord"
+                                            *ngFor="let itemsource of item['controls'].accord['controls']; let p = index;">
+                                            <div class="row" [formGroupName]="p">
+                                                <div class="col-lg-8 col-md-6 col-sm-12">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>{{labelName?.TypeHere}}</mat-label>
+                                                        <input matInput formControlName="TypingArea">
+                                                        <mat-error
+                                                            *ngIf="form.controls?.AddingField?.controls[i].controls?.accord.controls[p].controls?.TypingArea.errors">
+                                                            <ng-container
+                                                                *ngIf="form.controls?.AddingField?.controls[i].controls?.accord.controls[p].controls?.TypingArea.errors?.required">Typing
+                                                                Area is
+                                                                required.
+                                                            </ng-container>
+                                                            <ng-container
+                                                            *ngIf="form.controls?.AddingField?.controls[i].controls?.accord.controls[p].controls?.TypingArea.errors?.checknull">Whitespace
+                                                            not
+                                                            allowed.
+                                                        </ng-container>
+                                                    <ng-container
+                                                    *ngIf="form.controls?.AddingField?.controls[i].controls?.accord.controls[p].controls?.TypingArea.errors?.checknull1"> Must be at least 3 characters long.
+                                                </ng-container>
+                                                        </mat-error>
+
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-6 col-sm-12">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label style="font-size: 10px;">{{labelName?.Weightage}}</mat-label>
+                                                        <input matInput type="number" placeholder="00%" min="1"
+                                                            max="100" formControlName="Weightage2" (change)="DisplayWeightage(i)">
+                                                        <mat-error *ngIf="form.controls?.AddingField?.controls[i].controls?.accord.controls[p].controls?.Weightage2.errors">
+                                                            <ng-container
+                                                                *ngIf="form.controls?.AddingField?.controls[i].controls?.accord.controls[p].controls?.Weightage2.errors?.required" style="font-size: 10px;">
+                                                                Weightage is required.
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="form.controls?.AddingField?.controls[i].controls?.accord.controls[p].controls?.Weightage2.errors?.max" style="font-size: 5px;">
+                                                                Greater than 100.
+                                                            </ng-container>
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <mat-icon class="red-color cursorPointer" (click)="removeGroup2(i,p)"
+                                                   *ngIf='AddingField?.controls[i].controls?.accord.length > 1'
+                                                    style="margin-top: 10px;">delete_outline</mat-icon>&nbsp;&nbsp;
+
+                                                <mat-icon style="margin-top: 10px;"
+                                                    *ngIf="p == form.value.AddingField[i].accord.length-1"
+                                                    (click)="addItem2(i)">add</mat-icon>
+                                            </div>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row d-none d-block d-md-none">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <!-- <button class="btn btn-gray btnwidth mr-2" (click)="back()" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                            <button class="btn btnwidth" mat-flat-button color="primary" type="button" (click)="submit('add')">{{ reset ?
+                               labelName?.Update : labelName?.Save }}</button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 mt-2">
+                            <button #reset class="btn btn-gray btnwidth mr-2" *ngIf="!reset" type="reset" mat-flat-button (click)="resetfunc()">{{labelName?.Reset}}</button>
+                            <button *ngIf="!reset" class="btn outline btnwidth" type="button"  color="primary" (click)="submit('saveAndAddNew')">{{labelName?.SaveAddNew}} </button>
+
+                        </div>
+                      </div>
+
+                       <div class="btn-group d-none d-md-block">
+                        <!-- <button  *ngIf="userConfig?.Cancel" class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                        <button #reset class="btn btn-gray" *ngIf="!reset && userConfig?.Reset" type="reset" mat-flat-button (click)="resetfunc()">{{labelName?.Reset}}</button>
+                        <button *ngIf="!ID" class="btn outline"   type="button"  color="primary" (click)="submit('saveAndAddNew')">{{labelName?.SaveAddNew}} </button>
+                        <button  *ngIf="reset ? (userConfig?.Update) : (userConfig?.Save)" class="btn" mat-flat-button color="primary" type="button" (click)="submit('add')">{{ reset ?
+                           labelName?.Update : labelName?.Save }}</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>

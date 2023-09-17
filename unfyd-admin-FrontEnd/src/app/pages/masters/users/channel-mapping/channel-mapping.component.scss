@@ -1,0 +1,271 @@
+.icons{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    & + .icons{
+        margin-left: 5px;
+    }
+}
+
+.WhatsApp{
+    background-image: url('/assets/images/reports_icon/whatsapp.svg');
+}
+
+.Webchat{
+    background-image: url('/assets/images/reports_icon/webchat.svg');
+}
+
+.Twitter{
+    background-image: url('/assets/images/reports_icon/twittertwits.svg');
+}
+.FacebookChat{
+    background-image: url('/assets/images/reports_icon/facebook.svg');
+}
+.Facebook{
+    background-image: url('/assets/images/reports_icon/facebook.svg');
+}
+.Telegram{
+    background-image: url('/assets/images/reports_icon/twitterDM.svg');
+}
+.TwitterDm{
+    background-image: url('/assets/images/reports_icon/twitterDM.svg');
+}
+.Sms{
+     background-image: url('/assets/images/reports_icon/SMS.svg');
+}
+.Voice{
+     background-image: url('/assets/images/reports_icon/VOICE.svg');
+}
+.Crawl{
+     background-image: url('/assets/images/reports_icon/twitterDM.svg');
+}
+.InstagramPost{
+     background-image: url('/assets/images/reports_icon/instagramPost.svg');
+}
+.InstagramDm{
+     background-image: url('/assets/images/reports_icon/instagramDm.svg');
+}
+.Email{
+     background-image: url('/assets/images/reports_icon/Email.svg');
+}
+.Video{
+     background-image: url('/assets/images/reports_icon/twitterDM.svg');
+}
+.CoBrowse{
+     background-image: url('/assets/images/reports_icon/twitterDM.svg');
+}
+.hide{
+    display: none;
+}
+.channel-list{
+ 
+    .channel-row{
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--backgroud_color);
+        border: var(--border);
+        padding: 10px 30px;
+        margin: 7px 0;
+        border-radius: 5px;
+        .dropdown{
+            width: 175px;
+        }
+        input[type=text], input[type=number], select{
+            width: 65px;
+            height: 40px;
+            border: var(--border);
+            border-radius: 5px;
+            text-align: center;
+            outline: none;
+            font-weight: 800;
+           // margin-left: 10px;
+        }
+        label{
+            margin-left: 10px;
+            font-size: 16px;
+            color: var(--black_color_70);
+        }
+        .remove{
+            color: var(--maroonColor);
+        }
+        .channel-input{
+            position: relative;
+            margin-right: -10px;
+            input[type=text], input[type=number], select{
+                width: 180px;
+                padding-left: 38px;
+                font-size: 16px;
+                color: var(--black_color_80);
+                text-align: left;
+            }
+            .icons{
+                position: absolute;
+                z-index: 1;
+                left: 13px;
+                top: 11px;
+            }
+        }
+    }
+
+    .channelSource-row{
+               display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--gray_color_80);
+        border: var(--border);
+        padding: 10px 30px;
+        margin: -7px 0px 7px 0px;
+        input[type=text], input[type=number], select{
+            width: 90px;
+            height: 40px;
+            border: var(--border);
+            border-radius: 5px;
+            text-align: center;
+            outline: none;
+            font-weight: 800;
+            margin-left: 25px;
+        }
+        label{
+            margin-left: 10px;
+            font-size: 16px;
+            color: var(--black_color_70);
+        }
+        .remove{
+            color: var(--maroonColor);
+        }
+        .channel-input{
+            position: relative;
+            margin-right: -40px;
+            input[type=text], input[type=number], select{
+                width: 180px;
+                padding-left: 38px;
+                font-size: 16px;
+                color: var(--black_color_80);
+                text-align: left;
+            }
+            .icons{
+                position: absolute;
+                z-index: 1;
+                left: 13px;
+                top: 11px;
+            }
+        }
+    }
+}
+
+::ng-deep{
+  .masters_block{
+    .mat-slide-toggle.toggleBtn .mat-slide-toggle-bar .mat-slide-toggle-thumb-container .mat-slide-toggle-thumb{
+      background-color: var(--primary_color);
+    }
+  }
+
+  .channel-input{
+    .mat-form-field-wrapper{
+      padding-bottom: 0px;
+    }
+  }
+  .inbound{
+    width: 100px;
+  }
+}
+
+.channelfont{
+    padding-left: 50px;
+    font-family: 'Nunito Sans';
+        color: #5f5f5f;
+}
+
+.inboundfont{
+    color: #5f5f5f;
+padding-left: 66px;
+font-family: 'Nunito Sans';
+}
+.outboundfont{
+        color: #5f5f5f;
+    font-family: 'Nunito Sans';
+    padding-left: 53px;
+    }
+.inoutboundzero{
+    padding-left:401px
+}    
+
+.capacitygreater{
+    padding-left:463px
+}
+
+.fulcapfont{
+    padding-left: 60px;
+    font-family: 'Nunito Sans';
+        color: #5f5f5f;
+}
+
+.maxCapacity{
+    color:#d32f2f;;
+}
+
+.masters_block{
+    margin-top: 40px;
+    margin-left: 30px;
+}
+
+@media screen and (max-width:767px) {
+    .wrapper{
+        padding: 10px 15px 10px 50px;
+
+        .channelfont {
+            padding-left: 0px !important;
+        }
+        .inboundfont {
+            padding-left: 0px !important;
+        }
+        .outboundfont{
+            padding-left: 0px !important;
+        }
+
+        .fulcapfont{
+            padding-left: 0px !important;
+
+        }
+        ::ng-deep{
+            .masters_block{
+                margin-top: 50px !important;
+                padding: 40px 35px 21.1875px 35px !important;
+            }
+        }
+    }
+}
+
+@media screen and (min-width:768px) and (max-width:991px) {
+    .wrapper{
+        padding: 10px 15px;
+
+        .masters_block{
+            margin-top: 40px;
+            margin-left: 30px !important;
+            padding: 40px 15px 21.1875px 15px;
+        }
+
+        .channel-list{
+            padding: 10px 15px;
+            .channel-row{
+                padding: 10px 15px;
+                .dropdown{
+                    width: 100px !important;
+                }
+                
+                input[type=text], input[type=number], select{
+                    width: 40px;
+                    margin-left: 5px !important;
+                }
+                .channel-input{
+                    margin-right: 10px;
+                }
+            }
+        }
+        
+    }
+}

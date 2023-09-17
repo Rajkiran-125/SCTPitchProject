@@ -1,0 +1,146 @@
+.card-layout {
+
+    .cards {
+        margin-bottom: 20px;
+        background-color: var(--white_color);
+        box-shadow: 0px 0px 6px #0000001A;
+        padding: 15px;
+        border: var(--border);
+        border-radius: 15px;
+        cursor:pointer;
+       
+        .more-optn {
+            
+            button {
+                background-color: transparent;
+                border: none;
+
+                i::before {
+                    color: var(--theme_input_color);
+                    opacity: 0.7;
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+
+        .card-data {
+
+            .title {
+                color: #212121;
+               
+                text-align: left;
+                font-style: normal normal bold;
+                width: 80px;
+                height: 22px;
+                letter-spacing: 0px;
+            }
+
+            .sub-data {
+                color: #707070;
+                opacity: 1;
+                font: normal normal normal 12px/16px Nunito Sans;
+                letter-spacing: 0px;
+                
+            }
+
+            .date-time {
+                color: var(--theme_input_color);
+                opacity: 0.7;
+                font-size: 14px;
+                padding: 6px 0px 0px 0px;
+
+                span {
+                    padding-right: 6px;
+                }
+            }
+
+            .status {
+                color: var(--status_red);
+                font-size: 14px;
+                font-weight: 600;
+                padding: 20px 0px 0px 0px;
+            }
+        }
+    }
+
+}
+
+.logoposition{
+    top: 14px;
+    left:519px;
+    height: 20px;
+    width: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.agentlogo{ 
+    padding:50px
+}
+
+.container1{
+    background-size: cover;
+    background-color: var(--white_color);
+    border: var(--border);
+    border-radius: 15px;
+}
+
+.channel_license_display{
+    display: flex;
+    flex-flow: row wrap;
+    align-content: space-between;
+}
+.cutTextChannel{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 113px;
+}
+.example-chip-list {
+    width: 100%;
+  }
+
+.masters_block,
+.btn-group
+{
+    margin-left: 30px;
+}
+.masters_block{
+    margin-top: 40px;
+}
+  
+.channel_license_display{
+    display: flex;
+    flex-flow: row wrap;
+    align-content: space-between;
+}
+.cutTextChannel{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 113px;
+}
+.example-chip-list {
+    width: 100%;
+  }
+
+  ::ng-deep{
+    .tenant-dd{
+        .mat-form-field-flex{
+            border-radius: 20px !important;
+            background-color: var(--white_color);
+        }
+      }
+  }
+
+
+  ::ng-deep .custom-frame {
+    & .mat-checkbox-background, .mat-checkbox-frame {
+      border-radius: 70% !important;
+    }
+  }
+
+

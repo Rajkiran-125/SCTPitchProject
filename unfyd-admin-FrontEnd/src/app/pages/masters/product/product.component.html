@@ -1,0 +1,159 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+<div class="wrapper">
+    <form [formGroup]="form">
+        <legend>Products</legend>
+            <div class="formGroup">
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.type.errors }">
+                            <mat-label>{{labelName?.ProductType}}</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option *ngFor="let data of masters.productType" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf=" f.type.errors">
+                                <ng-container *ngIf="f.type.errors.required">Product Type is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.code.errors }">
+                            <mat-label>{{labelName?.ProductCode}}</mat-label>
+                            <input matInput formControlName="code">
+                            <mat-error *ngIf="f.code.errors">
+                                <ng-container *ngIf="f.code.errors.required">Product Code is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.name.errors }">
+                            <mat-label>{{labelName?.ProductName}}</mat-label>
+                            <input matInput formControlName="name" appTitleCase minlength="3">
+                            <mat-error *ngIf="f.name.errors">
+                                <ng-container *ngIf="f.name.errors.required">Product Name is required
+                                </ng-container>
+                                <ng-container *ngIf="f.name.errors.minlength">{{minMessage}}
+                                </ng-container>
+                                <ng-container *ngIf="f.name.errors.maxlength"> 
+                                    {{masters.MaxLengthMessage1}}
+                               </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ProductDescription}}</mat-label>
+                            <input matInput formControlName="descp" appTitleCase maxlength="100">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.Size}}</mat-label>
+                            <input matInput formControlName="size">
+                        </mat-form-field>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.maxqty.errors }">
+                            <mat-label>{{labelName?.MaxQty}}</mat-label>
+                            <input matInput formControlName="maxqty">
+                            <mat-error *ngIf="f.maxqty.errors">
+                                <ng-container *ngIf="f.maxqty.errors.pattern">Max Qty is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.maxqty.errors.required">Max Qty is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.minqty.errors }">
+                            <mat-label>{{labelName?.MinQty}}</mat-label>
+                            <input matInput formControlName="minqty">
+                            <mat-error *ngIf="f.minqty.errors">
+                                <ng-container *ngIf="f.minqty.errors.pattern">Min Qty is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.minqty.errors.required">Min Qty is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ProductCategory}}</mat-label>
+                            <input matInput formControlName="category" appTitleCase>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.rate.errors }">
+                            <mat-label>{{labelName?.Rate}}</mat-label>
+                            <input matInput formControlName="rate">
+                            <mat-error *ngIf="f.rate.errors">
+                                <ng-container *ngIf="f.rate.errors.pattern">Rate is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.rate.errors.required">Rate is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.gst.errors }">
+                            <mat-label>{{labelName?.GST}}</mat-label>
+                            <mat-select formControlName="gst">
+                                <mat-option *ngFor="let data of ddgst;let i=index" [value]="ddgst[i]['HSNCode']">{{ddgst[i]['GST']}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.gst.errors">
+                                <ng-container *ngIf="f.gst.errors.pattern">GST is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.gst.errors.required">GST is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.center.errors }">
+                            <mat-label>{{labelName?.Center}}</mat-label>
+                            <mat-select formControlName="center">
+                                <mat-option *ngFor="let data of ddcenterdata;let i=index" [value]="ddcenterdata[i]['Product Center Code']">{{ddcenterdata[i]['Product Center Code']}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.center.errors">
+                                <ng-container *ngIf="f.center.errors.required">Center is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="check-box">
+                            <div class="checkbox">
+                                <mat-checkbox color="primary" formControlName="status">{{labelName?.Status}}
+                                </mat-checkbox>                        
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="btn-group" *ngIf="config?.Update">
+              
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit()" type="button">Save</button>
+            </div>
+    </form>
+</div>
+</div>

@@ -1,0 +1,85 @@
+::ng-deep{
+    .mat-select-panel{
+      width: 100% !important;
+      position: absolute !important;
+    }
+    .two{
+      .mat-filter {
+        border-bottom: 1px solid grey;
+        border-radius: 0;
+        box-shadow: none;
+        box-sizing: border-box;
+        font-size: inherit;
+        padding: 10px !important;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    }
+}
+.skillmap {
+  //margin-left: 25px !important;
+}
+.skillmap::ng-deep .mat-select-arrow {
+  margin-right: 5px !important;
+}
+.dropdownButton{
+  border: 1px solid #EAEAEA !important;
+  border-radius: 0px 5px 5px 0px !important;
+  line-height: 40px !important;
+  box-shadow: unset !important;
+  height: calc(100% - 16px);
+}
+.customdd::ng-deep{
+  .mat-form-field{
+    .mat-form-field-wrapper{
+      .mat-form-field-flex{
+        .mat-form-field-infix{
+          border-top: 14px solid transparent !important;
+
+          .mat-select-arrow-wrapper{
+            height: 15px !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+::ng-deep{
+  .dropdownButtonField{
+    .mat-form-field-flex{
+      border-right: 0;
+      border-top-right-radius: 0px !important;
+      border-bottom-right-radius: 0px !important;
+     // height: 39px;
+  }
+  } 
+
+  .masters_block{
+    margin-top: 40px;
+    margin-left: 30px;
+  }
+  .btn-group{
+    margin-left: 30px;
+ }
+}
+
+ 
+@media screen and (min-width:768px) and (max-width:991px){
+  .wrapper{
+    padding: 10px 20px;
+
+    .skillmap {
+      margin-left: 0px !important;
+    }
+  }
+
+  ::ng-deep{
+    .mat-form-field-infix{
+      width: 75px !important;
+    }
+  }
+}

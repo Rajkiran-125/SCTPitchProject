@@ -1,0 +1,134 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <form [formGroup]="form">
+      <legend>Finance</legend>
+      <div class="formGroup">
+        <div class="row">
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ApplicantID.errors }">
+              <mat-label>{{labelName?.ApplicantID}}</mat-label>
+              <input readonly matInput formControlName="ApplicantID" appTitleCase />
+              <mat-error *ngIf="f.ApplicantID.errors">
+                <ng-container *ngIf="f.ApplicantID.errors.required">Applicant ID is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+         
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.HawkerFirstName.errors }">
+              <mat-label>{{labelName?.FirstName}}</mat-label>
+              <input matInput readonly formControlName="HawkerFirstName" minlength="3" appTitleCase />
+              <mat-error *ngIf="f.HawkerFirstName.errors">
+                <ng-container *ngIf="f.HawkerFirstName.errors.pattern">Please enter alphabets only
+                </ng-container>
+                <ng-container *ngIf="f.HawkerFirstName.errors.minlength">
+                  {{minMessage}}
+                </ng-container>
+                <ng-container *ngIf="f.HawkerFirstName.errors.maxlength">
+                  {{maxMessage}}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.HawkerMiddleName.errors }">
+              <mat-label>{{labelName?.MiddleName}}</mat-label>
+              <input matInput readonly formControlName="HawkerMiddleName" minlength="3" appTitleCase />
+              <mat-error *ngIf="f.HawkerMiddleName.errors">
+                <ng-container *ngIf="f.HawkerMiddleName.errors.pattern">Please enter alphabets only
+                </ng-container>
+                <ng-container *ngIf="f.HawkerMiddleName.errors.minlength">
+                  {{minMessage}}
+                </ng-container>
+                <ng-container *ngIf="f.HawkerMiddleName.errors.maxlength">
+                  {{maxMessage}}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.HawkerLastName.errors }">
+              <mat-label>{{labelName?.LastName}}</mat-label>
+              <input matInput readonly formControlName="HawkerLastName" minlength="3" appTitleCase />
+              <mat-error *ngIf="f.HawkerLastName.errors">
+                <ng-container *ngIf="f.HawkerLastName.errors.pattern">Please enter alphabets only
+                </ng-container>
+                <ng-container *ngIf="f.HawkerLastName.errors.minlength">
+                  {{minMessage}}
+                </ng-container>
+                <ng-container *ngIf="f.HawkerLastName.errors.maxlength">
+                  {{maxMessage}}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.FeeType.errors }">
+              <mat-label>{{labelName?.FeeType}}</mat-label>
+              <input matInput formControlName="FeeType" appTitleCase />
+              <mat-error *ngIf="f.FeeType.errors">
+                <ng-container *ngIf="f.FeeType.errors.required">Fee Type is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.DueFor}}</mat-label>
+            <input matInput formControlName="DueFor" appTitleCase />
+          </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.AmountPayable}}</mat-label>
+              <input matInput formControlName="AmountToBePaid" appTitleCase />
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.ReferenceNumber}}</mat-label>
+              <input matInput formControlName="TransactionRefNo" appTitleCase />
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.TransactionDate}}</mat-label>
+              <input (focus)="transactionDate.open()" (click)="transactionDate.open()" readonly
+                formControlName="TransactionDateTime" type="text" [matDatepicker]="transactionDate" [max]="newDate"
+                matInput />
+              <mat-datepicker-toggle matSuffix [for]="transactionDate"></mat-datepicker-toggle>
+              <mat-datepicker #transactionDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.ReceivedBy}}</mat-label>
+              <input matInput formControlName="PaymentReceivedBy" />
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.Mode}}</mat-label>
+              <mat-select formControlName="PaymentMode">
+                <mat-option *ngFor="let data of masters.paymentMode" [value]="data">{{data}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group" *ngIf="config?.Update">
+        <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+        <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+        <button *ngIf="!reset" class="btn" mat-flat-button color="primary" (click)="submit()" type="button">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="Container scrollbar">
+    <ng-container>
+        <app-filter [type]="type" [tabValue]="tabValue" class="mobileFilter" [pitchTable]="true">
+
+        </app-filter>
+    </ng-container>
+    <div class="main-card">
+        <div class="offer-cart" *ngFor="let tData of tabValue">
+            <div class="title">
+                <h3>{{tData['Name Space']}}</h3>
+                <div>
+                    <button><mat-icon>visibility</mat-icon></button>
+                    <button><mat-icon>edit</mat-icon></button>
+                </div>
+            </div>
+            <img src="{{tData['Message Header value']}}" height="200px" width="200px" alt="Template Image">
+            <div class="desc">
+                <button>
+                    <h4>{{tData.Footer}}</h4>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row">
+    <div class="col-1 backKey" style="">
+      <mat-icon class="cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+    </div>
+    <div class="col-10">
+      <span class="billsHeading">My Grievances</span>
+      <app-loader *ngIf="loader"></app-loader>
+      <div class="" *ngIf="!loader">
+              <div class="row bg-white font-weight-bold border-15px d-flex justify-content-between p-4 changetoStart" *ngFor="let item of myGrievances">
+                <span class=" largeFont ">{{item.ComplaintSubject | titlecase}}</span>
+                <span  class="text-muted" >{{item.ComplaintDescription | titlecase}}</span>
+                <span class="largeFont" [ngClass]="item.Status == 'Pending'?'red': item.Status == 'Resolved'?'green':''  ">{{item.Status | titlecase}}</span>
+              </div>
+      </div>
+    </div>
+    <div class="col-1"></div>
+  </div>
+</div>

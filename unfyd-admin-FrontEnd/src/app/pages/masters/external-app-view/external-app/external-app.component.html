@@ -1,0 +1,157 @@
+<!-- <p>external-app works!</p> -->
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+
+    <div class="wrapper">
+
+          <div class="d-flex justify-content-end">
+            <span class="icon-rejected" (click)="back()"></span>
+          </div>
+
+        <form [formGroup]="form" *ngIf="!loader">
+
+            <div class="row">
+
+                <div class="col-1 ">
+                    <mat-icon class="cursorPointer gray backarrow" (click)="back()">keyboard_backspace</mat-icon>
+                </div>
+
+                <div class="col-10 pl-0">
+
+                    <legend class="primary-color font-weight-bold size">{{ID == null ? labelName.AddNewApp: labelName.UpdateApp}}</legend>
+
+
+                    <div class="formGroup mt-3 slaAccordion">
+
+                        <div class="row">
+
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName.AppName}}</mat-label>
+                                    <input matInput formControlName="AppName">
+                                    <mat-error *ngIf="f.AppName?.errors">
+                                        <ng-container *ngIf="f.AppName?.errors?.required">{{labelName.AppName}} is required.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.AppName?.errors?.pattern">{{labelName.AppName}} is invalid.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.AppName?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.AppName?.errors?.checknull1">Must be at least 3 characters long.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName.Description}}</mat-label>
+                                    <input matInput formControlName="Description" maxlength="500">
+                                    <mat-error *ngIf="f.Description?.errors">
+                                        <ng-container *ngIf="f.Description?.errors?.pattern">{{labelName.Description}} is invalid.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Description?.errors?.maxlength">
+                                            Cannot be beyond 500 characters.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Description?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                        </ng-container>
+                                    </mat-error>
+                                    
+                                    <mat-hint *ngIf="f.Description?.value?.length == 500" class="mat-error" style="margin-left: 1px;font-size: 10px;color: #d92e2e;">Cannot be beyond 500 characters.</mat-hint>
+
+                                </mat-form-field>
+                             
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <mat-accordion class="" style="width: 83%; padding: 15px;">
+
+                                <mat-expansion-panel #panel1 class="expansionPanelBorder mb-3">
+
+                                    <mat-expansion-panel-header>
+
+                                        <mat-panel-title>{{labelName.SSO}}</mat-panel-title>
+
+                                        <mat-slide-toggle (change)="toggleStatusChanged($event)" color="primary" class="toggleBtn" [checked]="!isFormDisabled"></mat-slide-toggle>
+
+                                    </mat-expansion-panel-header>
+
+                                    <form [formGroup]="form">
+
+                                        <div class="row ServiceLevelAgreementDetails">
+                                            <div class="col-12">
+                                                <app-api-module  (formvalue)="formvalue($event)" [control]="item" [module]="'externalApp'" [disabled]="isFormDisabled"
+                                                [formControls]="returnControlLists()" [formControlsList]="returnControlDropdown()"></app-api-module>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </mat-expansion-panel>
+
+                                <mat-expansion-panel  #panel1 class="expansionPanelBorder mb-3">
+
+                                    <mat-expansion-panel-header>
+
+                                        <mat-panel-title>{{labelName.CustomerInfoPopOut}}</mat-panel-title>
+
+                                        <mat-slide-toggle (change)="toggleStatusChanged2($event)" color="primary" class="toggleBtn" [checked]="!isFormDisabled2"></mat-slide-toggle>
+
+
+                                    </mat-expansion-panel-header>
+                                    
+                                    <form [formGroup]="form">
+
+                                        <div class="row ServiceLevelAgreementDetails">
+                                            <div class="col-12">
+                                                <app-api-module (formvalue)="formval2($event)" [control]="item2" [module]="'externalApp'" [disabled]="isFormDisabled2"
+                                                [formControls]="returnControlLists()" [formControlsList]="returnControlDropdown()"></app-api-module>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </mat-expansion-panel>
+
+                                <mat-expansion-panel  #panel1 class="expansionPanelBorder mb-3">
+
+                                    <mat-expansion-panel-header>
+
+                                        <mat-panel-title>{{labelName.Logout}}</mat-panel-title>
+
+                                        <mat-slide-toggle (change)="toggleStatusChanged3($event)" color="primary" class="toggleBtn" [checked]="!isFormDisabled3"></mat-slide-toggle>
+
+
+                                    </mat-expansion-panel-header>
+
+                                    <form [formGroup]="form">
+
+                                        <div class="row ServiceLevelAgreementDetails">
+                                            <div class="col-12">
+                                                <app-api-module  (formvalue)="formval3($event)" [control]="item3" [module]="'externalApp'" [disabled]="isFormDisabled3"
+                                                [formControls]="returnControlLists()" [formControlsList]="returnControlDropdown()"></app-api-module>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </mat-expansion-panel>
+
+                            </mat-accordion>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <!-- <button  class="btn btn-gray" (click)="back()" mat-flat-button>{{labelName.Cancel}}</button> -->
+                        <button *ngIf ="ID == null" mat-flat-button  class="btn btn-gray" type="Reset" (click)="resetfunc()">{{labelName.Reset}}</button>
+                        <button *ngIf ="ID == null" class="btn outline" (click)="submit('saveaddnew')"  mat-stroked-button color="primary">{{labelName.SaveAddNew}}</button>
+                        <button class="btn" mat-flat-button color="primary" type="button" (click)="submit('add')">{{ID == null? labelName.Save : labelName.Update}}</button>
+                      </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,141 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper py-4 mt-3">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected"(click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+        <div class="row ">
+          <div class="col-12">
+            <span class="d-flex backArrow">
+              <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+              <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.FacebookChat}}</legend>
+            </span>
+            <div class="formGroup">
+              <div class="masters_block">
+                <app-steps [steps]="facebookMessengerConfigurationsteps" [moduletype]="'facebook-messenger'" [id]="path"
+                [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                <div class="row paddingX5">
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.DBName}}</mat-label>
+                      <input matInput formControlName="DBName" />
+                      <mat-error *ngIf="f.DBName.errors">
+                        <ng-container *ngIf="f.DBName?.errors?.checknull">Whitespace not allowed
+                        </ng-container>
+                        <ng-container *ngIf="f.DBName?.errors?.required">{{labelName?.DBName}} is required
+                        </ng-container>
+                        <ng-container *ngIf="f.DBName?.errors?.pattern">{{labelName?.DBName}} is invalid
+                        </ng-container>
+                        <ng-container *ngIf="f.DBName?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.HostName}}</mat-label>
+                      <input matInput formControlName="HostName" />
+                      <mat-error *ngIf="f.HostName.errors">
+                        <ng-container *ngIf="f.HostName?.errors?.checknull">Whitespace not allowed
+                        </ng-container>
+                        <ng-container *ngIf="f.HostName?.errors?.required">{{labelName?.HostName}} is required
+                        </ng-container>
+                        <ng-container *ngIf="f.HostName?.errors?.pattern">{{labelName?.HostName}} is invalid
+                        </ng-container>
+                        <ng-container *ngIf="f.HostName?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.IP}}</mat-label>
+                      <input matInput formControlName="IP" />
+                      <mat-error *ngIf="f.IP.errors">
+                        <ng-container *ngIf="f.IP?.errors?.checknull">Whitespace not allowed
+                        </ng-container>
+                        <ng-container *ngIf="f.IP?.errors?.required">{{labelName?.IP}} is required
+                        </ng-container>
+                        <ng-container *ngIf="f.IP?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                        <ng-container *ngIf="f.IP.errors.pattern">{{labelName?.IP}} is invalid
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.PortNo}}</mat-label>
+                      <input matInput formControlName="PortNo" />
+                      <mat-error *ngIf="f.PortNo.errors">
+                        <ng-container *ngIf="f.PortNo?.errors?.checknull">Whitespace not allowed
+                        </ng-container>
+                        <ng-container *ngIf="f.PortNo?.errors?.required">{{labelName?.PortNo}} is required
+                        </ng-container>
+                        <ng-container *ngIf="f.PortNo?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.UserName}}</mat-label>
+                      <input autocomplete="new-username" name="username" matInput formControlName="UserName" />
+                      <mat-error *ngIf="f.UserName.errors">
+                        <ng-container *ngIf="f.UserName?.errors?.checknull">Whitespace not allowed
+                        </ng-container>
+                        <ng-container *ngIf="f.UserName?.errors?.required">{{labelName?.UserName}}  is invalid
+                        </ng-container>
+                        <ng-container *ngIf="f.UserName?.errors?.pattern">{{labelName?.UserName}}  is invalid
+                        </ng-container>
+                        <ng-container *ngIf="f.UserName?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.Password}}</mat-label>
+                      <input autocomplete="new-password" name="password" matInput formControlName="Password" [type]="hide ? 'password' : 'text'" />
+                      <span matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide">
+                        <mat-icon [ngClass]="hide ? 'gray' : ''">{{hide ? 'visibility_off' :
+                          'visibility'}}</mat-icon>
+                      </span>
+                      <mat-error *ngIf="f.Password.errors">
+                        <ng-container *ngIf="f.Password?.errors?.checknull">Whitespace not allowed
+                        </ng-container>
+                        <ng-container *ngIf="f.Password.errors.required">{{labelName?.Password}} is required
+                        </ng-container>
+                        <ng-container *ngIf="f.Password.errors.pattern">{{labelName?.Password}} is invalid
+                          </ng-container>
+                          <ng-container *ngIf="f.Password?.errors?.checknull1">
+                            Must be at least 3 characters long.
+                          </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <div class="btn-group my-3" >
+                <!-- <button  class="btn btn-gray"   (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                  <button *ngIf="(userConfig?.Save)" (click)="saveFacebook('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                  <button  *ngIf=" (userConfig?.Next) " (click)="saveFacebook('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+              </div>
+            </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

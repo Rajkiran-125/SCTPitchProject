@@ -1,0 +1,66 @@
+.channel-list{
+    .row{
+        .remove{
+            color: var(--maroonColor);
+            margin-top: 9px;
+        }
+    }
+    .two{
+        .mat-filter {
+          border-bottom: 1px solid grey;
+          border-radius: 0;
+          box-shadow: none;
+          box-sizing: border-box;
+          font-size: inherit;
+          padding: 10px !important;
+          position: -webkit-sticky;
+          position: sticky;
+          top: 0;
+          z-index: 100;
+      }
+      }
+      .dropdownButton{
+        border: 1px solid #EAEAEA !important;
+        border-radius: 0px !important;
+        line-height: 35px !important;
+        box-shadow: unset !important;
+        height: calc(100% - 16px) !important;
+      }
+      
+      
+      ::ng-deep{
+        .dropdownButtonField{
+          .mat-form-field-flex{
+            border-right: 0;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important;
+            height: calc(100% - 19px) !important;
+          }
+        } 
+        .customdropdown{
+          .mat-form-field-wrapper{
+            .mat-form-field-flex{
+              padding-top: calc(0.5em - 1.5px) !important;
+
+              .mat-form-field-infix{
+                padding-bottom: calc(0.5em - 1.5px) !important;
+                border-top: 12px solid transparent !important;
+              }
+            }
+          }
+        }
+      }
+}
+
+.masters_block{
+  margin-top: 40px;
+  margin-left: 30px;
+}
+
+@media screen and (min-width:768px) and (max-width:991px) {
+  .wrapper{
+    padding: 20px !important;
+
+    
+  }
+}

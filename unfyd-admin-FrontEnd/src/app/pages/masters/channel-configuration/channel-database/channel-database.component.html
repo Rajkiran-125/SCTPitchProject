@@ -1,0 +1,121 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper py-4 mt-3">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="(userConfig?.Cancel)" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+        <div class="row ">
+          <div class="col-12">
+            <span class="d-flex backArrow">
+              <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+              <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} WhatsApp Account</legend>
+            </span>
+            <div class="formGroup">
+              <div class="masters_block">
+                <app-steps [steps]="channelConfigurationSteps" [moduletype]="'channelConfiguration'" [id]="path"
+                  [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                <div class="top_block"></div>
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.DBName}}</mat-label>
+                      <input matInput formControlName="DB_Name" />
+                      <mat-error *ngIf="w.DB_Name.errors">
+                        <ng-container *ngIf="w.DB_Name?.errors?.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="w.DB_Name?.errors?.required">DB Name is required.
+                        </ng-container>
+                        <ng-container *ngIf="w.DB_Name?.errors?.pattern">DB Name is invalid.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.HostName}}</mat-label>
+                      <input matInput formControlName="Host_Name" />
+                      <mat-error *ngIf="w.Host_Name.errors">
+                        <ng-container *ngIf="w.Host_Name?.errors?.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="w.Host_Name?.errors?.required">Host Name is required.
+                        </ng-container>
+                        <ng-container *ngIf="w.Host_Name?.errors?.pattern">Host Name is invalid.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.IP}}</mat-label>
+                      <input matInput formControlName="IP" />
+                      <mat-error *ngIf="w.IP.errors">
+                        <ng-container *ngIf="w.IP?.errors?.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="w.IP?.errors?.required">IP is required.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.PortNo}}</mat-label>
+                      <input matInput formControlName="Port_No" />
+                      <mat-error *ngIf="w.Port_No.errors">
+                        <ng-container *ngIf="w.Port_No?.errors?.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="w.Port_No?.errors?.required">Port No is required.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.UserName}}</mat-label>
+                      <input autocomplete="disabled" matInput formControlName="DB_Username" />
+                      <mat-error *ngIf="w.DB_Username.errors">
+                        <ng-container *ngIf="w.DB_Username?.errors?.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="w.DB_Username?.errors?.required">Username Name is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="w.DB_Username?.errors?.pattern">Username Name is invalid.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelName?.Password}}</mat-label>
+                      <input matInput formControlName="DB_Password" autocomplete="disabled" [type]="hide ? 'password' : 'text'" />
+                      <span matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide">
+                        <mat-icon [ngClass]="hide ? 'gray' : ''">{{hide ? 'visibility_off' :
+                          'visibility'}}</mat-icon>
+                      </span>
+                      <mat-error *ngIf="w.DB_Password.errors">
+                        <ng-container *ngIf="w.DB_Password?.errors?.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="w.DB_Password.errors.required">{{labelName?.Password}} is required.
+                        </ng-container>
+                        <ng-container *ngIf="w.DB_Password.errors.pattern">{{labelName?.Password}} is invalid.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+
+                </div>
+              </div>
+              <div class="btn-group my-3" >
+                <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                  <button *ngIf="(userConfig?.Save)" (click)="savewhatsapp('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                  <button  *ngIf=" (userConfig?.Next) " (click)="savewhatsapp('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+              </div>
+            </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

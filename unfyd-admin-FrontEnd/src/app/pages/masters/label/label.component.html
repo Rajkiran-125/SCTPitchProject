@@ -1,0 +1,228 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend>Label</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Category</mat-label>
+                            <mat-select (selectionChange)=" getSubCategory($event.value); getModule($event.value)
+                              " formControlName="Category">
+                              <mat-option *ngFor="let data of categories" [value]="data.ModuleGroupping">
+                                {{ data.ModuleGroupping }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Subcategory</mat-label>
+                            <mat-select (selectionChange)="getModule($event.value)" formControlName="Subcategory"
+                             >
+                             [disabled]="subcategory.length == 0"
+                              <mat-option *ngFor="let data of subcategory" [value]="data.SubModuleGroupping">
+                                {{ data.SubModuleGroupping }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ModuleName.errors }">
+                            <mat-label>Module Name</mat-label>
+                            <mat-select formControlName="ModuleName">
+                                <mat-option *ngFor="let data of modules" [value]="data.Module">
+                                    {{data.Module}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.ModuleName.errors">
+                                <ng-container *ngIf="f.ModuleName.errors.required">Module Name is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                    <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ColumnName.errors }">
+
+                            <mat-label>Column Name</mat-label>
+                            <input matInput formControlName="ColumnName" maxlength="100">
+                            <mat-error *ngIf=" f.ColumnName.errors">
+
+                                <ng-container *ngIf="f.ColumnName.errors.pattern">Column Name is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.ColumnName.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.LabelName.errors }">
+
+                            <mat-label>1Label Name</mat-label>
+                            <input matInput formControlName="LabelName" >
+                            <mat-error *ngIf=" f.LabelName.errors">
+                                <ng-container *ngIf="f.LabelName.errors.required">Label Name is required
+                                </ng-container>
+                                <ng-container *ngIf="f.LabelName.errors.pattern">Label Name is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.LabelName.errors.maxlength">
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Title.errors }">
+
+                            <mat-label>Title</mat-label>
+                            <input matInput formControlName="Title" appTitleCase>
+                            <mat-error *ngIf=" f.Title.errors">
+
+                                <ng-container *ngIf="f.Title.errors.pattern">Title is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.Title.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.Language.errors }">
+                            <mat-label>Language</mat-label>
+                            <mat-select formControlName="Language" [disabled]="reset">
+                                <mat-option *ngFor="let data of languageType" [value]="data.LanguageCode">
+                                    {{data.Language}}
+                                </mat-option>
+
+                            </mat-select>
+                            <mat-error *ngIf=" f.Language.errors">
+                                <ng-container *ngIf="f.Language.errors.required">Language  is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Key.errors }">
+                            <mat-label>Key</mat-label>
+                            <input matInput formControlName="Key">
+                            <mat-error *ngIf=" f.Key.errors">
+                                <ng-container *ngIf="f.Key.errors.required">Key is required
+                                </ng-container>
+                                <ng-container *ngIf="f.Key.errors.pattern">Key is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.Key.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ValidationMessage.errors }">
+
+                            <mat-label>Validation</mat-label>
+                            <input matInput formControlName="ValidationMessage" maxlength="100" appTitleCase>
+                            <mat-error *ngIf=" f.ValidationMessage.errors">
+
+                                <ng-container *ngIf="f.ValidationMessage.errors.pattern">Validation Message is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.ValidationMessage.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="IsVisible">
+                                IS Visible </mat-checkbox>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Insert.errors }">
+
+                            <mat-label>Insert Error Message</mat-label>
+                            <input matInput formControlName="Insert" maxlength="100" appTitleCase>
+                            <mat-error *ngIf=" f.Insert.errors">
+
+                                <ng-container *ngIf="f.Insert.errors.pattern">Error Message Value  is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.Insert.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Update.errors }">
+
+                            <mat-label>Update Error Message</mat-label>
+                            <input matInput formControlName="Update" maxlength="100" appTitleCase>
+                            <mat-error *ngIf=" f.Update.errors">
+
+                                <ng-container *ngIf="f.Update.errors.pattern">Error Message  is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.Update.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Select.errors }">
+
+                            <mat-label>Select Error Message</mat-label>
+                            <input matInput formControlName="Select" maxlength="100" appTitleCase>
+                            <mat-error *ngIf=" f.Select.errors">
+
+                                <ng-container *ngIf="f.Select.errors.pattern">Error Message Value is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.Select.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Delete.errors }">
+
+                            <mat-label>Delete Error Message</mat-label>
+                            <input matInput formControlName="Delete" maxlength="100" appTitleCase>
+                            <mat-error *ngIf=" f.Delete.errors">
+                                <ng-container *ngIf="f.Delete.errors.pattern">Error Message is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.Delete.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+                <div class="btn-group" >
+                    <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                    <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                    <button class="btn" (click)="submit()" mat-flat-button color="primary" type="submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

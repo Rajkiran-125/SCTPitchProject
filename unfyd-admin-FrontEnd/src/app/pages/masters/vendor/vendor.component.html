@@ -1,0 +1,242 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend>Vendor</legend>
+                <div class="formGroup">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.code.errors }">
+                                <mat-label>{{labelName?.VendorCode}}</mat-label>                               
+                                <mat-select formControlName="code">
+                                    <mat-option *ngFor="let data of masters.vendorCode" [value]="data">{{data}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.name.errors }">
+                                <mat-label>{{labelName?.VendorName}}</mat-label>
+                                <input matInput formControlName="name" appTitleCase>
+                                <mat-error *ngIf="submittedForm && f.name.errors">
+                                    <ng-container *ngIf="f.name.errors.required">Vendor name is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.name.errors.pattern">Vendor name is invalid
+                                    </ng-container>
+                                    <ng-container *ngIf="f.name.errors.maxlength"> 
+                                        {{masters.MaxLengthMessage1}}
+                                   </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.mobile.errors }">
+                                <mat-label>{{labelName?.MobileNumber}}</mat-label>
+                                <input  maxlength="10" matInput formControlName="mobile">
+                                <mat-error *ngIf="submittedForm && f.mobile.errors">
+                                    <ng-container *ngIf="f.mobile.errors.required">Mobile no. is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.mobile.errors.pattern">Mobile no. is invalid</ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.LandlineNumber}}</mat-label>
+                                <input matInput formControlName="landline">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.emailid.errors }">
+                                <mat-label>{{labelName?.EmailId}} </mat-label>
+                                <input matInput formControlName="emailid">
+                                <mat-error *ngIf="submittedForm && f.emailid.errors">
+                                    <ng-container *ngIf="f.emailid.errors.pattern">Email ID is invalid
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.Website}}</mat-label>
+                                <input matInput formControlName="website">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.HousenoFlatnoBuildingname}}</mat-label>
+                                <input matInput formControlName="line1" appTitleCase>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.AreaLocality}}</mat-label>
+                                <input matInput formControlName="line1" appTitleCase>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.CityVillageWardMunicipality}}</mat-label>
+                                <input matInput formControlName="hours" appTitleCase>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.Country}}</mat-label>
+                                <mat-select
+                                formControlName="country"
+                                (selectionChange)="getStates($event.value)"
+                               
+                                #select>
+                                <mat-option *ngFor="let data of countrylist" [value]="data.CountryID"
+                                    >{{ data.CountryName }}
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.State}}</mat-label>
+                                <mat-select
+                                formControlName="state"
+                                (selectionChange)="getDistrict($event.value)"
+                               
+                                #select2>
+                             <mat-select-filter *ngIf="select2.focused" [placeholder]="'Filter'"
+                              [displayMember]="'StateName'" [array]="states"
+                             (filteredReturn)="filteredstates =$event"></mat-select-filter>
+                             <mat-option *ngFor="let data of filteredstates" [value]="data.StateID"
+                             >{{ data.StateName }}
+                         </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.District}}</mat-label>
+                            <mat-select formControlName="district" disableOptionCentering #select3 (selectionChange)="getZipcodes($event.value)">
+                                <mat-select-filter *ngIf="select3.focused" [placeholder]="'Filter'" [displayMember]="'Districtname'" [array]="district"
+                             (filteredReturn)="filtereddistrict =$event"></mat-select-filter>
+                                <mat-option *ngFor="let data of filtereddistrict;" [value]="data.DistrictId">{{data.Districtname}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.PinCode}}</mat-label>
+                                <mat-select formControlName="pin" disableOptionCentering #select>
+                                    <mat-select-filter [placeholder]="'Filter'" [displayMember]="'Pincode'" [array]="zipcodes"
+                                    (filteredReturn)="filtereddzipcodes =$event"></mat-select-filter>
+                                    <mat-option *ngFor="let data of filtereddzipcodes;" [value]="data.Pincode">{{data.Pincode}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ProductCategory}}</mat-label>
+                            <mat-select formControlName="category" disableOptionCentering>
+                                <mat-option *ngFor="let data of masters.ProductCategory;" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.bankaccountdetails.errors }">
+                                <mat-label>{{labelName?.BankAccountDetails}}</mat-label>
+                                <input matInput formControlName="bankaccountdetails" appTitleCase>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.gstregistrationno.errors }">
+                                <mat-label>{{labelName?.GSTRegistrationNo}}</mat-label>
+                                <input matInput formControlName="gstregistrationno">
+                                <mat-error *ngIf="submittedForm && f.gstregistrationno.errors">
+                                    <ng-container *ngIf="f.gstregistrationno.errors.required">GST no. is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.gstregistrationno.errors.pattern">GST no. is invalid</ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                       
+                    </div>  
+                    
+                    
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.pan.errors }">
+                                <mat-label>{{labelName?.PAN}}</mat-label>
+                                <input matInput formControlName="pan">
+                                <mat-error *ngIf="submittedForm && f.pan.errors">
+                                    <ng-container *ngIf="f.pan.errors.required">PAN no. is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.pan.errors.pattern">PAN no. is invalid</ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" >
+                                <mat-label>{{labelName?.ContractStartDate}}</mat-label>
+                                <input (focus)="startDate.open()" (click)="startDate.open()" readonly formControlName="contractstartdate" type="text"
+                                    [matDatepicker]="startDate" [max]="startingDate" matInput>
+                                <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                                <mat-datepicker #startDate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" >
+                                <mat-label>{{labelName?.ContractEndDate}}</mat-label>
+                                <input (focus)="endDate.open()" (click)="endDate.open()" readonly formControlName="contractenddate" type="text"
+                                    [matDatepicker]="endDate"  matInput>
+                                <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                                <mat-datepicker #endDate></mat-datepicker>
+                            </mat-form-field>
+                            </div>
+
+                            
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill" >
+                                    <mat-label>{{labelName?.VendorEmpanelmentStatus}}</mat-label>
+                                    <mat-select formControlName="vendorempanelmentstatus" disableOptionCentering>
+                                        <mat-option *ngFor="let data of masters.vendorempanelmentstatus;" [value]="data">{{data}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-12">
+                                 
+                                    <form [formGroup] = "uploadForm" (ngSubmit)="submitDocuments()">      
+                                        <label for="documentProof" class="imgUpload">
+                                            <div class="title" >
+                                                <mat-icon>upload</mat-icon>
+                                                <span>Upload Documents</span>
+                                            </div>
+                                            <input id="documentProof" type="file"   name="uploaddocuments"  
+                                         (change)="onFileSelect($event)">
+                                            <img [src]="addressProofSrc" *ngIf="addressProofSrc">
+                                        </label>
+                                        <div class="updateDown">
+                                          <button class="btn btn-gray" mat-flat-button type="submit">Upload</button>
+                                        </div>
+                                      </form>
+                                </div>
+                            </div>
+                </div>
+                <div class="btn-group"  *ngIf="config?.Update">
+                    <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                    <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                    <button class="btn" mat-flat-button color="primary" (click)="submit('save')"  type="button">Save</button>
+                </div>
+        </form>
+    </div>
+    </div>

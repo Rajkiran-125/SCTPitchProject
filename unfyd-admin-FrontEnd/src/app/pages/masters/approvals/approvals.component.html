@@ -1,0 +1,114 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper py-5">
+    <div class="row">
+      <div class="col-1 text-center ">
+        <mat-icon class="cursorPointer gray pl-4" (click)="back()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-9">
+        <legend class="size">{{editData?.Category}}</legend>
+        <div class="row mt-3 pl-3" *ngIf="editData?.ModuleName == 'Localization' && (editData?.ActivateType == 'API' || editData?.ActivateType == 'MANUAL')">
+          <div class="col-12 backgroundGrayWithBorder p-4">
+            <div class="row">
+              <div class="col-12 my-2">
+                <div class="row">
+                  <div class="col-12">
+                    <span class="font-weight-bold">Category: </span><span>{{editData?.Category}}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 my-2">
+                <div class="row">
+                  <div class="col-4">
+                    <span class="font-weight-bold">Translation Langauge: </span><span>{{editData?.Language}}</span>
+                  </div>
+                  <div class="col-4">
+                    <span class="font-weight-bold">Requested By: </span><span>{{editData?.RequestedName}}</span>
+                  </div>
+                  <div class="col-4">
+                    <span class="font-weight-bold">Request Date: </span><span>{{editData?.RequestedOn |dateTimeFormat}}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 my-2" *ngIf="editData?.ActivateType == 'API'">
+                <div class="row">
+                  <div class="col-4">
+                    <span class="font-weight-bold">Characters: </span><span>{{editData?.CharactersCount}}</span>
+                  </div>
+                  <div class="col-4">
+                    <span class="font-weight-bold">Total Amount: </span><span>&#36;{{editData?.TotalAmount}}</span>
+                  </div>
+                  <!-- <div class="col-4">
+                    <span class="font-weight-bold">Category: </span><span>Language</span>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+<!-- {{allLabels|json}}
+          {{hasChecked|json}} -->
+          <div class="col-12 px-0 mt-3 px-0" *ngIf="editData?.ActivateType == 'MANUAL'">
+            <div class="dataTableToDisplay">
+              <table>
+                  <thead>
+                      <tr>
+                        <th>
+                          <!-- [disabled]="!data.CHECKBOX && maxNo" -->
+                          <mat-checkbox
+                            [(ngModel)]="allChecked" color="primary"
+                            [indeterminate]="hasChecked.length >0 && !allSelected"
+                            [checked]="hasChecked.length >0 && allSelected"
+                            (change)="bulkCheckboxCheck($event.checked)">
+                          </mat-checkbox>
+                        </th>
+                        <th>ModuleName</th>
+                        <th>Translated</th>
+                        <th>Suggested Text</th>
+                        <th>Approve</th>
+                        <th>Reject</th>
+                        <th>Comments</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item1 of allLabels| paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                      <td>
+                        <mat-checkbox
+                        [(ngModel)]="item1.CHECKBOX" color="primary"
+                        (change)="checkChecks()"></mat-checkbox>
+                      </td>
+                      <td>{{item1.ModuleName}}</td>
+                      <td>{{item1.OldLabelName}}</td>
+                      <td>{{item1.TranslatedLabelName}}</td>
+                      <td><i class="fontSizeTitle icon-thumb_up" (click)="item1.ApprovalStatus = 'Approved'" [ngClass]="item1.ApprovalStatus == 'Approved' ? 'green-color font-weight-bold' : ''"></i></td>
+                      <td><i class="fontSizeTitle icon-thumb_down" (click)="item1.ApprovalStatus = 'Rejected'" [ngClass]="item1.ApprovalStatus == 'Rejected' ? 'red-color font-weight-bold' : ''"></i></td>
+                      <td class="">
+                        <input type="text" placeholder="Add Comment" [(ngModel)]="item1.remark" class="inputInsideTextLeftAlign">
+                        <!-- {{(item1.remark).trim().length}} -->
+                        <mat-hint class="errorMsg" *ngIf="item1.ApprovalStatus == 'Rejected' && item1?.remark && ((item1?.remark).trim()).length === 0">Comment required.</mat-hint>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pagination" *ngIf="allLabels.length>10">
+                <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+          </div>
+
+          <div class="col-12 approvalButtons pl-0 mt-3" *ngIf="editData?.ActivateType == 'MANUAL' && hasChecked.length == 0">
+            <button class="btn outline px-4 mr-3" mat-stroked-button color="primary" (click)="resetLabels()">Reset</button>
+            <button class="btn px-4" mat-flat-button color="primary" [disabled]="isLabelChanged()" (click)="updateManualLabels('update')">Update</button>
+          </div>
+          <div class="col-12 approvalButtons pl-0 mt-3" *ngIf="editData?.ActivateType == 'API' || (editData?.ActivateType == 'MANUAL' && hasChecked.length>0)">
+            <button class="btn reject px-4 mr-3" mat-flat-button (click)="approveReject(false)">{{editData?.ActivateType == 'MANUAL' ? 'Reject Selected':'Reject'}}</button>
+            <button class="btn approve px-4" mat-flat-button (click)="approveReject(true)">{{editData?.ActivateType == 'MANUAL' ? 'Approve Selected':'Approve'}}</button>
+            <!-- <button (click)="translate('ta')">try</button> -->
+          </div>
+        </div>
+      <!-- </div> -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,118 @@
+<app-loader *ngIf="loader"></app-loader>
+
+<div class="inner-container">
+  <div class="wrapper py-5">
+    <div class="row">
+      <div class="col-1 text-center pt-1 pl-5">
+        <mat-icon
+          class="gray cursorPointer"
+          [routerLink]="['/masters/Privilege']"
+          >keyboard_backspace</mat-icon
+        >
+      </div>
+
+      <div class="col-9 pl-0">
+        <div class="row">
+          <div class="col-8">
+            <legend class="hubmaster">{{ summary.ControlName }}</legend>
+          </div>
+          <div class="col-4">
+            <button mat-stroked-button (click)="edithub()" class="addBtn">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-4">
+            <tr>
+              {{ labelName?.Name }}
+            </tr>
+          </div>
+
+          <div class="col-2">
+            <tr>
+              {{ labelName?.Description }}
+            </tr>
+          </div>
+        </div>
+        <div class="row contents">
+          <div class="col-4">
+            <th>
+              {{ summary.ControlName }}
+            </th>
+          </div>
+
+          <div class="col-2">
+            <th>
+              {{ summary.Description }}
+            </th>
+          </div>
+        </div>
+
+        <div class="row background">
+          <div class="col-3">
+            <th>{{ labelName?.Category }}</th>
+          </div>
+          <div class="col-2">
+            <th>{{ labelName?.Subcategory }}</th>
+          </div>
+          <div class="col-2">
+            <th>{{ labelName?.ModuleName }}</th>
+          </div>
+          <div class="col-5 pl-5">
+            <th>{{ labelName?.Actionable }}</th>
+          </div>
+        </div>
+
+        <div class="row tableinfo" *ngFor="let item of tableloop">
+          <div class="col-3 CustomCol pl-5">
+            <tr>
+              {{
+                item.Category
+              }}
+            </tr>
+          </div>
+          <div class="col-2 CustomCol pl-4">
+            <tr>
+              {{
+                item.Subcategory
+              }}
+            </tr>
+          </div>
+          <div class="col-2 CustomCol pl-3 ellipsis" 
+          matTooltip="{{ item.ModuleName }}">
+            <tr>
+              {{
+                item.ModuleName
+              }}
+            </tr>
+          </div>
+          <div
+            class="col-4 CustomCol pl-5 ellipsis"
+            matTooltip="{{ item.Action }}"
+          >
+            <tr>
+              {{
+                item.Action
+              }}
+            </tr>
+          </div>
+          <div class="col-1 CustomCol">
+            <span style="display: flex">
+              <mat-icon
+                class="red-color cursorPointerdelete"
+                (click)="removeItem('')"
+                #tooltip="matTooltip"
+                matTooltip="Delete"
+              >
+                delete</mat-icon
+              >
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,183 @@
+.tile{
+  height: 18vh;
+  color: var(--white_color);
+  background-color: var(--blue);
+  padding: 20px 15px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 5px #0000001a;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s linear;
+  &:hover{
+    transform: scale3d(1.13, 1.2, 1);
+  }
+
+  .row{
+    justify-content: space-between !important;
+    height: 15vh;
+    padding: 8px;
+  }
+
+  .leftSideOfCard{
+    display: flex;
+    align-items: center;
+    width: 16vw;
+
+
+    .mainPlaceHolderValue{
+      position: absolute;
+      top: 0;
+      font-size: var(--content) !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    .displayValue1{
+      font-size: 40px;
+      font-weight: bold;
+    }
+    .displayValue2{
+      font-size: 35px;
+      font-weight: bold;
+    }
+    .placeHolder{
+      position: absolute;
+      bottom: 0;
+      font-size: var(--content);
+      overflow-wrap: anywhere !important;
+    }
+    .placeHolder2{
+
+      font-size: var(--content);
+      overflow-wrap: anywhere  !important;
+    }
+  }
+
+  .rightSide{
+
+    width: 16vw;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    .subPlaceholder3{
+      font-size: var(--content);
+      overflow-wrap: anywhere  !important;
+    }
+    .subPlaceholder2{
+      position: absolute;
+      bottom: 0;
+
+      // right: 20px;
+      font-size: 0.9em;
+      overflow-wrap: anywhere  !important;
+
+
+    }
+
+    .chart{
+      background: #212121 0% 0% no-repeat padding-box;
+      border-radius: 8px;
+      opacity: 0.2;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      //height: 73%;
+    }
+
+    .displayChart{
+      display: flex;
+      justify-content: end;
+      .lineChart{
+        width: 50px !important;
+        height: 43px !important;
+      }
+
+      .lineChart1{
+        width: 50px !important;
+        height: 43px !important;
+
+      }
+      .imgInside{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 0 5px;
+        .dullYellowBackground{
+          background-color: #2121212e;
+          color: var(--white_color);
+          border-radius: 5px;
+          padding: 8px 16px;
+
+        }
+      }
+    }
+  }
+
+  .middleSide{
+    justify-content: flex-start;
+    margin-top: 5px;;
+  }
+  .font11{
+    font-size: 11px !important;
+  }
+
+  }
+
+
+  @media only screen and (max-width: 767px){
+    .tile{
+      display: block !important;
+    }
+  }
+
+  @media only screen and (min-width:768px) and (max-width:991px){
+
+    .tile{
+      width: 44vw !important;
+    }
+  }
+  @media only screen and (min-width:992px) and (max-width:1300px){
+    .tile{
+      .rightSide{
+        .subPlaceholder3{
+          font-size: 0.7em;
+        }
+        .subPlaceholder2{
+          font-size: 0.7em; 
+        }
+      }    
+      }
+  }
+
+
+  @media only screen and (min-width:1300px) and (max-width:1550px){
+    .tile{
+      .leftSideOfCard{
+        .mainPlaceHolderValue{
+          font-size: 0.7em !important;
+        }
+        .displayValue1{
+          font-size: 35px;
+        }
+        .displayValue2{
+          font-size: 30px;
+        }
+        .placeHolder{
+          font-size: 0.7em;
+        }
+        .placeHolder2{
+          font-size: 0.7em;
+        }
+      }
+      .rightSide{
+        .subPlaceholder3{
+          font-size: 0.7em;
+        }
+        .subPlaceholder2{
+          font-size: 0.8em; 
+        }
+      }    
+      }
+  }

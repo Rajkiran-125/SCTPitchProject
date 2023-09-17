@@ -1,0 +1,36 @@
+.hubmaster{
+    // padding-bottom: 50px;
+    color: #053c6d ;
+    font-weight: bold; 
+    font-style:normal;
+    // margin: 0px 0px 40px;
+    font-size: 18px;
+    margin-bottom: 30px;
+    
+}
+.part{
+    margin: 0 0 20px;
+    
+    .singleRow{
+      margin: 0 0 10px;
+      .rowTitle{
+        line-height: 8px;
+        font-size: 10px;
+      }
+      .rowValue{
+        font-size: var(--content_title);
+        .addEllipsis{
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: block;
+          // white-space: nowrap;
+          margin-bottom: 20px;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  .abcd{
+    display: flex;
+  }

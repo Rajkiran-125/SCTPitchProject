@@ -1,0 +1,503 @@
+.WhatsApp{
+    &.logoposition{
+        background-size: 100%;
+    }
+}
+
+.Webchat {
+    //background-image: url('/assets/images/channel_icon/webchaticon.svg');
+    height: 40px;
+    width: 40px;
+}
+// .Webchat{
+//     background-image: url('/assets/images/channel_icon/webchaticon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+
+// .Twitter{
+//     background-image: url('/assets/images/channel_icon/twittertwitsicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .FacebookChat{
+//     background-image: url('/assets/images/channel_icon/facebookicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .Facebook{
+//     background-image: url('/assets/images/channel_icon/facebookicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .Telegram{
+//     background-image: url('/assets/images/channel_icon/twitterDMicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .TwitterDm{
+//     background-image: url('/assets/images/channel_icon/twitterDMicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .Sms{
+//      background-image: url('/assets/images/channel_icon/SMSicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .Voice{
+//      background-image: url('/assets/images/channel_icon/VOICEicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .Crawl{
+//      background-image: url('/assets/images/channel_icon/twitterDMicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .InstagramPost{
+//      background-image: url('/assets/images/channel_icon/instagramPosticon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .InstagramDm{
+//      background-image: url('/assets/images/channel_icon/instagramDmicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .Email{
+//      background-image: url('/assets/images/channel_icon/Emailicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .Video{
+//      background-image: url('/assets/images/channel_icon/twitterDMicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+// .CoBrowse{
+//      background-image: url('/assets/images/channel_icon/twitterDMicon.svg');
+//     height: 40px;
+//     width: 40px;
+// }
+
+.card-layout {
+    .cards {
+        margin-bottom: 20px;
+        background-color: #ffffff;
+        box-shadow: 0px 0px 6px #0000001a;
+        padding: 24px 20px;
+        border: 1px solid #eaeaea;
+        border-radius: 15px;
+        min-height: 157px;
+        width: 205px;
+        height: 157px;
+        align-items: center;
+
+        .more-optn {
+            float: right;
+            position: absolute;
+            top: 14px;
+            right: 88px;
+
+            button {
+                background-color: transparent;
+                border: none;
+
+                i::before {
+                    color: var(--theme_input_color);
+                    opacity: 0.7;
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+
+        .card-data {
+            .title {
+                color: #212121;
+
+                text-align: left;
+                font-style: normal normal bold;
+                width: 108px;
+                height: 22px;
+                letter-spacing: 0px;
+            }
+
+            .sub-data {
+                color: #707070;
+                opacity: 1;
+                font: normal normal normal 12px/16px Nunito Sans;
+                letter-spacing: 0px;
+            }
+
+            .date-time {
+                color: var(--theme_input_color);
+                opacity: 0.7;
+                font-size: 14px;
+                padding: 6px 0px 0px 0px;
+
+                span {
+                    padding-right: 6px;
+                }
+            }
+
+            .status {
+                color: var(--status_red);
+                font-size: 14px;
+                font-weight: 600;
+                padding: 20px 0px 0px 0px;
+            }
+        }
+    }
+}
+
+.logoposition {
+    align-items: center;
+    // width: 80px;
+    // height: 80px;
+    // background-size: cover;
+    width: 50px;
+    height: 50px;
+    background-size: 65%;
+    border-radius: 100%;
+    padding: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: var(--greenColor);
+}
+
+.card {
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 2px #0000001a;
+    padding: 24px 20px 10px;
+    border: 1px solid #eaeaea;
+    border-radius: 15px;
+    min-height: 157px;
+    width: 100%;
+    align-items: center;
+
+    &.card1{
+        padding: 10px 20px 10px;
+    }
+
+    .channelHead {
+        font-size: var(--normal-font);
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 0;
+    }
+    .channelLicense {
+        font-size: var(--small-font);
+        margin: 10px 0;
+        margin-top: 0;
+        padding: 0;
+        color: var(--gray);
+    }
+}
+
+.mainChannelHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .channelHead {
+        font-size: var(--normal-font);
+        margin-top: 20px;
+        margin-bottom: 0;
+        padding: 0;
+    }
+    .channelLicense {
+        font-size: var(--small-font);
+        margin: 10px 0;
+        margin-top: 0;
+        padding: 0;
+    }
+}
+.wtscard {
+    top: 60px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 2px #0000001a;
+    padding: 24px 20px;
+    border: 1px solid #eaeaea;
+    border-radius: 15px;
+    min-height: 157px;
+    width: 312px;
+    height: 250px;
+    align-items: center;
+}
+.card-data {
+    cursor: pointer;
+   
+    .title {
+        color: #212121;
+
+        text-align: left;
+        font-style: normal normal bold;
+        width: 108px;
+        height: 22px;
+        letter-spacing: 0px;
+    }
+
+    .sub-data {
+        color: #707070;
+        opacity: 1;
+        font: normal normal normal 12px/16px Nunito Sans;
+        letter-spacing: 0px;
+    }
+
+    .date-time {
+        color: var(--theme_input_color);
+        opacity: 0.7;
+        font-size: 14px;
+        padding: 6px 0px 0px 0px;
+
+        span {
+            padding-right: 6px;
+        }
+    }
+
+    .status {
+        color: var(--status_red);
+        font-size: 14px;
+        font-weight: 600;
+        padding: 20px 0px 0px 0px;
+    }
+}
+
+.btnposition {
+    border: 0;
+    outline: 0;
+    background: var(--white-color);
+}
+.option1 {
+    background: url("/assets/images/whtsappcolor/whatsapp.svg") center / contain no-repeat;
+    white-space: nowrap;
+}
+.small-font {
+    font-size: var(--medium-font) !important;
+    color: var(--gray_color_70);
+    vertical-align: middle !important;
+    margin-top: 7px;
+}
+
+.option2 {
+    background: url("/assets/images/whtsappcolor/whatsapp\ \(1\).svg") center / contain no-repeat;
+    white-space: nowrap;
+}
+
+.option3 {
+    background: url("/assets/images/whtsappcolor/whatsapp\ \(2\).svg") center / contain no-repeat;
+    white-space: nowrap;
+}
+
+.option4 {
+    background: url("/assets/images/whtsappcolor/whatsapp\ \(3\).svg") center / contain no-repeat;
+    white-space: nowrap;
+}
+
+.option5 {
+    background: url("/assets/images/whtsappcolor/whatsapp\ \(4\).svg") center / contain no-repeat;
+    white-space: nowrap;
+}
+.optional-icon {
+    margin: 0 auto;
+    margin-top: -60px;
+    margin-bottom: 40px;
+}
+.channel-data-content {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--gray_color_80);
+    font-size: var(--medium-font);
+    align-items: center;
+}
+
+.whatsapp-icon1 {
+    width: 60px;
+    height: 60px;
+    background-image: url("/assets/images/whtsappcolor/whatsapp-1.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.whatsapp-icon2 {
+    width: 60px;
+    height: 60px;
+    background-image: url("/assets/images/whtsappcolor/whatsapp-2.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.whatsapp-icon3 {
+    width: 60px;
+    height: 60px;
+    background-image: url("/assets/images/whtsappcolor/whatsapp-3.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.whatsapp-icon4 {
+    width: 60px;
+    height: 60px;
+    background-image: url("/assets/images/whtsappcolor/whatsapp-4.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.addButton {
+    padding: 0;
+    height: 24px;
+    font-size: var(--content) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px !important;
+    border: 1px solid var(--primary_color);
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.addButton0 {
+    padding: 5px 10px;
+    font-size: var(--content);
+    color: var(--primary_color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--primary_color);
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.iconHeader {
+    color: white;
+    margin-top: -5%;
+    font-size: 30px;
+    border: 1px solid var(--gray_color);
+    border-radius: 50%;
+    padding: 13px;
+}
+
+
+.iconHeaderOnCard {
+    // color: white;
+    // position: absolute;
+    // top: -18%;
+    // left: 40%;
+    // font-size: 30px;
+    // border: var(--gray_color);
+    // border-radius: 50%;
+    // padding:13px;
+    margin-top: -10px;
+}
+// .whatsappconHeader{
+//     font-size: 16px;
+//     border: var(--gray_color);
+//     border-radius: 50%;
+//     padding: 0px;
+//     width: 40px;
+//     height: 40px;
+//     display: flex;
+//     align-items: center;
+
+//     &.icon-whatsapp::before{
+//         font-size: 24px;
+//         margin: 0 20%;
+//         color: #ffffff !important;
+//     }
+// }
+.positionAbsolute {
+    position: absolute;
+}
+
+.hsmcount {
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.editIcon {
+    color: var(--gray_color_70);
+}
+.duplicate_copy {
+    width: 20px;
+    height: 20px;
+    display: block;
+    background-image: url("../../../../../assets/images/webchat-admin/copy.svg");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.duplicate {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    display: inline-block;
+    background-image: url("../../../../../assets/images/webchat-admin/duplicate.svg");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.delete {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    display: inline-block;
+    background-image: url("../../../../../assets/images/webchat-admin/delete.svg");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.script-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 150px;
+    display: block;
+    white-space: nowrap;
+    padding-left: 30px;
+}
+.plugin-name {
+    font-weight: bold;
+    font-weight: bold;
+    width: 150px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    margin-left: 50px;
+    margin-top: 10px;
+    font-family: var(--nunito-font);
+
+    &.whatsapp_header{
+        overflow: unset;
+        margin-left: 10px;
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .inner-container {
+        padding: 0px 0px 5px 0px !important;
+
+        .wrapper {
+            padding: 0vh 5vh 0vh !important;
+        }
+    }
+}
+
+@media screen and (min-width:768px) and (max-width:991px) {
+    .inner-container{
+  
+      .wrapper{
+        padding: 10px 35px !important;
+      }
+    }
+}

@@ -1,0 +1,192 @@
+.card-layout {
+    .cards {
+        margin-bottom: 20px;
+        background-color: var(--white_color);
+        box-shadow: 0px 0px 6px #0000001a;
+        padding: 15px;
+        border: var(--border);
+        border-radius: 15px;
+
+        .more-optn {
+            button {
+                background-color: transparent;
+                border: none;
+
+                i::before {
+                    color: var(--theme_input_color);
+                    opacity: 0.7;
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+
+        .card-data {
+            .title {
+                color: #212121;
+
+                text-align: left;
+                font-style: normal normal bold;
+                width: 108px;
+                height: 22px;
+                letter-spacing: 0px;
+            }
+
+            .sub-data {
+                color: #707070;
+                opacity: 1;
+                font: normal normal normal 12px/16px Nunito Sans;
+                letter-spacing: 0px;
+            }
+
+            .date-time {
+                color: var(--theme_input_color);
+                opacity: 0.7;
+                font-size: 14px;
+                padding: 6px 0px 0px 0px;
+
+                span {
+                    padding-right: 6px;
+                }
+            }
+
+            .status {
+                color: var(--status_red);
+                font-size: 14px;
+                font-weight: 600;
+                padding: 20px 0px 0px 0px;
+            }
+        }
+    }
+}
+
+.logoposition {
+    top: 14px;
+    left: 519px;
+    height: 40px;
+    width: 40px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    // background-color: var(--greenColor);
+    &.Webchat {
+        // background-image: url("assets/images/webchat-admin/chat1.svg");
+        background-image: url("../../../../assets/images/channel_icon/webchaticon.svg");
+      }
+}
+
+caption {
+    flex: 1;
+    padding: 0;
+
+    strong,
+    span {
+        display: block;
+    }
+
+    strong {
+        font-weight: bold;
+        font-size: var(--medium-font);
+        color: var(--black_color_80);
+    }
+
+    span {
+        font-size: 12px;
+    }
+}
+
+.color {
+    border: 1px solid #053c6d;
+    border-radius: 5px;
+    background: var(--unnamed-color-ffffff) 0% 0% no-repeat padding-box;
+    color: #053c6d;
+    font-weight: bold;
+}
+caption {
+    flex: 1;
+    padding: 0;
+    strong,
+    span {
+        display: block;
+    }
+    strong {
+        font: normal normal bold 16px/20px Nunito Sans;
+        color: var(--black_color_80);
+        letter-spacing: 0px;
+        opacity: 1;
+    }
+    span {
+        font-size: 12px;
+    }
+}
+
+.dropdown {
+    width: 251px;
+    height: 50px;
+}
+
+.master_heading {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--header);
+    text-align: left;
+    letter-spacing: 0px;
+    margin: 0px 0px 20px;
+    color: var(--primary_color);
+    font-weight: bold;
+}
+
+.allowedChannels {
+    background-color: var(--primary_color_opacity10);
+    border-radius: 50%;
+    padding: 0px 6px;
+    margin: 0 5px 0 0;
+    color: var(--primary_color);
+    font-weight: bold;
+    font-size: var(--content);
+}
+
+.priority {
+    width: 4vw;
+    background: var(--backgroud_color);
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid var(--gray_color_80);
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: var(--content_title);
+    .plusMinusIcon {
+        color: var(--primary_color);
+        cursor: pointer;
+    }
+}
+.priorityText {
+    color: var(--gray);
+    font-size: var(--content_title);
+    margin: 0 5px;
+}
+.size {
+    font-size: 16px !important;
+}
+@media screen and (max-width: 767px){
+    .inner-container{
+      padding: 0px 0px 5px 15px!important; 
+  
+      .wrapper{
+        padding: 0vh 2vh 5vh !important;
+
+        .priority{
+            width: 15vw !important;
+        }
+      }
+    }
+}
+
+@media screen and (min-width:768px) and (max-width:991px) {
+    
+.wrapper{
+    padding: 1vh 2vh 0vh;
+  }
+}

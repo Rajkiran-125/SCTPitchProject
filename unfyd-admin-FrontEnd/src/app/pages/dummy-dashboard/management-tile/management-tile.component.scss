@@ -1,0 +1,153 @@
+.tile{
+  height: 24vh;
+  width: 20vw;
+  color: var(--white_color);
+  background-color: var(--blue);
+  padding: 10px 10px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 5px #0000001a;
+  margin: 5px 10px;
+  transition: all 0.2s linear;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  &:hover{
+    transform: scale3d(1.13, 1.2, 1);
+  }
+
+  .countHeight{
+    height: 9vh;
+    .countData{
+      font-size: 40px;
+    }
+  }
+
+  .subHeading{
+    font-size: var(--content);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mainPlaceHolderHeaderTitle{
+    font-size: var(--content_title);
+  }
+
+  .leftSideOfCard{
+    display: flex;
+    align-items: center;
+    width: 16vw;
+
+
+    .mainPlaceHolderValue{
+      position: absolute;
+      top: 0;
+      font-size: var(--content) !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    .displayValue1{
+      font-size: 40px;
+      font-weight: bold;
+    }
+    .displayValue2{
+      font-size: 35px;
+      font-weight: bold;
+    }
+    .placeHolder{
+      position: absolute;
+      bottom: 0;
+      font-size: var(--content);
+      overflow-wrap: anywhere !important;
+    }
+    .placeHolder2{
+
+      font-size: var(--content);
+      overflow-wrap: anywhere  !important;
+    }
+  }
+
+  .rightSide{
+
+    width: 16vw;
+    display: flex;
+    align-items: baseline;
+    justify-content: right;
+    .subPlaceholder3{
+      font-size: var(--content);
+      overflow-wrap: anywhere  !important;
+    }
+    .subPlaceholder2{
+      position: absolute;
+      bottom: 0;
+
+      right: 20px;
+      font-size: var(--content);
+      overflow-wrap: anywhere  !important;
+
+
+    }
+
+    .chart{
+      background: #212121 0% 0% no-repeat padding-box;
+      border-radius: 8px;
+      opacity: 0.2;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 73%;
+    }
+
+    .displayChart{
+      display: flex;
+      justify-content: end;
+      .lineChart{
+        width: 50px !important;
+        height: 43px !important;
+      }
+
+      .lineChart1{
+        width: 50px !important;
+        height: 43px !important;
+
+      }
+      .imgInside{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 0 5px;
+        .dullYellowBackground{
+          background-color: #2121212e;
+          color: var(--white_color);
+          border-radius: 5px;
+          padding: 8px 16px;
+
+        }
+      }
+    }
+  }
+
+  .middleSide{
+    justify-content: flex-start;
+    margin-top: 5px;;
+  }
+  .font11{
+    font-size: 11px !important;
+  }
+
+  }
+
+
+  @media screen and (max-width: 767px){
+    .tile{
+      display: block !important;
+      width: unset !important;
+    }
+  }
+
+  @media screen and (min-width:768px) and (max-width:991px){
+
+    // .tile{
+    //   width: 44vw !important;
+    // }
+  }

@@ -1,0 +1,486 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper" style="padding-left: 30px;">
+
+    <div class="row my-3">
+      <div class="col-1 text-center arrow">
+        <mat-icon class="gray cursorPointer" [routerLink]="['/masters/channel-configuration/configuration-add-channel/1']">keyboard_backspace
+        </mat-icon>
+      </div>
+
+      <div class="col-11">
+        <div class="row mb-4">
+            <div class="col-lg-1 col-md-2 col-3">
+            <div class=" icon-whatsapp iconHeaderOnCard" [ngStyle]="{'background': common.color[iconColor]}"></div>
+        </div>
+        <div class="col-5">
+            <legend *ngIf = "whatsappvender == 'infobip'"  class="primary-color font-weight-bold fontmargin" >Infobip</legend>
+            <legend *ngIf = "whatsappvender == 'netcore'" class="primary-color font-weight-bold fontmargin" >Netcore</legend>
+            <legend *ngIf = "whatsappvender == 'routemobile'" class="primary-color font-weight-bold fontmargin" >Route Mobile</legend>
+            <legend *ngIf = "whatsappvender == 'gupshup'" class="primary-color font-weight-bold fontmargin">Gupshup</legend>
+            <legend *ngIf = "whatsappvender == 'kaleyra'" class="primary-color font-weight-bold fontmargin" >Kaleyra</legend>
+            <legend *ngIf = "whatsappvender == 'Karix'" class="primary-color font-weight-bold fontmargin" >Karix</legend>
+            <legend *ngIf = "whatsappvender == 'yalochat'" class="primary-color font-weight-bold fontmargin" >YaloChat</legend>
+        </div>
+
+        </div>
+        <div class="wrapper darkWrapper"
+          style="overflow:hidden;    background: white !important;padding: 0px !important;">
+          <div class="custom-tab ">
+            <ul class="nav nav-tabs px-3 pt-2 pb-0" style="background: var(--backgroud_color)">
+              <button mat-stroked-button class="btn-one" (click)="ChannelConfigurationFunc()"
+                [ngStyle]="{'border-bottom': chconfval === true ? '3px solid var(--primary_color)' : 'white' ,'color': chconfval === true ? 'var(--primary_color)' : 'black'}">
+                {{labelName?.AccountConfiguration}}</button>
+                <button mat-stroked-button class="btn-two" (click)="HSMTemplateFunc()"
+                [ngStyle]="{'border-bottom': hsmtempval === true ? '3px solid var(--primary_color)' : 'white' ,'color': hsmtempval === true ? 'var(--primary_color)' : 'black'}">
+                HSMTemplate</button>
+            </ul>
+          </div>
+
+
+                            <div *ngIf = "hsmtempval == true">
+                            <app-hsm-template [inputfilter] = 'hsminput' [ChannelIdInput] = 'local'  [ChannelUniqueCodeInput] = 'uniqueid'></app-hsm-template>
+                            </div>
+
+          <div *ngIf="chconfval">
+            <div class="main-container p-2">
+              <div class="row justify-content-end">
+                <div class="col-3 d-flex justify-content-end iconsForAction">
+                  <mat-icon  *ngIf="userConfig?.Edit" class="mx-2 cursorPointer editIcon" (click)="editPage()">edit</mat-icon>
+                  <mat-icon  *ngIf="userConfig?.Delete" class="d-none red-color mx-2 cursorPointer">delete</mat-icon>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-9 col-md-12 col-12">
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.Details}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.WhatsaAppProvider}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.ChannelSource}}</span>
+                        </div>
+
+                        <div class="col-4">{{labelName?.WhatsAppContactNumber}}</div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.WhatsApp_Provider ? channel?.WhatsApp_Provider : '-'}}</span>
+                        </div>
+                        <div class="col-4">
+                
+                          <span>{{channel?.Channel_Source_Name ? channel?.Channel_Source_Name : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">{{channel?.countrycode}}{{channel?.contactnumber ? channel?.contactnumber : '-'}}</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.VersionNumber}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">{{channel?.Version_Number ? channel?.Version_Number : '-'}}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.WhatsAppProviderAPI}}</span>
+                    </div>
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.SendMessageLength}}</span>
+                        </div>
+                        <div class="col-8">
+                          <span>{{labelName?.SendMessageUrl}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Send_Message_Length ? channel?.Send_Message_Length : '-'}}</span>
+                        </div>
+                        <div class="col-8 addEllipsis">
+                          <span>{{channel?.Send_Message_URL ? channel?.Send_Message_URL : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-12">
+                          <span>{{labelName?.QuickReplyEnable}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-12 addEllipsis">
+                          <span>{{channel?.Enable_Quick_Reply ? channel?.Enable_Quick_Reply : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.QuickReply}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.QuickReplyTitle}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.QuickReplyUrl}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Quick_Reply_Length ? channel?.Quick_Reply_Length : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Quick_Reply_Title_Length ? channel?.Quick_Reply_Title_Length : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Quick_Reply_URL ? channel?.Quick_Reply_URL :'-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-12">
+                          <span>{{labelName?.ListOptionsEnable}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-12 addEllipsis">
+                          <span>{{channel?.Enable_List_Options ? channel?.Enable_List_Options : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.ListOptionsUrl}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.ListOptions}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.List_Options_URL ? channel?.List_Options_URL : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.List_Options_Length ? channel?.List_Options_Length : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-12">
+                          <span>{{labelName?.AuthType}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-12 addEllipsis">
+                          <span>{{channel?.Auth_Type ? channel?.Auth_Type : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <ng-container *ngIf="channel?.Auth_Type == 'basic'">
+                        <div class="row rowTitle">
+                          <div class="col-4">
+                            <span>{{labelName?.BasicAuthToken}}</span>
+                          </div>
+                        </div>
+                        <div class="row rowValue">
+                          <div class="col-4 addEllipsis">
+                            <span>{{channel?.authtoken ? channel?.authtoken : '-'}}</span>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="channel?.Auth_Type == 'tokenBased'">
+                        <div class="row rowTitle">
+                          <div class="col-4">
+                            <span>{{labelName?.TokenURL}}</span>
+                          </div>
+                          <div class="col-4">
+                            <span>{{labelName?.TokenValidityDuration}}</span>
+                          </div>
+                          <div class="col-4">
+                            <span>{{labelName?.TokenTransactionAPI}}</span>
+                          </div>
+                        </div>
+                        <div class="row rowValue">
+                          <div class="col-4 addEllipsis">
+                            <span>{{channel?.Token_URL ? channel?.Token_URL : '-'}}</span>
+                          </div>
+                          <div class="col-4 addEllipsis">
+                            <span>{{channel?.tokenValidityDuration ? channel?.tokenValidityDuration : '-'}}</span>
+                          </div>
+                          <div class="col-4 addEllipsis">
+                            <span>{{channel?.Token_Transaction_API ? channel?.Token_Transaction_API : '-'}}</span>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+
+                    <div class="col-12 singleRow" *ngIf="channel?.Auth_Type == 'tokenBased'">
+                      <ng-container *ngIf="channel.Auth_Type == 'tokenBased'">
+                        <div class="row rowTitle">
+                          <div class="col-4">
+                            <span>{{labelName?.UserName}}</span>
+                          </div>
+                          <div class="col-4">
+                            <span>{{labelName?.Password}}</span>
+                          </div>
+                        </div>
+                        <div class="row rowValue">
+                          <div class="col-4 addEllipsis">
+                            <span>{{channel?.Token_Username ? channel?.Token_Username : '-'}}</span>
+                          </div>
+                          <div class="col-4 addEllipsis">
+                            <span>{{channel?.Token_Password ? channel?.Token_Password : '-'}}</span>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.DataManagementApi}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.SaveIncomingData}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.SaveOutgoingData}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.CreateCustomerAgentSession}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Save_Incoming_Data ? channel?.Save_Incoming_Data : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Save_Outgoing_Data ? channel?.Save_Outgoing_Data : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Create_Customer_Agent_Session ? channel?.Create_Customer_Agent_Session : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.DeleteCustomerAgentSession}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.ValidateCustomerAgentSession}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Delete_Customer_Agent_Session ? channel?.Delete_Customer_Agent_Session : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Validate_Customer_Agent_Session ? channel?.Validate_Customer_Agent_Session : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.MediaDetails}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.MediaDownloadAPI}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.AuthenticationApi}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.StorageLocation}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Media_Download_API ? channel?.Media_Download_API : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Authentication_API ? channel?.Authentication_API : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Storage_Location ? channel?.Storage_Location : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.AutoDownload}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Enable_Auto_Download ? channel?.Enable_Auto_Download : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.Database}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.DBName}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.HostName}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.IP}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.DB_Name ? channel?.DB_Name : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Host_Name ? channel?.Host_Name : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.IP ? channel?.IP : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.PortNo}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.UserName}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.Password}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Port_No ? channel?.Port_No : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.DB_Username ? channel?.DB_Username : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.DB_Password ? channel?.DB_Password : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">{{labelName?.AttributeMapping}}</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.ProfileName}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.MobileNumber}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.Time}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Profile_Name ? channel?.Profile_Name : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Mobile_No ? channel?.Mobile_No : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Time ? channel?.Time : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row part">
+                    <div class="col-12 text-left contentHeader">
+                      <span class="">HSMAPI</span>
+                    </div>
+
+                    <div class="col-12 singleRow">
+                      <div class="row rowTitle">
+                        <div class="col-4">
+                          <span>{{labelName?.SendHSM}}</span>
+                        </div>
+                        <div class="col-4">
+                          <span>{{labelName?.StoreHSMOBMessage}}</span>
+                        </div>
+                      </div>
+                      <div class="row rowValue">
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.Send_HSM ? channel?.Send_HSM : '-'}}</span>
+                        </div>
+                        <div class="col-4 addEllipsis">
+                          <span>{{channel?.storeHSM ? channel?.storeHSM : '-'}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="hsmtempval == true">
+              <app-hsm-template [inputfilter]='hsminput'></app-hsm-template>
+            </div>
+
+
+
+            <div class="formGroup">
+            </div>
+
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>

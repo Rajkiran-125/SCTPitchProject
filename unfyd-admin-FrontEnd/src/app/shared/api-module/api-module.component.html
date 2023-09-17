@@ -1,0 +1,349 @@
+<!-- {{response|json}} -->
+<!-- {{control|json}} -->
+<!-- {{apiChecker.value|json}} -->
+<div [formGroup]="apiChecker">
+    <div class="row">
+        <div class="col-3">
+            <mat-form-field appearance="fill">
+                <mat-label>Method</mat-label>
+                <mat-select formControlName="method"  [disabled]="disabled">
+                    <mat-option *ngFor="let data of method" [value]="data">{{data}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-8">
+            <mat-form-field appearance="fill">
+                <mat-label>API</mat-label>
+                <input matInput formControlName="api"  [attr.disabled]="disabled ? true : null">
+                <mat-error *ngIf="!apiChecker.get('api').valid && apiChecker.get('api').touched">
+                    Name is invalid.
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-1">
+            <mat-icon class="mat-btn blue" (click)="checkApi()"  [attr.disabled]="disabled ? true : null">send</mat-icon>
+        </div>
+    </div>
+    <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTab" (selectedTabChange)="onTabChanged($event);">
+        <mat-tab label="Params">
+            <div formArrayName="params"
+                *ngFor="let item of apiChecker.get('params')['controls']; let i = index; let first = first">
+                <div class="row" [formGroupName]="i">
+                    <div class="col">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Key</mat-label>
+                            <input matInput formControlName="key"  [attr.disabled]="disabled ? true : null">
+                            <mat-error *ngIf="apiChecker.get('params')['controls'][i].get('key').errors?.required">
+                                Age required.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Value</mat-label>
+                            <input matInput formControlName="value"  [attr.disabled]="disabled ? true : null">
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                        <mat-icon class="mat-btn blue" (click)="add('customer_profile_params')" *ngIf="first"
+                            matTooltip="Add" [attr.disabled]="disabled ? true : null">add</mat-icon>
+                        <mat-icon class="mat-btn red" (click)="remove(i, 'customer_profile_params')" *ngIf="!first"
+                            matTooltip="Remove" [attr.disabled]="disabled ? true : null">delete_outline</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Auth">
+            <div class="row" formGroupName="auth">
+                <div class="col-4">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Type</mat-label>
+                        <mat-select formControlName="type" (selectionChange)="authTypeChange($event.value)"  [disabled]="disabled">
+                            <mat-option *ngFor="let data of authType" [value]="data">{{data}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-8">
+                    <ng-container *ngIf="selectedAuthType == authType[1]">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Key</mat-label>
+                            <input matInput formControlName="key"  [attr.disabled]="disabled ? true : null">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Value</mat-label>
+                            <input matInput formControlName="value"  [attr.disabled]="disabled ? true : null">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Add To</mat-label>
+                            <mat-select formControlName="add_to"  [disabled]="disabled">
+                                <mat-option *ngFor="let data of add_to" [value]="data">{{data}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-container *ngIf="selectedAuthType == authType[2]">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Token</mat-label>
+                            <input matInput formControlName="token"  [attr.disabled]="disabled ? true : null">
+                        </mat-form-field>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Headers">
+            <div formArrayName="header"
+                *ngFor="let item of apiChecker.get('header')['controls']; let i = index; let first = first">
+                <div class="row" [formGroupName]="i">
+                    <div class="col">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Key</mat-label>
+                            <input matInput formControlName="key"  [attr.disabled]="disabled ? true : null">
+                            <mat-error *ngIf="apiChecker.get('header')['controls'][i].get('key').errors?.required">
+                                Age required.
+                            </mat-error>
+
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Value</mat-label>
+                            <input matInput formControlName="value"  [attr.disabled]="disabled ? true : null">
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                        <mat-icon class="mat-btn blue" (click)="add('customer_profile_header')" *ngIf="first"
+                            matTooltip="Add" [attr.disabled]="disabled ? true : null">add</mat-icon>
+                        <mat-icon class="mat-btn red" (click)="remove(i, 'customer_profile_header')" *ngIf="!first"
+                            matTooltip="Remove" [attr.disabled]="disabled ? true : null">delete_outline</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Body" *ngIf="apiChecker.value.type !== 'Dynamic'">
+            <mat-form-field appearance="fill">
+                <mat-label>Body</mat-label>
+                <textarea rows="9" formControlName="body" matInput  [attr.disabled]="disabled ? true : null"></textarea>
+            </mat-form-field>
+        </mat-tab>
+        <mat-tab label="Body" *ngIf="apiChecker?.value?.type === 'Dynamic'">
+            <div class="row">
+
+                <div class="col-12" *ngIf="module == 'externalApp'; else elseBlock">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Request Format</mat-label>
+                        <textarea rows="5" matInput formControlName="Format"  [attr.disabled]="disabled ? true : null"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <ng-template #elseBlock>
+                    <div class="col">
+                        <mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}" [(ngModel)]="control.RequestFormat" class="toggleBtn mb-2"  [disabled]="disabled">Request Format</mat-slide-toggle>
+                    </div>
+                    <div *ngIf="control.RequestFormat" class="col-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Request Format</mat-label>
+                            <textarea rows="5" matInput formControlName="Format"></textarea>
+                        </mat-form-field>
+                        <mat-error *ngIf="showValidation() && control.RequestFormat">
+                            Please add "<span [innerText]="'${body}'"></span>" in your request parameters!
+                        </mat-error>
+                    </div>                  
+                </ng-template>
+
+
+            </div>
+            <ng-container *ngIf="module != 'taskGroup' && module != 'externalApp'">
+              <div formArrayName="body"
+                  *ngFor="let item of apiChecker.get('body')['controls']; let i = index;let first = first">
+                  <div class="row" [formGroupName]="i">
+                      <div class="col">
+                          <mat-form-field appearance="fill">
+                              <mat-label>Key</mat-label>
+                              <input matInput formControlName="Key"  [attr.disabled]="disabled ? true : null">
+                              <mat-error *ngIf="apiChecker.get('body')['controls'][i].get('Key').errors?.required">
+                                  Key required.
+                              </mat-error>
+                          </mat-form-field>
+                      </div>
+                      <!-- <div class="col" *ngIf="control.type !== 'button'">
+                          <mat-form-field appearance="fill">
+                              <mat-label>Value</mat-label>
+                              <input matInput formControlName="Value">
+                          </mat-form-field>
+                      </div> -->
+                      <div class="col">
+                        <!-- <div class="col" *ngIf="control.type === 'button'"> -->
+                          <mat-form-field appearance="fill">
+                              <mat-label>Value</mat-label>
+                              <mat-select matInput formControlName="Value"  [attr.disabled]="disabled ? true : null">
+                                  <mat-option *ngFor="let data of formControls" [value]="data">
+                                      {{data}}
+                                  </mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="col">
+                          <mat-icon class="mat-btn blue" (click)="add('body')" *ngIf="first"
+                              matTooltip="Add" [attr.disabled]="disabled ? true : null">add</mat-icon>
+                          <mat-icon class="mat-btn red" (click)="remove(i, 'body')" *ngIf="!first"
+                              matTooltip="Remove" [attr.disabled]="disabled ? true : null">delete_outline</mat-icon>
+                      </div>
+                  </div>
+              </div>
+            </ng-container>
+        </mat-tab>
+        <mat-tab label="Code" *ngIf="apiChecker.value.type !== 'Dynamic'" [disabled]="requestTab">
+            <mat-form-field appearance="fill">
+                <mat-label>Code</mat-label>
+                <textarea rows="9" matInput [value]="request | json" disabled></textarea>
+            </mat-form-field>
+        </mat-tab>
+        <mat-tab label="Response" *ngIf="!APICallAfterChange" [disabled]="!responseTab && responseOnAdd == true">
+            <div *ngIf="module == 'externalApp'; else elseBlock1">
+                <mat-form-field appearance="fill">
+                    <mat-label>Response</mat-label>
+                    <!-- {{externalresponse | json}} -->
+                    <!-- <textarea rows="9" matInput  formControlName="responseValue"></textarea> -->
+                    <!-- {{response | json}} -->
+                    <textarea rows="9" matInput [value]="response | json" formControlName="responseValue"></textarea>
+                </mat-form-field>
+            </div>    
+            
+            <ng-template #elseBlock1>
+                 <mat-form-field appearance="fill">
+                    <mat-label>Response</mat-label>
+                    <textarea rows="9" matInput [value]="response | json" disabled ></textarea>
+                </mat-form-field>                  
+            </ng-template>
+         
+          
+        </mat-tab>
+        <mat-tab label="Response" *ngIf="APICallAfterChange" [disabled]="!responseTab1">
+          <mat-form-field appearance="fill">
+              <mat-label>Response</mat-label>
+              <textarea rows="9" matInput [value]="response1 | json" disabled></textarea>
+          </mat-form-field>
+      </mat-tab>
+    </mat-tab-group>
+    <ng-container *ngIf="module != 'taskGroup'">
+    <div class="pb-2 static_label">Response Mapping</div>
+    <div class="row">
+        <div class="col-6">
+            <mat-form-field appearance="fill">
+                <mat-label>Format</mat-label>
+                <input matInput formControlName="response_format" [attr.disabled]="disabled ? true : null">
+            </mat-form-field>
+        </div>
+        <div class="col-12" formArrayName="response"
+            *ngFor="let item of apiChecker.get('response')['controls']; let i = index; let first = first">
+            <div class="row" [formGroupName]="i">
+                <div class="col" *ngIf="control.type !== 'button' && !APICallAfterChange">
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{control.Dynamic && control.type !== 'list' ? 'Field Name' : 'Key'}}</mat-label>
+                        <input matInput formControlName="field" [attr.disabled]="disabled ? true : null">
+                        <mat-error *ngIf="apiChecker.get('response')['controls'][i].get('field').errors?.required">
+                          {{control.Dynamic && control.type !== 'list' ? 'Field Name' : 'Key'}} required.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col" *ngIf="control.type === 'button'">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Field Name</mat-label>
+                        <mat-select matInput formControlName="field"  [disabled]="disabled">
+                            <mat-option *ngFor="let data of formControls" [value]="data">
+                                {{data}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="apiChecker.get('response')['controls'][i].get('field').errors?.required">
+                          Field Name required.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col" *ngIf="control.type === 'list' && APICallAfterChange">
+                  <mat-form-field appearance="fill">
+                      <mat-label>Field Name</mat-label>
+                      <mat-select matInput formControlName="field"  [disabled]="disabled">
+                        <ng-container  *ngFor="let data of formControls">
+                          <mat-option *ngIf="control.formControlName != data" [value]="data">
+                            {{data}}
+                        </mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <mat-error *ngIf="apiChecker.get('response')['controls'][i].get('field').errors?.required">
+                        Field Name required.
+                      </mat-error>
+                  </mat-form-field>
+              </div>
+                <div class="col">
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{control.Dynamic && control.type !== 'list' ? 'Response Field' : 'Value'}}</mat-label>
+                        <input matInput formControlName="response" [attr.disabled]="disabled ? true : null">
+                    </mat-form-field>
+                </div>
+                <div class="col" *ngIf="(control.Dynamic && control.type !== 'list') || control.type === 'button' || module == 'externalApp' ">
+                    <mat-icon class="mat-btn blue" (click)="add('customer_profile_response')" *ngIf="first"
+                        matTooltip="Add" [attr.disabled]="disabled ? true : null">add</mat-icon>
+                    <mat-icon class="mat-btn red" (click)="remove(i, 'customer_profile_response')" *ngIf="!first"
+                        matTooltip="Remove" [attr.disabled]="disabled ? true : null">delete_outline</mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="(control?.type === 'button' && formControlsList?.length > 0) || (control?.type === 'list' && APICallAfterChange)">
+      <div class="col-6 pb-2">
+          <mat-slide-toggle labelPosition="before" color="primary" formControlName="patchResponseToDropdownOption" class="toggleBtn" >Patch Response To Dropdown Option</mat-slide-toggle>
+      </div>
+      <ng-container *ngIf="apiChecker.value.patchResponseToDropdownOption">
+        <div class="col-12" formArrayName="patchDropdowns"
+            *ngFor="let item of apiChecker.get('patchDropdowns')['controls']; let i = index; let first = first">
+            <div class="row" [formGroupName]="i">
+              <!-- {{item.value|json}} -->
+              <div class="col-11">
+                <div class="row">
+                  <div class="col-4">
+                    <!-- <div class="col-4" *ngIf="control.type === 'button'"></div> -->
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{'Field Name'}}</mat-label>
+                        <mat-select matInput formControlName="field"  [disabled]="disabled">
+                          <mat-option *ngFor="let data of formControlsList" [value]="data">
+                              {{data}}
+                          </mat-option>
+                      </mat-select>
+                        <!-- <input matInput formControlName="field"> -->
+                        <mat-error *ngIf="apiChecker.get('patchDropdowns')['controls'][i].get('field').errors?.required">
+                          Field Name is required.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-4">
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{'Key'}}</mat-label>
+                        <input matInput formControlName="key" [attr.disabled]="disabled ? true : null">
+                        <mat-error *ngIf="apiChecker.get('patchDropdowns')['controls'][i].get('key').errors?.required">
+                          Key is required.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-4">
+                  <mat-form-field appearance="fill">
+                      <mat-label>{{'Value'}}</mat-label>
+                      <input matInput formControlName="value" [attr.disabled]="disabled ? true : null">
+                      <mat-error *ngIf="apiChecker.get('patchDropdowns')['controls'][i].get('value').errors?.required">
+                        Value is required.
+                      </mat-error>
+                  </mat-form-field>
+              </div>
+                </div>
+              </div>
+                <div class="col-1">
+                  <!-- <div class="col-1" *ngIf="(control.type == 'button')"></div> -->
+                    <mat-icon class="mat-btn blue" (click)="add('customer_profile_patchDropdowns')" *ngIf="first" [ngClass]="apiChecker.value.patchDropdowns.length >= formControlsList.length ? 'disabledIT':''"
+                        matTooltip="Add" [attr.disabled]="disabled ? true : null">add</mat-icon>
+                    <mat-icon class="mat-btn red" (click)="remove(i, 'customer_profile_patchDropdowns')" *ngIf="!first"
+                        matTooltip="Remove" [attr.disabled]="disabled ? true : null">delete_outline</mat-icon>
+                </div>
+            </div>
+        </div>
+      </ng-container>
+    </div>
+    </ng-container>
+</div>

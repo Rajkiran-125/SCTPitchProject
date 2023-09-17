@@ -1,0 +1,123 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4 mt-3">
+	   <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="(userConfig?.Cancel)"  (click)="back()"></span>
+    </div>
+        <form [formGroup]="form">
+                <div class="row ">
+                    <div class="col-12">
+                        <span class="d-flex backArrow">
+                            <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+                            <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?. TwitterDmAccount}}</legend>
+                        </span>
+                        <div class="formGroup">
+                            <div class="masters_block">
+                                <app-steps [steps]="twitterDmsteps" [moduletype]="'twitter-dm'" [id]="path"
+                                   [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                                <div class="row ">
+
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.AccessToken}}</mat-label>
+                                            <input matInput formControlName="AccessToken" />
+                                            <mat-error *ngIf="f.AccessToken.errors"  class="addEllipsis">
+                                            <ng-container *ngIf="f.AccessToken.errors.required">{{labelName?.AccessToken}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.AccessToken?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                            <ng-container *ngIf="f.AccessToken?.errors?.pattern">{{labelName?.AccessToken}} is invalid
+                                            </ng-container>
+                                            <ng-container *ngIf="f.AccessToken?.errors?.checknull1">
+                                                Must be at least 3 characters long.
+                                              </ng-container>
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                      <mat-form-field appearance="fill">
+                                          <mat-label>{{labelName?.AccessTokenSecret}}</mat-label>
+                                          <input matInput formControlName="AccessTokenSecret" />
+                                          <mat-error *ngIf="f.AccessTokenSecret.errors"  class="addEllipsis">
+                                          <ng-container *ngIf="f.AccessTokenSecret.errors.required">{{labelName?.AccessTokenSecret}} is required
+                                          </ng-container>
+                                          <ng-container *ngIf="f.AccessTokenSecret?.errors?.checknull">Whitespace not allowed
+                                          </ng-container>
+                                          <ng-container *ngIf="f.AccessTokenSecret?.errors?.pattern">{{labelName?.AccessTokenSecret}} is invalid
+                                          </ng-container>
+                                          <ng-container *ngIf="f.AccessTokenSecret?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                          </ng-container>
+                                      </mat-error>
+                                      </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class="row ">
+
+                                  <div class="col-lg-6 col-md-6 col-sm-12">
+                                      <mat-form-field appearance="fill">
+                                          <mat-label>{{labelName?.ConsumerKey}}</mat-label>
+                                          <input matInput formControlName="ConsumerKey" />
+                                          <mat-error *ngIf="f.ConsumerKey.errors"  class="addEllipsis">
+                                          <ng-container *ngIf="f.ConsumerKey.errors.required">{{labelName?.ConsumerKey}} is required
+                                          </ng-container>
+                                          <ng-container *ngIf="f.ConsumerKey?.errors?.checknull">Whitespace not allowed
+                                          </ng-container>
+                                          <ng-container *ngIf="f.ConsumerKey?.errors?.pattern">{{labelName?.ConsumerKey}} is invalid
+                                          </ng-container>
+                                          <ng-container *ngIf="f.ConsumerKey?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                          </ng-container>
+                                      </mat-error>
+                                      </mat-form-field>
+                                  </div>
+                                  <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.ConsumerSecretkey}}</mat-label>
+                                        <input matInput formControlName="ConsumerSecretkey" />
+                                        <mat-error *ngIf="f.ConsumerSecretkey.errors"  class="addEllipsis">
+                                        <ng-container *ngIf="f.ConsumerSecretkey.errors.required">{{labelName?.ConsumerSecretkey}} is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.ConsumerSecretkey?.errors?.checknull">Whitespace not allowed
+                                        </ng-container>
+                                        <ng-container *ngIf="f.ConsumerSecretkey?.errors?.pattern">{{labelName?.ConsumerSecretkey}} is invalid
+                                        </ng-container>
+                                        <ng-container *ngIf="f.ConsumerSecretkey?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                          </ng-container>
+                                    </mat-error>
+                                    </mat-form-field>
+                                </div>
+                              </div>
+                                <div class="row ">
+                                  <div class="col-lg-6 col-md-6 col-sm-12">
+                                      <mat-form-field appearance="fill">
+                                          <mat-label>{{labelName?.BearerToken}}</mat-label>
+                                          <input matInput formControlName="BearerToken" />
+                                          <mat-error *ngIf="f.BearerToken.errors"  class="addEllipsis">
+                                          <ng-container *ngIf="f.BearerToken.errors.required">{{labelName?.BearerToken}} is required
+                                          </ng-container>
+                                          <ng-container *ngIf="f.BearerToken?.errors?.checknull">Whitespace not allowed
+                                          </ng-container>
+                                          <ng-container *ngIf="f.BearerToken?.errors?.pattern">{{labelName?.BearerToken}} is invalid
+                                          </ng-container>
+                                          <ng-container *ngIf="f.BearerToken?.errors?.checknull1">
+                                            Must be at least 3 characters long.
+                                          </ng-container>
+                                      </mat-error>
+                                      </mat-form-field>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="btn-group my-3" >
+                              <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                                <button *ngIf="(userConfig?.Save)" (click)="saveTwitter('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                                <button  *ngIf=" (userConfig?.Next) " (click)="saveTwitter('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper" >
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="(userConfig?.Cancel)" (click)="backspace()"></span>
+          </div>      
+        <form [formGroup]="form">
+            <div class="row ">
+                <div class="col-12">
+                    <span class="d-flex backArrow">
+                        <mat-icon class="gray cursorPointer" (click)="backspace()" >keyboard_backspace</mat-icon>
+                        <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.VoiceConfiguration}}</legend>
+                      </span>
+
+                      <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="voiceConfigurationsteps" [moduletype]="'voice-configuration'" [id]="path"
+                            [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                            <div class="row marginXDesktop">
+                            <div class="col-10">
+                                <div class="form_content">
+                                    <div class="row" style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin-left: 20px;">
+                                        <div class="col-lg-10 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.SRNNumber}}</mat-label>
+                                                <input matInput formControlName="SRNNumber">
+                                                <mat-error *ngIf="f.SRNNumber.errors">
+                                                    <ng-container *ngIf="f.SRNNumber.errors.required">{{labelName?.SRNNumber}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.SRNNumber?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.SRNNumber?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                      </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin-left: 20px;">
+                                    <div class="col-lg-10 col-md-4 col-sm-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.VoiceServiceProvider}}</mat-label>
+                                            <mat-select  formControlName="voiceServiceProvider">
+                                                <mat-option *ngFor="let data of VoiceServiceProvider" [value]="data.Value">{{ data.Value }}</mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="f.voiceServiceProvider.errors">
+                                              <ng-container *ngIf="f.voiceServiceProvider.errors.required">{{labelName?.VoiceServiceProvider}} is required
+                                              </ng-container>
+                                          </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    </div>
+                                    <div class="row" style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin-left: 20px;">
+                                        <div class="col-lg-10 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.RequestBody}}</mat-label>
+                                                <input matInput formControlName="RequestBody">
+                                                <mat-error *ngIf="f.RequestBody.errors">
+                                                    <ng-container *ngIf="f.RequestBody.errors.required">{{labelName?.RequestBody}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.RequestBody?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.RequestBody?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        </div>
+
+                        <div class="btn-group my-3" >
+                            <!-- <button  *ngIf="(userConfig?.Cancel)" class="btn btn-gray"  (click)="backspace()"  routerLinkActive="router-link-active" (click)="back()" mat-flat-button type="Reset">Cancel</button> -->
+                              <button *ngIf="! reset && userConfig?.Reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                              <button  *ngIf="(userConfig?.Save)" class="btn" (click)="savevoiceservice('save')" mat-flat-button color="primary"  type="button">Save</button>
+                              <button class="btn"  *ngIf="(userConfig?.Next)" (click)="savevoiceservice('next')" mat-flat-button color="primary"  type="button">Next</button>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>

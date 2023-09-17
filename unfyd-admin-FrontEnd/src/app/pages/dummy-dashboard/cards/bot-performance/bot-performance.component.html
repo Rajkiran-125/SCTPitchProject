@@ -1,0 +1,38 @@
+<div>
+  <div class="row mx-0 mb-3 d-flex align-items-center">
+    <div class="col-12 p-0 text-left">
+      <span class="font-bold mediumFont">Flow Performance</span>
+    </div>
+
+  </div>
+
+  <div>
+
+    <div class="cardHeight">
+      <div class="align-center">
+        <div class="row mx-0 border-top" *ngFor="let item of data">
+          <div class="col-8 p-0 marginY12px text-left">
+            {{item?.label}}
+          </div>
+          <div class="col-4 p-0 marginY12px text-right"
+            [ngClass]="item.label == 'Longest Conversation Time' ? 'text-danger':''">
+            {{item?.value}}
+          </div>
+        </div>
+
+        <ng-container *ngIf="data.length < 5">
+          <div class="row mx-0 border-top" *ngFor="let item of numSequence(5-data.length)" >
+            <div class="col-8 p-0 marginY12px text-left">
+              -
+            </div>
+            <div class="col-4 p-0 marginY12px text-right">
+              -
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+  
+  </div>
+</div>

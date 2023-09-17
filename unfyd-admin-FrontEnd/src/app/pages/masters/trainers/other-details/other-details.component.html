@@ -1,0 +1,82 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+<app-steps [steps]="trainerFormSteps" [id]="path"></app-steps>
+<div class="wrapper mat-form">
+    <form [formGroup]="form">
+        <legend>Other Details</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Medical Initiation Date</mat-label>
+                            <input (focus)="medtestinitiationdate.open()" (click)="medtestinitiationdate.open()" readonly formControlName="medtestinitiationdate" type="text"
+                                [matDatepicker]="medtestinitiationdate" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="medtestinitiationdate"></mat-datepicker-toggle>
+                            <mat-datepicker #medtestinitiationdate></mat-datepicker>
+                        </mat-form-field>
+                    </div>                                                                                                                                    
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Medical Status</mat-label>
+                            <input matInput formControlName="medteststatus">
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Medical Result Date</mat-label>
+                            <input (focus)="medtestresultdate.open()" (click)="medtestresultdate.open()" readonly formControlName="medtestresultdate" type="text"
+                                [matDatepicker]="medtestresultdate" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="medtestresultdate"></mat-datepicker-toggle>
+                            <mat-datepicker #medtestresultdate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="ismedtestreportuploaded">
+                                Is Medical Clearance Report Uploaded ?</mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Police Verification Status</mat-label>
+                            <input matInput formControlName="policeverificationstatus">
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Police Verification Initiation Date</mat-label>
+                            <input (focus)="verificationinitiationdate.open()" (click)="verificationinitiationdate.open()" readonly formControlName="verificationinitiationdate" type="text"
+                                [matDatepicker]="verificationinitiationdate" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="verificationinitiationdate"></mat-datepicker-toggle>
+                            <mat-datepicker #verificationinitiationdate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="ispoliceclearanceattached">
+                                Is Police Clearance Attached</mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Undertaking If Applicable</mat-label>
+                            <input matInput formControlName="undertakingifapplicable">
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>PF UAN Details If Applicable</mat-label>
+                            <input matInput formControlName="pfuandetailsifapplicable">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-stroked-button (click)="submit('save')" type="button">Save</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit('next')" type="button">Next KYC Details >></button>
+            </div>
+    </form>
+</div>
+</div>

@@ -1,0 +1,168 @@
+<!-- {{form.value|json}} -->
+<!-- {{formFields|json}} -->
+<div class="m-3" *ngIf="formFields.length != 0">
+  <form [formGroup]="form">
+    <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+      <div *ngFor="let formField of formFields; let i =index" class="example-box d-flex align-items-center" cdkDrag>
+        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+        <div [ngSwitch]="formField.type" class="w-100 cursorPointer formcontrolHover transition"
+          (click)="getSelectedIndexValue(i)">
+          <div *ngSwitchCase="'input'">
+            <div class="" *ngIf="isVisible(formField.nestedToControl, formField.nestedToValue)">
+              <mat-form-field appearance="fill" *ngIf="formField.dataType !== 'hidden'">
+                <mat-label>{{formField?.label}}</mat-label>
+                <input matInput [readonly]="formField.LockControl" [type]="formField.dataType" formControlName={{formField.formControlName}}>
+                <mat-error class="text-error"
+                  *ngIf="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.required">
+                  {{ formField?.MandatoryErrorMessage ? formField?.MandatoryErrorMessage : formField?.label + 'is required'  }}</mat-error>
+                <mat-error class="text-error"
+                  *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('pattern')">
+                  {{ formField?.RegexErrorMessage ? formField?.RegexErrorMessage : formField?.label + 'is invalid' }} </mat-error>
+              </mat-form-field>
+              <input *ngIf="formField.dataType === 'hidden'" [type]="formField.dataType"
+                formControlName={{formField.formControlName}} />
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'textbox'">
+            <div class="" *ngIf="isVisible(formField.nestedToControl, formField.nestedToValue)">
+              <mat-form-field appearance="fill" *ngIf="formField.dataType !== 'hidden'">
+                <mat-label>{{formField?.label}}</mat-label>
+                <input matInput [disabled]="formField.LockControl" [type]="formField.dataType" formControlName={{formField.formControlName}}>
+                <mat-error class="text-error"
+                  *ngIf="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.required">
+                  {{formField?.label}} is required </mat-error>
+                <mat-error class="text-error"
+                  *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('pattern')">
+                  {{formField?.label}} is invalid </mat-error>
+              </mat-form-field>
+              <input *ngIf="formField.dataType === 'hidden'" [type]="formField.dataType"
+                formControlName={{formField.formControlName}} />
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'upload'">
+            <div class="" *ngIf="isVisible(formField.nestedToControl, formField.nestedToValue)">
+              <input hidden #fileUpload type="file" [multiple]="formField?.uploadFormType == 'multiple'" (change)="import($event,formField)">
+              <mat-form-field appearance="fill" *ngIf="formField.dataType !== 'hidden'">
+                <mat-label>{{formField?.label}}</mat-label>
+                <input matInput [disabled]="formField.LockControl" readonly formControlName={{formField.formControlName}}>
+                <mat-icon matSuffix (click)="fileUpload.click()">upload</mat-icon>
+                <mat-error class="text-error"
+                  *ngIf="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.required">
+                  {{formField?.label}} is required </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="row mb-3" *ngIf="form?.value[formField.formControlName]?.length > 0">
+              <div class="col-4 dynamicFormFileUpload" *ngFor="let itembb of form?.value[formField.formControlName]; let ii = index" (click)="deleteUploadedFile(formField.formControlName,ii)">
+                    <img src='{{itembb}}' class="uploadImage pb-1" alt="Document" />
+                  <mat-icon class="iconAboveImg"  type="button">delete</mat-icon>
+              </div>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'checkbox'">
+
+            <div class="">
+              <mat-checkbox [disabled]="formField.LockControl" (change)="changeCheckboxNestedControlMandatoryStatus(i)" class="formCheckbox"
+                color="primary" formControlName={{formField.formControlName}}
+                [ngClass]="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.required ?'' : 'mb-3'">{{formField.label}}</mat-checkbox>
+              <mat-error class="text-error errorFontSize mb-3"
+                *ngIf="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.required">
+                {{formField?.label}} is required
+              </mat-error>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'button'">
+            <div class="" *ngIf="isVisible(formField.nestedToControl, formField.nestedToValue)">
+              <button class="btn mb-3" mat-flat-button color="primary" (click)="buttonClick(formField.label)" [disabled]="isDisable(i)"
+                type="button">{{formField?.label}}</button>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'list'">
+            <div class="" *ngIf="formField.Dynamic
+              && isVisible(formField.nestedToControl, formField.nestedToValue)">
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>{{formField?.label}}</mat-label>
+                  <mat-select [disabled]="formField.LockControl" formControlName={{formField.formControlName}} (selectionChange)="dropdownChanged(formField.formControlName,formField)">
+                    <ng-container *ngFor="let data of formField.listOfValues | orderBy">
+                      <mat-option [value]="data.value">
+                        {{data.key}}
+                      </mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error class="text-error"
+                    *ngIf="form.get(formField.formControlName)?.touched && form.get(formField.formControlName)?.hasError('required')">
+                    {{formField?.label}} is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="" *ngIf="!formField.Dynamic
+              && isVisible(formField.nestedToControl, formField.nestedToValue)">
+              <!-- {{form.value|json}} -->
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>{{formField?.label}}</mat-label>
+                  <mat-select [disabled]="formField.LockControl" formControlName={{formField.formControlName}} (selectionChange)="dropdownChanged(formField.formControlName,formField)">
+                    <ng-container *ngFor="let data of formField.listOfValues | orderBy">
+                      <mat-option *ngIf="
+                          (data.parent1FormControl === null && data.parent2FormControl === null && data.parent3FormControl === null)
+                          " [value]="data.value">
+                        {{data.key}}
+                      </mat-option>
+                      <mat-option *ngIf="
+                          (data.parent1FormControl !== null && data.parent2FormControl === null
+                          && data.parent3FormControl === null
+                          && (form.get(data.parent1FormControl)?.value === data.parent1Value))
+                          " [value]="data.value">
+                        {{data.key}}
+                      </mat-option>
+                      <mat-option *ngIf="(data.parent1FormControl !== null && data.parent2FormControl !== null
+                      && data.parent3FormControl === null && (
+                            (form.get(data.parent1FormControl)?.value === data.parent1Value) &&
+                            (form.get(data.parent2FormControl)?.value === data.parent2Value)
+                            ))
+                          " [value]="data.value">
+                        {{data.key}}
+                      </mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error class="text-error"
+                    *ngIf="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.required">
+                    {{formField?.label}} is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'datetime'">
+            <div class="" *ngIf="isVisible(formField.nestedToControl, formField.nestedToValue)">
+              <mat-form-field appearance="fill">
+                <mat-label>{{formField?.label}}</mat-label>
+                <input [disabled]="formField.LockControl" matInput [matDatepicker]="dp" readonly formControlName={{formField.formControlName}}>
+                <mat-datepicker-toggle [disabled]="formField.LockControl" matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp></mat-datepicker>
+                <mat-error class="text-error"
+                  *ngIf="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.required">
+                  {{formField?.label}} is required
+                </mat-error>
+                <mat-hint class="text-error"
+                  *ngIf="f[formField.formControlName]?.touched && f[formField.formControlName].errors?.pattern">
+                  {{formField?.label}} is invalid
+                </mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="example-handle" style="padding-bottom: 1.34375em;" *ngIf="isVisible(formField.nestedToControl, formField.nestedToValue)">
+          <mat-icon class="cursorPointer" cdkDragHandle>drag_indicator</mat-icon>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

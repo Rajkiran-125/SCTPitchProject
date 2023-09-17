@@ -1,0 +1,96 @@
+<div *ngIf="loader">
+    <app-loader></app-loader>
+</div>
+<div class="" *ngIf="!loader">
+    <app-filter *ngIf="tabValue.length>0" component="collection-summary" [type]="'PaymentCollection'" [role]="userDetails.role" [tabValue]="tabValue" ></app-filter>
+    <div class="dataTable px-0 py-0 bg-white ">
+        <table>
+            <thead>
+                <tr *ngIf="tabValue.length>0">
+                    <ng-container *ngFor="let data of tabKey; let i = index">
+                        <th class="column{{i}}">
+                            {{data}}
+                        </th>
+                    </ng-container>
+                    
+                </tr>
+                <tr *ngIf="noData">
+                    <th>No record found</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="tabValue.length>0">
+                <ng-container
+                    *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                    <tr>
+                        <ng-container *ngFor="let val of tabKey; let i = index">
+                            <td *ngIf="val == 'Sr No'" class="column{{i}}" (click)="dummy(tempData[j],data)">
+                                <span>{{((page-1)*(itemsPerPage))+(j+1)}}</span>
+                            </td>
+                            <td *ngIf="val !== 'Sr No' && val !== 'Applicant No.' 
+                                    && val !== 'Deposited Date' && val !== 'Collection Date'
+                                    && val !== 'Online' && val !== 'Cash'
+                                    && val !== 'Total Amount' && val !== 'Deposit Status'
+                                    && val !== 'Deposit Date' && val !== 'Verification Status'
+                                    && val !== 'Deposit Amount' && val !== 'CollectionDate'" class="column{{i}}">
+                                <span>{{data[tabKey[i]] == '' ? '-' :data[tabKey[i]] == ' ' ?'-':
+                                    data[tabKey[i]]}}</span>
+                            </td>
+                            <td *ngIf="val == 'Deposited Date' || val =='Deposit Date' " class="column{{i}}">
+                                <span>
+                                    {{data[tabKey[i]] }}
+                                </span>
+                            </td>
+                            <td *ngIf="val == 'Collection Date'|| val == 'CollectionDate' " class="column{{i}}">
+                                <span>
+                                    {{data[tabKey[i]] }}
+                                </span>
+                            </td>
+                            <td *ngIf="val == 'Deposit Status' && !config?.Submit" class="column{{i}}">
+                                <span>
+                                    {{data[tabKey[i]]}}
+                                </span>
+                            </td>
+                            <td *ngIf="val == 'Deposit Status' && config?.Submit" class="column{{i}} justify-content-center d-flex">
+                                <ng-container *ngIf="data['Verification Status'] == 'Pending' && data[tabKey[i]] == 'Resubmit';else else_content">
+                                    <span>Resubmitted</span>
+                                </ng-container>
+                                <ng-template #else_content>
+                                    <div class="btn btn-gray" *ngIf="data[tabKey[i]] == 'Submit' || data[tabKey[i]] =='Resubmit'" (click)="deposit(data[tabKey[i]],tempData[j])" >{{ data[tabKey[i]]}}</div>
+                                </ng-template>
+                                
+                            </td>
+                            <td *ngIf="val == 'Verification Status' && !config?.Verification" class="column{{i}} font-weight-bold text-center" [ngClass]="data[tabKey[i]] == 'Pending' ? 'blue-color': data[tabKey[i]] == 'Approved' ? 'green-color':data[tabKey[i]] == 'Rejected' ? 'red-color':''">
+                                {{data[tabKey[i]]}}
+                            </td>
+                            <td *ngIf="val == 'Verification Status' && config?.Verification" class="column{{i}} text-center justify-content-center">
+                                <ng-container *ngIf="data[tabKey[i]] == 'Pending'">
+                                    <select class="form-control border-0 dropDown mx-4" id="exampleFormControlSelect1" (change)="changeVerificationStatus(tempData[((page-1)*(itemsPerPage))+(j)],$event.target.value,((page-1)*(itemsPerPage))+(j))" >
+                                        <option [selected]="data[tabKey[i]] == 'Pending'" value="Pending"> <span class="text-primary">Pending</span> </option>
+                                        <option [selected]="data[tabKey[i]] == 'Approved'" value="Approved"><span class="text-success bg-success">Approved</span></option>
+                                        <option [selected]="data[tabKey[i]] == 'Rejected'" value="Rejected"><span class="text-danger">Rejected</span></option>
+                                        </select>
+                                </ng-container>
+                                <ng-container *ngIf="data[tabKey[i]] != 'Pending'" >
+                                    <span class="font-weight-bold " [ngClass]="data[tabKey[i]] == 'Approved' ? 'green-color':data[tabKey[i]] == 'Rejected' ? 'red-color':''">
+                                    {{data[tabKey[i]]}}
+                                </span>
+                                </ng-container>
+                            </td>
+                            <td *ngIf="val == 'Online' || val == 'Cash' || val == 'Total Amount' || val =='Deposit Amount'" class="column{{i}}">
+                                <span *ngIf="data[tabKey[i]] != '' && data[tabKey[i]] != ' ' && data[tabKey[i]] != 0 && data[tabKey[i]] != null "> &#8377;</span>
+                                <span>{{data[tabKey[i]] == '' ? '-' :data[tabKey[i]] == ' ' ?'-':data[tabKey[i]] == null ?'-':
+                                    data[tabKey[i]].toLocaleString('en-IN')}}</span>
+                            </td>
+                            <td *ngIf="val == 'Applicant No.'" class="column{{i}}">
+                                <span>{{data[tabKey[i]]}}</span>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination" *ngIf="tabValue.length>10">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+</div>

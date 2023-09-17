@@ -1,0 +1,46 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="btn-group btn-icon btn-right">
+        <button *ngIf="tab !== 'payment'" class="btn" mat-flat-button color="primary" type="button" (click)="action('edit')">
+            <mat-icon>edit</mat-icon><span>Edit</span>
+        </button>
+    </div>
+    <div class="wrapper">
+        <app-steps [steps]="trainerDetailsSteps" [id]="contactId" [tab]="tab"></app-steps>
+        <div *ngIf="tab !== 'payment'" class="row details">
+            <div class="col col-3" *ngFor="let item of data | keyvalue : keepOrder">
+                <p>
+                    <small>{{item.key}}</small>
+                    <strong>{{item.value == true ? 'Yes' : item.value == false ? 'no' : item.value}}</strong>
+                </p>
+            </div>
+
+        </div>
+        <div class="dataTable" *ngIf="tab == 'payment' && tabValue.length>0">
+            <table>
+                <thead>
+                    <tr>
+                        <ng-container *ngFor="let data of tabKey; let i = index">
+                            <th>{{data}}</th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of tabValue; let j = index">
+
+                        <ng-container *ngFor="let val of tabKey; let i = index">
+                            <td *ngIf="val == 'SrNo'" class="column{{i}}"><span>{{j+1}}</span></td>
+                            <td *ngIf="val == 'Print'" class="column{{i}}">
+                                <button class="btn sm-btn" mat-flat-button color="primary" type="button"><mat-icon>print</mat-icon><span>Print</span></button>
+                            </td>
+                            <td *ngIf="val !== 'SrNo' && val !== 'Print'">
+                                <span [innerHtml]="data[tabKey[i]]"></span>
+                            </td>
+                        </ng-container>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

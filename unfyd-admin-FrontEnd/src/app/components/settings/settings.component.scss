@@ -1,0 +1,45 @@
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+        a {
+            display: flex;
+            padding: 20px 30px;
+            text-decoration: none;
+            cursor: pointer;
+            i {
+                flex: 0 0 18px;
+                margin-right: 15px;
+                font-size: 18px;
+                color: var(--gray_color);
+            }
+            caption {
+                flex: 1;
+                padding: 0;
+                strong, span{
+                    display: block;
+                }
+                strong{
+                    font-weight: bold;
+                    font-size: 14px;
+                    color: var(--black_color_80);
+                }
+                span{
+                    font-size: 12px;
+                }
+            }
+            &.active{
+                background-color: var(--white_color);
+                caption{
+                    strong{
+                        color: var(--primary_color);
+                    }
+                }
+                i{
+                    color: var(--primary_color);
+                }
+            }
+        }
+    }
+}

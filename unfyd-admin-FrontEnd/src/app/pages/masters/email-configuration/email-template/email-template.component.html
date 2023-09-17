@@ -1,0 +1,305 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div *ngIf="filter == 'email'">
+  <div class="wrapper">
+      <app-filter [hasChecked]="hasChecked" [component]="''" [role]="userDetails.role" type="email-template"
+      [tabValue]="tabValue" [addBtn]="true" [ChannelIdInput]="ChannelIdInput"
+      [ChannelUniqueCodeInput]="ChannelUniqueCodeInput">
+    </app-filter>
+    <div *ngIf="emailtoggleval == 'table'">
+      <div class="px-0 py-0">
+        <div class="dataTable" style="overflow: auto;">
+          <table>
+            <thead>
+
+              <tr *ngIf="tabValue.length!==0">
+                <ng-container *ngFor="let data of finalField; let i = index">
+                  <th *ngIf="data.value !== 'CHECKBOX' " [ngClass]="!data.checked ? 'tabCol' : ''"
+                    class="{{'column'+i}}" (click)="sortUsers(data.value, data.order)">
+                    <ng-container class="Header_All" *ngIf="data.value == 'Sr No' else else_content">
+                      <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary"
+                        [indeterminate]="hasChecked.length >0 && !allSelected"
+                        [checked]="hasChecked.length >0 && allSelected" [disabled]="!data.CHECKBOX && maxNo"
+                        (change)="bulkCheckboxCheck($event.checked, data)"></mat-checkbox>
+                    </ng-container>
+                    <ng-template #else_content>{{data.value == 'Actionable' ? 'Action' : data.value}}
+                      <span [ngSwitch]="data.order">
+                        <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                        <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                      </span>
+                    </ng-template>
+                  </th>
+                </ng-container>
+              </tr>
+              <tr *ngIf="tabValue.length == 0">
+                <th>No record found</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="tabValue.length>0">
+              <ng-container
+                *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage:currentpage  }; let j = index">
+                <tr>
+                  <ng-container *ngFor="let val of finalField; let i = index">
+                    <td *ngIf="val.value == 'Sr No'" [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}}">
+                      <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary" [disabled]="!data.CHECKBOX && maxNo"
+                        (change)="singleCheckboxCheck($event.checked, data)"></mat-checkbox>
+                    </td>
+                    <td *ngIf="val.value == 'Actionable'" class="{{'column'+i}} action">
+                      <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                      <mat-menu #menu="matMenu" class="master_action">
+                        <!-- <button *ngIf="userConfig?.PreviewHSM && hasChecked.length == 0" mat-menu-item
+                          (click)="viewPreview(data[finalField[i].value],data[val.value],'true')">
+                          <mat-icon>remove_red_eye</mat-icon>
+                          <span>{{labelname?.View}}</span>
+                        </button> -->
+                        <button *ngIf="hasChecked.length == 0" mat-menu-item
+                          (click)="emailForm()" [routerLink]="['/masters/channel-configuration/email-configuration/email-template/edit']"
+                          [queryParams]="{ filter: 'edit-email',Id : data.Actionable,channelid : ChannelIdInput, uniquecode : ChannelUniqueCodeInput}">
+                          <mat-icon>edit</mat-icon>
+                          <span>{{labelname?.Edit}}</span>
+                        </button>
+                        <button  mat-menu-item
+                          (click)="deleteEmail(data[finalField[i].value])">
+                          <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                          <span>{{labelname?.Delete}}</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                    <td *ngIf="val.value !== 'Sr No' && val.value !== 'Actionable' && val.value !== 'Body' && (val.value).toLowerCase() !== 'description'"
+                      [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}} textwrap">
+                      <span
+                        [matTooltip]="data[val.value] && data[val.value].toString().length > 20 ? data[val.value] : ''">{{data[val.value]
+                        == '' ? '-' :data[val.value] == ' ' ?'-':
+                        data[val.value]}}</span>
+                    </td>
+                    <td *ngIf="val.value !== 'Sr No' && val.value !== 'Actionable' && val.value !== 'Body' && (val.value).toLowerCase() == 'description'"
+                      [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}} textwrap">
+                      <span
+                        [matTooltip]="data[val.value] && data[val.value].toString().length > 20 ? data[val.value] : ''">{{htmlDecodeTable(data[val.value]
+                        == '' ? '-' :data[val.value] == ' ' ?'-':
+                        data[val.value])}}</span>
+                    </td>
+                    
+                  </ng-container>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" *ngIf="tabValue.length>itemsPerPage">
+          <pagination-controls (pageChange)="currentpage = $event" previousLabel="" nextLabel="">
+          </pagination-controls>
+        </div>
+        <input type="hidden"
+          *ngFor="let data of paginationArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentpage }">
+      </div>
+    </div>
+    <div  *ngIf="emailtoggleval == 'card'">
+      <div>
+        <div class="wrapper px-0 py-0">
+          <div style="overflow: hidden; font-size: 12px;">
+            <table>
+              <thead>
+              </thead>
+              <tbody *ngIf="tabValue.length>0">
+                <tr class="row">
+                  <ng-container
+                    *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage:currentpage  }; let j = index">
+                    <th>
+                      <div class="col-12" style="margin-top: 10px;">
+                        <div class="cardfirstlayer ">
+                          {{data.TemplateName}}
+                          <mat-icon [matMenuTriggerFor]="menu" style="float: right;">more_horiz</mat-icon>
+                          <mat-menu #menu="matMenu" class="master_action">
+                            <!-- <button *ngIf="userConfig?.PreviewHSM" mat-menu-item
+                              (click)="viewPreview(data.Actionable,data.Actionable,'true')">
+                              <mat-icon>remove_red_eye</mat-icon>
+                              <span>{{labelname?.View}}</span>
+                            </button> -->
+                            <button *ngIf="hasChecked.length == 0" mat-menu-item
+                              (click)="emailForm()" [routerLink]="['/masters/channel-configuration/email-configuration/email-template/edit']"
+                              [queryParams]="{ filter: 'edit-email',Id : data.Actionable,channelid : ChannelIdInput, uniquecode : ChannelUniqueCodeInput}">
+                              <mat-icon>edit</mat-icon>
+                              <span>{{labelname?.Edit}}</span>1
+                            </button>
+                            <button  mat-menu-item
+                              (click)="deleteEmail(data.Actionable)">
+                              <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                              <span>{{labelname?.Delete}}</span>2
+                            </button>
+                          </mat-menu>
+                        </div>
+                        <div class="cardsecondlayer" [innerHtml]="data.HtmlView">
+                        </div>
+                        <div class="cardthirdlayer">
+                          {{data.Description}}
+                        </div>
+                      </div>
+                    </th>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" *ngIf="tabValue.length>itemsPerPage">
+            <pagination-controls (pageChange)="currentpage = $event" previousLabel="" nextLabel="">
+            </pagination-controls>
+          </div>
+          <input type="hidden"
+            *ngFor="let data of paginationArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentpage }">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div *ngIf="filter == 'add-email' || filter == 'edit-email'"> -->
+<div class="inner-container" *ngIf="filter == 'add-email' || filter == 'edit-email'">
+  <div class="wrapper py-4 pl-0">
+    <div class="row">
+      <div class="col-1 text-center backarrow ">
+        <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-lg-10 col-md-10 col-10 pl-0">
+        <legend class="size"> {{ filter == 'add-email' ? 'Add New' : 'Update' }} {{labelname?.EmailTemplate}}</legend>
+        <form [formGroup]="form">
+          <div class="formGroup mt-3">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelname?.TemplateName}}</mat-label>
+                  <input matInput formControlName="Template" >
+                  <mat-error *ngIf=" f.Template.errors">
+                    <ng-container *ngIf="f.Template?.errors?.required">
+                      {{labelname?.TemplateName}}  is required
+                    </ng-container>
+                    <ng-container *ngIf="f.Template?.errors?.pattern">
+                      {{labelname?.TemplateName}}  is invalid
+                    </ng-container>
+                    <ng-container *ngIf="f.Template?.errors?.checknull1">Must be at least 3 characters long.
+                    </ng-container>
+                </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelname?.Description}}</mat-label>
+                  <input matInput formControlName="Description" maxlength="500">
+                  <mat-error *ngIf=" f?.Description?.errors">
+                    <ng-container *ngIf="f.Description?.errors?.pattern">{{labelname?.Description}}  is invalid.
+                    </ng-container>
+                    <ng-container *ngIf="f?.Description?.errors?.minlength">
+                      Must be at least 3 characters long.
+                    </ng-container>
+                    <ng-container *ngIf="f?.Description?.errors?.maxlength">
+                      Cannot be beyond 300 characters.
+                    </ng-container>
+                    <ng-container *ngIf="f?.Description?.errors?.checknull1">
+                      Must be at least 3 characters long
+                    </ng-container>
+                </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <div style="border: 1px solid  #efefef;border-radius: 5px;">
+                <div class="row">
+                  <div class="col noBorder" mat-tab-nav-bar>
+                    <a mat-tab-link *ngFor="let data of emailtemp" (click)="onTabChange(data.tab)"
+                      [active]="tab == data.tab" class="userNavtab">
+                      {{data.label}} </a>
+                  </div>
+                  <div class="col">
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{labelname?.SystemFields}}</mat-label>
+                      <mat-select formControlName="System" (selectionChange)="addToMessage($event.value)">
+                        <mat-option *ngFor="let item of EmailTempFormat" [value]="item.Key">{{item.Value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div *ngIf="this.tab == 'TextView'">
+                  <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="font-size: 13px; " >
+                      <div [ngxSummernote]="ngxconfig" formControlName="Body" class="note-editor"></div>
+                      <span *ngIf="f.Body.errors && f.Body.touched">
+                        <span style="color: red;font-size: 11px;" *ngIf="f.Body.errors.required">Message Body is required</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="this.tab == 'HTMLView'">
+                <div class="row">
+                  <textarea rows="8"
+                  style="flex:1;background: var(--backgroud_color);font-size: 14px; font-weight: 900;"
+                  resizable="auto" formControlName="Body" class="textarea"></textarea>
+                </div>
+                <span *ngIf="f.Body.errors && f.Body.touched">
+                  <span style="color: red;font-size: 11px;" *ngIf="f.Body.errors.required">Message Body is required</span>
+                </span>
+              </div>
+              <a href="http://"></a>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div style="border: 1px solid  #efefef;border-radius: 10px;">
+                  <label style="font-family: Nunito Sans, Regular;font-size: 14px;padding:15px">{{labelname?.Placeholders}}</label>
+                  <button (click)="removeplace(1)" *ngIf="place().controls.length !== 1 "
+                    class="btn-gray placeholderremove">
+                    <span class="minusfont">-</span></button>
+                  <button *ngIf="place().controls.length == 1 " [disabled]=true class="btn-gray placeholderremove">
+                    <span class="minusfont">-</span></button>
+                  <span class="placeholdercount">
+                    {{place().controls.length}}
+                  </span>
+                  <button type="button" *ngIf="place().controls.length < 5 " (click)="addplace()"
+                    class="btn-gray placeholderadd">
+                    <span class="addfont">+</span></button>
+                  <button type="button" *ngIf="place().controls.length == 5 " [disabled]=true
+                    class="btn-gray placeholderadd">
+                    <span class="addfont">+</span></button>
+                  <div formArrayName="place">
+                    <div *ngFor="let val of place().controls; let i= index " [formGroupName]="i">
+                      <div class="row">
+                        <div class="col-2"></div>
+                        <div class="col-lg-2 col-md-2 col-4">
+                          <mat-form-field appearance="fill">
+                            <mat-label>{{labelname?.Parameters}}</mat-label>
+                            <input type="text" matInput formControlName="parameters" readonly>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-8" style="padding-right: 10px;">
+                          <mat-form-field appearance="fill">
+                            <mat-label>{{labelname?.Placeholders}} </mat-label>
+                            <input type="text" matInput formControlName="holders">
+                            <mat-error *ngIf="place().controls[i].get('holders').hasError('required')">{{labelname?.Placeholders}}
+                              is required </mat-error>
+                            <mat-error *ngIf="val.get('holders')?.errors?.cannotContainSpace">Whitespace not
+                              allowed.</mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-group d-none d-md-block">
+            <!-- {{filter}} -->
+            <button  *ngIf="userConfig?.Cancel" class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">{{labelname?.Cancel}}</button>
+              <button  *ngIf="filter == 'add-email' && userConfig?.Reset"  class="btn btn-gray" (click)="resetEmail()" mat-flat-button type="Reset">{{labelname?.Reset}}</button>
+              <button  *ngIf="userConfig?.Preview"  class="btn btn-gray" mat-stroked-button color="primary" (click)="emailPreview('preview')">Preview</button>
+              <button   *ngIf="filter == 'add-email' && userConfig?.SaveAddNew" class="btn outline"  type="button" (click)="submit('saveAndAddNew')">{{labelname?.SaveAddNew}}</button>
+              <button   *ngIf="filter == 'add-email' ? (userConfig?.Save)  : (userConfig?.Update)" class="btn" mat-flat-button color="primary"  type="button" (click)="submit('add')">{{ filter == 'add-email' ? labelname?.Save : labelname?.Update }}</button>
+              <!-- <button   *ngIf="filter !== 'add-email' ? (userConfig?.Save) : (userConfig?.Update)" class="btn" mat-flat-button color="primary"  type="button" (click)="submit('add')">{{ filter !== 'add-email' ? labelname?.Update : labelname?.Save }}</button> -->
+
+          </div>
+        </form>
+      </div>
+      <div class="col-4">
+      </div>
+    </div>
+  </div>
+</div>

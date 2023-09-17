@@ -1,0 +1,100 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper py-4 mt-3">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="(userConfig?.Cancel)"  (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+      <div class="row ">
+        <div class="col-12">
+          <span class="d-flex backArrow">
+            <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+            <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.TelegramAccount}}</legend>
+          </span>
+          <div class="formGroup">
+            <div class="masters_block">
+              <app-steps [steps]="telegramSteps" [moduletype]="'telegram'" [id]="path"
+              [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+              <div class="top_block"></div>
+
+              <div style="margin-bottom: 10px;">
+              <span><b>Attribute Mapping</b></span>
+              </div>
+              <div class="divbackground" *ngIf="form.value.product.length > 0" >
+
+                <ng-container formArrayName="product" *ngFor="let item of product?.controls; let i = index;"   class="divbackground" >
+                  <div class="row" [formGroupName]="i">
+
+                    <div class="col">
+                      <mat-form-field appearance="fill">
+
+                        <mat-label>{{labelName?.AttributeType}}</mat-label>
+                        <mat-select formControlName="productid" disableOptionCentering>
+                          <mat-option *ngFor="let data of findNonAdults(productType,i)" [value]="data.Id">
+                            {{data.ProductName}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                        *ngIf="product.controls[i].get('productid').hasError('required')"> {{labelName?.AttributeType}}
+                        is required  </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="equalsign">
+                    <span>=</span>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.AttributeName}}</mat-label>
+                        <mat-select class='roleidclss' formControlName="roleid" disableOptionCentering>
+                          <mat-option *ngFor="let data of findNonAdults2(attributeMapping,i)" [value]="data.Id">
+                            {{data.ProductName}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                        *ngIf="product.controls[i].get('roleid').hasError('required')"> {{labelName?.AttributeName}}
+                        is required  </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <button *ngIf="product?.controls.length > 1" mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 cursorPointer addbutton">
+                     <mat-icon class="remove cursorPointer red-color" (click)="removeProductGroup(i)"
+                      #tooltip="matTooltip" matTooltip="Remove">delete_outline</mat-icon>
+                    </button>
+
+
+
+                      <button  mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 cursorPointer addbutton"
+                      [disabled]="form.invalid || form.value.product.length >= productType.length || form.value.product.length >= attributeMapping.length"
+                      #tooltip="matTooltip" matTooltip="Add" (click)="addItem()"><span class="addfont">+</span></button>
+
+                  </div>
+                </ng-container>
+              </div>
+
+              <div style="padding-left: 13px;padding-right:17px">
+              <div class="row divbackground"  *ngIf="form.value.product.length == 0"  style="padding-left: 12px;padding-bottom: 10px;">
+                <button *ngIf="form.value.product.length == 0" mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 cursorPointer addbutton"
+                [disabled]="form.invalid || form.value.product.length >= productType.length || form.value.product.length >= attributeMapping.length"
+                #tooltip="matTooltip" matTooltip="Add" (click)="addItem()"><span class="addfont">+</span></button>
+              </div>
+            </div>
+
+
+
+
+            </div>
+            <div class="btn-group my-3" >
+              <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+              <button *ngIf="userConfig?.SaveAddNew" class="btn outline"   mat-stroked-button color="primary"  (click)="savetelegram('next')">{{labelName?.SaveAddNew }}</button>
+                <button *ngIf="(userConfig?.Save)" (click)="savetelegram('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                <!-- <button  *ngIf=" (userConfig?.SaveAddNew) " (click)="savetelegram('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.SaveAddNew }}</button> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

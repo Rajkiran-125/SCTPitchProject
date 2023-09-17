@@ -1,0 +1,298 @@
+.placeholderbox{
+    padding-left: 8%;
+}
+.placeholderboxpadding{
+  padding: 10px 5px;
+}
+.placeholdercount {
+
+
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid var(--gray_color);
+    padding: 2px 9px 3px 9px;
+  }
+  
+  .placeholderadd {
+    min-width: 25px !important;
+    height: 28px;
+    border-radius: 0px 6px 6px 0px;
+    border: 2px solid var(--gray_color);
+  }
+  
+  .placeholderremove {
+    min-width: 25px !important;
+    height: 28px;
+    border-radius: 6px 0px 0px 6px;
+    border: 2px solid var(--gray_color);
+  }
+  
+  .addfont {
+    color: var(--primary_color);
+    font-weight: 900;
+  }
+  
+  .minusfont {
+    color: var(--primary_color);
+    font-weight: 900;
+  }
+
+  ::ng-deep{
+    .note-toolbar{
+      position: absolute;
+      bottom: 0;
+      width: 99%;
+      z-index: 9999;
+    }
+
+    .note-editable{
+      margin-bottom: 15px !important;
+    }
+
+    .navTabDropdown{
+      .mat-form-field-wrapper{
+        padding-bottom: 0px !important;
+        margin-bottom: -5px !important;
+        width: 50%;
+        float: right;
+      }
+      .mat-form-field-flex{
+        border-radius: 0px !important;
+        background-color: #fff;
+        // width: 50%;
+        // float: right;
+      }
+    }
+  }
+
+  .inner-container{
+    padding: 0px 0px 5px 15px !important; 
+    margin-top: 1.5rem !important;
+  .wrapper {
+    padding: 2vh 2vh 5vh;
+   }
+  }
+  
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 35px;
+  }
+  .containerrow {
+    width: 240px;
+  }
+  .container {
+    width: 100%;
+    height: 80vh;
+    position: relative;
+    .box {
+      width: 100%;
+      height: 80%;
+      position: absolute;
+      background-size: 85%;
+      background-repeat: no-repeat;
+      word-break: break-word;
+      font-size: 10px;
+    }
+    .bodyText {
+      margin: 5px;
+      color: azure;
+    }
+  }
+  .stack-top {
+    width: 68%;
+    height: 345px;
+    z-index: 1;
+    position: absolute;
+    margin: 20px;
+    top: 6%;
+    border-radius: 10px;
+    overflow: auto;
+    padding: 3px;
+  }
+  
+  div button {
+    position: relative;
+  }
+  .textarea {
+    border: 1px solid #efefef !important;
+    border-radius: 10px !important;
+    padding: 10px;
+    font-size: var(--medium-font);
+    margin: 0px 15px;
+  }
+  .counter {
+    font-size: var(--medium-font);
+    font-weight: bold;
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+  }
+  
+  .textwrap {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 400px;
+  }
+  
+  .placeholderbox{
+      padding-left: 20%;
+      width: 10px;color: 
+      var(--primary_color);
+  }
+  
+  :host ::ng-deep .mat-radio-container {
+    height: 15px;
+    width: 15px;
+  }
+  :host ::ng-deep .mat-radio-outer-circle {
+    height: 15px;
+    width: 15px;
+  }
+  :host ::ng-deep .mat-radio-inner-circle {
+    height: 15px;
+    width: 15px;
+  }
+  :host ::ng-deep .mat-radio-button .mat-radio-ripple {
+    height: 20px; 
+    width: 20px; 
+    left: calc(50% - 10px);
+    top: calc(50% - 10px);
+  }
+  
+  input.mat-input-element {
+    font-size: 14px;
+    font-weight: 900;
+  }
+  
+  .placeholdercount {
+  
+  
+    font-size: 14px;
+    font-weight: 600;
+    border: 2px solid var(--gray_color);
+    padding: 2px 9px 3px 9px;
+  }
+  
+  .placeholderadd {
+    min-width: 25px !important;
+    height: 28px;
+    border-radius: 0px 6px 6px 0px;
+    border: 2px solid var(--gray_color);
+  }
+  
+  .placeholderremove {
+    min-width: 25px !important;
+    height: 28px;
+    border-radius: 6px 0px 0px 6px;
+    border: 2px solid var(--gray_color);
+  }
+  
+  .addfont {
+    color: var(--primary_color);
+    font-weight: 900;
+  }
+  
+  .minusfont {
+    color: var(--primary_color);
+    font-weight: 900;
+  }
+  
+  .colField {
+    padding-left: 20%;
+  }
+  .keyTextField {
+    width: 80px;
+    text-align: center;
+    color: var(--primary_color);
+  }
+  
+  ListkeyTextField{
+    width:110px;
+  }
+  .ListHeaderField{
+    .mat-form-field-wrapper{
+      width: 150px !important;
+    }
+  }
+  
+  .cardfirstlayer {
+    border: 1px solid #ccc;
+    border-radius: 5px 5px 0px 0px;
+    padding: 8px;
+    margin-right: 10px;
+    width: 100%;
+    background: var(--faintGray);
+  }
+  
+  .cardsecondlayer {
+    border: 1px solid #ccc;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .cardthirdlayer {
+    border: 1px solid #ccc;
+    border-radius: 0px 0px 5px 5px;
+    padding: 8px;
+    background: var(--faintGray);
+    width: 100%;
+  }
+  
+ 
+  .outline{
+    border: 1px solid var(--primary_color);
+    font-weight: bold;
+  }
+  
+  .container-space{
+    padding: 1.5rem;
+  }
+  
+  legend{
+    color: var(--primary_color);
+    font-weight: bold;
+    font-size: var(--title) !important;
+  }
+  
+  .hsmcheckbox{
+    margin-top: 3rem;
+  }
+  .noBorder{
+    border: 0px solid ;
+  }
+
+
+
+  @media screen and (max-width:767px) {
+    .inner-container{
+      padding: 0px 0px 5px 0px !important; 
+      margin-top: 0.5rem !important;
+    .wrapper {
+      padding: 2vh 2vh 5vh !important;
+  
+      .placeholderbox{
+        padding-left: 8%;
+    }
+    .placeholderboxpadding{
+      padding: 10px 5px;
+    }
+    .hsmcheckbox{
+      margin-top: 1rem;
+    }
+  
+    #custom-div{
+      padding: 10px 30px !important;
+    }
+     
+      ::ng-deep .mat-radio-group{
+        .mat-radio-button{
+          display: table-row !important;
+        }
+      }
+    
+    }
+    .container-space{
+      padding: 0.5rem !important;
+    }
+  }
+  }

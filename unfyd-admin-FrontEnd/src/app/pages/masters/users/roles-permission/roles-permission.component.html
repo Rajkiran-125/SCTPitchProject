@@ -1,0 +1,105 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="userConfig?.Cancel" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+          <div class="row ">
+            <!-- <div class="col-1 text-center ">
+              <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+            </div> -->
+            <div class="col-12 py-0">
+                <span class="d-flex">
+                    <span>                   
+                         <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+                    </span>
+                    <span>
+                        <legend class="ml-2">Update User</legend>
+                    </span>
+                </span>
+            <div class="formGroup">
+                <div class="masters_block">
+                    <app-steps [steps]="userFormSteps" [tabSelected]="'Roles & Permissions'" (newsteps)="addnewsteps($event)" [isDialog]="isDialog" [id]="path"></app-steps>
+                    <div class="channel-list">
+                        <ng-container formArrayName="product"
+                            *ngFor="let item of product?.controls; let i = index;">
+                            <div class="row" [formGroupName]="i">
+                                <div class="col">
+                                    <mat-form-field appearance="fill" class="customdropdown">
+                                        <mat-label>{{labelName?.Application}}</mat-label>
+                                        <mat-select formControlName="productid" disableOptionCentering (selectionChange)="productDetails($event.value,i)">
+                                            <mat-option *ngFor="let data of findNonAdults(productType,i)" [value]="data.Id">
+                                                {{data.ProductName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col" *ngIf="item.value.productid.toString() == '11'">
+                                    <mat-form-field appearance="fill" class="customdropdown">
+                                        <mat-label>Admin Access</mat-label>
+                                        <mat-select formControlName="products" disableOptionCentering multiple (selectionChange)="productAccess($event.value,i)">
+                                            <mat-option *ngFor="let data of products" [value]="data.Id">
+                                                {{data?.ProductName}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col">
+                                    <mat-form-field appearance="fill" class="customdropdown">
+                                        <mat-label>{{labelName?.Role}}</mat-label>
+                                        <mat-select formControlName="roleid"  disableOptionCentering (selectionChange)="getaccess($event.value,form.value.product[i].productid)" #roles123>
+                                          <mat-select-filter class="two" [placeholder]="'Search'" [displayMember]="'SubType'" [array]="profileType" (filteredReturn)="filteredList2 =$event" ></mat-select-filter>
+                                          
+                                          <ng-container *ngFor="let item1 of filteredList2">
+                                             <ng-container *ngIf="item.value.productid.toString() != '11';else elsePart">
+                                                <mat-option [value]="item1.Id" *ngIf="(item1.Id==2 || item1.Id==3)">{{item1.SubType}}</mat-option>
+                                             </ng-container>
+                                               <ng-template #elsePart>
+                                                    <ng-container *ngIf="item.value.productid.toString() == '11';else elsePart1">
+                                                        <mat-option [value]="item1.Id" *ngIf="(item1.Id==1 )">{{item1.SubType}}</mat-option>
+                                                    </ng-container>
+                                                    <ng-template #elsePart1>
+                                                             <mat-option [value]="item1.Id">{{item1.SubType}}</mat-option>
+                                                        </ng-template>
+                                                </ng-template>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col d-flex">
+                                    <mat-form-field appearance="fill" class="dropdownButtonField">
+                                        <mat-label>{{labelName?.AccessControl}}</mat-label>
+                                        <mat-select formControlName="accesscontrolid" disableOptionCentering (change)="setFilterForaceesControl(i)"  #abc>
+                                          <mat-select-filter class="Search" [placeholder]="'Search'" (selectionChange)="setAccess($event)" [displayMember]="'ControlName'" [array]="productTypeAccessControlCopy[form.value.product[i].productid]" (filteredReturn)="productTypeAccessControl[form.value.product[i].productid] =$event" *ngIf = "abc.focused"></mat-select-filter>
+                                            <mat-option *ngFor="let item of productTypeAccessControl[form.value.product[i].productid]" [value]="item.Id">
+                                              {{item.ControlName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <span *ngIf="item.value.productid.toString() == '11'" >
+                                        <button  mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 dropdownButton"
+                                          style="width:40px;font-weight: bold;"  (click)="dropdown('Privilege','Privilege')" ><span class="icon-master_data_management"></span></button>
+                                      </span>
+                                      <span *ngIf="item.value.productid.toString() !== '11'" >
+                                          <button  mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 dropdownButton"
+                                            style="width:40px;font-weight: bold;"  (click)="dropdown('FC','Feature Controls')" ><span class="icon-master_data_management"></span></button>
+                                        </span>
+                                </div>
+                                    <mat-icon class="remove cursorPointer" [ngClass]="i == 0 ? 'disabledIT':''" (click)="removeProductGroup(i)" #tooltip="matTooltip" matTooltip="Remove">delete</mat-icon>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <button (click)="addItem()" [disabled]="form.invalid" mat-stroked-button color="primary">{{labelName?.AddMoreApplication}}</button>
+                </div>
+            </div>
+            <div class="btn-group" >
+                <!-- <button *ngIf="userConfig?.Cancel" class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                <button *ngIf="!reset && userConfig?.Reset" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button>
+                <button *ngIf="userConfig?.Save" class="btn" mat-flat-button color="primary" [disabled]="form.invalid" (click)="submit()" type="button">{{labelName?.Save}}</button>
+                <button *ngIf="userConfig?.Next" class="btn outline" mat-flat-button color="primary" [disabled]="form.invalid" (click)="Next()" type="button">{{labelName?.Next}}</button>
+            </div>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,192 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper py-4 mt-3" >
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" routerLinkActive="router-link-active" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+        <div class="row ">
+          <div class="col-12">
+            <span class="d-flex backArrow">
+              <mat-icon class="gray cursorPointer" (click)="back()" >keyboard_backspace</mat-icon>
+              <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.FacebookChat}}</legend>
+            </span>
+            <div class="formGroup">
+              <div class="masters_block">
+                <app-steps [steps]="facebookMessengerConfigurationsteps" [moduletype]="'facebook-messenger'" [id]="path"
+                  [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                  <div class="row">
+                    <div class="col-lg-1 col-md-1 col-3 text-center pl-0">
+                      <div class="channelIcon cursorPointer" [matMenuTriggerFor]="menu" [ngStyle]="{'background-color': form.value.profilepic ? common.color[form.value.profilepic] : 'var(--gray_color)' }">
+                        <i class="chooseIcon icon-facebook_messenger"
+                          [ngStyle]="{'background-color': form.value.profilepic ? common.color[form.value.profilepic] : 'var(--gray_color)' }"></i>
+                      </div>
+                      <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                        <div class="row m-2" (click)="$event.stopPropagation()">
+                          <div class="col-12">
+                            <span class="selectColor">Select Icon Color</span>
+                          </div>
+                          <div class="col-3 py-2 px-1" *ngFor="let item of common.colorArray">
+                            <div class="row justify-content-center">
+                              <div
+                                class="cursorPointer colorTile d-flex align-items-center justify-content-center fontSize34PX"
+                                [ngStyle]="{'background': common.color[item], 'height': '30px', 'width': '30px'}"
+                                [ngClass]="item == form.value.profilepic ? 'selectedIconOnAddDashboardMatMenu':''"
+                                (click)="form.controls.profilepic.patchValue(item); menu.close.emit()">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-menu>
+                    </div>
+                    <div class="col-11">
+                      <div class="form_content">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.ChannelSourceName.errors }">
+                                    <mat-label>{{labelName?.ChannelSourceName}}</mat-label>
+                                    <input matInput formControlName="ChannelSourceName">
+                                    <mat-error *ngIf="f.ChannelSourceName.errors">
+                                        <ng-container *ngIf="f.ChannelSourceName.errors.required">{{labelName?.ChannelSourceName}}  is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.ChannelSourceName?.errors?.checknull">Whitespace not allowed
+                                        </ng-container>
+                                        <ng-container *ngIf="f.ChannelSourceName?.errors?.checknull1">
+                                          Must be at least 3 characters long.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.VersionNumber.errors }">
+                                    <mat-label>{{labelName?.VersionNumber}}</mat-label>
+                                    <input matInput formControlName="VersionNumber">
+                                    <mat-error *ngIf="f.VersionNumber.errors">
+                                        <ng-container *ngIf="f.VersionNumber.errors.required">{{labelName?.VersionNumber}} is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.VersionNumber?.errors?.checknull">Whitespace not allowed
+                                        </ng-container>
+                                        <ng-container *ngIf="f.VersionNumber?.errors?.checknull1">
+                                          Must be at least 3 characters long.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-8 col-md-8 col-sm-12">
+                              <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.SendMessageUrl.errors }">
+                                  <mat-label>{{labelName?.SendMessageUrl}}</mat-label>
+                                  <input matInput formControlName="SendMessageUrl">
+                                  <mat-error *ngIf="f.SendMessageUrl.errors">
+                                      <ng-container *ngIf="f.SendMessageUrl.errors.required">{{labelName?.SendMessageUrl}} is required
+                                      </ng-container>
+                                      <ng-container *ngIf="f.SendMessageUrl?.errors?.checknull">Whitespace not allowed
+                                      </ng-container>
+                                      <ng-container *ngIf="f.SendMessageUrl?.errors?.checknull1">
+                                        Must be at least 3 characters long.
+                                      </ng-container>
+                                      <ng-container *ngIf="f.SendMessageUrl?.errors.pattern">{{labelName?.SendMessageUrl}} is invalid.
+                                      </ng-container>
+                                  </mat-error>
+                              </mat-form-field>
+                          </div>
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                              <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.PageID.errors }">
+                                  <mat-label>{{labelName?.PageID}}</mat-label>
+                                  <input matInput formControlName="PageID">
+                                  <mat-error *ngIf="f.PageID.errors">
+                                      <ng-container *ngIf="f.PageID.errors.required">{{labelName?.PageID}} is required
+                                      </ng-container>
+                                      <ng-container *ngIf="f.PageID?.errors?.checknull">Whitespace not allowed
+                                      </ng-container>
+                                      <ng-container *ngIf="f.PageID?.errors?.checknull1">
+                                        Must be at least 3 characters long.
+                                      </ng-container>
+                                  </mat-error>
+                              </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="QuickReply"
+                          (toggleChange)="form.updateValueAndValidity()"  (change)="onButtonSelected()" labelPosition="before">{{labelName?.QuickReply}}</mat-slide-toggle>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12"  *ngIf="form.value.QuickReply">
+                          <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.QuickReplylength.errors }">
+                              <mat-label>{{labelName?.QuickReplylength}}</mat-label>
+                              <input matInput formControlName="QuickReplylength" type="number" (keypress)="numericOnly($event)"  min = 0 max =1000>
+                              <mat-error *ngIf="f.QuickReplylength.errors">
+                                  <ng-container *ngIf="f.QuickReplylength.errors.required">{{labelName?.QuickReplylength}} is required
+                                  </ng-container>
+                                  <ng-container *ngIf="f.QuickReplylength?.errors?.checknull">Whitespace not allowed
+                                  </ng-container>
+                                  <ng-container *ngIf="f.QuickReplylength.value > 1000">{{labelName?.QuickReplylength}} cannot be more than 1000
+                                  </ng-container>
+                              </mat-error>
+                          </mat-form-field>
+                      </div>
+
+                      <div class="col-lg-6 col-md-6 col-sm-12"  *ngIf="form.value.QuickReply">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.QuickReplytitlelength.errors }">
+                                <mat-label>{{labelName?.QuickReplytitlelength}}</mat-label>
+                                <input matInput formControlName="QuickReplytitlelength"  type="number" (keypress)="numericOnly($event)"  min = 0 max =1000>
+                                <mat-error *ngIf="f.QuickReplytitlelength.errors">
+                                    <ng-container *ngIf="f.QuickReplytitlelength.errors.required">{{labelName?.QuickReplytitlelength}} is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.QuickReplytitlelength?.errors?.checknull">Whitespace not allowed
+                                    </ng-container>
+                                    <ng-container *ngIf="f.QuickReplytitlelength.value > 1000">{{labelName?.QuickReplytitlelength}} cannot be more than 1000
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="ListOptions"
+                        (toggleChange)="form.updateValueAndValidity()"  (change)="onButtonSelected2()" labelPosition="before">{{ labelName?.ListOptions}}</mat-slide-toggle>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6 col-sm-12"  *ngIf="form.value.ListOptions">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ListOptionslength.errors }">
+                            <mat-label>{{ labelName?.ListOptionslength}}</mat-label>
+                            <input matInput formControlName="ListOptionslength"  type="number" (keypress)="numericOnly($event)"  min = 0 max =1000>
+                            <mat-error *ngIf="f.ListOptionslength.errors">
+                                <ng-container *ngIf="f.ListOptionslength.errors.required">{{ labelName?.ListOptionslength}} is required
+                                </ng-container>
+                                <ng-container *ngIf="f.ListOptionslength?.errors?.checknull">Whitespace not allowed
+                                </ng-container>
+                                <ng-container *ngIf="f.ListOptionslength.value > 1000">{{labelName?.ListOptionslength}} cannot be more than 1000
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="NumericButton"
+                        (toggleChange)="form.updateValueAndValidity()"   labelPosition="before">{{ labelName?.NumericButton}}</mat-slide-toggle>
+                      </div>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+              <!-- <button  class="btn btn-gray"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+              <button  *ngIf="!reset && userConfig?.Reset" class="btn btn-gray" mat-flat-button type="Reset" (click)=" resetFunc()">{{labelName?.Reset}}</button>
+              <button *ngIf="(userConfig?.Save)" (click)="saveFacebook('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+              <button  *ngIf=" (userConfig?.Next) " (click)="saveFacebook('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+            </div>
+            </div>
+        </div>
+        </div>
+    </form>
+  </div>
+</div>

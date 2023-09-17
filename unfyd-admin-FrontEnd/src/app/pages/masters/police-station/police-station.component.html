@@ -1,0 +1,199 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="wrapper">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <legend>Police Station</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.psname.errors }">
+                            <mat-label>{{labelName?.PoliceStationName}}</mat-label>
+                            <input type="text" matInput formControlName="psname" appTitleCase />
+                            <mat-error *ngIf="submittedForm && f.psname.errors">
+                                <ng-container *ngIf="f.psname.errors.required">
+                                    {{labelName?.PoliceStationName}} is required
+                                </ng-container>
+                                <ng-container *ngIf="f.psname.errors.pattern">Police Station Name is invalid
+                                </ng-container>
+                                <ng-container *ngIf="f.psname.errors.maxlength">
+                                    {{masters.MaxLengthMessage1}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.incharge.errors }">
+                            <mat-label>{{labelName?.OfficerIncharge}}</mat-label>
+                            <input type="text" matInput formControlName="incharge" appTitleCase minlength="3"
+                                maxlength="100" />
+
+                            <mat-error *ngIf="submittedForm && f.incharge.errors">
+                                <ng-container *ngIf="f.incharge.errors.minlength">
+                                    {{minMessage}}
+                                </ng-container>
+                                <ng-container *ngIf="f.incharge.errors.maxlength">
+                                    {{maxMessage}}
+                                </ng-container>
+                                <ng-container *ngIf="f.incharge.errors.required">
+                                    {{labelName?.OfficerIncharge}} is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.Headquarter}}</mat-label>
+                        
+                            <input type="text" matInput formControlName="hqname" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.mobile.errors }">
+                            <mat-label>{{labelName?.TelephoneNumber}}</mat-label>
+                            <input type="text" matInput formControlName="mobile" />
+                            <mat-error *ngIf="submittedForm && f.mobile.errors">
+                                <ng-container *ngIf="f.mobile.errors.required">Telephone no. is required</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.landline.errors }">
+                            <mat-label>{{labelName?.LandlineNumber}}</mat-label>
+                            <input type="text" matInput formControlName="landline" minlength="10" maxlength="10" />
+                            <mat-error *ngIf="submittedForm && f.landline.errors">
+                                <ng-container *ngIf="f.landline.errors.pattern">Landline no. is invalid</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.emailid.errors }">
+                            <mat-label>{{labelName?.EmailID}}</mat-label>
+                            <input type="text" matInput formControlName="emailid" />
+                            <mat-error *ngIf="submittedForm && f.emailid.errors">
+                                <ng-container *ngIf="f.emailid.errors.pattern">Email ID is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.Website}}</mat-label>
+                            <input type="text" matInput formControlName="website" />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.AddressLine1}}</mat-label>
+                            <input type="text" matInput formControlName="line1" appTitleCase />
+                            <mat-error *ngIf="submittedForm && f.line1.errors">
+                                <ng-container *ngIf="f.line1.errors.required">{{labelName?.AddressLine1}} is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.AddressLine2}}</mat-label>
+                            <input type="text" matInput formControlName="line2" appTitleCase />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Country.errors }">
+                            <mat-label>{{labelName?.Country}}</mat-label>
+                            <mat-select formControlName="Country" (selectionChange)="getStates($event.value)"
+                                disableOptionCentering #select>
+                                <mat-option *ngFor="let data of countrylist" [value]="data.CountryID">{{
+                                    data.CountryName }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submittedForm && f.Country.errors">
+                                <ng-container *ngIf="f.Country.errors.required">{{labelName?.Country}} is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.State.errors }">
+                            <mat-label>{{labelName?.State}}</mat-label>
+                            <mat-select formControlName="State" (selectionChange)="getDistrict($event.value)"
+                                disableOptionCentering #select2>
+                                <mat-select-filter *ngIf="select2.focused" [placeholder]="'Filter'"
+                                    [displayMember]="'StateName'" [array]="states"
+                                    (filteredReturn)="filteredstates =$event"></mat-select-filter>
+                                <mat-option *ngFor="let data of filteredstates" [value]="data.StateID">{{ data.StateName
+                                    }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submittedForm && f.State.errors">
+                                <ng-container *ngIf="f.State.errors.required">{{labelName?.State}} is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.District.errors }">
+                            <mat-label>{{labelName?.District}}</mat-label>
+                            <mat-select formControlName="District" disableOptionCentering #select3
+                                (selectionChange)="getZipcodes($event.value)">
+
+                                <mat-select-filter *ngIf="select3.focused" [placeholder]="'Filter'"
+                                    [displayMember]="'Districtname'" [array]="district"
+                                    (filteredReturn)="filtereddistrict =$event"></mat-select-filter>
+
+                                <mat-option *ngFor="let data of filtereddistrict;" [value]="data.DistrictId">
+                                    {{data.Districtname}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submittedForm && f.District.errors">
+                                <ng-container *ngIf="f.District.errors.required">{{labelName?.District}} is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.pin.errors }">
+                            <mat-label>{{labelName?.PINCode}}</mat-label>
+                            <mat-select formControlName="pin" disableOptionCentering #select>
+                                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'Pincode'"
+                                    [array]="zipcodes" (filteredReturn)="filtereddzipcodes =$event"></mat-select-filter>
+                                <mat-option *ngFor="let data of filtereddzipcodes;" [value]="data.Pincode">
+                                    {{data.Pincode}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submittedForm && f.pin.errors">
+                                <ng-container *ngIf="f.pin.errors.required">{{labelName?.PINCode}} is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-label></mat-label>
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="ishq">{{labelName?.IsHeadquarter}}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group" *ngIf="config.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button class="btn btn-gray" *ngIf="!reset" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-flat-button color="primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

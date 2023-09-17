@@ -1,0 +1,480 @@
+<!-- {{form.value?.taskgroupfields|json}} -->
+<!-- {{returnTaskFields()|json}} -->
+<!-- {{selectedIndex}} -->
+<!-- {{form.value.rechurnrule|json}} -->
+<!-- {{query|json}} -->
+<!-- {{config|json}}<br>{{config1|json}} -->
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-1 text-left pl-0 backarrow">
+          <mat-icon class="cursorPointer gray pl-4" (click)="back()">keyboard_backspace</mat-icon>
+        </div>
+        <div class="col-11 pl-0">
+          <legend class="heading">{{path ? ( labelName?.update ? labelName?.update :'Update' ) : ( labelName?.addNew ? labelName?.addNew : 'Add New'  ) }} {{changeModuleDisplayName}}</legend>
+            <div class="formGroup mt-3">
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <mat-accordion class="taskGroup">
+                      <mat-expansion-panel   [expanded]=variable0 #panel0="matExpansionPanel" class="expansionPanelBorder mb-3">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            {{labelName?.details  ? labelName?.details : 'Details'}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div formGroupName="details" class="mb-3">
+                          <div class="row">
+                            <div class="col-8">
+                              <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.name  ? labelName?.name : 'Name'}}</mat-label>
+                                <input matInput formControlName="name">
+                                <mat-error *ngIf="fDetails.name.errors">
+                                  <ng-container *ngIf="fDetails.name.errors.required">
+                                    {{labelName?.name  ? labelName?.name : 'Name'}} is required
+                                  </ng-container>
+                                  <ng-container *ngIf="fDetails.name.errors.pattern">
+                                    {{labelName?.name  ? labelName?.name : 'Name'}} is invalid
+                                  </ng-container>
+                                  <ng-container *ngIf="fDetails.name.errors.maxLength">
+                                    {{labelName?.name  ? labelName?.name : 'Name'}} exceeds maxlength.
+                                  </ng-container>
+                                  <ng-container *ngIf="fDetails?.name?.errors?.checknull">Whitespace not allowed.
+                                  </ng-container>
+                                  <!-- <ng-container *ngIf="fDetails.name.errors.checknull1">
+                                    {{ labelName?.mustBeAtLeastThreeCharactersLong ? labelName?.mustBeAtLeastThreeCharactersLong : 'Must be at least 3 characters long.' }}
+                                  </ng-container> -->
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-4">
+                              <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.userGroup  ? labelName?.userGroup : 'User Group'}}</mat-label>
+                                <mat-select formControlName="usergroup"  (selectionChange)="ifselectall($event.value,1)" disableOptionCentering multiple class="skillmap">
+                                  <div class="selectAll">
+                                    <mat-checkbox color="primary" class="mat-option w-100" [checked]="common.isChecked(getGroupList,form.controls['details']['controls']['usergroup'].value)"
+                                      (click)="$event.stopPropagation()" (change)="toggleSelection($event)">
+                                      Select All
+                                    </mat-checkbox>
+                                  </div>
+
+                                  <mat-option *ngFor="let data of getGroupList" [value]="data.GroupID">
+                                      {{data.GroupName}}
+                                  </mat-option>
+                              </mat-select>
+                                <mat-error *ngIf="fDetails.usergroup.errors">
+                                  <ng-container *ngIf="fDetails.usergroup.errors.required">
+                                    {{labelName?.userGroup  ? labelName?.userGroup : 'User Group'}} is required
+                                  </ng-container>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-12">
+                              <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.description ? labelName?.description : 'Description'}}</mat-label>
+                                <textarea matInput formControlName="description" maxlength="500"></textarea>
+                                <mat-error *ngIf="fDetails.description.errors">
+                                  <ng-container *ngIf="fDetails?.description?.errors?.pattern">
+                                    {{labelName?.description ? labelName?.description : 'Description'}} is invalid.
+                                  </ng-container>
+                                  <ng-container *ngIf="fDetails?.description?.errors?.minlength">
+                                    Must be at least 3 characters long
+                                  </ng-container>
+                                  <ng-container *ngIf="fDetails?.description?.errors?.maxlength">
+                                    Cannot be beyond 500 characters.
+                                  </ng-container>
+                                  <ng-container *ngIf="fDetails?.description?.errors?.checknull1">
+                                    Must be at least 3 characters long.
+                                  </ng-container>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                              <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.startDate  ? labelName?.startDate : 'Start Date'}}</mat-label>
+                                <input readonly formControlName="startdate" type="text" [min]="path ? todayDate : form.value.details.startdate"
+                                    [matDatepicker]="startdate" matInput>
+                                <mat-datepicker-toggle matSuffix [for]="startdate"></mat-datepicker-toggle>
+                                <mat-datepicker #startdate></mat-datepicker>
+                                <mat-error *ngIf="fDetails.startdate.errors">
+                                    <ng-container *ngIf="fDetails.startdate.errors.required">{{labelName?.startDate  ? labelName?.startDate : 'Start Date'}} is required.
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                              <mat-form-field appearance="fill" >
+                                <mat-label>{{labelName?.startTime  ? labelName?.startTime : 'Start Time'}}</mat-label>
+                                <input matInput class=" w-100"
+                                value="{{form?.value?.details?.starttime?.hour ? form?.value?.details?.starttime?.hour > 9 ? form?.value?.details?.starttime?.hour : '0'+form?.value?.details?.starttime?.hour : '00'}}:{{form?.value?.details?.starttime?.minute ? form?.value?.details?.starttime?.minute > 9 ? form?.value?.details?.starttime?.minute : '0'+form?.value?.details?.starttime?.minute : '00'}}:{{form?.value?.details?.starttime?.second ? form?.value?.details?.starttime?.second > 9 ? form?.value?.details?.starttime?.second : '0'+form?.value?.details?.starttime?.second : '00'}}"
+                                [readonly]="true" placeholder="00:00:00"/>
+                                <mat-icon class="timerIconPosition cursorPointer" [matMenuTriggerFor]="timeFrom3" matSuffix>access_time</mat-icon>
+                                <mat-error *ngIf="fDetails?.startTime?.errors">
+                                  <ng-container *ngIf="fDetails?.startTime?.errors?.required">{{labelName?.startTime  ? labelName?.startTime : 'Start Time'}} is required.
+                                  </ng-container>
+                              </mat-error>
+                            </mat-form-field>
+                            <mat-menu #timeFrom3="matMenu" class="w-100 px-2  d-flex align-items-center cardMoreFetures" xPosition="before">
+                            <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                                $event.stopPropagation();"  formControlName="starttime"
+                                [seconds]="true" [hourStep]="1" [minuteStep]="1" [secondStep]="1">
+                            </ngb-timepicker>
+                            </mat-menu>
+
+                            </div>
+                            <div class="col-3">
+                              <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.endDate  ? labelName?.endDate : 'End Date'}}</mat-label>
+                                <input readonly formControlName="enddate" type="text" [min]="form.value.details.startdate ? form.value.details.startdate : null"
+                                    [matDatepicker]="enddate" matInput [disabled]="!form.value.details.startdate">
+                                <mat-datepicker-toggle matSuffix [for]="enddate"></mat-datepicker-toggle>
+                                <mat-datepicker #enddate></mat-datepicker>
+                                <mat-error *ngIf="fDetails.enddate.errors">
+                                    <ng-container *ngIf="fDetails.enddate.errors.required">{{labelName?.endDate  ? labelName?.endDate : 'End Date'}} is required.
+                                    </ng-container>
+                                </mat-error>
+                                 <mat-error *ngIf="fDetails?.enddate.errors?.matDatepickerMin">{{labelName?.endDate  ? labelName?.endDate : 'End Date'}} should be greater than {{labelName?.startTime  ? labelName?.startTime : 'Start Time'}}</mat-error>
+                            </mat-form-field>
+                            </div>
+                            <div class="col-3">
+                              <mat-form-field appearance="fill" >
+                                <mat-label>{{labelName?.endTime  ? labelName?.endTime : 'End Time'}}</mat-label>
+                                <input matInput class=" w-100"
+                                value="{{form?.value?.details?.endtime?.hour ? form?.value?.details?.endtime?.hour > 9 ? form?.value?.details?.endtime?.hour : '0'+form?.value?.details?.endtime?.hour : '00'}}:{{form?.value?.details?.endtime?.minute ? form?.value?.details?.endtime?.minute > 9 ? form?.value?.details?.endtime?.minute : '0'+form?.value?.details?.endtime?.minute : '00'}}:{{form?.value?.details?.endtime?.second ? form?.value?.details?.endtime?.second > 9 ? form?.value?.details?.endtime?.second : '0'+form?.value?.details?.endtime?.second : '00'}}"
+                                [readonly]="true" placeholder="00:00:00"/>
+                                <mat-icon class="timerIconPosition cursorPointer" [matMenuTriggerFor]="timeFrom4" matSuffix>access_time</mat-icon>
+                                <mat-error *ngIf="fDetails?.endtime?.errors">
+                                  <ng-container *ngIf="fDetails?.endtime?.errors?.required">{{labelName?.endTime  ? labelName?.endTime : 'End Time'}} is required.
+                                  </ng-container>
+                              </mat-error>
+                                <mat-hint class="mat-error"
+                                    *ngIf="StartTimeEndTimeGreater() && (fDetails.endtime.value !== 0 || fDetails.endtime.value.minute !== 0 || fDetails.endtime.value.second !== 0) && fDetails.endtime.touched && fDetails.starttime.touched">{{labelName?.endTime  ? labelName?.endTime : 'End Time'}}
+                                      should be greater than {{labelName?.startTime  ? labelName?.startTime : 'Start Time'}}</mat-hint>
+                            </mat-form-field>
+                            <mat-menu #timeFrom4="matMenu" class="w-100 px-2  d-flex align-items-center cardMoreFetures" xPosition="before">
+                            <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                                $event.stopPropagation();"  formControlName="endtime"
+                                [seconds]="true" [hourStep]="1" [minuteStep]="1" [secondStep]="1">
+                            </ngb-timepicker>
+                            </mat-menu>
+                            </div>
+                            <div class="col-4 inputText normal-dropdown">
+                              <mat-form-field appearance="fill">
+                                <input matInput type="number" min="1" formControlName="previewduration" class="example-right-align" placeholder="00 (Sec)" panelClass="normal-panel" (keypress)="common.numericOnly($event)">
+                                <span matPrefix>{{labelName?.previewDuration  ? labelName?.previewDuration : 'Preview Duration'}}</span>
+                                <mat-error *ngIf="fDetails.previewduration.errors">
+                                  <ng-container *ngIf="fDetails.previewduration.errors.required">
+                                    {{labelName?.previewDuration  ? labelName?.previewDuration : 'Preview Duration'}} is required
+                                  </ng-container>
+                                  <ng-container *ngIf="fDetails.previewduration.errors.max">
+                                    {{labelName?.previewDuration  ? labelName?.previewDuration : 'Preview Duration'}} Cannot be beyond 99
+                                  </ng-container>
+                                  <ng-container *ngIf="fDetails.previewduration.errors.min">
+                                    {{labelName?.previewDuration  ? labelName?.previewDuration : 'Preview Duration'}} Has to be more than 0
+                                  </ng-container>
+                                </mat-error> </mat-form-field>
+                            </div>
+                            <div class="col-12 d-flex mt-2">
+                              <label class="mr-3">{{labelName?.routeType ? labelName?.routeType : 'Route Type'}}</label>
+                              <mat-radio-group
+                                aria-labelledby="example-radio-group-label"
+                                class="example-radio-group"
+                                formControlName="routetype">
+                                <mat-radio-button class="example-radio-button" *ngFor="let data of routeType" [value]="data.Value">
+                                  {{data.Key}}
+                                </mat-radio-button>
+                                <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"   *ngIf="route() && submittedForm ">
+                                    {{labelName?.routeType ? labelName?.routeType : 'Route Type'}} is required
+                                </mat-hint>
+                              </mat-radio-group>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-expansion-panel>
+                      <mat-expansion-panel   [expanded]="variable1" #panel1="matExpansionPanel" class="expansionPanelBorder mb-3" (closed)="callUserConfig()">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            {{labelName?.taskGroupFields  ? labelName?.taskGroupFields : 'Task Group Fields'}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                          <div class="row mb-3">
+                            <div class="col-8">
+                              <app-create-form (exportAllFormControls)="changesDone($event)" [resetform]="resetform"  (resetTask)="resetTaskGroup($event)"[allFormControl]="form.value.taskgroupfields" [selectedIndex]="selectedIndex" [systemDefinedFields]="true" [userDefinedFields]="true"></app-create-form>
+                            </div>
+                            <div class="col-4">
+                              <app-form-preview [item]="dummyAllFormControl" (newItemEvent)="changesDone1($event)"
+                              (selectedIndex)="selectedIndexValue($event)"></app-form-preview>
+                            </div>
+                          </div>
+                      </mat-expansion-panel>
+                      <!-- <mat-expansion-panel   [expanded]="variable2" #panel2="matExpansionPanel" class="expansionPanelBorder mb-3 d-none" (closed)="callUserConfig()">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                              {{labelName?.businessHours  ? labelName?.businessHours : 'Business Hours'}}
+                          </mat-panel-title>
+                          <mat-slide-toggle (click)="$event.stopPropagation();" formControlName="businesshours" color="primary" class="toggleBtn"></mat-slide-toggle>
+                        </mat-expansion-panel-header>
+                          <div formGroupName="onlinehours" class="row ">
+                            <div class="row ">
+                              <div class="col-lg-3 col-md-3 col-sm-12 blue-dropdown">
+                                <div class="blue-dropdown">
+                                  <mat-form-field appearance="fill">
+                                    <mat-select formControlName="productName" panelClass="blue-panel" (selectionChange)="productChange()">
+                                      <mat-option *ngFor="let data of productType" [value]="data.Id">{{data.ProductName}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Channel</mat-label>
+                                  <mat-select formControlName="channel">
+                                    <mat-select-trigger *ngIf="form.controls?.onlinehours.controls.channel.value" class="d-flex align-items-center">
+                                      <ng-container *ngFor="let item2 of userChannelName">
+                                        <ng-container *ngIf="form.controls?.onlinehours.controls.channel.value == item2.ChannelId">
+                                          <span [innerHtml]="item2?.ChannelIcon"></span>
+                                          <span>{{item2.ChannelName}}</span>
+                                        </ng-container>
+                                      </ng-container>
+                                    </mat-select-trigger>
+                                    <mat-option *ngFor="let data of userChannelName"  [value]="data.ChannelId">
+                                      <span [innerHtml]="data?.ChannelIcon"></span>
+                                      <span>{{data.ChannelName}}</span>
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-lg-3 col-md-3 col-12 ">
+                                <mat-form-field appearance="fill" >
+                                  <mat-label >Language</mat-label>
+                                  <mat-select matinput matInput formControlName="language">
+                                    <mat-option *ngFor="let data of userLanguageName | orderBy:'language'"
+                                      [value]="data.langcode">{{data.language}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+
+                              <div class="col-lg-3 col-md-3 col-12">
+                                <button mat-stroked-button color="primary" class="outline width_100"
+                                  (click)="getOnlineHrs()">View</button>
+                              </div>
+
+
+                            </div>
+                            <div class="col-12" *ngIf="view">
+                              <app-business-hours [showHeader]="false"  [language]="language" [channel]="channel" type="BusinessHours" tabType="hour"  tabSelected="Online Hours"></app-business-hours>
+                            </div>
+                          </div>
+                      </mat-expansion-panel> -->
+                      <mat-expansion-panel   [expanded]="variable3" #panel3="matExpansionPanel" class="expansionPanelBorder mb-3" (opened)="queryBuilderOpened()" (closed)="callUserConfig()">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                              {{labelName?.filterCondition  ? labelName?.filterCondition : 'Filter Condition'}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row" *ngIf="invalidQueryArray.length > 0 && invalidQueryArray.includes(true)">
+                          <div class="col-12 errorMsg">
+                            {{labelName?.checkYourFormfieldsValidateFilterConditions ? labelName?.checkYourFormfieldsValidateFilterConditions : 'Check your formfields, Validate filter conditions.'}}
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <div class="col-12">
+                            <!-- <app-query-creation-builder [config]="config" [query]="form.value.filtercondition" (sendData)="dataFromQueryBuilder($event)"></app-query-creation-builder> -->
+                          </div>
+                        </div>
+                        <div class="d-none">
+                          <div formArrayName="filtercondition" *ngFor="let item of form.get('filtercondition')['controls']; let i = index; let first = first;let last = last">
+                            <div class="row" [formGroupName]="i">
+                              <div class="col-3">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>{{labelName?.taskField  ? labelName?.taskField : 'Task Field'}}</mat-label>
+                                  <mat-select formControlName="taskfield" disableOptionCentering class="skillmap">
+                                    <mat-option *ngFor="let data of returnTaskFields()" [value]="data.formControlName">
+                                        {{data.label}}
+                                    </mat-option>
+                                </mat-select>
+                                  <mat-error *ngIf="item.get('taskfield').errors">
+                                    <ng-container *ngIf="item.get('taskfield').errors.required">
+                                      {{labelName?.taskField  ? labelName?.taskField : 'Task Field'}} is required
+                                    </ng-container>
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-3">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>{{labelName?.condition  ? labelName?.condition : 'Condition'}}</mat-label>
+                                  <mat-select formControlName="condition" disableOptionCentering class="skillmap">
+                                    <mat-option *ngFor="let data of comparisonOperator" [value]="data">
+                                        {{data}}
+                                    </mat-option>
+                                </mat-select>
+                                  <mat-error *ngIf="item.get('condition').errors">
+                                    <ng-container *ngIf="item.get('condition').errors.required">
+                                      {{labelName?.condition  ? labelName?.condition : 'Condition'}} is required
+                                    </ng-container>
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-3">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>{{labelName?.value  ? labelName?.value : 'Value'}}</mat-label>
+                                  <input matInput formControlName="value">
+                                  <mat-error *ngIf="item.get('value').errors">
+                                    <ng-container *ngIf="item.get('value').errors.required">
+                                      {{labelName?.value  ? labelName?.value : 'Value'}} is required
+                                    </ng-container>
+                                    <ng-container *ngIf="item.get('value').errors.checknull">
+                                      Whitespace not allowed.
+                                    </ng-container>
+                                  </mat-error>
+                                </mat-form-field>
+                              </div>
+                              <div [ngClass]="!last ? 'col-2':'offset-2'">
+                                <mat-button-toggle-group *ngIf="!last" formControlName="andor" class="toggleButtonBlockContent">
+                                  <mat-button-toggle value="and">And</mat-button-toggle>
+                                  <mat-button-toggle value="or">Or</mat-button-toggle>
+                                </mat-button-toggle-group>
+                              </div>
+                              <div class="col-lg-1 col-md-1 col-1 d-flex pt-2" *ngIf="form.value.filtercondition.length >1">
+                                <mat-icon class="red-color cursorPointer mr-3" (click)="delete('filtercondition',i)">delete</mat-icon>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-2 col-md-2 col-2 ">
+                              <button mat-mini-fab class="addFormControl rounded w-100" [disabled]="form.get('filtercondition').invalid" (click)="addFilterConditionType('filtercondition')">
+                                <span class="">Add</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-expansion-panel>
+                      <mat-expansion-panel  [expanded]="variable4" #panel4="matExpansionPanel" class="expansionPanelBorder mb-3" (opened)="queryBuilderOpened1();rechurnOpened()" (closed)="callUserConfig()">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                              {{labelName?.rechurnRule  ? labelName?.rechurnRule : 'Rechurn Rule'}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <!-- {{form.value.rechurnrule|json}} -->
+                        <div class="row" *ngIf="invalidQueryArray1.length > 0 && invalidQueryArray1.includes(true)">
+                          <div class="col-12 errorMsg">
+                            {{labelName?.checkYourFormfieldsValidateFilterConditions ? labelName?.checkYourFormfieldsValidateFilterConditions : 'Check your formfields, Validate filter conditions.'}}
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <div class="col-12">
+                            <app-query-creation-builder [config]="config1" [query]="form.value.rechurnrule.condition" (sendData)="dataFromQueryBuilder1($event)"></app-query-creation-builder>
+                          </div>
+                        </div>
+                        <div class="row ml-5 mb-2">
+                          <div class="col-12">
+                            <span class="primary-color font-weight-bold">Action</span>
+                          </div>
+                        </div>
+                        <div class="row ml-5">
+                          <div class="col-5 small-font gray-color">{{labelName?.fieldName ? labelName?.fieldName : 'Field Name'}}</div>
+                          <div class="col-5 small-font gray-color">{{labelName?.fieldValue ? labelName?.fieldValue : 'Field Value'}}</div>
+                          <div class="col-2 small-font gray-color">{{labelName?.status ? labelName?.status : 'Status'}}</div>
+                        </div>
+                        <div formGroupName="rechurnrule">
+                          <div formArrayName="action" *ngFor="let item of form.controls['rechurnrule']['controls']['action']['controls']; let i = index">
+                            <div class="row ml-5" [formGroupName]="i">
+                              <div class="col-5 inputText normal-dropdown">
+                                <mat-form-field appearance="fill">
+                                  <input matInput type="text" readonly formControlName="taskfield" class="" panelClass="normal-panel">
+                                </mat-form-field>
+                              </div>
+                              <div class="col-5 inputText normal-dropdown">
+                                <mat-form-field appearance="fill">
+                                  <input matInput type="text" formControlName="value" class="" panelClass="normal-panel" placeholder="Value">
+                                  <mat-error class="errorMsg" *ngIf="item.get('value').errors ">
+                                    <ng-container *ngIf="item.get('value').errors.emptySpace">
+                                      Empty space not allowed
+                                    </ng-container>
+                                    <ng-container *ngIf="item.get('value').errors.required">
+                                      Value is required
+                                    </ng-container>
+                                    <ng-container *ngIf="item.get('value').errors.pattern">
+                                      Value is invalid
+                                    </ng-container>
+                                  </mat-error>
+                                </mat-form-field>
+
+                              </div>
+                              <div class="col-2">
+                                <!-- (change)="taskGroupRechurnActionSetValidation(i)" -->
+                                <mat-checkbox class="example-margin pt-2 ml-2" (change)="taskGroupRechurnActionSetValidation(i)" color="primary" formControlName="status"></mat-checkbox>
+                              </div>
+                              <!-- {{data.data.value|json}}
+                              {{form.value.action|json}} -->
+                            </div>
+                          </div>
+                        </div>
+
+                      </mat-expansion-panel>
+                      <mat-expansion-panel   [expanded]="variable5" #panel5="matExpansionPanel" class="expansionPanelBorder mb-3" (opened)="sortOpened()" (closed)="callUserConfig()">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            {{labelName?.sortCondition ? labelName?.sortCondition : 'Sort Condition'}}
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div formGroupName="sortcondition" class="mb-3">
+                          <div class="row">
+                            <div class="col-12 d-flex">
+                              <button class="primaryBorderButton mr-3" [matMenuTriggerFor]="menu">Add Field</button>
+                              <mat-menu #menu="matMenu" (click)="$event.stopPropagation()" class="">
+                                <div class="row w-100" (click)="$event.stopPropagation()">
+                                  <div class="col-12 w-100 ml-2 mt-3" (click)="$event.stopPropagation()">
+                                    <mat-form-field class="w-100 mx-2" appearance="fill" (click)="$event.stopPropagation()">
+                                      <mat-label>{{labelName?.selectCondition  ? labelName?.selectCondition : 'Select Condition'}}</mat-label>
+                                      <mat-select disableOptionCentering class="skillmap" (selectionChange)="sortSelection($event.value)">
+                                        <ng-container *ngFor="let item of returnTaskFields();let i = index">
+                                          <mat-option *ngIf="!form.value?.sortcondition?.value?.includes(item?.formControlName)" [value]="item.formControlName">
+                                            {{item.label}}
+                                        </mat-option>
+                                        </ng-container>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </mat-menu>
+                              <mat-chip-list>
+                                <ng-container *ngFor="let item of returnTaskFields();let i = index">
+                                  <mat-chip *ngIf="form.value?.sortcondition?.value?.includes(item?.formControlName)" (removed)="remove(item.formControlName)">{{item.label}}<button matChipRemove><mat-icon>cancel</mat-icon></button></mat-chip>
+                                </ng-container>
+                              </mat-chip-list>
+                            </div>
+                          </div>
+                          <div class="row mt-3">
+                            <div class="col-12 d-flex">
+                              <span class="pr-3 orderBy">{{labelName?.orderBy ? labelName?.orderBy : 'Order By'}}:</span>
+                              <span class="pr-2 toggleLabel">{{labelName?.ascending ? labelName?.ascending : 'Ascending'}}</span>
+                                <mat-slide-toggle  formControlName="order" color="primary" class="toggleBtn toggleLabel" style="float: right;"></mat-slide-toggle>
+                              <span class="pr-2 toggleLabel">{{labelName?.descending ? labelName?.descending : 'Descending'}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="btn-group d-md-block">
+                    <!-- <button  class="btn btn-gray" (click)="back()"  mat-flat-button type="Reset">{{labelName?.cancel ? labelName?.cancel : 'Cancel'}}</button> -->
+                    <button class="btn btn-gray" mat-flat-button *ngIf="!path " type="Reset"  (click)="reset()">{{labelName?.reset ? labelName?.reset : 'Reset'}}</button>
+                    <button *ngIf="!path " class="btn outline"   type="button"  color="primary" (click)="submit('saveAndAddNew')">{{labelName?.SaveAddNew ? labelName?.SaveAddNew  : 'Save & Add New'}}</button>
+                    <button class="btn" mat-flat-button color="primary" (click)="submit('add')" type="button">{{ path ? (labelName?.update ? labelName?.update : 'Update') : (labelName?.save ? labelName?.save : 'Save') }}</button>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,307 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <app-steps [steps]="hawkerFormSteps" [id]="path == null ? '': path"></app-steps>
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend>Personal Details</legend>
+            <div class="formGroup" style="display:flex;">
+                <div class="profileInfo">
+                    <div class="content">
+                            <div class="avatar avatar-mar" [ngClass]="{ 'shake': submittedForm && f.photographstatus.errors }">
+                                <mat-icon *ngIf="profileImg == null">person</mat-icon>
+                                <img *ngIf="profileImg !== null" [src]="profileImg" >
+                                <input formControlName="photographstatus" type="checkbox" (click)="uploadDocument(true, profileDocument, 'Photograph')">
+                            </div>
+                    </div>
+                    <mat-error *ngIf="f.photographstatus.errors" [ngClass]="{ 'shake': submittedForm && f.photographstatus.errors }">
+                        <ng-container  *ngIf="f.photographstatus.errors.required && f.photographstatus.touched">
+                            * Upload Profile
+                        </ng-container> 
+                    </mat-error>
+                </div>
+
+                <div class="profile-form">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.ApplicationDate}}</mat-label>
+                                <input datePickerFormat="DD-MM-YYYY" (focus)="applicationdate.open()"
+                                    (click)="applicationdate.open()" readonly formControlName="applicationdate"
+                                    type="text" [matDatepicker]="applicationdate" matInput [max]="currentDate" [min]="lastYear"
+                                    [disabled]="currentDateReadonly">
+                                <mat-datepicker-toggle matSuffix [for]="applicationdate"></mat-datepicker-toggle>
+                                <mat-datepicker #applicationdate></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.salutation.errors }">
+                                <mat-label>{{labelName?.Title}}</mat-label>
+                                <mat-select formControlName="salutation" (selectionChange)="getsalutation($event.value)"
+                                   >
+                                    <mat-option *ngFor="let data of masterConfig?.salutation" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf=" f.salutation.errors">
+                                    <div *ngIf="f.salutation.errors.required">Salutation is required</div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.firstname.errors }">
+                                <mat-label>{{labelName?.FirstName}}</mat-label>
+                                <input matInput formControlName="firstname" maxlength="30" appTitleCase>
+                                <mat-error *ngIf=" f.firstname.errors">
+                                    <ng-container *ngIf="f.firstname.errors.required">First name is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.firstname.errors.pattern">First name is invalid
+                                    </ng-container>
+                                    <ng-container *ngIf="f.firstname.errors.maxlength"> 
+                                        {{masters.MaxLengthMessage1}}
+                                   </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.middlename.errors }">
+                                <mat-label>{{labelName?.MiddleName}}</mat-label>
+                                <input matInput formControlName="middlename" maxlength="30" appTitleCase>
+                                <mat-error *ngIf=" f.middlename.errors">
+                                    <ng-container *ngIf="f.middlename.errors.pattern">Middle name is invalid
+                                    </ng-container>
+                                    <ng-container *ngIf="f.middlename.errors.maxlength"> 
+                                        {{masters.MaxLengthMessage1}}
+                                   </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.lastname.errors }">
+                                <mat-label>{{labelName?.LastName}}</mat-label>
+                                <input matInput formControlName="lastname" maxlength="30" appTitleCase>
+                                <mat-error *ngIf=" f.lastname.errors">
+                                    <ng-container *ngIf="f.lastname.errors.required">Last name is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.lastname.errors.pattern">Last name is invalid
+                                    </ng-container>
+                                    <ng-container *ngIf="f.lastname.errors.maxlength"> 
+                                        {{masters.MaxLengthMessage1}}
+                                   </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.gender.errors }">
+                                <mat-label>{{labelName?.Gender}}</mat-label>
+                                <mat-select formControlName="gender"
+                                    (selectionChange)="getGender($event.value)">
+                                    <mat-option *ngFor="let data of masterConfig?.gender" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf=" f.gender.errors">
+                                    <ng-container *ngIf="f.gender.errors.required">Gender is required</ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.dob.errors }">
+                                <mat-label>{{labelName?.DateOfBirth}}</mat-label>
+                                <input datePickerFormat="DD-MM-YYYY" (focus)="dob.open()" (click)="dob.open()" readonly
+                                    formControlName="dob" type="text" [matDatepicker]="dob" [max]="maxDate"
+                                    [min]="minDate" matInput>
+                                <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                                <mat-datepicker #dob></mat-datepicker>
+                                <mat-error *ngIf=" f.dob.errors">
+                                    <ng-container *ngIf="f.dob.errors.required">Date of birth is required
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.relativeof.errors }">
+                                <mat-label>{{labelName?.Relation}}</mat-label>->
+                                <mat-select formControlName="relativeof">
+                                    <mat-option *ngFor="let data of masters.relativeof" [value]="data">{{data}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf=" f.relativeof.errors">
+                                    <ng-container *ngIf="f.relativeof.errors.required">Son / Daughter / Wife of is
+                                        required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.relativeof.errors.pattern">Son / Daughter / Wife of is
+                                        invalid
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.relativename.errors }">
+                                <mat-label>{{labelName?.CareOf}}</mat-label>
+                                <input maxlength="100" matInput formControlName="relativename" appTitleCase style="text-transform: capitalize">
+                                <mat-error *ngIf=" f.relativename.errors">
+                                    <ng-container *ngIf="f.relativename.errors.required">Care of is required
+                                    </ng-container>
+                                    <ng-container *ngIf="f.relativename.errors.pattern">Care of is invalid
+                                    </ng-container>
+                                    <ng-container *ngIf="f.relativename.errors.maxlength"> 
+                                        {{masters.MaxLengthMessage1}}
+                                   </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.Nationality}}</mat-label>
+                                <mat-select formControlName="nationality">
+                                    <mat-option *ngFor="let data of masterConfig?.nationality" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.religion.errors }">
+                                <mat-label>{{labelName?.Religion}}</mat-label>
+                                <mat-select formControlName="religion">
+                                    <mat-option *ngFor="let data of masterConfig?.religion" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf=" f.religion.errors">
+                                    <ng-container *ngIf="f.religion.errors.required">Religion is required</ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.caste.errors }">
+                                <mat-label>{{labelName?.Caste}}</mat-label>
+                                <mat-select formControlName="caste">
+                                    <mat-option *ngFor="let data of masterConfig?.caste" [value]="data.Key">{{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf=" f.caste.errors">
+                                    <ng-container *ngIf="f.caste.errors.required">Caste is required
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.educationqual.errors }">
+                                <mat-label>{{labelName?.Qualification}}</mat-label>
+                                <mat-select formControlName="educationqual">
+                                    <mat-option *ngFor="let data of masterConfig?.educationLevel" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf=" f.educationqual.errors">
+                                    <ng-container *ngIf="f.educationqual.errors.required">Education qualification
+                                        required
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.BloodGroup}}</mat-label>
+                                <mat-select formControlName="bloodgroup">
+                                    <mat-option *ngFor="let data of masterConfig?.bloodGroup" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.mothertongue.errors }">
+                                <mat-label>{{labelName?.MotherTongue}}</mat-label>
+                                <mat-select formControlName="mothertongue">
+                                    <mat-option *ngFor="let data of masterConfig?.languages | orderBy: 'Key'" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf=" f.mothertongue.errors">
+                                    <ng-container *ngIf="f.mothertongue.errors.required">Mother tongue is required
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill"
+                                [ngClass]="{ 'shake': submittedForm && f.languagesknown.errors }">
+                                <mat-label>{{labelName?.LanguagesKnown}}</mat-label>
+                                <mat-select formControlName="languagesknown" multiple>
+                                    <mat-option *ngFor="let data of masterConfig?.languages | orderBy: 'Key'" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf=" f.languagesknown.errors">
+                                    <ng-container *ngIf="f.languagesknown.errors.required">Languages known is required
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.MaritalStatus}}</mat-label>
+                                <mat-select formControlName="maritalstatus">
+                                    <mat-option *ngFor="let data of masterConfig?.maritalStatus" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.UniformSize}}</mat-label>
+                                <mat-select formControlName="uniformsize">
+                                    <mat-option *ngFor="let data of masterConfig?.uniformSize" [value]="data.Key">
+                                        {{data.Key}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="checkbox">
+                                <mat-checkbox color="primary" formControlName="speciallyabled" (change)="uploadDocument($event.checked, abledDocument, 'Specially Abled')">
+                                    {{labelName?.SpeciallyAbled}}</mat-checkbox>
+                                <mat-icon class="view" *ngIf="form.value.speciallyabled" (click)="viewDocument('Specially Abled', 'document')" #tooltip="matTooltip" matTooltip="View">remove_red_eye</mat-icon>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="checkbox">
+                                <mat-checkbox color="primary" formControlName="covidvaxcertificatestatus" (change)="uploadDocument($event.checked, covidDocument, 'Covid Vaccination')">
+                                    {{labelName?.CovidCertificate}}</mat-checkbox>
+                               
+                                <mat-icon class="view" *ngIf="form.value.covidvaxcertificatestatus" (click)="viewDocument('Covid Vaccination', 'document')" #tooltip="matTooltip" matTooltip="View">remove_red_eye</mat-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="userConfig?.Update">
+                        <div class="col">
+                            <div class="btn-group">
+                                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                                <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                                <button class="btn" mat-stroked-button (click)="submit('save')"
+                                    type="button">Save</button>
+                                <button class="btn" mat-flat-button color="primary" (click)="submit('next')"
+                                    type="button">Next >>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

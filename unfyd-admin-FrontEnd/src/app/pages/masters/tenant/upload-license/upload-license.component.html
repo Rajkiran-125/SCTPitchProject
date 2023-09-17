@@ -1,0 +1,358 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" style="padding-bottom: 50px;" *ngIf="loader==false &&  productcount == 0 && channelcount == 0 && rolecount == 0 && countryloopcount == 0">
+    <div class="wrapper" *ngIf="loader==false &&  productcount == 0 && channelcount == 0 && rolecount == 0 && countryloopcount == 0">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" [routerLink]="['/masters/tenant']"></span>
+          </div>
+        <form [formGroup]="form" *ngIf="loader==false &&  productcount == 0 && channelcount == 0 && rolecount == 0 && countryloopcount == 0" >
+            <div class="row ">
+                <div class="col-12">
+                    <span class="d-flex">
+                    <span>                    
+                        <mat-icon class="gray cursorPointer" [routerLink]="['/masters/tenant']">keyboard_backspace</mat-icon>
+                    </span>
+                    <span>
+                        <legend *ngIf="uplicense.LicenseUpload == null" class="ml-2">Add New Tenant</legend>
+                        <legend *ngIf="uplicense.LicenseUpload != null" class="ml-2">Update Tenant</legend>
+                    </span>
+                    </span>
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="tenantFormSteps" [id]="path"></app-steps>
+                            <div class="row">
+                                <div class="col-lg-8 col-md-4 col-sm-12" style="padding-bottom:10px">
+                                    <label>
+                                        <b>{{labelName?.Summary}}</b>
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="wrapper darkWrapper" style="overflow:hidden;">
+                                <div class="search-form" style="padding-left:20px">
+                                        <div class="col-lg-1 col-md-1 col-sm-2 text-center pr-0">
+                                        
+
+                                        </div>
+                                            <div class="row">
+                                                    <legend style="font-size:15px">
+                                                        <b>{{labelName?.CompanyInfo}}</b>
+                                                    </legend>
+
+                                            </div>
+
+                                    <div class="row" style="padding-bottom:10px">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.FirstName}}</h5>
+                                                <p><b>{{uplicense.FirstName}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.LastName}}</h5>
+                                                <p><b>{{uplicense.LastName}}</b></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.Designation}}</h5>
+                                                <p><b>{{uplicense.Designation}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row" style="padding-bottom:10px">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.CompanyName}}</h5>
+                                                <p><b>{{uplicense.ProcessName}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.EmployeeStrength}}</h5>
+                                                <p><b>{{uplicense.EmployeeStrength}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.DomainShortCode}}</h5>
+                                                <p><b>{{uplicense.ShortCode}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="padding:10px">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.Country}}</h5>
+                                                <p><b>{{displaycountryname}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.MobileNo}}</h5>
+                                                <p><b>{{uplicense.MobileNo}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.EmailID}}</h5>
+                                                <p><b>{{uplicense.EmailId}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="padding:10px">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.ContractType}}</h5>
+                                                <p><b>{{uplicense.ContractType}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.StartDate}}</h5>
+                                                <p><b>{{upstartdate}}</b></p>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.RenewalDate}}</h5>
+                                                <p><b>{{upenddate}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                        <div class="row" *ngIf="!moreisDisabled"  >
+                                            <div class="col-lg-4 col-md-4 col-sm-12"></div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12"></div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                                <legend class="cursorPointer" (click)="morefunc()" style="font-size:14px;     margin-left: 150px;" >More</legend>
+                                            </div>
+
+
+                                        </div>
+
+
+                                       <div *ngIf="moreisDisabled" style="padding-bottom:30px">
+                                        <div class="row">
+                                                <legend style="font-size:15px">
+                                                    <b>{{labelName?.AdditionalInfo}}</b>
+                                                </legend>
+
+                                        </div>
+
+                                        <div class="row" style="padding-left: 10px;padding-top: 10px;">
+                                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                                <div class="mat-typography">
+
+                                                    <div *ngIf="tenantup.AllowLOB == true">
+                                                        <h5>{{labelName?.AllowLOBCreation}}</h5>
+                                                        <p><b>{{labelName?.Enabled}}</b></p>
+                                                    </div>
+                                                    <div *ngIf="tenantup.AllowLOB == false || tenantup.AllowLOB == null">
+                                                        <h5>{{labelName?.AllowLOBCreation}}</h5>
+                                                        <p><b>{{labelName?.Disabled}}</b></p>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                        <div class="row" style="padding:10px">
+                                            <legend style="font-size:13px;margin-left: 18px;">
+                                                <b>Language</b>
+                                            </legend>
+                                            <div class="col-lg-4 col-md-4 col-sm-12" *ngFor="let langdata of LanguageData; let i= index">
+                                                <div class="mat-typography" style="padding-bottom: 10px;" >
+
+                                                        <div style="border: 1px solid #ccc;border-radius: 5px ;padding: 8px;margin-right: 10px;text-align: center;">
+                                                            <span  [innerHtml]="langdata?.ChannelIcon"></span>
+
+                                                            {{langdata.Language}}
+
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                            <div class="row" style="padding:10px">
+                                                <legend style="font-size:13px;margin-left: 18px;">
+                                                    <b>{{labelName?.Channels}}</b>
+                                                </legend>
+                                                <div class="col-lg-4 col-md-4 col-sm-12" *ngFor="let data1 of a[1]?.channel?.channelid; let i= index">
+                                                    <div class="mat-typography" style="padding-bottom: 10px;" >
+
+                                                            <div style="border: 1px solid #ccc;border-radius: 5px ;padding: 8px;margin-right: 10px;">
+                                                                <span  [innerHtml]="data1?.ChannelIcon"></span>
+
+                                                                {{a[1]?.channel?.channelid[i]?.ChannelName}}
+
+                                                                <input
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [(ngModel)]="a[1]?.channel?.channelIdValue[data1?.ChannelId]"
+                                                                    autocomplete="on" type="number" value="0"
+                                                                    min="0" max="999"
+                                                                    style="border: 0px solid #efefef;border-radius: 5px; max-width:35px;margin-left:5px; background-color: #f8f8f8;font-weight: bold;"
+                                                                    readonly />
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <div class="custom-tab "  >
+                                            <ul class="nav nav-tabs"  >
+                                                <div *ngFor="let data of productName;let i = index">
+
+                                                <button  mat-stroked-button (click)="onTabClick(data.Id,i)" style="border-radius: 0px;width:120px"
+                                                [ngStyle]="{'background-color': indexidval === i ? '#efefef ' : 'white' }">
+                                                    {{data.ProductName}}</button>
+                                                    </div>
+                                            </ul>
+
+                                            <div style="background-color:#efefef ; border-radius: 5px; border:1px solid rgb(236, 236, 236)">
+                                            <div class="row" style="padding:10px">
+                                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                                    <div class="mat-typography">
+
+                                                        <h5>{{labelName?.Subscription}}</h5>
+                                                        <p><b>{{a[onclicktabId]?.subscription?.value}}</b></p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="padding:10px;padding-bottom: 30px;">
+                                                <legend style="font-size:13px;margin-left: 19px;">
+                                                    <b>{{labelName?.Users}}</b>
+                                                </legend>
+                                                <div class="col-lg-4 col-md-4 col-sm-12" *ngFor="let data2 of a[onclicktabId]?.user?.userid; let k= index" style="padding-bottom:10px" >
+                                                    <div class="mat-typography">
+
+                                                        <div
+                                                            style="border: 1px solid #ccc;border-radius: 5px ;padding: 8px;margin-right: 10px;">
+                                                            {{a[onclicktabId]?.user?.userid[k]?.SubType}}
+
+                                                            <input
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                [(ngModel)]="a[onclicktabId]?.user?.useridValue[data2?.Id]"
+                                                                autocomplete="on" type="number" value="0"
+                                                                min="0" max="999"
+                                                                style="border: 0px solid #efefef;border-radius: 5px; max-width:35px;margin-left:5px;background-color: #efefef;font-weight: bold;"
+                                                                readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px; margin-bottom: 5px;">
+                                <button class="btn outline" mat-stroked-button color="primary" (click)="flip()">{{labelName.GeneratelicenseRequest}}</button>
+                                </div>
+
+                            <div class="row" style="padding:10px">
+
+                            <div class="col col-4 pl-0"  >
+
+                                    <div class="avatar"  >
+
+                                        <div class="uploadTitle" *ngIf="!loginImg" >
+                                            <i class="icon-upload"></i>
+                                            <strong>{{labelName?.Upload}}<br>{{labelName?.License}}</strong>
+
+                                        </div>
+                                        <mat-icon *ngIf="!loginImg"></mat-icon>
+
+                                        <img *ngIf="loginImg && findextension == 'image/png' || findextension == 'image/jpg' || findextension == 'image/jpeg' || findextension == 'image/gif'" [src]="loginImg">
+                                        <img *ngIf="loginImg && findextension == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'" src="assets/images/icons/excelicon.png">
+                                        <img *ngIf="loginImg && findextension == 'application/pdf'" src="assets/images/icons/pdficon.png">
+                                        <img *ngIf="loginImg && findextension == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'" src="assets/images/icons/docicon.png">
+                                        <img *ngIf="loginImg && findextension == 'text/plain'" src="assets/images/icons/licenseagreement.png">
+                                        <img *ngIf=" this.extention == 'lic'" src="assets/images/icons/licenseagreement.png">
+
+
+                                        <img  *ngIf="upfileextension == 'png' || upfileextension == 'jpg' || upfileextension == 'jpeg' || upfileextension == 'gif'" [src]="tenantup.LicenseUpload" />
+                                        <img  *ngIf="upfileextension == 'pdf'" src="assets/images/icons/pdficon.png" />
+                                        <img  *ngIf="upfileextension == 'docx'" src="assets/images/icons/docicon.png"/>
+                                        <img  *ngIf="upfileextension == 'xlsx'" src="assets/images/icons/excelicon.png" />
+                                        <img  *ngIf="upfileextension == 'lic'" src="assets/images/icons/licenseagreement.png " />
+
+                                        <input type="file" formControlName="loginImgStatus" (change)="fileChange1($event.target.files)" title="">
+
+                                    </div>
+                            </div>
+
+                        </div>
+    <div class="col col-3" *ngIf="islicenseuploaded !== null">
+        <a href='{{uploadlicenseurl}}'  target="_blank" >{{uploadlicenseurl}}</a>
+    </div>
+
+    <div class="col col-3" *ngIf="loginImg !== null && islicenseuploaded == null">
+        <a href='{{loginImg}}'  target="_blank" >{{loginImg}}</a>
+    </div>
+
+    
+                        </div>
+                    </div>
+
+                    <div class="btn-group" *ngIf="config?.Update">
+               
+                        <!-- <button  class="btn btn-gray"  [routerLink]="['/masters/tenant']"   mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                        <button *ngIf="userConfig?.Save" class="btn" mat-flat-button color="primary" type="button" (click)="savefunction()">{{labelName?.Save}}</button>
+                        <button *ngIf="userConfig?.SaveAddNew" class="btn savefunctionAddNew" mat-flat-button color="primary" type="button" (click)="savefunctionAddNew()">{{labelName?.SaveAddNew}}</button>                        
+                    </div>
+                </div>
+            </div>
+
+            
+        </form>
+    </div>
+</div>
+
+
+
+
+

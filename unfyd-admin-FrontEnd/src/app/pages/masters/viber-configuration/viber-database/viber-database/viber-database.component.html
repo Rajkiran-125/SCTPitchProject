@@ -1,0 +1,161 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4 mt-3">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="(userConfig?.Cancel)" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <span class="d-flex backArrow">
+                        <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+                        <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.ViberAccount}}</legend>
+                    </span>
+
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="viberConfigurationsteps" [moduletype]="'voice-configuration'"
+                            [id]="path" [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+
+                            <div class="row marginXDesktop">
+                                <div class="col-10">
+                                    <div class="form_content">
+                                        <div class="row" style="display: flex; flex-direction: row; justify-content: center; align-items: center;margin-left: 20px;">
+                                            <div class="col-lg-3 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.DBName.errors }">
+                                                    <mat-label>{{labelName?.DBName}}</mat-label>
+                                                    <input matInput formControlName="DBName">
+                                                    <mat-error *ngIf="f.DBName.errors">
+                                                        <ng-container
+                                                            *ngIf="f.DBName.errors.required">{{labelName?.DBName}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.DBName?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.DBName?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.HostName.errors }">
+                                                    <mat-label>{{labelName?.HostName}}</mat-label>
+                                                    <input matInput formControlName="HostName">
+                                                    <mat-error *ngIf="f.HostName.errors">
+                                                        <ng-container
+                                                            *ngIf="f.HostName.errors.required">{{labelName?.HostName}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.HostName?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.HostName?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.IP.errors }">
+                                                    <mat-label>{{labelName?.IP}}</mat-label>
+                                                    <input matInput formControlName="IP">
+                                                    <mat-error *ngIf="f.IP.errors">
+                                                        <ng-container
+                                                            *ngIf="f.IP.errors.required">{{labelName?.IP}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="f.IP.errors.pattern">{{labelName?.IP}}
+                                                            is invalid
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.IP?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.IP?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="display: flex; flex-direction: row; justify-content: center; align-items: center;margin-left: 20px;">
+                                            <div class="col-lg-3 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.PortNo.errors }">
+                                                    <mat-label>{{labelName?.PortNo}}</mat-label>
+                                                    <input matInput formControlName="PortNo">
+                                                    <mat-error *ngIf="f.PortNo.errors">
+                                                        <ng-container
+                                                            *ngIf="f.PortNo.errors.required">{{labelName?.PortNo}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.PortNo?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.PortNo?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.UserName.errors }">
+                                                    <mat-label>{{labelName?.UserName}}</mat-label>
+                                                    <input matInput formControlName="UserName">
+                                                    <mat-error *ngIf="f.UserName.errors">
+                                                        <ng-container
+                                                            *ngIf="f.UserName.errors.required">{{labelName?.UserName}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.UserName?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.UserName?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.Password.errors }">
+                                                    <mat-label>{{ labelName?.Password }}</mat-label>
+                                                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="Password" autocomplete="new-password" name="Password">
+                                                    <span matSuffix (click)="hide = !hide" [attr.aria-label]="hide ? 'Hide password' : 'Show password'" [attr.aria-pressed]="hide">
+                                                        <span [ngClass]="hide ? 'icon-hide_password' : 'icon-show_password'" mat-icon></span>
+                                                    </span>
+                                                    <mat-error *ngIf="f.Password.errors">
+                                                        <ng-container *ngIf="f.Password.errors.required">{{ labelName?.Password }} is required</ng-container>
+                                                        <ng-container *ngIf="f.Password.errors.pattern">{{ labelName?.Password }} is invalid</ng-container>
+                                                        <ng-container *ngIf="f.Password?.errors?.checknull1">Whitespace not allowed</ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-group my-3">
+                            <!-- <button class="btn btn-gray"  *ngIf="(userConfig?.Cancel)" routerLinkActive="router-link-active"
+                                (click)="back()" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                            <!-- <button *ngIf="! reset" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button> -->
+                            <button class="btn" *ngIf="(userConfig?.Save)" (click)="SaveViber('save')" mat-flat-button
+                                color="primary" type="button">{{labelName?.Save}}</button>
+                            <button class="btn" *ngIf="(userConfig?.Next)" (click)="SaveViber('next')" mat-flat-button
+                                color="primary" type="button">{{labelName?.Next}}</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

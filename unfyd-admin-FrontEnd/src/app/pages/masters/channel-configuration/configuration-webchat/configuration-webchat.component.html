@@ -1,0 +1,1930 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+
+    <div class="wrapper ">
+        <form [formGroup]="form">
+            <div class="row py-2">
+
+                <div class="col-lg-12 col-md-12 col-sm-12 p-0">
+                    <div class="row scroll">
+                        <div class="col-1 p-0">
+                            <mat-icon class="gray cursorPointer"
+                                [routerLink]="['/masters/channel-configuration/configuration-add-channel/2']">keyboard_backspace</mat-icon>
+                        </div>
+                        <div class="col-6 p-0">
+                            <legend>Edit Webchat Account</legend>
+                        </div>
+                        <div class="col-5 d-flex" style="justify-content:end;">
+                            <div id="scroll-el" class="pb-3">
+                                <div class="btn-group" style="justify-content: center;">
+                                    <button id="reset" #reset class="btn btn-gray" mat-flat-button type="Reset"
+                                        (click)="resetfunc()">Reset</button>
+                                    <button
+                                        class="mat-focus-indicator btn btn-block mat-flat-button mat-button-base mat-primary"
+                                        mat-stroked-button color="primary" *ngIf="!channelSRCID"
+                                        (click)="webchatInfo('insert')">Save</button>
+                                    <button
+                                        class="mat-focus-indicator btn btn-block mat-flat-button mat-button-base mat-primary"
+                                        mat-stroked-button color="primary" *ngIf="channelSRCID"
+                                        style="margin-top:0!important;" (click)="updateWebchatData()">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <mat-accordion class="webchat-config whitebg-input">
+
+
+
+                        <!-- Details Section-->
+                        <div class="row">
+
+                            <div class="col-12 webchat-detail ">
+                                <mat-expansion-panel class="">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title class="d-flex justify-content-between">
+                                            <span class="header-title">Details</span>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row" style="margin-left:0;">
+                                        <!-- <div class="col-1 mr-2">
+                                    <div [matMenuTriggerFor]="webchatIcon" class="webchatIcon" style="margin-top:-20px;" [ngStyle]="{'background-color': common.IconData[form.value.webchatIconColor]}"></div>
+                                    <mat-menu #webchatIcon="matMenu" class="webchat-icon-selector">
+                                        <div class="color-container" mat-menu-item>
+                                            <h4 class="p-0">Select Color</h4>
+                                            <div class="row">
+                                                <div class="col-1 m-2" *ngFor="let item of common.WebchatIconData">
+                                                    <div class="justify-content-center">
+                                                        <div class="cursorPointer colorTile border-radius d-flex align-items-center justify-content-center"
+                                                            [ngStyle]="{'background-color': common.IconData[item]}"
+                                                            (click)="changesDoneForWebchatIcon(item)">
+                                                            <i class="icon-color-selected white-color"
+                                                                *ngIf="form.value.webchatIconColor == item"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </mat-menu>
+                                </div> -->
+                                        <!-- <div class="pt-2 outline-shape-chat-grid-icon"> -->
+                                        <div class="mr-3">
+                                            <div [matMenuTriggerFor]="webchatIcon" class="webchatIcon"
+                                                [ngStyle]="{'background-color': common.IconData[form.value.webchatIconColor]}">
+                                            </div>
+                                            <mat-menu #webchatIcon="matMenu" class="webchat-icon-selector">
+                                                <div class="color-container" mat-menu-item>
+                                                    <h4 class="p-0 m-0">Select Color</h4>
+                                                    <div class="row pl-2">
+                                                        <div class="m-2" style="width:40px"
+                                                            *ngFor="let item of common.WebchatIconData">
+                                                            <div class="justify-content-center">
+                                                                <div class="cursorPointer colorTile border-radius d-flex align-items-center justify-content-center"
+                                                                    [ngStyle]="{'background-color': common.IconData[item]}"
+                                                                    (click)="changesDoneForWebchatIcon(item)">
+                                                                    <i class="icon-color-selected white-color"
+                                                                        *ngIf="form.value.webchatIconColor == item"></i>
+                                                                </div>
+                                                                <div class="colortext">
+                                                                    {{item.slice(0,item.length-4)}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </mat-menu>
+                                        </div>
+                                        <div>
+                                            <mat-form-field appearance="fill" style="width:350px;">
+                                                <mat-label>Webchat Name</mat-label>
+                                                <input matInput formControlName="WebchatName" maxlength="25" />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="f?.WebchatName?.errors" class="mb-2">
+                                                <ng-container *ngIf="f?.WebchatName?.errors?.checknull">Whitespace not
+                                                    allowed
+                                                </ng-container>
+                                                <ng-container *ngIf="f?.WebchatName?.errors?.pattern">Alphabets only
+                                                </ng-container>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </mat-expansion-panel>
+                            </div>
+                        </div>
+                        <!-- Pre-Chat Section-->
+                        <mat-expansion-panel class="webchat-config" style="margin-top:0!important;"><!--
+                            (opened)="form.value.togglePrechat ? preChatForm.close():''" 
+                            #preChatForm="matExpansionPanel"-->
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Pre-chat</span>
+                                </mat-panel-title>
+                                <span class="mt-1">
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="togglePrechat" (toggleChange)="enableDisablePrechat($event)">
+                                    </mat-slide-toggle>
+                                </span>
+                            </mat-expansion-panel-header>
+
+                            <!-- <div class="col-12 py-2 border_top d-flex justify-content-between">
+                                <span>Welcome Title</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleWelcomeTitle">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 pb-2" *ngIf="form.value.toggleWelcomeTitle">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Type Welcome Title Here</mat-label>
+                                    <input matInput formControlName="WelcomeTitle" />
+                                </mat-form-field>
+                            </div> -->
+
+                            <!-- <div class="col-12 border_top py-2 d-flex justify-content-between">
+                                <span>Welcome Message</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleWelcomeMSG">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 pb-2" *ngIf="form.value.toggleWelcomeMSG">
+                                <div *ngIf="form.value.toggleWelcomeMSG">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Type Welcome Message Here</mat-label>
+                                        <textarea matInput formControlName="WelcomeMsg"></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="col-12 border_top border-bottom py-3 d-flex justify-content-between">
+                                <span>Privacy Policy (Add Read and Agree option)</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="togglePrivacyPolicy">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div> -->
+
+                            <!-- <div class="col-12 border-bottom py-3 d-flex justify-content-between">
+                                <span>Create Form Fields and allow to make it mandatory</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="fieldsMandatory">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div> -->
+
+
+                            <!-- <div class="col-12 py-3" *ngIf="form.value.toggleLeaveOfflineMSG">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Type Welcome Message Here</mat-label>
+                                    <textarea matInput formControlName="LeaveOfflineMSG"></textarea>
+                                </mat-form-field>
+                            </div> -->
+                            <!-- <div class="col-12 d-flex border_top pt-2 justify-content-between inputText normal-dropdown">
+                                <span class="selectColor">Pre-chat Form (Online)</span>
+                                <mat-icon class="mat-btn blue" (click)="addPrechatField()" matTooltip="Add">add</mat-icon> 
+                            </div> -->
+                            
+                            <div class="indent row align-items-center border_top m-0" *ngIf="form.value.togglePrechat">
+                                <div class="col-12 inputText normal-dropdown mt-2">
+                                    <div class="row mt-2" (click)="$event.stopPropagation()">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>PreChat Form Heading</mat-label>
+                                            <input matInput formControlName="prechatFormHeding" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-12 inputText normal-dropdown mt-2">
+                                    <div class="row mt-2" (click)="$event.stopPropagation()">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>PreChat Form SubHeading</mat-label>
+                                            <input matInput formControlName="prechatFormSubHeding" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="indent row align-items-center border_top m-0" *ngIf="form.value.togglePrechat">
+                                <div class="col-3 mb-1 pl-0">
+                                    <span>Online Hours</span>
+                                </div>
+                                <div class="col-5 inputText normal-dropdown mt-3">
+                                    <div class="row mt-2" (click)="$event.stopPropagation()">
+                                        <mat-form-field appearance="fill">
+                                            <!-- <mat-label>Forms</mat-label> -->
+                                            <mat-select formControlName="prechatformOnline"
+                                                placeholder="Select Prechat Form">
+                                                <mat-option *ngFor="let data of allFormsData"
+                                                    [value]="data.FormType">{{data.FormType}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-12 d-flex justify-content-between">
+                                <span class="selectColor">Pre-chat Form (Offline)</span>
+                                <mat-icon class="mat-btn blue" (click)="addPrechatField()" matTooltip="Add">add</mat-icon>
+                            </div> -->
+
+                            <div class="indent row align-items-center border_top m-0" *ngIf="form.value.togglePrechat">
+                                <div class="col-3 mb-1 pl-0">
+                                    <span>Offline Hours</span>
+                                </div>
+                                <div class="col-5 inputText normal-dropdown mt-3">
+                                    <div class="row mt-2" (click)="$event.stopPropagation()">
+                                        <mat-form-field appearance="fill">
+                                            <!-- <mat-label>Forms</mat-label> -->
+                                            <mat-select formControlName="prechatformOffline"
+                                                placeholder="Select Prechat Form">
+                                                <mat-option *ngFor="let data of allFormsData"
+                                                    [value]="data.FormType">{{data.FormType}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-12 pt-2 py-2 d-flex justify-content-between">
+                                <span class="selectColor">Offline</span>
+                                <span>
+                                     <mat-slide-toggle color="primary" class="toggleBtn" formControlName="enablebutton">
+                                        </mat-slide-toggle> 
+                                </span>
+                            </div>
+                            <div class="col-12 pt-2 d-flex justify-content-between">
+                                <span>Leave Offline Message (Welcome offline message)</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleLeaveOfflineMSG">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div> -->
+                        </mat-expansion-panel>
+
+                        <!-- Chat Widget Section-->
+                        <mat-expansion-panel class="webchat-config" [expanded]="step === 0" (opened)="setStep(0); enableChatComponent();">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Chat Widget</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <div class="indent row my-2 align-items-center m-0">
+                                <div class="col-12 border_top pt-3 pb-2 pl-0">
+                                    <span class="selectColor">Theme Color</span>
+                                </div>
+
+                                <div class="indent row align-items-center mb-2" style="margin-left: 30px;">
+                                    <div class="col-12 pl-0">
+                                        <div class="row my-2 mb-2" (click)="$event.stopPropagation()">
+                                            <!-- <mat-form-field appearance="fill">
+                                                <mat-label>Color Style</mat-label>
+                                                <mat-select formControlName="colorPalletteSelection"
+                                                    (selectionChange)="colorPalletteSelection()">
+                                                    <mat-option *ngFor="let data of themeColorPallette"
+                                                        [value]="data">{{data}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field> -->
+                                            <mat-radio-group aria-labelledby="example-radio-group-label" class="" color="primary"
+                                                [ngModelOptions]="{standalone: true}" formControlName="themeColorPalletteSelected"
+                                                (change)="colorPalletteSelection()">
+                                                <ng-container *ngFor="let data of themeColorPallette">
+                                                    <mat-radio-button [value]="data">
+                                                        {{data | titlecase}}
+                                                    </mat-radio-button>
+                                                </ng-container>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uf-clear"></div>
+                            </div>
+                            <!-- {{form.value.themeColorPalletteSelected}}:{{form.value.themeColor}}:
+                            {{form.value.themePrimaryColorCode}}:{{form.value.themeSecondaryColorCode}} -->
+                            <!-- {{form.value.themeColor|json}} -->
+                            <div class="indent row pb-3 mt-2 align-items-center mx-1"
+                                style="margin-top: -20px!important;">
+                                <div class="col-1 py-2 mr-2" *ngFor="let item of colorPallet" (click)="isShowColorAdd = false; isShowGradientColorAdd = false">
+                                    <div class="row justify-content-center">
+                                        <!-- {{form.value.themeColor}} -->
+                                        <div class="cursorPointer colorTile border-radius d-flex align-items-center justify-content-center"
+                                            [ngStyle]="{'background': form.value.themeColorPalletteSelected =='Solid' ? common.themeSolidColor[item] : common.themeColor[item]}"
+                                            (click)="changesDoneForTile(item)">
+                                            
+                                            <i class="icon-color-selected white-color"
+                                                *ngIf="(form.value.themeColorPalletteSelected =='Solid' && common.themeSolidColor[item] == form.value.themeColor) ||
+                                                     (form.value.themeColorPalletteSelected =='Gradient' && common.themeColor[item] == form.value.themeColor)"></i>
+                                        </div>                                        
+                                        <div class="colortext">
+                                            {{item.slice(0,item.length-4)}}
+                                        </div>
+                                        <!-- | {{common.themeColor[item]}} -->
+                                    </div>
+                                </div>
+
+                                <!-- {{form.value.themeColorPalletteSelected|json}}
+                                {{customThemeColorGradient|json}} -->
+                                <div class="col-1 py-2 mr-2" *ngIf="(form.value.themeColorPalletteSelected =='Solid' && customThemeColorSolid) || (form.value.themeColorPalletteSelected !='Solid' && customThemeColorGradient)">
+                                    <div class="row justify-content-center">
+                                        <!-- {{form.value.themeColor}} -->
+                                       
+                                        <div class="cursorPointer colorTile border-radius d-flex align-items-center justify-content-center"
+                                            [ngStyle]="{'background': form.value.themeColorPalletteSelected =='Solid' ? customThemeColorSolid : customThemeColorGradient}"
+                                            (click)="changesDoneForTile('customColor')">
+                                            
+                                            <i class="icon-color-selected white-color"
+                                                *ngIf="(form.value.themeColorPalletteSelected =='Solid' && customThemeColorSolid == form.value.themeColor) ||
+                                                     (form.value.themeColorPalletteSelected =='Gradient' && customThemeColorGradient == form.value.themeColor)"></i>
+                                        </div>                                        
+                                        <div class="colortext">
+                                            {{'Custom'}}
+                                        </div>
+                                        <!-- | {{common.themeColor[item]}} -->
+                                    </div>
+                                </div>
+                                <div>
+                                    <div (click)="addThemeColorCode()"
+                                        class="graycolorTile p-4 border-radius d-flex align-items-center justify-content-center">
+                                        <mat-icon>add</mat-icon>
+                                    </div>
+                                    <div class="colortext">
+
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2" *ngIf="isShowColorAdd">
+                                    <div class="col-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Color Code</mat-label>
+                                            <input matInput formControlName="themeColorCode" maxlength="7" (change)="solidCustomColorChnaged()" (keyup)="solidCustomColorChnaged()" (keypress)="solidCustomColorChnaged()" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="f?.themeColorCode?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.themeColorCode?.errors?.pattern"> 
+                                                HexCode only (Ex.#ffffff)
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2" *ngIf="isShowGradientColorAdd">
+                                    <div class="col-6">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Primary Color Code</mat-label>
+                                            <input matInput formControlName="themePrimaryColorCode" maxlength="7" (change)="gradientCustomColorChnaged()" (keyup)="gradientCustomColorChnaged()" (keypress)="gradientCustomColorChnaged()" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="f?.themePrimaryColorCode?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.themePrimaryColorCode?.errors?.pattern"> HexCode
+                                                only (Ex.#ffffff)
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                    <div class="col-6">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Secondary Color Code</mat-label>
+                                            <input matInput formControlName="themeSecondaryColorCode" maxlength="7" (change)="gradientCustomColorChnaged()" (keyup)="gradientCustomColorChnaged()" (keypress)="gradientCustomColorChnaged()" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="f?.themeSecondaryColorCode?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.themeSecondaryColorCode?.errors?.pattern">HexCode
+                                                only (Ex.#ffffff)
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Eye Catcher-->
+
+                            <div class="indent py-3 m-0 row border-bottom border_top align-items-center">
+                                <div class="col-12 pl-0">
+                                    <div class="row m2 py-2">
+                                        <div class="col-11">
+                                            <span class="selectColor">Eye Catcher</span>
+                                        </div>
+                                        <div class="col-1 mt-1">
+                                            <mat-slide-toggle color="primary" class="toggleBtn"
+                                                formControlName="toggleEyeCatcher">
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" style="padding:0;" *ngIf="form.value.toggleEyeCatcher">
+                                    <div class="col-lg-5 pl-0" style="float:left;">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Heading</mat-label>
+                                            <input matInput maxlength="25" formControlName="eyeCatcherHeading"
+                                                (focus)="eyeCatcherFocus=true" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="f?.eyeCatcherHeading?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.eyeCatcherHeading?.errors?.required">Eyecatcher Heading
+                                                Required
+                                            </ng-container>
+                                            <ng-container *ngIf="f?.eyeCatcherHeading?.errors?.pattern">Alphabets only
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                    <div class="col-lg-5" style="float:left;">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Text</mat-label>
+                                            <input matInput maxlength="25" formControlName="eyeCatcherText"
+                                                (focus)="eyeCatcherFocus=false" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="f?.eyeCatcherText?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.eyeCatcherText?.errors?.required">Eyecatcher Text
+                                                Required
+                                            </ng-container>
+                                            <ng-container *ngIf="f?.eyeCatcherText?.errors?.pattern">Alphabets only
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 pl-0" style="padding:0;" *ngIf="form.value.toggleEyeCatcher">
+                                    <div class="row m-0 align-items-end">
+                                        <div class="col-3 eyecatcher-outline" (click)="selectEyeCatcher('eyeCatcher1')"
+                                            [ngStyle]="{'border': form.value.eyeCatcher == 'eyeCatcher1' ? '1px solid #053c6d' : '' }">
+                                            <div class="eyeCatcher-bubble tri-right bubble-border round btm-left-in"
+                                                style="display: flex; flex-direction: column; align-items: center;">
+                                                <div class="align-items-center">
+                                                    <div class="eyeCatcher-img align-center"></div>
+                                                </div>
+                                                <div class="bubbleText text-center">
+                                                    <h1
+                                                        [ngStyle]="{'color': form.value.themeColor ? form.value.themeColor : '#053c6d' }">
+                                                        {{form.value.eyeCatcherHeading}}</h1>
+                                                    <p class="mb-2">{{form.value.eyeCatcherText}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-5 ml-3" (click)="selectEyeCatcher('eyeCatcher2')">
+                                            <div class="eyecatcher-outline"
+                                                [ngStyle]="{'border': form.value.eyeCatcher == 'eyeCatcher2' ? '1px solid #053c6d' : '' }">
+                                                <div class="eyeCatcher-bubble tri-right btm-right"
+                                                    style="display: flex;background-color:#053C6D; border-radius: 10px;">
+                                                    <div class="mt-2 mx-2 align-items-center">
+                                                        <div class="eyeCatcher2-img align-center"></div>
+                                                    </div>
+                                                    <div class="bubbleText">
+                                                        <h1 class="white-color">{{form.value.eyeCatcherHeading}}</h1>
+                                                        <p class="white-color">{{form.value.eyeCatcherText}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Widget Style-->
+
+                            <div class="indent py-3 border-bottom row align-items-center m-0">
+                                <div class="col-12 pl-0">
+                                    <div class="row" (click)="$event.stopPropagation()" style="margin:0;">
+                                        <div class="col-12" style="padding:0;">
+                                            <span class="selectColor">Widget Style</span>
+                                        </div>
+                                        <div class="col-3 p-0 mb-2 mt-3">
+                                            <div class="d-flex">
+                                                <div class="row justify-content-center widget-outline-shape"
+                                                    [ngStyle]="{'border': item=== form.value.widgetStyle ? '1px solid #053c6d' : '', 'background-color': item=== form.value.widgetStyle ? '#efefef' : '' }"
+                                                    *ngFor="let item of widgetStyle" style="border-radius: 10px;">
+                                                    <div class="cursorPointer d-flex align-items-center justify-content-center {{item}}"
+                                                        (click)="chooseWidgetStyle(item)">
+                                                        <!-- <i class="icon-color-selected" color="primary" *ngIf="item === form.value.widgetStyle"></i> -->
+                                                    </div>
+
+                                                    <div class="row justify-content-center" style="width: 100%;
+                                                    font-size: 12px;">
+                                                        {{item|titlecase}}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Chat Icon Style-->
+
+                            <div class="indent row py-3 border-bottom align-items-center m-0">
+                                <div class="col-12 pl-0">
+                                    <div class="row" (click)="$event.stopPropagation()">
+                                        <div class="col-12">
+                                            <span class="selectColor">Chat Icon Style</span>
+                                        </div>
+                                    </div>
+                                    <div class="row px-3 py-1">
+                                        <div class="py-2 px-1 my-2 outline-shape width-60"
+                                            [ngStyle]="{'border': item === form.value.chatIconStyle ? '1px solid #053c6d' : '' }"
+                                            *ngFor="let item of chatIconStyle">
+                                            <div class="row justify-content-center">
+                                                <div class="cursorPointer d-flex align-items-center justify-content-center chat-icon-holder"
+                                                    [ngStyle]="{'background': form.value.themeColor ? form.value.themeColor : '#053C6D' }"
+                                                    (click)="chooseChatIconStyle(item)">
+                                                    <div class="{{item}}"></div>
+                                                    <!-- <i class="icon-color-selected select-icon" color="primary"
+                                                        *ngIf="item === form.value.chatIconStyle"></i> -->
+                                                </div>
+                                            </div>
+
+                                            <div class="row justify-content-center fontBelowColor">
+                                                <!-- {{item|titlecase}} -->
+                                            </div>
+                                        </div>
+                                        <!-- <div  class="d-flex align-items-center justify-content-center">                                            <div 
+                                                class="agentIcon-holder align-items-center py-2 outline-shape ">
+                                                <mat-icon role="img" class="mat-icon notranslate mx-2 cursorPointer material-icons mat-icon-no-color"
+                                                    aria-hidden="true" data-mat-icon-type="font">add_circle</mat-icon>
+                                                    <input  type="file" id="UploadBotIconDiv" class="d-none"></div>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Chat Button Title-->
+
+                            <div class="indent row py-3 border-bottom align-items-center m-0">
+                                <div class="col-12 pl-0">
+                                    <div class="row py-2 mx-0 mb-2">
+                                        <div class="col-12 p-0">
+                                            <span class="selectColor">Chat Button Title (25 Characters)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 p-0">
+                                    <div class="col-lg-5 pl-0" style="float:left;">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>When Agents Online</mat-label>
+                                            <input matInput type='text' maxlength="25" formControlName="chatTitleOnline"
+                                                (focus)="chatTitleFocus=true" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="f?.chatTitleOnline?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.chatTitleOnline?.errors?.pattern">Alphabets only
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                    <div class="col-lg-5" style="float:left;">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>When Agents Offline</mat-label>
+                                            <input matInput type='text' maxlength="25"
+                                                formControlName="chatTitleOffline" (focus)="chatTitleFocus=false" />
+                                        </mat-form-field>
+                                        <mat-error *ngIf="f?.chatTitleOffline?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.chatTitleOffline?.errors?.pattern">Alphabets only
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                </div>
+
+                                <!-- Chat Header Title-->
+                                <div class="row py-1 ">
+                                    <div class="col-11 pl-3 indent">
+                                        <div class="row py-2 mx-0 mb-2">
+                                            <div class="col-12 p-0">
+                                                <span class="selectColor">Webchat Header Title (40 Characters)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <mat-form-field appearance="fill" class="width-300">
+                                            <mat-label>Webchat Header</mat-label>
+                                            <input matInput formControlName="botName" class="form-input" maxlength="40" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                            
+                            <!--Chat Button Shape-->
+
+                            <div class="indent row py-3 border-bottom align-items-center m-0">
+                                <div class="col-12 pl-0">
+                                    <div class="row m-0 mt-2" (click)="$event.stopPropagation()">
+                                        <div class="col-12 mb-2" style="padding:0;">
+                                            <span class="selectColor">Chat Button Shape</span>
+                                        </div>
+                                        <div class="row col-12 mt-2 mb-3">
+                                            <div class="p-2 px-1 mr-3 outline-shape"
+                                                [ngStyle]="{'border': form.value.chatButtonShape == 'chatButtonShape1' ? '1px solid #053c6d' : '' }">
+                                                <div class="chatButtonShape1 d-flex"
+                                                    [ngStyle]="{'background': form.value.themeColor ? form.value.themeColor : '#053C6D' }"
+                                                    (click)="selectShape('chatButtonShape1')">
+                                                    <span
+                                                        class="shape-icon ? {{form.value.chatIconStyle}} : shape-icon"></span>
+                                                    <span class="pt-1">{{(chatTitleFocus && form.value.chatTitleOnline)
+                                                        ? form.value.chatTitleOnline : (!chatTitleFocus &&
+                                                        form.value.chatTitleOffline)
+                                                        ? form.value.chatTitleOffline : "chat with us"}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="outline-shape"
+                                                [ngStyle]="{'border': form.value.chatButtonShape == 'chatButtonShape2' ? '1px solid #053c6d' : '' }">
+                                                <div class="chatButtonShape2"
+                                                    [ngStyle]="{'background': form.value.themeColor ? form.value.themeColor : '#053C6D' }"
+                                                    (click)="selectShape('chatButtonShape2')">
+                                                    <span
+                                                        class="shape-icon ? {{form.value.chatIconStyle}} : shape-icon"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row col-12 mb-3">
+                                            <div class="p-2 px-1 mr-3 outline-shape"
+                                                [ngStyle]="{'border': form.value.chatButtonShape == 'chatButtonShape3' ? '1px solid #053c6d' : '' }">
+                                                <div class="chatButtonShape3 d-flex"
+                                                    [ngStyle]="{'background': form.value.themeColor ? form.value.themeColor : '#053C6D' }"
+                                                    (click)="selectShape('chatButtonShape3')">
+                                                    <span
+                                                        class="shape-icon ? {{form.value.chatIconStyle}} : shape-icon"></span>
+                                                    <span class="pt-1">{{(chatTitleFocus && form.value.chatTitleOnline)
+                                                        ? form.value.chatTitleOnline : (!chatTitleFocus &&
+                                                        form.value.chatTitleOffline)
+                                                        ? form.value.chatTitleOffline : "chat with us"}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="outline-shape"
+                                                [ngStyle]="{'border': form.value.chatButtonShape == 'chatButtonShape4' ? '1px solid #053c6d' : '' }">
+                                                <div class="chatButtonShape4"
+                                                    [ngStyle]="{'background': form.value.themeColor ? form.value.themeColor : '#053C6D' }"
+                                                    (click)="selectShape('chatButtonShape4')">
+                                                    <span
+                                                        class="shape-icon ? {{form.value.chatIconStyle}} : shape-icon"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row col-12 mb-1">
+                                            <div class="p-2 px-1 mr-3 outline-shape"
+                                                [ngStyle]="{'border': form.value.chatButtonShape == 'chatButtonShape5' ? '1px solid #053c6d' : '' }">
+                                                <div class="chatButtonShape5 d-flex"
+                                                    [ngStyle]="{'background': form.value.themeColor ? form.value.themeColor : '#053C6D' }"
+                                                    (click)="selectShape('chatButtonShape5')">
+                                                    <span
+                                                        class="shape-icon ? {{form.value.chatIconStyle}} : shape-icon"></span>
+                                                    <span class="pt-1">{{(chatTitleFocus && form.value.chatTitleOnline)
+                                                        ? form.value.chatTitleOnline : (!chatTitleFocus &&
+                                                        form.value.chatTitleOffline)
+                                                        ? form.value.chatTitleOffline : "chat with us"}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="outline-shape"
+                                                [ngStyle]="{'border': form.value.chatButtonShape == 'chatButtonShape6' ? '1px solid #053c6d' : '' }">
+                                                <div class="chatButtonShape6"
+                                                    [ngStyle]="{'background': form.value.themeColor ? form.value.themeColor : '#053C6D' }"
+                                                    (click)="selectShape('chatButtonShape6')">
+                                                    <span
+                                                        class="shape-icon ? {{form.value.chatIconStyle}} : shape-icon"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row col-12 mb-1">
+                                            <div class="" *ngIf="form.value.shapeUploaded">
+                                                <div class="row justify-content-center align-items-center flex-column agent-avatar agantavater-custdesign mt-2"
+                                                [ngStyle]="{'border': form.value.shapeUploaded ? '1px solid #053c6d' : '1px solid #dee2e6' }">
+                                                    <img src="{{form.value.shapeUploaded}}" alt="image"/>
+                                                    <br/>
+                                                    <div class="row justify-content-center fontBelowColor" style="margin-top: 65px!important;margin-left: -70px;">
+                                                        Custom
+                                                    </div>
+                                                </div>                                            
+                                            </div>
+                                        </div>
+
+                                        <div class="row col-12">
+                                            <div class="p-3 my-3 outline-shape" style="background: #efefef;">
+                                                <span class="mx-2 cursorPointer upload-btn"
+                                                    (click)="UploadChatIconDiv.click()">
+                                                    Upload Image
+                                                </span>
+                                                <input class="d-none" type="file"
+                                                    (change)="UploadChatIcon($event, 150, 80)" #UploadChatIconDiv
+                                                    id="UploadChatIconDiv" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Chat Button Position-->
+
+                            <div class="indent row py-3 align-items-center m-0">
+                                <div class="col-12" style="padding:0;">
+                                    <div class="row m-0" (click)="$event.stopPropagation()">
+                                        <div class="col-12 pl-0 mb-2">
+                                            <span class="selectColor">Chat Button Position</span>
+                                        </div>
+                                        <div class="col-2 py-2 pr-2" *ngFor="let item of chatButtonPosition">
+                                            <div class="row justify-content-center">
+                                                <div class="cursorPointer outline-shape d-flex align-items-center justify-content-center {{item}}"
+                                                    [ngStyle]="{'border': item=== form.value.chatButtonPosition ? '1px solid #053c6d' : '' }"
+                                                    (click)="chooseButtonPosition(item)">
+                                                    <!-- <i class="icon-color-selected select-icon"
+                                                        *ngIf="item === form.value.chatButtonPosition"></i> -->
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-center fontBelowColor">
+                                                {{item|titlecase}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Chat Button Position Side Spacing-->
+
+                            <div class="indent row border-bottom align-items-center m-0">
+                                <div class="col-lg-12 mb-3 pl-0">
+                                    
+                                    <div class="col-6 d-flex normal-dropdown pl-0" style="float:left;">
+                                        <span class="selectColor mt-2 mr-2">Side Spacing(px)</span>
+                                        <input type="text"
+                                            style="width: 30%;padding: 8px 10px;background: #fff;border-radius: 5px;border: 1px solid #efefef;outline:0;"
+                                            placeholder="10" matInput maxlength="3" formControlName="sideSpacing" />
+                                    </div>
+                                    <div class="col-6 d-flex normal-dropdown" style="float:left;">
+                                        <span class="selectColor mt-2 mr-2">Bottom Spacing(px)</span>
+                                        <input type="text"  
+                                            style="width: 30%;padding: 8px 10px;background: #fff;border-radius: 5px;border: 1px solid #efefef;outline:0;"
+                                            placeholder="10" matInput maxlength="3" formControlName="bottomSpacing" />
+                                    </div>
+                                    <div class="col-6 mt-3 p-0" style="float:left;">
+                                        <mat-error *ngIf="f?.sideSpacing?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.sideSpacing?.errors?.pattern">Only numeric value
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                    <div class="col-5 mt-3 ml-3 p-0" style="float:left;">
+                                        <mat-error *ngIf="f?.bottomSpacing?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.bottomSpacing?.errors?.pattern">Only numeric value
+                                            </ng-container>
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Language-->
+
+                            <div class="indent row border-bottom align-items-center m-0" style="padding:0">
+                                <div class="col-6 pl-0">
+                                    <!-- {{language|json}} -->
+                                    <div class="row m-0 mt-2" (click)="$event.stopPropagation()">
+                                        <div class="pt-2 pb-3">
+                                            <span class="selectColor">Language</span>
+                                        </div>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Language</mat-label>
+                                            <mat-select formControlName="languageSelected" multiple>
+                                                <mat-option *ngFor="let data of language"
+                                                    [value]="data.LanguageCode">{{data.Language}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Agent Avatar-->
+
+                            <div class="indent row align-items-center m-0">
+                                <div class="col-12 pl-0">
+                                    <div class="row mx-0 mt-2" (click)="$event.stopPropagation()">
+                                        <div class="pt-2 pb-3" style="display:block;width:100%;">
+                                            <span class="selectColor">Agent Avatar</span>
+                                        </div>
+                                        <div class="" *ngFor="let item of agentAvatar">
+                                            <div class="row justify-content-center align-items-center flex-column agantavater-custdesign ml-0"
+                                                [ngStyle]="{'border': (item === form.value.agentAvatar && !form.value.agentAvatarUploaded) ? '1px solid #053c6d' : '1px solid #dee2e6' }">
+                                                <div class="cursorPointer"
+                                                    [ngClass]="item =='agent-avatar1'?'agent-avatar-male':'agent-avatar-female'"
+                                                    (click)="chooseAgentAvatar(item)">
+                                                </div>
+                                                <div class="row justify-content-center fontBelowColor">
+                                                    {{item == 'agent-avatar1' ? 'Male' :'Female'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="" *ngIf="form.value.agentAvatarUploaded">
+                                            <div class="row justify-content-center align-items-center flex-column agent-avatar agantavater-custdesign ml-0"
+                                            [ngStyle]="{'border': form.value.agentAvatarUploaded ? '1px solid #053c6d' : '1px solid #dee2e6' }">
+                                                <img src="{{form.value.agentAvatarUploaded}}" alt="image"/>
+                                                <br/>
+                                                <div class="row justify-content-center fontBelowColor" style="margin-top: 55px!important;margin-left: -70px;">
+                                                    Avatar
+                                                </div>
+                                            </div>                                            
+                                        </div>
+
+                                        <div class="">
+                                            <div class="cust-agentIcon-holder cursorPointer">
+                                                <div class="align-items-center py-2 d-flex">
+                                                    <mat-icon
+                                                        class="mx-2  d-flex align-items-center justify-content-center "
+                                                        (click)="UploadAgentIconDiv.click()">add_circle</mat-icon>
+                                                    <input class="d-none" type="file"
+                                                        (change)="UploadAgentIcon($event, 100, 100)" #UploadAgentIconDiv
+                                                        id="UploadAgentIconDiv" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </mat-expansion-panel>
+
+                        <!-- Type Area Section-->
+                        <mat-expansion-panel class="webchat-config" (opened)="enableIframe();">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Type Area</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="row border_top m-0">
+                                <div class="col-12 p-0">
+                                    <div class="col-12 d-flex justify-content-between align-items-center py-4" style="padding:0">
+                                        <span class="selectColor">Attachment</span>
+                                        <span>
+                                            <mat-slide-toggle color="primary" class="toggleBtn"
+                                                formControlName="toggleAttachment">
+                                            </mat-slide-toggle>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-12 pb-3 d-flex" style="padding:0"
+                                        *ngIf="form.value.toggleAttachment">
+                                        <span class="width-100 pt-2">Attach File</span>
+                                        <span class="pt-2" style="flex: 1;">
+                                            <mat-radio-group aria-labelledby="example-radio-group-label"
+                                                class="d-flex tiles example-radio-group"
+                                                formControlName="singleMultiImage" color="primary">
+
+                                                <mat-radio-button value="singleFile" class="example-radio-button tiles"
+                                                    style="display: grid;"></mat-radio-button>
+                                                <mat-label class="mx-1 mr-3">Single</mat-label>
+
+                                                <mat-radio-button value="multiFile"
+                                                    class="example-radio-button tiles"></mat-radio-button>
+                                                <mat-label class="mx-1 mr-3">Multiple</mat-label>
+
+                                            </mat-radio-group>
+                                        </span>
+                                        <span class="normal-dropdown pl-4" style="flex:4" *ngIf="form.value.singleMultiImage=='multiFile'">
+                                            <span style="vertical-align: top;display: inline-block;margin-top: 8px;">Maximum Number of Files</span>
+                                                <!-- <mat-label>Maximum Number of Files</mat-label> -->
+                                                
+                                                <input matInput type="number" min="2" max="10" placeholder="2"
+                                                    formControlName="maxNumberFile" style="width: 30%;padding: 8px 10px;background: #fff;border-radius: 5px;border: 1px solid #efefef;outline:0;margin-left: 10px;" />
+                                           
+                                            <span class="p-0 m-0" style="margin-top: -10px!important;margin-left: 90px!important;display: inline-block;">
+                                                <p style="font-size: 10px;font-style:italic;">It should be between 2 to 10</p>
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <div class="row pb-3 m-0" *ngIf="form.value.toggleAttachment">
+                                        <div class="col-12 border_top border-bottom pt-3 pb-2 pl-0">
+                                            <div class="mb-3 selectColor">Supported File Types</div>
+                                            <div class="row">
+                                                <div class="col-3" style="float: left;">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label>Add</mat-label>
+                                                        <mat-select formControlName="FileFormatSelected" multiple>
+                                                            <mat-option *ngFor="let data of fileFormats"
+                                                                [value]="data.Key">{{data.Value}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-9">
+                                                    <mat-chip-list style="float:left;"
+                                                        *ngFor="let item of form.value.FileFormatSelected">
+                                                        <mat-chip class="mx-2 my-2 chips">{{item}} <mat-icon class="removeChip" (click)="removeChip(item)">cancel</mat-icon></mat-chip>
+                                                    </mat-chip-list>
+
+                                                    <!-- <mat-chip-row *ngFor="let fruit of fruits" (removed)="remove(fruit)">
+                                                            {{fruit}}
+                                                            <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+                                                            <mat-icon>cancel</mat-icon>
+                                                            </button>
+                                                        </mat-chip-row> -->
+                                                </div>
+                                            </div>
+                                            <!-- <span>
+                                            <mat-checkbox color="primary" [(ngModel)]="PDF"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (change)="selectFileTypeSendImg()">PDF
+                                            </mat-checkbox>
+                                            <mat-checkbox color="primary" [(ngModel)]="JPG"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (change)="selectFileTypeSendImg()">JPG
+                                            </mat-checkbox>
+                                            <mat-checkbox color="primary" [(ngModel)]="PNG"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (change)="selectFileTypeSendImg()">PNG
+                                            </mat-checkbox>
+                                            <mat-checkbox color="primary" [(ngModel)]="EXCEL"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (change)="selectFileTypeSendImg()">EXCEL
+                                            </mat-checkbox>
+                                            <mat-checkbox color="primary" [(ngModel)]="MP3"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (change)="selectFileTypeSendImg()">MP3
+                                            </mat-checkbox>
+                                            <mat-checkbox color="primary" [(ngModel)]="MP4"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (change)="selectFileTypeSendImg()">MP4
+                                            </mat-checkbox>
+                                        </span> -->
+                                            <div class="clear"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 border-bottom p-0 d-flex" *ngIf="form.value.toggleAttachment">
+                                        <span class="pt-2 selectColor">Maximum File Size</span>
+                                        <div class="col-4">
+                                            <mat-form-field appearance="fill" style="width:100px;">
+                                                <mat-label>File Size</mat-label>
+                                                <input matInput type="number" min="1" max="10" formControlName="fileSize" />
+                                            </mat-form-field>
+                                            <mat-error *ngIf="f?.fileSize?.errors" class="mb-2">
+                                                <ng-container *ngIf="f?.fileSize?.errors?.required">Required
+                                                </ng-container>
+                                                <ng-container *ngIf="f?.fileSize?.errors?.pattern">Invalid Value
+                                                </ng-container>
+                                            </mat-error>
+                                        </div>
+                                        <div class="col-3">
+                                            <mat-form-field appearance="fill" class="width-100">
+                                                <mat-label>KB/MB</mat-label>
+                                                <mat-select formControlName="fileSizeMemorySelected">
+                                                    <mat-option *ngFor="let data of fileSizeMemory"
+                                                        [value]="data">{{data}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 pt-3 d-flex justify-content-between" style="padding:0">
+                                        <span class="selectColor">Textarea Characters Limit (Max. 1000 Chars)</span>
+                                        <span>
+                                            <mat-slide-toggle color="primary" class="toggleBtn"
+                                                formControlName="textareaCharLimit">
+                                            </mat-slide-toggle>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-4 py-2 d-flex justify-content-between"
+                                        *ngIf="form.value.textareaCharLimit" style="padding:0">
+                                        <mat-form-field appearance="fill" class="width-100">
+                                            <mat-label>Characters Limit</mat-label>
+                                            <input matInput type="number" formControlName="CharsLimit" min="200" max="1000" />
+                                        </mat-form-field>
+                                    </div>
+                                    <mat-error *ngIf="f?.CharsLimit?.errors" class="mb-2">
+                                        <ng-container *ngIf="f?.CharsLimit?.errors?.required">Required
+                                        </ng-container>
+                                        <ng-container *ngIf="f?.CharsLimit?.errors?.pattern">Invalid Value
+                                        </ng-container>
+                                    </mat-error>
+
+                                    <div class="col-12 border_top border-bottom py-3 d-flex justify-content-between"
+                                        style="padding:0">
+                                        <span class="selectColor">Mic Option</span>
+                                        <span>
+                                            <mat-slide-toggle color="primary" class="toggleBtn"
+                                                formControlName="toggleMic">
+                                            </mat-slide-toggle>
+                                        </span>
+                                    </div>
+                                    <div class="col-12 py-3 d-flex justify-content-between" style="padding:0">
+                                        <span class="selectColor">Emoji</span>
+                                        <span>
+                                            <mat-slide-toggle color="primary" class="toggleBtn"
+                                                formControlName="toggleEmoji">
+                                            </mat-slide-toggle>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <!-- Message Area Section-->
+                        <mat-expansion-panel class="webchat-config">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <div class="header-title">Message Area</div>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <div class="col-12 border_top pt-4 border-bottom py-3 d-flex justify-content-between"
+                                style="padding:0">
+                                <div class="selectColor">View Input Form</div>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleInputForm">
+                                    </mat-slide-toggle>
+                                </span>
+                                <!-- <div class="row m-2" (click) = "$event.stopPropagation()">
+                                        <div class="col-4 py-2 px-1" *ngFor="let item of inputFormLayout">
+                                            <div class="row justify-content-center">
+                                                <div class="cursorPointer d-flex align-items-center justify-content-center {{item}}" [ngStyle]="{'border': item=== form.value.inputFormLayout ? '1px solid #333' : '' }" (click)="chooseInputFormStyle(item)">
+                                                <i class="icon-color-selected white-color" *ngIf="item === form.value.inputFormLayout"></i>
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-center fontBelowColor">
+                                                {{item|titlecase}}
+                                            </div>
+                                        </div>
+                                    </div> -->
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">View Carousel</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleCarousel">
+                                    </mat-slide-toggle>
+                                </span>
+                                <!-- <div class="col-12 border-bottom py-3">
+                                        <div class="row m-2" (click) = "$event.stopPropagation()">
+                                            <div class="col-3 py-2 px-1" *ngFor="let item of carousalStyle">
+                                                <div class="row justify-content-center">
+                                                    <div class="cursorPointer d-flex align-items-center justify-content-center {{item}}" [ngStyle]="{'border': item=== form.value.carousalStyle ? '1px solid #333' : '' }" (click)="chooseCaraousalStyle(item)">
+                                                    <i class="icon-color-selected white-color" *ngIf="item === form.value.carousalStyle"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="row justify-content-center fontBelowColor">
+                                                    {{item|titlecase}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                            </div>
+
+                            <!-- <div class="col-12 border-bottom py-3 d-flex">
+                                <span class="width-100 pr-2">View Image</span>   
+                                <span>
+                                    <mat-radio-group aria-labelledby="example-radio-group-label"
+                                        class="d-flex tiles example-radio-group" formControlName="viewSingleMultiImage"
+                                        color="primary">
+                                        <mat-label class="mx-2">Single Image </mat-label>
+                                        <mat-radio-button class="example-radio-button tiles"
+                                            value="viewSignleImg"></mat-radio-button>
+                                        <mat-label class="mx-2">Multiple Images </mat-label>
+                                        <mat-radio-button class="example-radio-button tiles"
+                                            value="viewMultiImg"></mat-radio-button>
+                                    </mat-radio-group>
+                                </span>
+                            </div> -->
+
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Enlarge and View Image</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="imageCaption">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">View Image Caption</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="imageCaption">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Video Playback</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="videoPlayback">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Audio Playback</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="audioPlayback">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Video Youtube</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="pictureInPicture">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">View URL</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="urlToggle">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3" *ngIf="form.value.urlToggle" style="padding:0">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="selectColor">URL Highlighter</span>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row" style="margin-left:-5px;">
+                                            <div class="col-1 py-2 mx-1" *ngFor="let item of common.colorArray">
+                                                <div class="row justify-content-center">
+                                                    <div class="cursorPointer colorTile d-flex border-radius align-items-center justify-content-center"
+                                                        [ngStyle]="{'background-color': common.color[item]}"
+                                                        (click)="urlColor(item)">
+                                                        <i class="icon-color-selected white-color"
+                                                            *ngIf="item === form.value.urlHighlighter"></i>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="row justify-content-center fontBelowColor">
+                                                        {{item|titlecase}}
+                                                    </div> -->
+                                            </div>
+                                            <!-- <div class="mt-2">
+                                                <div (click)="addThemeColorCode()"
+                                                    class="graycolorTile p-4 border-radius d-flex align-items-center justify-content-center">
+                                                    <mat-icon>add</mat-icon>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-12 border-bottom py-3" *ngIf="form.value.urlToggle" style="padding:0">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="selectColor">Email Highlighter</span>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row" style="margin-left:-5px;">
+                                            <div class="col-1 py-2 mx-1" *ngFor="let item of common.colorArray">
+                                                <div class="row justify-content-center">
+                                                    <div class="cursorPointer colorTile d-flex border-radius align-items-center justify-content-center"
+                                                        [ngStyle]="{'background-color': common.color[item]}"
+                                                        (click)="emailColor(item)">
+                                                        <i class="icon-color-selected white-color"
+                                                            *ngIf="item === form.value.emailHighlighter"></i>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="row justify-content-center fontBelowColor">
+                                                    {{item|titlecase}}
+                                                </div> -->
+                                            </div>
+                                            <!-- <div class="mt-2">
+                                                <div (click)="addThemeColorCode()"
+                                                    class="graycolorTile p-4 border-radius d-flex align-items-center justify-content-center">
+                                                    <mat-icon>add</mat-icon>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 border-bottom py-3" *ngIf="form.value.urlToggle" style="padding:0">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="selectColor">Number Highlighter</span>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="row" style="margin-left:-5px;">
+                                            <div class="col-1 py-2 mx-1" *ngFor="let item of common.colorArray">
+                                                <div class="row justify-content-center">
+                                                    <div class="cursorPointer colorTile d-flex border-radius align-items-center justify-content-center"
+                                                        [ngStyle]="{'background-color': common.color[item]}"
+                                                        (click)="numberColor(item)">
+                                                        <i class="icon-color-selected white-color"
+                                                            *ngIf="item === form.value.numberHighlighter"></i>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="row justify-content-center fontBelowColor">
+                                                    {{item|titlecase}}
+                                                </div> -->
+                                            </div>
+                                            <!-- <div class="mt-2">
+                                                <div (click)="addThemeColorCode()"
+                                                    class="graycolorTile p-4 border-radius d-flex align-items-center justify-content-center">
+                                                    <mat-icon>add</mat-icon>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-12 border-bottom py-3 d-flex justify-content-between">
+                                <span>Message with time as per customer timezone</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleMsgCustomerTImezone">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div> -->
+
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Reducing Queue Wait time Message</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="QueueWaitTime">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Reducing Queue Position Message</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="QueueWaitTime">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <!-- <div class="col-12 py-3 d-flex justify-content-between">
+                                <span>Queue POSITION Message</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="QueuePositionMsg">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div> -->
+
+                        </mat-expansion-panel>
+
+                        <!-- Additional Feature Section-->
+                        <mat-expansion-panel class="webchat-config">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Additional Settings</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="col-12 border_top pt-4 border-bottom py-3 d-flex justify-content-between"
+                                style="padding:0">
+                                <span class="selectColor">Sneakpeak</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleSneakPeak">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Notification Sound</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleNotification">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between"
+                                *ngIf="form.value.toggleNotification">
+                                <div class="watermarkImg-holder align-items-center py-2"
+                                    (click)="UploadNotificationSound.click()">
+                                    <mat-icon
+                                        class="mx-2 cursorPointer d-flex align-items-center justify-content-center">add_circle</mat-icon>
+                                    <!-- (change)="UploadNotificationSoundMethod($event)" -->
+                                    <!-- audioToBase64($event.target.files[0]) -->
+                                    <input class="d-none" type="file" (change)="UploadNotificationSoundMethod($event)"
+                                        #UploadNotificationSound id="UploadNotificationSound" />
+                                </div>
+                                <!-- {{form.value.notiSoundUploaded | json}} -->
+                                <div *ngIf="form.value.notiSoundUploaded" class="ml-5">
+                                    <audio controls src="{{form.value.notiSoundUploaded}}"></audio>
+                                </div>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Read Cookies</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleCookieRead">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Email Transcript</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleEmailTranscript">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Download Transcript</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleDownloadTranscript">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 py-3 pb-3 border-bottom d-flex justify-content-between"
+                                style="padding:0">
+                                <span class="selectColor">End Conversation</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleEndConversation">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Branding</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleBranding">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div *ngIf="form.value.toggleBranding"
+                                class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Powered by UNFYD<sup>&reg;</sup></span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleUNFYDBranding">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="row pb-1 pt-4" *ngIf="form.value.toggleBranding && form.value.toggleUNFYDBranding"
+                                style="padding:0">
+                                <div class="width-300 mx-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Copyright Text (100 Characters Only)</mat-label>
+                                        <input type="text" matInput formControlName="CopyrightText" class="form-input" maxlength="100"/>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row py-1" *ngIf="form.value.toggleBranding && form.value.toggleUNFYDBranding">
+                                <div class="width-300 mx-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Branding URL (100 Characters Only)</mat-label>
+                                        <input type="text" matInput formControlName="BrandingURL" class="form-input" maxlength="100"/>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-12 border-bottom py-3 d-flex justify-content-between">
+                                        <span>UNFYD Branding at the end of the menu</span>
+                                        <span>
+                                            <mat-slide-toggle color="primary" class="toggleBtn" formControlName="toggleBottomBranding">
+                                            </mat-slide-toggle>
+                                        </span>
+                                    </div>
+                                    <div class="col-12 border-bottom py-3 d-flex justify-content-between">
+                                        <span>Powered by UNFYD in the plugin</span>
+                                        <span>
+                                            <mat-slide-toggle color="primary" class="toggleBtn" formControlName="togglePluginBranding">
+                                            </mat-slide-toggle>
+                                        </span>
+                                    </div> -->
+                            <div class="col-12 py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Water Mark - Chat Message Area</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="watermarkMessageWindow">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 pb-3 d-flex" *ngIf="form.value.watermarkMessageWindow" style="padding:0">
+                                <div class="watermarkImg-holder align-items-center py-2">
+                                    <mat-icon class="mx-2 cursorPointer"
+                                        (click)="UploadwatermarkMessageWindow.click()">add_circle</mat-icon>
+                                    <input class="d-none" type="file"
+                                        (change)="UploadWatermarkChatWindow($event, 300, 400)"
+                                        #UploadwatermarkMessageWindow id="UploadwatermarkMessageWindow" />
+                                </div>
+                                <div *ngIf="form.value.watermarkMessageWindow" class="ml-4">
+                                    <img class="img-class" src="{{form.value.watermarkMessageWindowImg}}" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 border_top py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Water Mark Pre-Chat Form</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="watermarkPrechatWindow">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 pb-3 d-flex" *ngIf="form.value.watermarkPrechatWindow" style="padding:0">
+                                <div class="watermarkImg-holder align-items-center py-2">
+                                    <mat-icon class="mx-2 cursorPointer"
+                                        (click)="UploadwatermarkPrechatWindow.click()">add_circle</mat-icon>
+                                    <input class="d-none" type="file"
+                                        (change)="UploadWatermarkPreChatWindow($event, 300, 400)"
+                                        #UploadwatermarkPrechatWindow id="UploadwatermarkPrechatWindow" />
+                                </div>
+                                <div *ngIf="form.value.watermarkPrechatWindow" class="ml-4">
+                                    <img class="img-class" src="{{form.value.watermarkPrechatWindowImg}}" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 border_top py-3 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">Marquee</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="toggleMarquee">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 d-flex justify-content-between" style="padding:0"
+                                *ngIf="form.value.toggleMarquee">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Marquee Text (1000 Chars)</mat-label>
+                                    <input matInput formControlName="marqueeText" maxlength="1000" />
+                                </mat-form-field>
+                            </div>
+                            <div class="row mx-2 pb-3" *ngIf="form.value.toggleMarquee">
+                                <div class="col-6 d-flex inputText normal-dropdown" style="padding:0">
+                                    <span class="selectColor mt-2 mr-2">Text Color</span>
+                                    <input type="text"
+                                        style="width: 50%;padding: 8px 10px;background: #fff;border-radius: 5px;border: 1px solid #efefef;outline:0;"
+                                        placeholder="#000000" formControlName="marqueeTextColor" />
+                                    <!-- <input matInput formControlName="marqueeTextColor" maxlength="100" /> -->
+                                    <mat-error *ngIf="f?.marqueeTextColor?.errors" class="mb-2">
+                                        <ng-container *ngIf="f?.marqueeTextColor?.errors?.required">Color Code Required
+                                        </ng-container>
+                                        <ng-container *ngIf="f?.marqueeTextColor?.errors?.pattern">HexCode only (Ex.#ffffff)
+                                        </ng-container>
+                                    </mat-error>
+                                </div>
+                                
+                                <div class="col-6 d-flex inputText normal-dropdown" style="padding:0">
+                                    <span class="selectColor mt-2 mr-2">Background Color</span>
+                                    <input type="text"
+                                        style="width: 50%;padding: 8px 10px;background: #fff;border-radius: 5px;border: 1px solid #efefef;outline:0;"
+                                        placeholder="#ffffff" formControlName="marqueeBGColor" />
+                                        <mat-error *ngIf="f?.marqueeBGColor?.errors" class="mb-2">
+                                            <ng-container *ngIf="f?.marqueeBGColor?.errors?.required">Color Code Required
+                                            </ng-container>
+                                            <ng-container *ngIf="f?.marqueeBGColor?.errors?.pattern">HexCode only (Ex.#ffffff)
+                                            </ng-container>
+                                        </mat-error>
+                                </div>
+                                
+                            </div>
+                            <div class="col-12 pt-3 border_top" style="padding:0;">
+                                <div class="selectColor pb-3">Social Media Icons</div>
+                                <div class="pb-3"> 
+                                    <span>
+                                        <mat-checkbox class="mr-3 social-media-checkbox" color="primary" formControlName="FACEBOOKSOCIAL"
+                                        (change)="selectSocialMediaIcons()">
+                                        <span class="Facebook social-icons mr-1 d-flex align-items-center"></span>Facebook
+                                        </mat-checkbox>
+                                    </span>
+                                    <span>
+                                        <mat-checkbox class="mr-3 social-media-checkbox" color="primary" formControlName="TWITTERSOCIAL"
+                                        (change)="selectSocialMediaIcons()">
+                                        <span class="Twitter social-icons mr-1 d-flex align-items-center"></span>Twitter
+                                    </mat-checkbox>
+                                    </span>
+                                    <span>
+                                        <mat-checkbox class="mr-3 social-media-checkbox" color="primary" formControlName="INSTAGRAMSOCIAL"
+                                        (change)="selectSocialMediaIcons()">
+                                        <span class="InstagramPost social-icons mr-1 d-flex align-items-center"></span>Instagram
+                                    </mat-checkbox>
+                                    </span>
+                                </div>
+                                <div class="pt-2 mt-2 d-flex" *ngIf="form.value.FACEBOOKSOCIAL">
+                                        <div class="col-1 d-flex align-items-baseline pl-0">
+                                            <span class="mt-2 mr-4">Facebook</span>
+                                        </div>
+                                        <div class="col-11">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Facebook URL</mat-label>
+                                                <input matInput formControlName="facebookURL" class="form-input" />
+                                            </mat-form-field>
+                                        </div>
+                                </div>
+                                <div class="pt-2 d-flex" *ngIf="form.value.TWITTERSOCIAL">
+                                    <div class="col-1 d-flex align-items-baseline pl-0">
+                                        <span class="mt-2 mr-4">Twitter</span>
+                                    </div>
+                                    <div class="col-11">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Twitter URL</mat-label>
+                                            <input matInput formControlName="twitterURL" class="form-input" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="pt-2 d-flex" *ngIf="form.value.INSTAGRAMSOCIAL">
+                                    <div class="col-1 d-flex align-items-baseline pl-0">
+                                        <span class="mt-2 mr-4">Instagram</span>
+                                    </div>
+                                    <div class="col-11">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Instagram URL</mat-label>
+                                            <input matInput formControlName="instagramURL" class="form-input" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <!-- ChatBOT Section-->
+                        <mat-expansion-panel class="webchat-config">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Chat BOT</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="col-12 py-3 border_top pt-4 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Auto Completion</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleAutocompletion">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border_top py-3 pt-2 d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">BOT Flow</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="toggleBotFlow">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="row py-1" *ngIf="form.value.toggleBotFlow">
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill" class="width-300">
+                                        <mat-label>Select</mat-label>
+                                        <mat-select formControlName="botFlowSelected"
+                                            (selectionChange)="botFlowSelection()">
+                                            <mat-option *ngFor="let data of botFlowList"
+                                                [value]="data.CHANNELSUBTYPE">{{data.CHANNELSUBTYPE}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="col-12 py-3 border_top d-flex justify-content-between" style="padding:0">
+                                <span class="selectColor">BOT Avatar</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleBotAvatar">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 pb-3" *ngIf="form.value.toggleBotAvatar" style="padding:0">
+                                <div class="row m-0" (click)="$event.stopPropagation()">
+                                    <div class="px-1 mr-3 outline-shape" *ngFor="let item of botAvatar"
+                                        (click)="chooseBotAvatar(item)"
+                                        [ngStyle]="{'border': (item == form.value.botAvatar && !form.value.botAvatarUploaded) ? '1px solid #333' : '' }"
+                                        style="width:65px!important;">
+                                        <div class="row justify-content-center">
+                                            <div
+                                                class="cursorPointer gray-color d-flex align-items-center justify-content-center {{item}}">
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center fontBelowColor">
+                                            <!-- {{item|titlecase}} -->
+                                        </div>
+                                    </div>
+                                    <div class="" *ngIf="form.value.botAvatarUploaded">
+                                        <div class="row justify-content-center align-items-center flex-column agent-avatar agantavater-custdesign ml-0"
+                                        [ngStyle]="{'border': form.value.botAvatarUploaded ? '1px solid #053c6d' : '1px solid #dee2e6' }">
+                                            <img src="{{form.value.botAvatarUploaded}}" alt="image"/>
+                                            <br/>
+                                            <!-- <div class="row justify-content-center fontBelowColor" style="margin-top: 55px!important;margin-left: -70px;">
+                                                Avatar
+                                            </div> -->
+                                        </div>                                            
+                                    </div>
+                                    <div class="outline-shape">
+                                        <div class="agentIcon-holder align-items-center py-2">
+                                            <mat-icon class="mx-2 cursorPointer"
+                                                (click)="UploadBotIconDiv.click()">add_circle</mat-icon>
+                                            <input class="d-none" type="file" (change)="UploadBotIcon($event, 100, 100)"
+                                                #UploadBotIconDiv id="UploadBotIconDiv" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </mat-expansion-panel>
+
+                        <!-- Additional Features Section-->
+                        <mat-expansion-panel class="webchat-config">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Additional Features</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="col-12 py-3 border_top pt-4 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Thumb Like Dislike</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleThumbBtn">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 py-3 border_top pt-4 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Emoji</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleEmojiBtn">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 py-3 border_top pt-4 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Video Call</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleVideoCall">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 py-3 pt-2 d-flex justify-content-between"
+                                *ngIf="form.value.toggleVideoCall" style="padding:0;">
+                                <span class="ml-4">Audio</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="VideoCallAudio"></mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border_top py-3 pt-2 d-flex justify-content-between"
+                                *ngIf="form.value.toggleVideoCall" style="padding:0;">
+                                <span class="ml-4">Video</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="VideoCallVideo"></mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border_top py-3 pt-2 d-flex justify-content-between"
+                                *ngIf="form.value.toggleVideoCall" style="padding:0;">
+                                <span class="ml-4">Copy URL</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="VideoCopyURL"></mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border_top py-3 pt-2 d-flex justify-content-between"
+                                *ngIf="form.value.toggleVideoCall" style="padding:0;">
+                                <span class="ml-4">Recording</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="VideoRecording"></mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border_top py-3 pt-2 d-flex justify-content-between"
+                                *ngIf="form.value.toggleVideoCall" style="padding:0;">
+                                <span class="ml-4">Screenshare</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="VideoScreenshare"></mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom border_top py-3 d-flex justify-content-between"
+                                style="padding:0;">
+                                <span class="selectColor">Voice Call</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleVoiceCall">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Mute/Unmute</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn" formControlName="muteUnmute">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Network disconnect notification</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleNetNotification">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Volume Control</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleVolumeConrol">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 border-bottom py-3 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Maximize Video</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleMaximizeVideo">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                            <div class="col-12 pt-4 py-3 d-flex justify-content-between" style="padding:0;">
+                                <span class="selectColor">Co-Browse</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleCoBrowse">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                        </mat-expansion-panel>
+
+
+                        <!-- Post-Chat Section-->
+                        <mat-expansion-panel class="webchat-config">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Post-chat</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="col-12 pb-2 border_top pt-4 d-flex justify-content-between" style="padding:0;">
+                                <span>Show customer feedback</span>
+                                <span>
+                                    <mat-slide-toggle color="primary" class="toggleBtn"
+                                        formControlName="toggleCustFeedback">
+                                    </mat-slide-toggle>
+                                </span>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <!-- Install Script Section-->
+                        <mat-expansion-panel class="webchat-config">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Install Chat Script</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="row border_top pt-4">
+                                <div class="col-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Webchat Script</mat-label>
+                                        <textarea matInput formControlName="WebchatScript" #userinput placeholder=""
+                                            class="form-input script-area"></textarea>
+                                    </mat-form-field>
+                                    <!-- <mat-error *ngIf="f?.WebchatScript?.errors" class="mb-2">
+                                        <ng-container *ngIf="f?.WebchatScript?.errors?.required"> 
+                                        </ng-container>
+                                    </mat-error> -->
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn mat-focus-indicator mat-flat-button mat-primary mx-3"
+                                        color="primary" (click)="copyInputMessage(userinput)">
+                                        <mat-icon class="mat-icon notranslate material-icons mat-icon-no-color primary"
+                                            style="font-size:20px!important;">file_copy</mat-icon><strong>Copy
+                                            Code</strong>
+                                    </button>
+                                    <button class="btn mat-focus-indicator mat-flat-button mat-primary mx-3"
+                                        color="primary" (click)="sendScriptPopup('send-script-popup',null)">
+                                        <mat-icon class="mat-icon notranslate material-icons mat-icon-no-color primary"
+                                            style="font-size:20px!important;">send</mat-icon><strong>Send Code</strong>
+                                    </button>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                    </mat-accordion>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+    <div class="webchat-preview" *ngIf="!loader">
+        <!-- <ng-container *ngIf="form.value.eyeCatcher=='eyeCatcher1'" >
+            <div class="col-2 eyeCatcher-position"> 
+                <div class="eyecatcher-outline admin" style="background-color: transparent;">
+                    <div class="eyeCatcher-bubble tri-right bubble-border round btm-left-in"
+                        style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="align-items-center">
+                            <div class="eyeCatcher-img align-center"></div>
+                        </div>
+                        <div class="bubbleText text-center">
+                            <h1
+                                [ngStyle]="{'color': form.value.themeColor ? form.value.themeColor : '#053c6d' }">
+                                {{form.value.eyeCatcherHeading}}</h1>
+                            <p class="mb-2">{{form.value.eyeCatcherText}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="form.value.eyeCatcher=='eyeCatcher2' && !webchatContainer">
+            <div class="ml-3 eyeCatcher-position">
+                <div class="eyecatcher-outline admin" style="background-color: transparent;">
+                    <div class="eyeCatcher-bubble tri-right btm-right"
+                        style="display: flex;background-color:#053C6D; border-radius: 10px;">
+                        <div class="mt-2 mx-2 align-items-center">
+                            <div class="eyeCatcher2-img align-center"></div>
+                        </div>
+                        <div class="bubbleText">
+                            <h1 class="white-color">{{form.value.eyeCatcherHeading}}</h1>
+                            <p class="white-color">{{form.value.eyeCatcherText}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container> -->
+        <div *ngIf="chatComponent">
+        <ng-container *ngIf="webchatContainer">
+            <div class="webchat-iframe">
+				<div class="webchat-header" [ngStyle]="{'background': (form.value.themeColor || customThemeColorGradient) ? (form.value.themeColor || customThemeColorGradient) : '#053C6D'}" >
+					<div class="header-align">
+						<div class="header-data admin">
+							<div [ngClass]="form.value.botAvatar">
+								<!-- <img src="{{form.value.botAvatar}}" style="width:60px;"> -->
+							</div>
+							<div class="title">
+								{{form.value.botName}}
+							</div>
+						</div>
+						<div class="header-menu"></div>
+					</div>
+				</div>
+				<div class="webchat-body">
+					<div class="marquee-tag" *ngIf="form.value.marqueeBGColor" [ngStyle]="{'background': form.value.marqueeBGColor ? form.value.marqueeBGColor : '#efefef'}">
+						<marquee class="marquee-style" behavior="" direction="left" [ngStyle]="{'color': form.value.marqueeTextColor ? form.value.marqueeTextColor : '#000'}">{{form.value.marqueeText}}</marquee>
+					</div>
+                    <div class="chat-body">
+                        <div class="msg-container d-flex">
+                            <div class="bot-icon-holder">
+                                <div class="botAgent-icon"></div>
+                            </div>
+                            <div class="botAgentMsg">Hello Pintu, Welcome to our chat service</div>
+                        </div>
+                        <div class="msg-container d-flex fl-right">
+                            <div class="botAgentMsg" [ngStyle]="{'background':(form.value.themeColor || customThemeColorGradient) ? (form.value.themeColor || customThemeColorGradient) : '#053C6D' }">Hello Pintu, Welcome to our chat service</div>
+                        </div>
+                    </div>                    
+				</div>
+                <!--Textarea-->
+                <div class="messengerInput" >
+                    <label for="file">
+                        <input type="file" id="file" hidden=""/>
+                        <i class="icon-attachment"></i>
+                    </label>
+
+                    <textarea id="msgInput" [(ngModel)]="abcd" placeholder="Send a message" value="" class="form-control" rows="1">
+                    </textarea>
+                    <div class="actionBtns">
+                        <ng-container>
+                            <button class="mic-button">
+                                <i class="icon-thumbs-up-o"></i>
+                            </button>
+                        </ng-container>
+                        <ng-container>
+                            <button class="mic-button" >
+                                <i class="icon-emoji"></i>
+                            </button>
+                        </ng-container>
+                        <ng-container>
+                            <button class="mic-button" type="button" >
+                                <div class="pulse-ring" ></div>
+                                <i class="icon-mike"></i>
+                            </button>
+                        </ng-container>
+                    </div>
+                    <i class="icon-enter"></i>
+                </div>
+                <!--Textarea End-->
+				<div class="webchat-footer">
+					©UNFYD®
+				</div>
+			</div>
+        </ng-container>
+        <ng-container *ngIf="(form.value.chatButtonShape == 'chatButtonShape1') || (form.value.chatButtonShape == 'chatButtonShape3') || (form.value.chatButtonShape == 'chatButtonShape5')">
+            <div class="p-2 px-1 mr-3 outline-shape" [ngClass]="form.value.chatButtonPosition" style="background: none;background-color: transaparent;">
+                <div class="button-shape d-flex" [ngClass]="form.value.chatButtonShape"
+                    [ngStyle]="{'background':  (form.value.themeColor || customThemeColorGradient) ? (form.value.themeColor || customThemeColorGradient) : '#053C6D' }">
+                    <span class="shape-icon ? {{form.value.chatIconStyle}} : shape-icon"></span>
+                    <span class="pt-1">{{(chatTitleFocus && form.value.chatTitleOnline)
+                        ? form.value.chatTitleOnline : (!chatTitleFocus &&
+                        form.value.chatTitleOffline)
+                        ? form.value.chatTitleOffline : "chat with us"}}</span>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf=" (form.value.chatButtonShape == 'chatButtonShape2') ||  (form.value.chatButtonShape == 'chatButtonShape4') || (form.value.chatButtonShape == 'chatButtonShape6')">
+            <div class="outline-shape" [ngClass]="form.value.chatButtonPosition"  style="background: none;background-color: transaparent;">
+                <div class="button-shape-small" [ngClass]="form.value.chatButtonShape" [ngStyle]="{'background': form.value.themeColor ? form.value.themeColor : '#053C6D' }">
+                    <span class="shape-icon ? {{form.value.chatIconStyle}} : shape-icon"></span>
+                </div>
+            </div>
+        </ng-container>
+        </div>
+        <div *ngIf="iframeVisible">
+            <app-iframe-webchat [reload]="iframeURLReload"></app-iframe-webchat>
+        </div>
+    </div>
+</div>

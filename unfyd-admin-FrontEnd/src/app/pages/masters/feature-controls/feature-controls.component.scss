@@ -1,0 +1,210 @@
+.row {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.h4 {
+  font-size: var(--normal-font);
+  color: var(--primary_color);
+  font-weight: bold;
+}
+.list-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  .displayData{
+    max-width: 205px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  &:hover {
+    background: var(--white);
+    transition: all 0.2s linear;
+  }
+}
+.mat-tree-node {
+  min-height: unset;
+}
+
+::ng-deep {
+    .backgroundWhite{
+      .mat-form-field-appearance-fill .mat-form-field-flex {
+        background-color: var(--white_color);
+      }
+    .mat-form-field-wrapper {
+      padding-bottom: 1.34375em;
+    }
+  }
+  .wrapper {
+    margin: 0px !important;
+    border-radius: 0 !important;
+  }
+  .multiselect {
+    margin-right: 30px;
+
+
+    .mat-select {
+      .mat-select-trigger {
+        display: flex;
+        top: 8px !important;
+      }
+    }
+  }
+
+  .multiselectChild {
+
+    .mat-select {
+      .mat-select-trigger {
+        display: flex;
+        top: 8px !important;
+      }
+    }
+  }
+  .featureControlFropdown {
+    margin-right: 30px;
+
+    .mat-select {
+      .mat-select-trigger {
+
+        display: flex;
+        top: 8px !important;
+      }
+      .mat-select-value-text {
+        padding-left: 10px;
+      }
+    }
+  }
+}
+.mat-tree-border {
+  padding: 0 15px;
+  border: 1px solid var(--gray_color_60);
+  cursor: pointer;
+}
+.example-tree-invisible {
+  display: none;
+}
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+.mat-tree-position {
+  top: 5%;
+  margin-top: 40px;
+}
+
+::ng-deep{
+  .mat-icon{
+    display: inline-flex !important;
+  }
+}
+
+.timerIconPositionparent{
+  position: absolute;
+  right: 110px;
+  margin-top: 3px !important;
+
+}
+.timerIconPosition{
+  position: absolute;
+  margin-top: 3px;
+  right: 80px;
+}
+ul {
+  padding: 0px;
+  margin-top: 0px;
+  height: calc(100vh - 300px);
+  overflow: auto;
+  margin: 0 -20px;
+  li {
+    list-style-type: none;
+    border-top: var(--border);
+  }
+}
+
+.tree-list-menu {
+  font-size: var(--medium-font);
+  display: contents;
+  font-family: var(--nunito-font);
+}
+.list-items {
+  padding: 6px 0px 10px 0px;
+}
+.left-panel {
+  height: 100%;
+  background: var(--light);
+  padding: 10px 20px;
+}
+.right-panel {
+  padding: 20px 30px;
+  background: var(--white-color);
+  height: 90vh;
+  overflow: auto;
+  overflow-x: hidden;
+}
+.mat-slide-toggle.toggleBtn .mat-slide-toggle-bar {
+  border: 1px solid var(--border-color) !important;
+}
+
+.margin10{
+  margin-top: 10px;
+}
+
+.mat-form-field-wrappe {
+  padding-bottom: 0 !important;
+}
+@media screen and (max-width: 1366px) {
+  ul {
+    padding: 0px;
+    margin-top: 0px;
+  }
+
+}
+.DatePicker_input {
+  margin-right: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-width: 120px;
+  height: 25px;
+  padding-left: 11px;
+  margin-bottom: 3px;
+}
+.selectedMenuOption{
+  color: var(--primary_color);
+  background-color: var(--white_color);
+}
+.unselectedOpton{
+  color: var(--black_color);
+}
+.mat-pseudo-checkbox.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox.mat-pseudo-checkbox-indeterminate {
+  border-color: transparent;
+  background: orangered;
+}
+
+.inputInside {
+  border: none;
+  height: 26px;
+  background: transparent;
+  font-size: var(--content);
+  max-width: 200px;
+  width: 200px;
+
+  &:hover {
+    border: 1px solid var(--gray_color);
+    border-radius: 5px;
+  }
+  &:focus-visible {
+    border: 1px solid var(--gray_color);
+    border-radius: 5px;
+    outline: none;
+  }
+}
+
+@media screen and (max-width:767px) {
+
+}
+

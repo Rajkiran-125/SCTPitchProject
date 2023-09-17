@@ -1,0 +1,132 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper mt-4">
+    <form [formGroup]="form">
+      <legend>Holidays</legend>
+      <div class="formGroup">
+
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.isfixedholiday.errors }">
+              <mat-label>{{ labelName?.HolidayType }}</mat-label>
+              <mat-select disableRipple formControlName="isfixedholiday" (selectionChange)="showDate($event.value)">
+                <mat-option [value]="false"> Seasonal</mat-option>
+                <mat-option [value]="true"> Fixed</mat-option>
+              </mat-select>
+              <mat-error *ngIf="f.isfixedholiday.errors">
+                <ng-container *ngIf="f.isfixedholiday.errors.required">{{labelName?.HolidayType}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div *ngIf="this.isfixedholiday == true" class="col-lg-4 col-md-4 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.holiday.errors }">
+              <mat-label>{{ labelName?.Holiday }}</mat-label>
+              <input datePickerFormat="{{(selectedDateFormats).toUpperCase()}}" (focus)="date.open()"
+                (click)="date.open()" readonly formControlName="holiday" type="text" [matDatepicker]="date" matInput />
+              <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+              <mat-datepicker #date></mat-datepicker>
+              <mat-error *ngIf="f.holiday.errors">
+                <ng-container *ngIf="f.holiday.errors.required">{{ labelName?.Holiday }} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+
+
+          <div *ngIf="this.isfixedholiday == false" class="col-lg-4 col-md-4 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.holiday.errors }">
+              <mat-label>{{ labelName?.Holiday }}</mat-label>
+              <input readonly formControlName="holiday" type="text" [matDatepicker]="date" matInput />
+              <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+              <mat-datepicker #date></mat-datepicker>
+              <mat-error *ngIf="f.holiday.errors">
+                <ng-container *ngIf="f.holiday.errors.required">{{ labelName?.Holiday }} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.description.errors }">
+              <mat-label> {{ labelName?.HolidayName }}</mat-label>
+              <input matInput formControlName="description" appTitleCase />
+              <mat-error *ngIf="f.description.errors">
+                <ng-container *ngIf="f.description.errors.required">{{ labelName?.HolidayName }} is required.
+                </ng-container>
+                <ng-container *ngIf="f.description?.errors?.checknull1">Must be at least 3 characters long.
+                </ng-container>
+                <ng-container *ngIf="f.description?.errors?.maxlength">Cannot be beyond 100 characters.
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.autoresponse.errors }">
+              <mat-label>{{ labelName?.AutoResponse }}</mat-label>
+              <textarea matInput formControlName="autoresponse" maxlength="300"></textarea>
+              <mat-error *ngIf="f.autoresponse.errors">
+                <ng-container *ngIf="f.autoresponse.errors.required">{{ labelName?.AutoResponse }} is required.
+                </ng-container>
+                <ng-container *ngIf="f.autoresponse?.errors?.checknull1">Must be at least 3 characters long.
+                </ng-container>
+                <ng-container *ngIf="f.autoresponse?.errors?.maxlength">Cannot be beyond 300 characters
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <div class="msgmedia">
+              <p class="px-0" style="display: inline-block; margin-right: 10px">
+                {{ labelName?.Message }}
+              </p>
+              <mat-slide-toggle (click)="flip()" color="primary" class="toggleBtn" formControlName="enable">
+              </mat-slide-toggle>
+              <p class="px-0" style="display: inline-block">
+                {{ labelName?.Media }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row bot">
+          <div class="col col-3 p-0 mb-3 mx-3  uploadimg" [ngClass]="!isDisabled ? 'disabledIT' : 'cursorPointer'">
+            <div class="avatar" (click)="uploadimage.click()">
+              <div class="uploadTitle" *ngIf="!holidayImg">
+                <i class="icon-upload"></i>
+                <strong>{{ labelName?.UploadHolidayImage }}</strong>
+              </div>
+              <img *ngIf="holidayImg" [src]="holidayImg" />
+              <input type="file" hidden (change)="directUpload($event)" title="" #uploadimage />
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <!-- <button class="btn btn-gray" mat-flat-button *ngIf="userConfig?.Cancel" (click)="closeDialog(false)"
+            type="Reset">
+            {{ labelName?.Cancel}}
+          </button> -->
+          <button *ngIf="!reset && userConfig?.Reset" class="btn btn-gray" id="reset" #reset mat-flat-button
+            type="Reset" (click)="resetfunc()">
+            {{ labelName?.Reset}}
+          </button>
+          <button class="btn outline" *ngIf="(userConfig?.SaveAddNew) && !reset" mat-stroked-button color="primary"
+            (click)="submit('saveAndAddNew')">
+            {{ labelName?.SaveAddNew}}
+          </button>
+          <button class="btn" mat-flat-button *ngIf="reset ? (userConfig?.Update) : (userConfig?.SaveHolidays)"
+            color="primary" (click)="submit('add')" type="button">
+            {{ reset ? labelName?.Update : labelName?.Save }}
+          </button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,972 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="row" *ngIf="!loader && (filter !== 'add' && filter !== 'edit' && filter !== 'view')">
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="inner-container">
+      <div class="wrapper">
+        <legend class="primary-color font-weight-bold size d-none d-md-block">{{changeModuleLabelDisplayName}}</legend>
+        <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+          <div class="col-lg-3 col-md-6 col-sm-12 ">
+            <div class="blue-dropdown">
+              <mat-form-field appearance="fill">
+                <mat-label>Application</mat-label>
+                <mat-select [(ngModel)]="productName" [ngModelOptions]="{standalone: true}" panelClass="blue-panel"
+                  (selectionChange)="selectedProduct($event.value)">
+                  <mat-option *ngFor="let data of productType" [value]="data.Id">{{data.ProductName}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </div>
+        <div mat-tab-nav-bar>
+          <a mat-tab-link *ngFor="let data of notificationsStep" (click)="onTabChange(data.tabn)"
+            [active]="master == data.tabn" class="userNavtab">
+            {{data.label}} </a>
+        </div>
+
+        <div class="inner-container2" *ngIf="!loader">
+          <ng-container>
+            <app-filter [hasChecked]="hasChecked"
+              [component]="master === 'internal' ? 'NotificationInternal' : 'NotificationExternal'" [type]="type"
+              [role]="userDetails.role" [tabValue]="tabValue" [productID]="productName" [tabn]="master"
+              [addBtn]="true"></app-filter>
+
+          </ng-container>
+          <div class="table-container dataTable" style="overflow: auto;">
+            <table>
+              <thead>
+                <tr *ngIf="tabValue.length>0">
+                  <ng-container *ngFor="let data of finalField; let i = index">
+                    <th *ngIf="data.value !== 'Sr No'" [ngClass]="!data.checked ? 'tabCol' : ''" class="column{{i}}"
+                      (click)="sortUsers(data.value, data.order)">
+                      <ng-container class="Header_All" *ngIf="data.value == 'Actionable'; else else_content">
+                        <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary"
+                          [indeterminate]="hasChecked.length >0 && !allSelected"
+                          [checked]="hasChecked.length >0 && allSelected" [disabled]="!data.CHECKBOX && maxNo"
+                          (change)="bulkCheckboxCheck($event.checked, data)"></mat-checkbox>
+                      </ng-container>
+                      <ng-template #else_content>{{data.value === 'Status' ? '' : data.value == 'Id' ?
+                        'Action':data.value}}
+                        <span [ngSwitch]="data.order">
+                          <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                          <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                        </span>
+                      </ng-template>
+                    </th>
+                  </ng-container>
+                </tr>
+                <tr *ngIf="noData">
+                  <th>No record found</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="tabValue.length>0">
+                <ng-container *ngFor="let data of tabValue | filter: search; let j = index">
+                  <tr>
+                    <ng-container *ngFor="let val of finalField; let i = index">
+                      <td *ngIf="val.value == 'Id'" class="{{'column'+i}} action">
+                        <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                        <mat-menu #menu="matMenu" class="master_action">
+
+                          <button *ngIf="userConfig?.Edit && hasChecked.length == 0" mat-menu-item
+                            (click)="edit(data.Actionable);">
+                            <mat-icon>edit</mat-icon>
+                            <span>{{labelName?.Edit}}</span>
+                          </button>
+                          <button *ngIf="userConfig?.Delete" mat-menu-item
+                            (click)="openDialog('delete',data.Actionable)">
+                            <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                            <span>{{labelName?.Delete}}</span>
+                          </button>
+                        </mat-menu>
+                      </td>
+                      <!-- (click)="contactAction(data.Actionable)" -->
+                      <td *ngIf="val.value !== 'Id'
+                    && val.value !== 'Actionable' && val.value !== 'Status' && val.value !== 'Sr No'
+                      && val.value !== 'Browser' && val.value !== 'Bell' && val.value !== 'Mobile'"
+                        [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                        <span>{{data[val.value] === null || data[val.value] === '' || data[val.value] === '0' ? '-'
+                          :data[val.value]}}</span>
+                      </td>
+                      <td *ngIf="val.value === 'Status'" [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                        <mat-slide-toggle color="primary" #tooltip="matTooltip" matTooltip="Status"
+                          [checked]="data[val.value] === 1 ? true : false"
+                          (change)="flip(data.Actionable,$event.checked)"></mat-slide-toggle>
+                      </td>
+                      <td *ngIf="val.value === 'Actionable'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                        class="column{{i}}">
+                        <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary" [disabled]="!data.CHECKBOX && maxNo"
+                          (change)="singleCheckboxCheck($event.checked, data)"></mat-checkbox>
+                      </td>
+                      <!-- (click)="contactAction(data.Actionable)"    for preview -->
+                      <td
+                        *ngIf="master === 'internal' && (val.value === 'Browser' || val.value === 'Bell' || val.value === 'Mobile')"
+                        [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                        <mat-icon *ngIf="data[val.value] === true"
+                          class="material-icons color_green">check_circle</mat-icon>
+                        <mat-icon *ngIf="data[val.value] === false">check_circle</mat-icon>
+                      </td>
+                    </ng-container>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" *ngIf="paginationArray.length>10">
+            <pagination-controls (pageChange)="pageChange($event)" previousLabel="" nextLabel=""></pagination-controls>
+          </div>
+          <input type="hidden"
+            *ngFor="let data of paginationArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentpage }">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="inner-container" *ngIf="(filter == 'add' || filter == 'edit') ">
+  <div class="wrapper1">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form" #formDirective="ngForm">
+      <div class="row">
+        <div class="col-1 text-center backarrow ">
+          <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon>
+        </div>
+        <div class="col-10 pl-0">
+          <legend class="">{{filter == 'add' ? 'Add New':'Update'}} {{master == 'external' ? 'External':'Internal'}}
+            Notification
+          </legend>
+          <div class="formGroup mt-3">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <mat-form-field appearance="fill">
+                  <mat-label> {{labelName?.Name }}</mat-label>
+                  <input matInput formControlName="Name">
+                  <mat-error *ngIf="f.Name?.errors">
+                    <ng-container *ngIf="f.Name?.errors?.required">
+                      {{labelName?.Name }} is required
+                    </ng-container>
+                    <ng-container *ngIf="f.Name?.errors?.maxlength">
+                      {{labelName?.Name }} accepts 100 charecters only.
+                    </ng-container>
+                    <ng-container *ngIf="f?.Name?.errors?.pattern">
+                      {{labelName?.Name }} is invalid.
+                    </ng-container>
+                    <ng-container *ngIf="f.Name?.errors?.checknull">Whitespace not allowed.
+                    </ng-container>
+                    <ng-container *ngIf="f.Name?.errors?.checknull1">
+                      Must be at least 3 characters long
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <!-- class="errorMsg" -->
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <mat-form-field appearance="fill">
+                  <mat-label> {{labelName?.Description}}</mat-label>
+                  <input matInput formControlName="Description" maxlength="500">
+                  <mat-error *ngIf="f?.Description?.errors" class="errorMsg">
+                    <ng-container *ngIf="f?.Description?.errors?.pattern">{{labelName?.Description}} is invalid.
+                    </ng-container>
+                    <!-- <ng-container *ngIf="f?.Description?.errors?.minlength">
+                      Must be at least 3 characters long
+                    </ng-container> -->
+                    <ng-container *ngIf="f?.Description?.errors?.maxlength">
+                      Cannot be beyond 500 characters.
+                    </ng-container>
+                    <ng-container *ngIf="f?.Description?.errors?.checknull1">
+                      Must be at least 3 characters long.
+                    </ng-container>
+
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div
+                class="{{master === 'external' ? 'col-lg-3 col-md-3 col-sm-12 d-flex' : 'col-lg-6 col-md-6 col-sm-12 d-flex'}}">
+                <!-- [ngStyle]="master === 'external' ? {'width': '156px', 'height': '39px'} : (master === 'internal' ? {'height': '39px'} : {})"> -->
+                <mat-form-field appearance="fill"
+                  class="{{master === 'external' ? 'dropdownButtonField3': 'dropdownButtonField2'}}">
+                  <mat-label>{{labelName?.Category}}</mat-label>
+                  <mat-select matInput formControlName="Category"
+                    (selectionChange)="getEvents($event.value);getSystemFields($event.value)">
+                    <mat-option *ngFor="let data of category" [value]="data.Id">{{data.Category}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f?.Category?.errors">
+                    <ng-container *ngIf="f?.Category?.errors?.required">
+                      {{labelName?.Category}} is required
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+                <span>
+                  <button mat-raised-button
+                    class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 dropdownButton"
+                    style="width:40px;font-weight: bold;" (click)="dropdown('event', 'Notification Events')"><span
+                      class="icon-master_data_management"></span></button>
+                </span>
+              </div>
+              <div class="{{master === 'external' ? 'col-lg-3 col-md-3 col-sm-12': 'col-lg-6 col-md-6 col-sm-12'}}">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.FeatureAndEvents}}</mat-label>
+                  <mat-select matInput formControlName="Event">
+                    <mat-option *ngFor="let data of events" [value]="data.Id">{{data.EventName}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <ng-container *ngIf="master === 'external'">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.Channel}}</mat-label>
+                    <mat-select matInput formControlName="Channel"
+                      (selectionChange)="getFields($event.value);getChannelSource($event.value)">
+                      <mat-option *ngFor="let data of Channel" [value]="data.ChannelId">
+                        <span [innerHtml]="data?.ChannelIcon"></span>
+                        <span>{{data.ChannelName}}</span>
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.Channel?.errors">
+                      <ng-container *ngIf="f.Channel?.errors?.required">
+                        {{labelName?.Channel}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.ChannelSource}}</mat-label>
+                    <mat-select matInput formControlName="ChannelSource"
+                      (selectionChange)="getTemplate($event.value);getSenderData(form.value.Channel,$event.value)">
+                      <mat-option *ngFor="let data of ChannelSource"
+                        [value]="data.ChannelSourceId">{{data.ChannelSourceName }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f?.ChannelSource?.errors">
+                      <ng-container *ngIf="f?.ChannelSource.errors?.required">
+                        {{labelName?.ChannelSource }} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </ng-container>
+            </div>
+            <div class="row" *ngIf="master === 'internal'">
+              <div class="col-lg-4 col-md-4 col-sm-12">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.Priority}}</mat-label>
+                  <mat-select matInput formControlName="Priority">
+                    <mat-option *ngFor="let data of priority" [value]="data.Key">{{data.Value}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f?.Priority?.errors">
+                    <ng-container *ngIf="f?.Priority?.errors?.required">
+                      {{labelName?.Priority}} is required
+                    </ng-container>
+
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <ng-container *ngIf="master === 'external' && emailChannel">
+            </ng-container>
+            <ng-container *ngIf="master === 'external' && whatsAppChannel">
+            </ng-container>
+            <ng-container
+              *ngIf="master === 'external' && form.value.Channel !== '' && form.value.ChannelSource !== '' && TemplateData.length > 0">
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <mat-form-field appearance="fill" (click)="show()">
+                    <mat-label>{{labelName?.Template}}</mat-label>
+                    <mat-select matInput formControlName="Template">
+                      <mat-option *ngFor="let data of template" [value]="data.Key">{{data.Value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="master === 'internal'">
+              <div class="row" style="padding-bottom: 15px;">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                  <mat-label style="padding-right: 40px;">
+                    {{labelName?.TypesofNotifications}}
+                  </mat-label>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 notificationCheckbox">
+                  <mat-checkbox color="primary" formControlName="Browser"
+                    (change)="hideChange($event.checked,'Browser')" value="Browser">Browser</mat-checkbox>
+                  <mat-checkbox color="primary" formControlName="Bell" (change)="hideChange($event.checked,'Bell')"
+                    value="Bell">Bell</mat-checkbox>
+                  <mat-checkbox color="primary" formControlName="Mobile" (change)="hideChange($event.checked,'Mobile')"
+                    value="Mobile">Mobile</mat-checkbox>
+                  <mat-hint class="errorMsg" *ngIf="oneType() && submittedForm">
+
+                    Select at least single notification
+
+                  </mat-hint>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="form.value.Browser">
+              <mat-card class="notificationCard shadow-none">
+                <mat-card-header class="cardheader">
+                  <mat-label>{{labelName?.Browser == undefined ? 'Browser': labelName?.Browser}}</mat-label>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="row">
+                    <div class="col-lg-9 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.Message == undefined ? 'Message': labelName?.Message}}</mat-label>
+                        <input matInput formControlName="BrowserMessage">
+                        <mat-error *ngIf="f?.BrowserMessage?.errors">
+                          <ng-container *ngIf="f?.BrowserMessage?.errors?.required">
+                            {{labelName?.Message == undefined ? 'Message': labelName?.Message}} is required
+                          </ng-container>
+                          <ng-container *ngIf="f?.BrowserMessage?.errors?.pattern">{{labelName?.Message == undefined ?
+                            'Message': labelName?.Message}} is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f?.BrowserMessage?.errors?.checknull">Whitespace not allowed.
+                          </ng-container>
+                          <ng-container *ngIf="f?.BrowserMessage?.errors?.maxlength"> Cannot be beyond 300 characters.
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="col-lg-2 col-md-6 col-sm-12">
+                      <button class="btn" mat-flat-button color="primary" type="button"
+                        (click)="showSystemFields('Browser')">System Fields</button>
+                    </div> -->
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.SystemFields == undefined ? 'System Fields': labelName?.SystemFields}}
+                        </mat-label>
+                        <mat-select matInput formControlName="BrowserSystemFields"
+                          (selectionChange)="addToMessage('Browser',$event.value)">
+                          <mat-option *ngFor="let data of systemFields"
+                            [value]="data.SystemField">{{data.SystemField}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.Duration == undefined ? 'Duration': labelName?.Duration}}</mat-label>
+                        <input matInput class="form-input border-0 w-100" [matMenuTriggerFor]="menu3" readonly
+                          value="{{form.get('BrowserDuration').value?.hour ? form.get('BrowserDuration').value?.hour > 9 ? form.get('BrowserDuration').value?.hour : '0'+form.get('BrowserDuration').value?.hour : '00'}}:{{form.get('BrowserDuration').value?.minute ? form.get('BrowserDuration').value?.minute > 9 ? form.get('BrowserDuration').value?.minute : '0'+form.get('BrowserDuration').value?.minute : '00'}}:{{form.get('BrowserDuration').value?.second ? form.get('BrowserDuration').value?.second > 9 ? form.get('BrowserDuration').value?.second : '0'+form.get('BrowserDuration').value?.second : '00'}}" />
+
+                        <mat-icon class="timerIconPosition" [matMenuTriggerFor]="menu3">access_time</mat-icon>
+                        <mat-menu #menu3="matMenu" class="w-100 px-2  d-flex align-items-center cardMoreFetures"
+                          xPosition="before">
+                          <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                            $event.stopPropagation();" formControlName="BrowserDuration" [seconds]="true"
+                            [hourStep]="1" [minuteStep]="1" [secondStep]="1">
+                          </ngb-timepicker>
+                        </mat-menu>
+                        <mat-error *ngIf="f?.BrowserDuration?.errors">
+                          <ng-container *ngIf="f?.BrowserDuration?.errors?.required">
+                            {{labelName?.Duration == undefined ? 'Duration': labelName?.Duration}} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}}</mat-label>
+                        <mat-select matInput formControlName="BrowserTriggerKey"
+                          (selectionChange)="getTriggerValue($event.value);emptyTriggerValue('Browser')">
+                          <mat-option *ngFor="let data of notificationTriggers"
+                            [value]="data.Key">{{data.Value}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.BrowserTriggerKey?.errors">
+                          <ng-container *ngIf="f?.BrowserTriggerKey?.errors?.required">
+                            {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="form.value.BrowserTriggerKey === 'UserSkills'">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerValue == undefined ? 'Trigger Value':
+                          labelName?.TriggerValue}}</mat-label>
+                        <mat-select matInput formControlName="BrowserTriggerValue"
+                          (selectionChange)="allBrowserSkills($event.value,1)" multiple>
+                          <div class="selectAll">
+                            <mat-checkbox color="primary" class="mat-option w-100"
+                              [checked]="common.isChecked(skills,form.value.BrowserTriggerValue)"
+                              (click)="$event.stopPropagation()" (change)="toggleSelectionBS($event)">
+                              Select All
+                            </mat-checkbox>
+                          </div>
+                          <mat-option *ngFor="let data of skills" [value]="data.Id">{{data.SkillName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.BrowserTriggerValue?.errors">
+                          <ng-container *ngIf="f?.BrowserTriggerValue?.errors?.required">
+                            {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                            }} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="form.value.BrowserTriggerKey === 'UserGroups'">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                          }}</mat-label>
+                        <mat-select matInput formControlName="BrowserTriggerValue"
+                          (selectionChange)="allBrowserGroups($event.value,1)" multiple>
+                          <div class="selectAll">
+                            <mat-checkbox color="primary" class="mat-option w-100"
+                              [checked]="common.isChecked(groups,form.value.BrowserTriggerValue)"
+                              (click)="$event.stopPropagation()" (change)="toggleSelectionBG($event)">
+                              Select All
+                            </mat-checkbox>
+                          </div>
+                          <mat-option *ngFor="let data of groups" [value]="data.GroupID">{{data.GroupName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.BrowserTriggerValue?.errors">
+                          <ng-container *ngIf="f?.BrowserTriggerValue?.errors?.required">
+                            {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                            }} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="BrowserSystemFields">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                           {{labelName?.SystemFields == undefined ? 'System Fields': labelName?.SystemFields}}</mat-label>
+                        <mat-select matInput formControlName="BrowserSystemFields"
+                          (selectionChange)="addToMessage('Browser',$event.value)">
+                          <mat-option *ngFor="let data of systemFields"
+                            [value]="data.SystemField">{{data.SystemField}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div> -->
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </ng-container>
+            <ng-container *ngIf="form.value.Bell">
+              <mat-card class="notificationCard shadow-none">
+                <mat-card-header class="cardheader">
+                  <mat-label>{{labelName?.Bell == undefined ? 'Bell': labelName?.Bell}}</mat-label>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="row">
+                    <div class="col-lg-9 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.Message == undefined ? 'Message': labelName?.Message}}</mat-label>
+                        <input matInput formControlName="BellMessage">
+                        <mat-error *ngIf="f?.BellMessage?.errors">
+                          <ng-container *ngIf="f?.BellMessage?.errors?.required">
+                            {{labelName?.Message == undefined ? 'Message': labelName?.Message}} is required
+                          </ng-container>
+                          <ng-container *ngIf="f?.BellMessage?.errors?.pattern">{{labelName?.Message == undefined ?
+                            'Message': labelName?.Message}} is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f?.BellMessage?.errors?.checknull">Whitespace not allowed.
+                          </ng-container>
+                          <ng-container *ngIf="f?.BellMessage?.errors?.maxlength"> Cannot be beyond 300 characters.
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="col-lg-2 col-md-6 col-sm-12">
+                      <button class="btn" mat-flat-button color="primary" type="submit"
+                        (click)="showSystemFields('Bell')">System Fields</button>
+                    </div> -->
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.SystemFields == undefined ? 'System Fields':
+                          labelName?.SystemFields}}</mat-label>
+                        <mat-select matInput formControlName="BellSystemFields"
+                          (selectionChange)="addToMessage('Bell',$event.value)">
+                          <mat-option *ngFor="let data of systemFields"
+                            [value]="data.SystemField">{{data.SystemField}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.Duration == undefined ? 'Duration': labelName?.Duration}}</mat-label>
+                        <input matInput class="form-input border-0 w-100" [matMenuTriggerFor]="menu4" readonly
+                          value="{{form.value.BellDuration?.hour ? form.value.BellDuration?.hour > 9 ? form.value.BellDuration?.hour : '0'+form.value.BellDuration?.hour : '00'}}:{{form.value.BellDuration?.minute ? form.value.BellDuration?.minute > 9 ? form.value.BellDuration?.minute : '0'+form.value.BellDuration?.minute : '00'}}:{{form.value.BellDuration?.second ? form.value.BellDuration?.second > 9 ? form.value.BellDuration?.second : '0'+form.value.BellDuration?.second : '00'}}" />
+                        <mat-icon class="timerIconPosition" [matMenuTriggerFor]="menu4">access_time</mat-icon>
+                        <mat-menu #menu4="matMenu" class="w-100 px-2  d-flex align-items-center cardMoreFetures"
+                          xPosition="before">
+                          <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                            $event.stopPropagation();" formControlName="BellDuration" [seconds]="true" [hourStep]="1"
+                            [minuteStep]="1" [secondStep]="1">
+                          </ngb-timepicker>
+                        </mat-menu>
+                        <mat-error *ngIf="f?.BrowserDuration?.errors">
+                          <ng-container *ngIf="f?.BrowserDuration?.errors?.required">
+                            {{labelName?.Duration == undefined ? 'Duration': labelName?.Duration}} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}}</mat-label>
+                        <mat-select matInput formControlName="BellTriggerKey"
+                          (selectionChange)="getTriggerValue($event.value);emptyTriggerValue('Bell')">
+                          <mat-option *ngFor="let data of notificationTriggers"
+                            [value]="data.Key">{{data.Value}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.BellTriggerKey?.errors">
+                          <ng-container *ngIf="f?.BellTriggerKey?.errors?.required">
+                            {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="form.value.BellTriggerKey === 'UserSkills'">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                          }}</mat-label>
+                        <mat-select matInput formControlName="BellTriggerValue"
+                          (selectionChange)="allBellSkills($event.value,1)" multiple>
+                          <div class="selectAll">
+                            <mat-checkbox color="primary" class="mat-option w-100"
+                              [checked]="common.isChecked(skills,form.value.BellTriggerValue)"
+                              (click)="$event.stopPropagation()" (change)="toggleSelectionBeS($event)">
+                              Select All
+                            </mat-checkbox>
+                          </div>
+                          <mat-option *ngFor="let data of skills" [value]="data.Id">{{data.SkillName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.BellTriggerValue?.errors">
+                          <ng-container *ngIf="f?.BellTriggerValue?.errors?.required">
+                            {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue}} is
+                            required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="form.value.BellTriggerKey === 'UserGroups'">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                          }}</mat-label>
+                        <mat-select matInput formControlName="BellTriggerValue"
+                          (selectionChange)="allBellGroups($event.value,1)" multiple>
+                          <div class="selectAll">
+                            <mat-checkbox color="primary" class="mat-option w-100"
+                              [checked]="common.isChecked(groups,form.value.BellTriggerValue)"
+                              (click)="$event.stopPropagation()" (change)="toggleSelectionBeG($event)">
+                              Select All
+                            </mat-checkbox>
+                          </div>
+                          <mat-option *ngFor="let data of groups" [value]="data.GroupID">{{data.GroupName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.BellTriggerValue?.errors">
+                          <ng-container *ngIf="f?.BellTriggerValue?.errors?.required">
+                            {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                            }} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="BellSystemFields">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                           {{labelName?.SystemFields == undefined ? 'System Fields': labelName?.SystemFields}}</mat-label>
+                        <mat-select matInput formControlName="BellSystemFields"
+                          (selectionChange)="addToMessage('Bell',$event.value)">
+                          <mat-option *ngFor="let data of systemFields"
+                            [value]="data.SystemField">{{data.SystemField}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div> -->
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </ng-container>
+            <ng-container *ngIf="form.value.Mobile">
+              <mat-card class="notificationCard shadow-none">
+                <mat-card-header class="cardheader">
+                  <mat-label>{{labelName?.Mobile == undefined ? 'Mobile': labelName?.Mobile}}</mat-label>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="row">
+                    <div class="col-lg-9 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.Message == undefined ? 'Message': labelName?.Message}}</mat-label>
+                        <input matInput formControlName="MobileMessage">
+                        <mat-error *ngIf="f?.MobileMessage?.errors">
+                          <ng-container *ngIf="f?.MobileMessage?.errors?.required">
+                            {{labelName?.Message == undefined ? 'Message': labelName?.Message}} is required
+                          </ng-container>
+                          <ng-container *ngIf="f?.MobileMessage?.errors?.pattern">{{labelName?.Message == undefined ?
+                            'Message': labelName?.Message}} is invalid.
+                          </ng-container>
+                          <ng-container *ngIf="f?.MobileMessage?.errors?.checknull">Whitespace not allowed.
+                          </ng-container>
+                          <ng-container *ngIf="f?.MobileMessage?.errors?.maxlength"> Cannot be beyond 300 characters.
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="col-lg-2 col-md-6 col-sm-12">
+                      <button class="btn" mat-flat-button color="primary" type="submit"
+                        (click)="showSystemFields('Mobile')">System Fields</button>
+                    </div> -->
+                    <div class="col-lg-3 col-md-6 col-sm-12">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.SystemFields == undefined ? 'System Fields':
+                          labelName?.SystemFields}}</mat-label>
+                        <mat-select matInput formControlName="MobileSystemFields"
+                          (selectionChange)="addToMessage('Mobile',$event.value)">
+                          <mat-option *ngFor="let data of systemFields"
+                            [value]="data.SystemField">{{data.SystemField}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}}</mat-label>
+                        <mat-select matInput formControlName="MobileTriggerKey"
+                          (selectionChange)="getTriggerValue($event.value);emptyTriggerValue('Mobile')">
+                          <mat-option *ngFor="let data of notificationTriggers"
+                            [value]="data.Key">{{data.Value}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.MobileTriggerKey?.errors">
+                          <ng-container *ngIf="f?.MobileTriggerKey?.errors?.required">
+                            {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="form.value.MobileTriggerKey === 'UserSkills'">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                          }}</mat-label>
+                        <mat-select matInput formControlName="MobileTriggerValue"
+                          (selectionChange)="allMobileSkills($event.value,1)" multiple>
+                          <div class="selectAll">
+                            <mat-checkbox color="primary" class="mat-option w-100"
+                              [checked]="common.isChecked(skills,form.value.MobileTriggerValue)"
+                              (click)="$event.stopPropagation()" (change)="toggleSelectionMS($event)">
+                              Select All
+                            </mat-checkbox>
+                          </div>
+                          <mat-option *ngFor="let data of skills" [value]="data.Id">{{data.SkillName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.MobileTriggerValue?.errors">
+                          <ng-container *ngIf="f?.MobileTriggerValue?.errors?.required">
+                            {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                            }} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="form.value.MobileTriggerKey === 'UserGroups'">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                          {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                          }}</mat-label>
+                        <mat-select matInput formControlName="MobileTriggerValue"
+                          (selectionChange)="allMobileGroups($event.value,1)" multiple>
+                          <div class="selectAll">
+                            <mat-checkbox color="primary" class="mat-option w-100"
+                              [checked]="common.isChecked(groups,form.value.MobileTriggerValue)"
+                              (click)="$event.stopPropagation()" (change)="toggleSelectionMG($event)">
+                              Select All
+                            </mat-checkbox>
+                          </div>
+                          <mat-option *ngFor="let data of groups" [value]="data.GroupID">{{data.GroupName}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f?.MobileTriggerValue?.errors">
+                          <ng-container *ngIf="f?.MobileTriggerValue?.errors?.required">
+                            {{labelName?.TriggerValue == undefined ? 'Trigger Value': labelName?.TriggerValue
+                            }} is required
+                          </ng-container>
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="MobileSystemFields">
+                      <mat-form-field appearance="fill">
+                        <mat-label>
+                           {{labelName?.SystemFields == undefined ? 'System Fields': labelName?.SystemFields}}</mat-label>
+                        <mat-select matInput formControlName="MobileSystemFields"
+                          (selectionChange)="addToMessage('Mobile',$event.value)">
+                          <mat-option *ngFor="let data of systemFields"
+                            [value]="data.SystemField">{{data.SystemField}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div> -->
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </ng-container>
+            <ng-container *ngIf="master === 'external' && templateVisible">
+              <th style="border : none !important;">
+                <div class="col-12" style="margin-top: 10px;">
+                  <div class="cardfirstlayer ">
+                    {{cardTemplate['Template Name']}}
+                  </div>
+                  <div class="cardsecondlayer">
+                    <img src="{{cardTemplate['Message Header value']}}"
+                      *ngIf="cardTemplate['Message header'] == 'Image'" class="cardimg" />
+                    <video *ngIf="cardTemplate['Message header']  == 'Video'" class="cardvideo" controls>
+                      <source src="{{cardTemplate['Message Header value']}}">
+                    </video>
+                    <img *ngIf="cardTemplate['Message header'] == 'Document'" src="assets/images/icons/documentfile.png"
+                      class="carddoc" />
+                    <img *ngIf="cardTemplate['Message header'] == 'Text'" src="assets/images/icons/documentfile.png"
+                      class="carddoc" />
+                    <img *ngIf="cardTemplate['Message header'] == 'Location'" src="assets/images/icons/documentfile.png"
+                      class="carddoc" />
+                  </div>
+                  <div class="cardthirdlayer">
+                    {{cardTemplate['Name Space']}}
+                  </div>
+                </div>
+              </th>
+            </ng-container>
+          </div>
+          <div class="btn-group">
+            <!-- <button *ngIf="userConfig?.Cancel" class="btn btn-gray" (click)="back()" mat-flat-button
+              type="Reset">{{labelName?.Cancel}}</button> -->
+            <button *ngIf="filter !== 'edit' && userConfig?.Reset"
+              class="btn mat-focus-indicator btn btn-gray mat-flat-button mat-button-base ng-star-inserted"
+              mat-flat-button (click)=" resetfunc()" type="Reset">{{labelName?.Reset}}</button>
+            <button *ngIf="(userConfig?.SaveAddNew) && !reset" class="btn outline" mat-stroked-button color="primary"
+              (click)="Submit('addNew',formDirective)">{{labelName?.SaveAddNew}}</button>
+            <button *ngIf="(filter === 'add' && userConfig?.Add)
+            || (filter === 'edit' && userConfig?.Update)" class="btn" mat-flat-button color="primary" type="submit"
+              (click)="Submit('add',formDirective)">
+              {{filter === 'add' ?labelName?.Save: labelName?.Update}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="inner-container" *ngIf="(filter == 'view')">
+  <div class="wrapper py-4">
+    <div class="row">
+      <div class="col-1 text-center ">
+        <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-11 pl-0">
+        <div class="row">
+          <div class="col-10">
+            <legend class="Notificationlegend">{{viewData?.Category}}</legend>
+          </div>
+          <div class="col-2 text-left">
+            <mat-icon *ngIf="userConfig?.Edit" color="primary" (click)="patchFormData(viewData)">edit</mat-icon>
+            <mat-icon *ngIf="userConfig?.Delete" class="red-color cursorPointer"
+              (click)="openDialog('delete',viewData.Id)">delete_outline</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row part ">
+      <div class="col-12 text-left  pl-0">
+        <div class="w-100">
+          <div class="singleRow pl-0">
+            <div class="row" style="margin-top: 20px;">
+              <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                <div class="col-12">
+                  <span>{{labelName?.Name}}</span>
+                </div>
+                <div class="col-12 rowValue addEllipsis">
+                  <th>{{viewData?.Name}}</th>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                <div class="col-12">
+                  <span>{{labelName?.FeatureAndEvents}}</span>
+                </div>
+                <div class="col-12 rowValue addEllipsis">
+                  <th>{{viewData?.FeatureAndEvents === '' || viewData?.FeatureAndEvents === null ||
+                    viewData?.FeatureAndEvents == undefined ? '-' : viewData?.FeatureAndEvents}}</th>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                <div class="col-12">
+                  <span>{{labelName?.Description}}</span>
+                </div>
+                <div class="col-12 rowValue addEllipsis">
+                  <th>{{viewData?.Description}}</th>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                <div class="col-12">
+                  <span>{{labelName?.Category}}</span>
+                </div>
+                <div class="col-12 rowValue addEllipsis">
+                  <th>{{viewData?.Category}}</th>
+                </div>
+              </div>
+              <ng-container *ngIf="master === 'internal'">
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span>{{labelName?.Priority}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.Priority}}</th>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span>{{labelName?.TypesofNotifications}}</span>
+                  </div>
+                  <div *ngIf="(viewData?.Browser == true && viewData?.Bell == true && viewData?.Mobile == true)"
+                    class="col-12 rowValue addEllipsis">
+                    <th>Browser, Bell, Mobile</th>
+                  </div>
+                  <div *ngIf="(viewData?.Browser == true && viewData?.Bell == true) "
+                    class="col-12 rowValue addEllipsis">
+                    <th>Browser, Bell</th>
+                  </div>
+                  <div *ngIf="(viewData?.Browser == true  && viewData?.Mobile == true)"
+                    class="col-12 rowValue addEllipsis">
+                    <th>Browser, Mobile</th>
+                  </div>
+                  <div *ngIf="(viewData?.Bell == true && viewData?.Mobile == true)" class="col-12 rowValue addEllipsis">
+                    <th>Bell, Mobile</th>
+                  </div>
+                  <div *ngIf="(viewData?.Browser == true && viewData?.Bell !== true && viewData?.Mobile !== true)"
+                    class="col-12 rowValue addEllipsis">
+                    <th>Browser</th>
+                  </div>
+                  <div *ngIf="( viewData?.Bell == true && viewData?.Browser !== true && viewData?.Mobile !== true)"
+                    class="col-12 rowValue addEllipsis">
+                    <th>Bell</th>
+                  </div>
+                  <div *ngIf="(viewData?.Mobile == true && viewData?.Browser !== true && viewData?.Bell !== true)"
+                    class="col-12 rowValue addEllipsis">
+                    <th>Mobile</th>
+                  </div>
+
+                </div>
+              </ng-container>
+              <ng-container *ngIf="master === 'external'">
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span>Channel Name</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.Channel === '' || viewData?.Channel === null
+                      || viewData?.Channel == undefined
+                      ? '-': viewData?.Channel}}</th>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span>Channel Source</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.ChannelSource === '' || viewData?.ChannelSource === null
+                      || viewData?.ChannelSource == undefined
+                      ? '-' : viewData?.ChannelSource}}</th>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <ng-container *ngIf="master === 'external'">
+              <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle" *ngIf="ChannelSource === 'Email'">
+                  <div class="col-12">
+                    <span>{{labelName?.From}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.From === '' ? '-' : viewData?.From}}</th>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle" *ngIf="ChannelSource === 'Email'">
+                  <div class="col-12">
+                    <span>{{labelName?.ReplyTo}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.ReplyTo === '' ? '-' : viewData?.ReplyTo}}</th>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span>{{labelName?.Template}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.Template === '0' ? '-': viewData?.Template}}</th>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <div *ngIf="master === 'internal' && viewData?.Browser">
+              <legend class="rowLegend">{{labelName?.Browser}}</legend>
+              <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span>{{labelName?.Duration == undefined ? 'Duration': labelName?.Duration}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.BrowserDuration}}</th>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span> {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.BrowserTriggerKey}}</th>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="master === 'internal' && viewData?.Bell">
+              <legend class="rowLegend"> {{labelName?.Bell}}</legend>
+              <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span> {{labelName?.Duration == undefined ? 'Duration': labelName?.Duration}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.BellDuration}}</th>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span> {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.BellTriggerKey}}</th>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="master === 'internal' && viewData?.Mobile">
+              <legend class="rowLegend">{{labelName?.Mobile}}</legend>
+              <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 rowTitle">
+                  <div class="col-12">
+                    <span> {{labelName?.TriggerTo == undefined ? 'Trigger To': labelName?.TriggerTo}}</span>
+                  </div>
+                  <div class="col-12 rowValue addEllipsis">
+                    <th>{{viewData?.MobileTriggerKey}}</th>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

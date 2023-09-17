@@ -1,0 +1,107 @@
+.mat-radio-button ~ .mat-radio-button {
+    scroll-margin-right: 16px;
+  }
+
+  .avatar{
+    position: relative;
+    flex: 0 0 93.8px;
+    margin-right: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    border: 1px solid var(--gray_color);
+    border-radius: 15px;
+    // margin-bottom: 5px;
+    .mat-icon{
+        // width: 96.07px;
+        height: 96.07px;
+        background-color: var(--gray_color_60);
+        border: var(--border);
+        border-radius: 5px;
+    }
+    img {
+        object-fit: cover;
+        height: 100px;
+        width: 100%;
+        border-radius: 15px;
+        background-color: var(--gray_color_60);
+        border: var(--border);
+      }
+    .mat-icon{
+        line-height: 96.07px;
+        font-size: 50px !important;
+        color: var(--gray_color);
+        cursor: pointer;
+    }
+    img{
+        object-fit: cover;
+    }
+    input[type="checkbox"]{
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 0;
+        outline: 0;
+        border: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+    }
+    &.shake{
+        .mat-icon{
+            border-color: var(--error);
+        }
+      }
+}
+
+.uploadTitle{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100px;
+  color: var(--gray_color);
+  i{
+      margin-bottom: 7px;
+  }
+  strong, span{
+      line-height: 21px;
+  }
+  strong{
+      font-size: 16px;
+  }
+  span{
+      font-size: 14px;
+  }
+}
+
+.uploadimg{
+    // border: 1px solid var(--faintGray);
+    // margin-left: 17px;
+    // background: var(--backgroud_color);
+    padding: 35px;
+}
+
+// .bot{
+//     padding-bottom: 25px;
+// }
+
+.msgmedia{
+    padding-left: 3px;
+    font-family: Nunito Sans, Regular;
+    font-size: 15px;
+}
+.reset{
+    border: 1px solid var(--primary_color);
+    background: var(--white_color);
+    color: var(--primary_color);
+    font-weight: bold;
+  }
+
+  .outline {
+    border: 1px solid var(--primary_color) !important;
+    // border-radius: 15px !important;
+    color: var(--primary_color);
+    font-weight: bold;
+  }

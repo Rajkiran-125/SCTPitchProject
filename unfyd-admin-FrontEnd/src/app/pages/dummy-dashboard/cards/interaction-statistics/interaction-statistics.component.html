@@ -1,0 +1,38 @@
+<div>
+  <div class="row m-0  d-flex align-items-center">
+    <div class="col-8 p-0 text-left">
+      <span class="font-bold mediumFont">Interaction Statistics</span>
+    </div>
+    <div class="col-4 p-0 text-right">
+      <select class="form-control rounded smallSelect smallFont" id="exampleFormControlSelect1" [(ngModel)]="selectedGrievance"
+      (change)="getInformation(spname,innerSpName,selectedGrievance);selectedOptionValue();nextDisable = true"
+      >
+        <option>Day</option>
+        <option>Month</option>
+        <option>Year</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row mx-0 py-2">
+    
+      <div echarts [options]="options" class="chartH"></div>
+    
+  </div>
+
+  <div class="row m-0">
+    <div class="col-2 p-0">
+      <mat-icon class="cursorPointer" (click)="changeDate('prev')">keyboard_arrow_left</mat-icon>
+    </div>
+    <div class="col-8 text-center dashboardDate smallFont d-flex justify-content-center align-items-center">
+      <span class="" *ngIf="selectedGrievance == 'Day'">{{ hawkerAppDate | dateFormat}}</span>
+      <span class="" *ngIf="selectedGrievance == 'Month'">{{ hawkerAppDate | date : 'MMM yyyy'}}</span>
+      <span class="" *ngIf="selectedGrievance == 'Year'">{{ hawkerAppDate | date:'yyyy'}}</span>
+    </div>
+    <div class="col-2 p-0 text-right">
+      <span [ngClass]="nextDisable ? 'disabledIT' :'cursorPointer'">
+        <mat-icon (click)="changeDate('next')">keyboard_arrow_right</mat-icon>
+      </span>
+    </div>
+  </div>
+</div>

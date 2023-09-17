@@ -1,0 +1,111 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <form [formGroup]="form">
+      <legend  *ngIf="showHeader">{{tabSelected}}</legend>
+      <app-filter  [hasChecked]="hasChecked" [component]="tabSelected == 'Online Hours' ? 'OnlineHours' : tabSelected == 'Offline Days' ? 'OfflineDays': 'BusinessHours'" [tabSelected]="tabSelected" [role]="userDetails?.role"
+        [type]="type" [tabValue]="tabValue">
+      </app-filter>
+      <app-loader *ngIf="loader"></app-loader>
+
+      <div class="wrapper px-0 py-0 padding0" *ngIf="!loader">
+        <div class="dataTable">
+          <table>
+            <thead>
+              <tr *ngIf="tabValue.length>0">
+                <ng-container *ngFor="let data of finalField; let i = index">
+                  <!-- <th [ngClass]="!data.checked ? 'tabCol' : ''" class="column{{i}}" (click)="sortUsers(data.value, data.order)">{{data.value == 'Actionable' ? 'Action' :
+                    data.value}}
+                    <span [ngSwitch]="data.order">
+                      <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                      <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                  </span>
+                  </th> -->
+
+
+                  <th *ngIf="data.value !== 'CHECKBOX'" [ngClass]="!data.checked ? 'tabCol' : ''"
+                                          class="{{'column'+i}}" (click)="sortUsers(data.value, data.order)">
+                                          <ng-container *ngIf="data.value == 'Sr No'; else else_content">
+                                              <mat-checkbox
+                                                  [(ngModel)]="data.CHECKBOX" color="primary"   [ngModelOptions]="{standalone: true}"
+                                                  [indeterminate]="hasChecked.length >0 && !allSelected"
+                                                  [checked]="hasChecked.length >0 && allSelected"
+                                                  [disabled]="!data.CHECKBOX && maxNo"
+                                                  (change)="bulkCheckboxCheck($event.checked, data)"></mat-checkbox>
+
+                                          </ng-container>
+                                          <ng-template #else_content>{{data.value == 'Actionable' ? 'Action' : data.value}}
+                                            <span [ngSwitch]="data.order">
+                                                <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                                                <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                                            </span>
+                                          </ng-template>
+                                      </th>
+                </ng-container>
+              </tr>
+              <tr *ngIf="noData">
+                <th>No record found</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="tabValue.length>0">
+              <ng-container
+                *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                <tr>
+                  <ng-container *ngFor="let val of finalField; let i = index">
+
+
+
+                    <!-- <td *ngIf="val.value == 'Sr No.'" [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                      <span>{{((page-1)*(itemsPerPage))+(j+1)}}</span>
+                    </td> -->
+                    <!-- && !viewOnly -->
+                    <td *ngIf="val.value == 'Sr No'" class="column{{i}}" [ngClass]="!val.checked ? 'tabCol' : ''">
+                      <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary"  [ngModelOptions]="{standalone: true}"
+                          [disabled]="!data.CHECKBOX && maxNo"
+                          (change)="singleCheckboxCheck($event.checked, data)"></mat-checkbox>
+                  </td>
+
+
+                    <td *ngIf="val.value == 'Actionable'" [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+
+                      <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                      <mat-menu #menu="matMenu">
+                        <button *ngIf="userConfig?.Edit && hasChecked.length == 0" mat-menu-item (click)="gotoFormPage('edit',data)">
+                          <mat-icon>edit</mat-icon>
+                          <span>Edit</span>
+                        </button>
+                        <button *ngIf="userConfig?.Delete " mat-menu-item (click)="delete(data)">
+                          <mat-icon class="red-color">delete_outline</mat-icon>
+                          <span>Delete</span>
+                        </button>
+
+
+
+                      </mat-menu>
+                    </td>
+
+                    <td *ngIf="val.value !== 'Sr No' && val.value != 'Actionable' && val.value !== 'Channel'"
+                    [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                    <span [matTooltip]="data[val.value] && data[val.value].toString().length > 20 ? data[val.value] : ''" >{{! isNumber(data[val.value]) ?
+                      data[val.value] == true || data[val.value] ==false ?
+                      data[val.value]: (data[val.value]):data[val.value]}}</span>
+                  </td>
+
+
+                    <td *ngIf="val.value == 'Channel'" [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                      <span [innerHTML]="data[val.value]"></span>
+                    </td>
+
+                  </ng-container>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="pagination" *ngIf="tabValue.length>10">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+.top-node {
+  position: absolute;
+  /* left: 88%; */
+  /* margin-left: 4px; */
+}
+
+.add-btn {
+  cursor: pointer;
+  position: fixed;
+  /* left: 93%; */
+  margin-top: -5px;
+}
+.alignment{
+/* margin-left: -104px; */
+    position: absolute;
+  }
+.textareamargin{
+      padding:10px;
+      margin-right:80px;
+}
+.inputmargin{
+  margin-right:350px !important;
+}
+.btnmargin{
+  margin-left: 25px;
+}
+.dialog-heading{
+  margin-left: 10px;
+  font-size: 16px !important;
+}
+
+::ng-deep {
+    .matstylenode{
+      .mat-form-field-label{
+        font-weight: 600;
+        margin-left: 5px;
+        margin-top: 2px;
+    }
+    .mat-form-field-infix {  
+      background: #f8f8f8;
+    }
+    }
+  }
+
+  @media screen and (max-width:767px) {
+    .textareamargin{
+      margin-right:-8px !important;
+    }
+    
+    .inputmargin{
+      margin-right:0px !important;
+    }
+  }
+
+
+
+  
+
+

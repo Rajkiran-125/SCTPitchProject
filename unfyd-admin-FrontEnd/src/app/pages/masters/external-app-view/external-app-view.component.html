@@ -1,0 +1,52 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" >
+  <div class="wrapper" *ngIf="!loader">
+    <div class="row">
+      <div class="col-11 pr-0">
+        <div class="card-layout">
+          <div class="row justify-content-between align-items-center mb-3">
+            <!-- <div class="col-11 text-left">
+              <span class="header d-none d-md-block">External Apps</span>
+            </div>
+            <div class="col-1 text-right">
+              <button mat-stroked-button class="editBtn addBtnBlue" (click)="goTo()"><mat-icon>add</mat-icon></button>  
+            </div> -->
+            <div class="col-lg-4 col-md-8 col-8">
+              <legend class="primary-color font-weight-bold size d-none d-md-block">External Apps</legend>
+            </div>
+            <div class="col-lg-2 col-md-4 col-4 text-right">
+              <button mat-stroked-button class="editBtn addBtnBlue" (click)="goTo()"><mat-icon>add</mat-icon></button>  
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-lg-4 col-xl-3 col-sm-12" *ngFor="let item of allFormsData">
+              <div class="cards cursorPointer d-flex">
+                <div class="row">
+                  <div class="col-10">
+                    <div>
+                      <strong class="cardHeading">{{item.ExternalAppName}}</strong>
+                    </div>
+                    <div class="mt-2">
+                      <span class="cardInnerDescription">{{item.Description}}</span>
+                    </div>
+                    <div class="mt-2">
+                      <span class="cardInnerContent">Created On {{item.CreatedOn}}</span>
+                    </div>
+                  </div>
+                  <div class="col-1">
+                      <mat-icon class="more_icon cursorPointer" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                      <mat-menu #menu="matMenu" class="w-100">
+                        <button mat-menu-item (click)="editForm(item.Id)"><mat-icon>edit</mat-icon>Edit</button>
+                        <button mat-menu-item (click)="deleteApp(item.Id)"><mat-icon class="red-color">delete</mat-icon>Delete</button>
+                      </mat-menu>
+                  </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  </div>

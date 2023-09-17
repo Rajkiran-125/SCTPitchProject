@@ -1,0 +1,36 @@
+<div class="dashboardContainer">
+  <app-bot-cards></app-bot-cards>
+
+  <div class="row m-0 dashboardcards" #contenedor cdkDropListGroup>
+    <ng-container *ngFor="let item of botCards; let i = index">
+      <div
+        class="col-lg-3 col-md-3 col-sm-12 colPadding"
+        *ngIf="tabs[item] != null"
+      >
+        <div
+          class=""
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          [cdkDropListData]="{ item: item, index: i }"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div class="inner" cdkDrag [cdkDragDisabled]="edit">
+            <div *ngIf="!edit" class="edit">
+              <div class="example-handle" cdkDragHandle>
+                <mat-icon class="dragIcon m-3">open_with</mat-icon>
+              </div>
+              <div>
+                <mat-icon class="deleteDashboardCard m-3" >delete_outline</mat-icon>
+              </div>
+            </div>
+            <div class="" *cdkDragPlaceholder></div>
+            <div class="borderEAEAEA">
+              <ng-container *ngComponentOutlet="tabs[item]"> </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

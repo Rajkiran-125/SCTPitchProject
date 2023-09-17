@@ -1,0 +1,38 @@
+.outline {
+    border: 1px solid var(--primary_color);
+    background: var(--white_color) !important;
+    color: var(--primary_color) !important;
+    font-weight: bold;
+   
+  }
+  ::ng-deep {
+
+    .contactNoWithCountryCode{
+      .mat-form-field-appearance-fill .mat-form-field-infix{
+        margin: 0px 0 0 -2em !important;
+      }
+    }
+    
+  }
+  .hide{
+    display: none;
+}
+// ::ng-deep{
+.countrycodeDropdown{
+    position: absolute;
+    top: 8px;
+    left: 20px;
+    max-width: 80px;
+    z-index: 1;
+    // width:  75%
+}
+.countryFlag{
+    display: block;
+    min-width: 90px;
+}
+// .textwrap{
+//     width: 15px
+// }
+.textcase{
+    width: 20px
+}

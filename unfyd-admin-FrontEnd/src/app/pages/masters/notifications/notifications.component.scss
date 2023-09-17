@@ -1,0 +1,261 @@
+.wrapper{
+    //padding: 4vh 5vh 5vh;
+}
+.wrapper1{
+    padding-left: 0px;
+}
+
+.cardheader {
+    margin-left: -32px !important;
+    margin-bottom: 10px !important;
+    font-size: var(--medium-font);
+    font-weight: 400;
+}
+
+.notificationCard {
+    margin-bottom: 20px !important;
+    border: var(--border) !important;
+}
+.material-icons.color_green{ color: #69F0AE !important;}
+
+::ng-deep{
+    .mat-form-field{
+        .mat-form-field-wrapper{
+            .mat-form-field-flex{
+                padding-top: calc(0.5em - 1.5px) !important;
+    
+                .mat-form-field-infix{
+                    padding-bottom: calc(0.5em - 1.5px) !important;
+                  }
+            }
+        }
+    }
+}
+
+
+.dropdownButton
+{
+    border: 1px solid #EAEAEA !important;
+    border-radius: 0px !important;
+    line-height: 43px !important;
+    box-shadow: unset !important;
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+    height: calc(100% - 16px);
+  }
+
+
+  ::ng-deep{
+    .dropdownButtonField2{
+       // width: 80% !important;
+       //height: 39px !important;
+      .mat-form-field-flex{
+        border-right: 0;
+        border-top-right-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+       // height: 39px;
+       // width: 11vw;
+    }
+    .mat-form-field-infix{
+        width: auto !important;
+    }
+    } 
+    .dropdownButtonField3{
+        .mat-form-field-flex{
+            border-right: 0;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important;
+          //  height: 39px !important;
+            //width: 156px !important;
+
+            .mat-form-field-infix{
+                width: 100% !important;
+            }
+        } 
+    }
+  }
+
+.material-icons.color_green {
+    color: #69F0AE !important;
+}
+
+.Notificationlegend {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--header);
+    font-weight: bold;
+    color: var(--primary_color);
+    line-height: 24px;
+    margin-bottom: 10px;
+
+    &.sub-title {
+        font-size: 18px;
+        color: var(--black_color_70);
+        line-height: 22px;
+        margin-bottom: 30px;
+    }
+}
+
+.part {
+    margin: 0 0 20px;
+
+    .singleRow {
+        margin: 0 0 10px;
+
+        .rowLegend {
+            margin-left: 15px;
+            font-size: var(--small-font);
+            color: var(--dark_blue_color);
+            font-weight: bold;
+        }
+
+        .row {
+            margin-bottom: 30px !important;
+
+            .rowTitle {
+                line-height: 16px;
+                font-size: 10px;
+            }
+
+            .rowValue {
+                font-size: var(--content_title);
+
+                .addEllipsis {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    display: block;
+                    margin-bottom: 20px;
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+}
+
+.cardfirstlayer {
+    border: 1px solid #ccc;
+    border-radius: 5px 5px 0px 0px;
+    padding: 8px;
+    margin-right: 10px;
+    width: 100%;
+    background: var(--faintGray);
+}
+
+.cardsecondlayer {
+    border: 1px solid #ccc;
+    height: 100%;
+    width: 100%;
+}
+
+.cardthirdlayer {
+    border: 1px solid #ccc;
+    border-radius: 0px 0px 5px 5px;
+    padding: 8px;
+    background: var(--faintGray);
+    width: 100%;
+}
+
+.cardimg {
+    height: 98px;
+    width: 165px;
+}
+
+.cardvideo {
+    height: 93px;
+}
+
+.carddoc {
+    height: 98px;
+    width: 100;
+    border-radius: 4px;
+
+    margin-left: 50px;
+    margin-right: 40px;
+}
+
+.outline {
+    border: 1px solid var(--primary_color);
+    font-weight: bold;
+}
+
+.notificationCheckbox{
+    display: flex;
+    justify-content: space-around;
+    justify-content: space-between;
+}
+
+.userNavtab{
+    margin: 0px 30px 0px 0px;
+    color: var(--dark_blue_color) !important;
+    font-weight: bold;
+    opacity: unset;
+  
+    &:hover{
+      text-decoration: none;
+      color: var(--dark_blue_color) !important;
+      font-weight: bold;
+    }
+  }
+
+  .mat-tab-nav-bar, .mat-tab-header{
+    border-bottom: 0px solid rgba(0, 0, 0, 0.12) !important;
+    ::ng-deep{
+        .mat-tab-links{
+            border-bottom: var(--border);
+        }
+      }
+  }
+
+  legend{
+    color: var(--primary_color);
+    font-weight: bold;
+    font-size: var(--title) !important;
+  }
+
+  @media screen and (max-width: 767px){
+    .inner-container{
+        padding: 0vh 1vh 0vh 2vh !important;
+        .wrapper {
+            padding: 25px 15px !important;
+    
+            ::ng-deep{
+                .dropdownButtonField2{
+                    width: 87% !important;
+                } 
+              }
+              .notificationCheckbox{
+                justify-content: space-between !important;
+            }
+        }
+    }
+
+    .inner-container1{
+        padding: 0vh 1vh 0vh 0vh !important;
+        .wrapper {
+            padding: 25px 15px !important;
+    
+            ::ng-deep{
+                .dropdownButtonField2{
+                    width: 87% !important;
+                } 
+              }
+              .notificationCheckbox{
+                justify-content: space-between !important;
+            }
+        }
+    }
+
+  }
+
+  @media screen and (min-width:768px) and (max-width:991px) {
+    .wrapper{
+        padding: 2vh 2vh 2vh;
+    }
+  }
+
+  .timerIconPosition{
+    position: absolute;
+    bottom: 3px !important;
+    right: -10px;
+  
+  }

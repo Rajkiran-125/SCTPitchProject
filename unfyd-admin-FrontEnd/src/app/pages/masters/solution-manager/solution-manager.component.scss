@@ -1,0 +1,75 @@
+.chheathFont{
+    font-weight: 900;
+    font-size: 12px;
+}
+
+.chheathFont2{
+    font-size: 12px;
+}
+
+.chEnginehealth{
+    font-weight: 900; 
+    color: var(--primary_color);
+}
+
+.restartbutton{
+    background: #4b89dc;
+    width: 85px;
+}
+
+.stopbutton{
+    background: #db4453;
+    width: 85px;
+}
+
+
+.slaAccordion{
+    .expansionPanelBorder{
+      border: 1px solid var(--gray_color);
+      background-color: var(--backgroud_color);
+      border-radius: 10px;
+  
+      .example-right-align {
+        text-align: right;
+      }
+  
+      input.example-right-align::-webkit-outer-spin-button,
+      input.example-right-align::-webkit-inner-spin-button {
+        display: none;
+      }
+  
+      input.example-right-align {
+        -moz-appearance: textfield;
+      }
+  
+      .inputText {
+        .mat-form-field-wrapper {
+          padding-bottom: 0;
+        }
+  
+        .mat-form-field-infix{
+          border-right: 1px solid var(--gray_color) !important;
+        }
+      }
+  
+      .backgroundWhite{
+        border: 1px solid var(--gray_color);
+        background-color: var(--white_color);
+        border-radius: 10px;
+  
+        .borderBottom{
+          border-bottom: 1px solid var(--gray_color);
+        }
+      }
+    }
+    // .example-container mat-form-field + mat-form-field {
+    //   margin-left: 8px;
+    // }
+  }
+
+  .fontfam{
+    font-family: Nunito Sans, Regular
+  }
+  .bold{
+    font-weight: 600;
+  }

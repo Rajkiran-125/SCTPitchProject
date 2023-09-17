@@ -1,0 +1,54 @@
+<div class="infoCards">
+  <div class="width20 cardBlue">
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[0].title | titlecase }}</div>
+      <div class="cardValue mb-3 cursorPointer" (click)="openDrillDown(infocards[0].title,infocards[0].title)">{{ infocards[0].value }}</div>
+    </div>
+    <div class="card-right d-flex justify-content-center">
+   
+      <div echarts [options]="options5" class="chartH3"></div>
+    </div>
+  </div>
+
+  <div class="width20 green">
+   
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[1].title | titlecase }}</div>
+      <div class="cardValue mb-3 cursorPointer" (click)="openDrillDown(infocards[1].title,infocards[1].title)">{{ infocards[1].value }}</div>
+    </div>
+    <div class="card-right">
+      <div echarts [options]="options1" class="chartHeight2"></div>
+    </div>
+  
+  </div>
+
+  <div class="width20 goldYellow">
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[2].title | titlecase }}</div>
+      <div class="cardValue mb-3 cursorPointer" (click)="openDrillDown(infocards[2].title,infocards[2].title)">{{ infocards[2].value }}</div>
+    </div>
+    <div class="card-right">
+      <div echarts [options]="options2" class="chartHeight2"></div>
+    </div>
+  </div>
+
+  <div class="width20 maroon">
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[3].title | titlecase }}</div>
+      <div class="cardValue mb-3 cursorPointer" (click)="openDrillDown(infocards[3].title,infocards[3].title)">{{ infocards[3].value }}</div>
+    </div>
+    <div class="card-right">
+      <div echarts [options]="options3" class="chartHeight2"></div>
+    </div>
+  </div>
+
+  <div class="width20 purple">
+    <div class="card-left">
+      <div class="cardName mb-3">{{ infocards[4].title | titlecase }}</div>
+      <div class="cardValue mb-3 cursorPointer" (click)="openDrillDown(infocards[4].title,infocards[4].title)">{{ infocards[4].value }}</div>
+    </div>
+    <div class="card-right">
+      <div echarts [options]="options4" class="chartHeight2"></div>
+    </div>
+  </div>
+</div>

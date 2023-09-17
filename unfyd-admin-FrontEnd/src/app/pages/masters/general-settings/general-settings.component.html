@@ -1,0 +1,433 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <form>
+      <div class="row mb-3">
+        <div class="col-8">
+          <legend class="legendheader">{{ changeModuleDisplayName }}</legend>
+        </div>
+        <div class="col-2 d-flex align-items-center justify-content-end" *ngIf="allConfigData.length > 0">
+          <button *ngIf="userConfig?.Update && edit" mat-raised-button class="btn" (click)="CancelEdit()" class=" addBtn" style="margin-right:10px;border:1px solid #eaeaea">Cancel</button>
+
+              <button *ngIf="(userConfig?.Update) && edit"  mat-flat-button color="primary"  class="customsaveedit" (click)="updateAdminConfig()">{{labelName?.Save}}</button>
+              <!-- <button *ngIf="(userConfig?.Edit) && !edit"  class="editBtn customsaveedit" mat-flat-button color="primary" type="button" (click)="edit = true">
+                <mat-icon class="mr-0">edit</mat-icon>
+              </button> -->
+
+              <div class="d-flex align-items-center">
+                <i class="icon-edit editBtn" *ngIf="(userConfig?.Edit) && !edit" (click)="edit = true"></i>
+              </div>
+        </div>
+      </div>
+      <div class="formGroup">
+          <div class="row" *ngIf="allConfigData.length > 0">
+            <div class="col-10">
+              <mat-accordion class="setting-accordion">
+                <mat-expansion-panel (opened)="panelOpenState = true; panelOpenStateKeyConfiguration = false" (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                      <mat-panel-title>
+                          <span class="font-weight-bold">
+                            <i class="icon-logging"></i>
+                            {{labelName?.Logging}}</span>
+                      </mat-panel-title>
+                      <div class="switchForConfigManager" style="float: right;">
+                        <mat-slide-toggle [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" color="primary" class="toggleBtn" [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['LogStatus']['ConfigValue']" (click)="$event.stopPropagation();">
+                        </mat-slide-toggle>
+                    </div>
+                  </mat-expansion-panel-header>
+                  <ul>
+                      <li class="indent row mx-0">
+                        <div class="col-3 pl-0">
+                          <label>{{labelName?.Logtype}}</label>
+                          </div>
+                          <div class="col-2">
+                            <!-- <input [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" type="text" class="mat-input-element form-input"/> -->
+                            <div class="inputText normal-dropdown">
+                              <mat-form-field appearance="fill">
+                                <mat-select panelClass="normal-panel" placeholder=LogType
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['LogType']['ConfigValue']" disableOptionCentering
+                                   [disabled]="!edit || !configdata['LogStatus']['ConfigValue']"                        >
+                                  <mat-option *ngFor="let data of logType" [value]="data.Key">
+                                    {{data.Value}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="offset-lg-1 offset-md-1 col-3 pl-0">
+                          <label>{{labelName?.Logfilesize}}</label>
+                        </div>
+                        <div class="col-3">
+                          <!-- <input [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" type="text" class="mat-input-element form-input"/> -->
+                          <div class="inputText normal-dropdown">
+                            <mat-form-field appearance="fill">
+                              <input matInput type="number" min="1" panelClass="normal-panel" class="example-right-align" placeholder="00" (keypress)="common.numericOnly($event)"
+                              [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['LogFileSizeValue']['ConfigValue']" disableOptionCentering [readonly]="!edit || !configdata['LogStatus']['ConfigValue']">
+                              <mat-select matSuffix  placeholder="KB"
+                              [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['LogFileSizeType']['ConfigValue']" disableOptionCentering
+                               [disabled]="!edit || !configdata['LogStatus']['ConfigValue']"
+                                >
+                                <mat-option *ngFor="let data of logFileSize" [value]="data.Key">
+                                  {{data.Value}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <div class="col-12 pl-0" *ngIf="configdata['LogFileSizeValue']['ConfigValue'] > 5">
+                              <mat-hint class="mat-error"> Cannot be beyond 5 MB </mat-hint>
+                            </div>
+                            <div class="col-12 pl-0" *ngIf="configdata['LogFileSizeValue']['ConfigValue'] == 0">
+                              <mat-hint class="mat-error"> Has to be more than 0 MB</mat-hint> </div>
+                          </div>
+                        </div>
+                      </li>
+                        <li class="indent row mx-0 align-items-start">
+                          <div class="col-3 pl-0">
+                          <label>{{labelName?.Logfilerolloverno}}</label>
+                          </div>
+                          <div class="col-2 inputText normal-dropdown">
+                            <mat-form-field appearance="fill">
+                              <input matInput [ngModelOptions]="{standalone: true}" (keypress)="common.numericOnly($event)" [(ngModel)]="configdata['LogFileRolloverNo']['ConfigValue']" [readonly]="!edit || !configdata['LogStatus']['ConfigValue']" type="number" min="0" class="mat-input-element form-input mr-3"/>
+                            </mat-form-field>
+                            <div class="col-12 pl-0" *ngIf="configdata['LogFileRolloverNo']['ConfigValue'] > 999">
+                              <mat-hint class="mat-error"> Cannot be beyond 999  </mat-hint>
+                            </div>
+                            <div class="col-12 pl-0" *ngIf="configdata['LogFileRolloverNo']['ConfigValue'] == 0">
+                              <mat-hint class="mat-error"> Has to be more than 0 </mat-hint>
+                            </div>
+                        </div>
+                        <div class="offset-lg-1 offset-md-1 col-3 pl-0">
+                          <label>{{labelName?.Retain}}</label>
+                        </div>
+                        <div class="col-2 inputText normal-dropdown">
+                          <mat-form-field appearance="fill">
+                            <input matInput [ngModelOptions]="{standalone: true}" (keypress)="common.numericOnly($event)" [(ngModel)]="configdata['LogRetainPeriod']['ConfigValue']" [readonly]="!edit || !configdata['LogStatus']['ConfigValue']" type="number" min="1" class="mat-input-element form-input mr-3" />
+                          </mat-form-field>
+                          <div class="col-12 pl-0" *ngIf="configdata['LogRetainPeriod']['ConfigValue'] > 999">
+                            <mat-hint class="mat-error"> Cannot be beyond 999  </mat-hint>
+                          </div>
+                          <div class="col-12 pl-0" *ngIf="configdata['LogRetainPeriod']['ConfigValue'] == 0">
+                            <mat-hint class="mat-error"> Has to be more than 0 </mat-hint>
+                          </div>
+                        </div>
+                      </li>
+                      <!-- <li>
+                          <label>{{labelName?.LoginAction}}</label>
+                          <div class="switchForConfigManager" style="float: right;">
+                              <mat-slide-toggle color="primary" class="toggleBtn"></mat-slide-toggle>
+                          </div>
+                      </li>
+                      <li class="indent">
+                          <label>{{labelName?.Maketheagentautoready}}</label>
+                          <div class="switchForConfigManager" style="float: right;">
+                              <mat-slide-toggle color="primary" class="toggleBtn"  [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'"
+                              formControlName="ISAUTOREADY"></mat-slide-toggle>
+                          </div>
+                      </li>
+                      <li class="indent d-flex justify-content-between">
+                          <label>{{labelName?.Defaultnoteadyreasoncode}}</label>
+                          <div class="inputText normal-dropdown">
+                            <mat-form-field appearance="fill">
+                              <mat-select panelClass="normal-panel" placeholder={{labelName?.Defaultnoteadyreasoncode}}
+                                formControlName="Default_NotReadyCode" disableOptionCentering
+                                 [disabled]="!edit" [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'">
+                                <mat-option *ngFor="let data of notReadyReasonCode" [value]="data['Reason Code Key']">
+                                  {{data['Reason Code'] | titlecase}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                      </li> -->
+                  </ul>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel (opened)="panelOpenState = true; panelOpenStateKeyConfiguration = false" (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <span class="font-weight-bold">
+                          <i class="icon-Master-Data-Management-NotReadyReason"></i>
+                          {{labelName?.LoginAction}}</span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <ul>
+                    <li>
+                        <label>{{labelName?.Maketheagentautoready}}</label>
+                        <div class="switchForConfigManager" style="float: right;">
+                          <mat-slide-toggle [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" color="primary" class="toggleBtn" [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['LoginActionMakeAgentAutoReady']['ConfigValue']">
+                          </mat-slide-toggle>
+                        </div>
+                    </li>
+                    <li class="indent d-flex justify-content-between">
+                        <label>{{labelName?.Defaultnoteadyreasoncode}}</label>
+                        <div class="inputText normal-dropdown">
+                          <mat-form-field appearance="fill">
+                            <mat-select panelClass="normal-panel" placeholder={{labelName?.Defaultnoteadyreasoncode}}
+                            [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['LoginDefaultNotReadyReasonCode']['ConfigValue']" disableOptionCentering
+                               [disabled]="!edit" [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'"
+                              >
+                              <mat-option *ngFor="let data of notReadyReasonCode" [value]="data['Reason Code Key']">
+                                {{data['Reason Code'] | titlecase}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                    </li>
+                </ul>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel (opened)="panelOpenState = true; panelOpenStateKeyConfiguration = true" (closed)="panelOpenState = false; panelOpenStateKeyConfiguration = false">
+              <mat-expansion-panel-header>
+                  <mat-panel-title>
+                      <span class="font-weight-bold">
+                        <i class="icon-localization"></i>
+                        {{labelName?.KeyConfiguration}}</span>
+                  </mat-panel-title>
+                  <div class="switchForConfigManager" style="float: right;">
+                    <div class="d-flex align-items-center">
+                      <i *ngIf="panelOpenStateKeyConfiguration" class="icon-add" [ngClass]="!edit || !configdata['KeyConfigurationStatus']['ConfigValue'] ? 'disabledIT':'cursorPointer'" (click)="$event.stopPropagation();addNewKeyConfiguration('keyConfiguration')"></i>
+                      <button *ngIf="addKeyConfiguration.length > 0 && panelOpenStateKeyConfiguration" [ngClass]="!edit || !configdata['KeyConfigurationStatus']['ConfigValue'] ? 'disabledIT':'cursorPointer'" mat-flat-button color="primary"  class="customsaveedit mr-2" (click)="$event.stopPropagation();insertKeyConfiguration('keyConfiguration')">Save</button>
+                      <mat-slide-toggle (click)="$event.stopPropagation();" [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" color="primary" class="toggleBtn" [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['KeyConfigurationStatus']['ConfigValue']">
+                      </mat-slide-toggle>
+                    </div>
+                  </div>
+              </mat-expansion-panel-header>
+              <ul>
+                <li class="indent mx-0 d-block" *ngIf="addKeyConfiguration.length > 0">
+                  <span class="addKeys">Add New Keys</span>
+                </li>
+                <li class="indent mx-3 d-block" *ngFor="let item of addKeyConfiguration; let i = index">
+                  <div class="row">
+                    <div class="col-11">
+                      <div class="row pb-2">
+                        <div class="col-2 pl-0">
+                          <label>{{labelName?.KeyLabel}}</label>
+                        </div>
+                        <div class="col-3">
+                          <div class="inputText normal-dropdown">
+                            <mat-form-field appearance="fill">
+                              <input matInput placeholder="Title" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.ConfigLabel" [readonly]="!edit || !configdata['KeyConfigurationStatus']['ConfigValue']">
+                            </mat-form-field>
+                            <mat-hint class="errorMsg" *ngIf="returnValidation('keyConfiguration',i,'ConfigLabel','required')">{{labelName?.KeyLabel}} is required</mat-hint>
+                          </div>
+                        </div>
+                        <div class="col-2 pl-0 offset-lg-2">
+                          <label>{{labelName?.KeyName}}</label>
+                        </div>
+                        <div class="col-3">
+                          <div class="inputText normal-dropdown">
+                            <mat-form-field appearance="fill">
+                              <input matInput placeholder="Title" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.ConfigKey" [readonly]="!edit || !configdata['KeyConfigurationStatus']['ConfigValue']" (keypress)="item.ConfigKey = (item.ConfigKey).split(' ').join('')">
+                            </mat-form-field>
+                            <mat-hint class="errorMsg" *ngIf="returnValidation('keyConfiguration',i,'ConfigKey','required')">{{labelName?.KeyName}} is required</mat-hint>
+                          </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-2 pl-0">
+                        <label>{{labelName?.KeyValue}}</label>
+                      </div>
+                      <div class="col-10">
+                        <mat-form-field class="example-chip-list" appearance="fill">
+                          <mat-label>{{labelName?.Values}}</mat-label>
+                          <mat-chip-list #chipList aria-label="Video keywords" multiple>
+                            <!-- [ngModelOptions]="{standalone: true}" [(ngModel)]="item.ConfigValue" -->
+                            <mat-chip
+                                *ngFor="let keyword of item.ConfigValue"
+                                [selected]="keyword"
+                                [value]="keyword"
+                                (removed)="remove(keyword,i,'keyConfiguration','newKey')">
+                              {{keyword}}
+                              <button matChipRemove>
+                                <mat-icon>cancel</mat-icon>
+                              </button>
+                            </mat-chip>
+                            <input #fruitInput
+                              placeholder="New Key Value..."
+                              [matChipInputFor]="chipList"
+                              [readonly]="!edit || !configdata['KeyConfigurationStatus']['ConfigValue']"
+                              (matChipInputTokenEnd)="addKeywordFromInput($event,i,'keyConfiguration','newKey',fruitInput)">
+                          </mat-chip-list>
+                        </mat-form-field>
+                      </div>
+                  </div>
+                    </div>
+                    <div class="col-1">
+                      <mat-icon class="red-color cursorPointer" (click)="deleteAddedKey(i,'keyConfiguration')">delete_outline</mat-icon>
+                    </div>
+                  </div>
+                </li>
+                <li class="indent mx-0 d-block" *ngIf="keyConfigurationData.length > 0">
+                  <span class="addKeys">Already Added Keys</span>
+                </li>
+                <ng-container *ngIf="keyConfigurationData.length > 0">
+                  <ng-container *ngFor="let item of allConfigData; let i = index">
+                  <li class="indent mx-3 d-block" *ngIf="item.Category == 'keyConfiguration'">
+                    <div class="row pb-2">
+                          <div class="col-2 pl-0">
+                            <label>{{labelName?.KeyLabel}}</label>
+                          </div>
+                          <div class="col-3">
+                            <div class="inputText normal-dropdown">
+                              <mat-form-field appearance="fill">
+                                <input matInput placeholder="Title" [readonly]="!edit || !configdata['KeyConfigurationStatus']['ConfigValue']" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.DisplayName">
+                              </mat-form-field>
+                            </div>
+                          </div>
+                          <div class="col-2 pl-0 offset-lg-2">
+                            <label>{{labelName?.KeyName}}</label>
+                          </div>
+                          <div class="col-3">
+                            <div class="inputText normal-dropdown">
+                              <mat-form-field appearance="fill">
+                                <input disabled matInput placeholder="Title" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.ConfigKey">
+                              </mat-form-field>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 pl-0">
+                          <label>{{labelName?.KeyValue}}</label>
+                        </div>
+                        <div class="col-10">
+                          <mat-form-field class="example-chip-list" appearance="fill">
+                            <mat-label>{{labelName?.Values}}</mat-label>
+                            <mat-chip-list #chipList aria-label="Video keywords" multiple >
+                              <mat-chip
+                                  *ngFor="let keyword of item.ConfigValue"
+                                  [selected]="keyword"
+                                  [value]="keyword"
+                                  (removed)="remove(keyword,i,'keyConfiguration','oldKey')">
+                                {{keyword}}
+                                <button matChipRemove>
+                                  <mat-icon>cancel</mat-icon>
+                                </button>
+                              </mat-chip>
+                              <input #fruitInput1
+                                placeholder="New Key Value..."
+                                [matChipInputFor]="chipList"
+                                [readonly]="!edit || !configdata['KeyConfigurationStatus']['ConfigValue']"
+                                (matChipInputTokenEnd)="addKeywordFromInput($event,i,'keyConfiguration','oldKey',fruitInput1)">
+                            </mat-chip-list>
+                          </mat-form-field>
+                        </div>
+                    </div>
+                  </li>
+                </ng-container>
+                </ng-container>
+                <ng-container *ngIf="keyConfigurationData.length == 0">
+                  <div class="noCategoryFound">No Record Found</div>
+                </ng-container>
+              </ul>
+          </mat-expansion-panel>
+
+        <!-- <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+              <mat-panel-title>
+                  <span class="font-weight-bold">
+                    <i class="icon-settings"></i>
+                    {{labelName?.NLP}}</span>
+              </mat-panel-title>
+              <div class="switchForConfigManager" style="float: right;">
+                <mat-slide-toggle [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" color="primary" class="toggleBtn" formControlName="GeneralSettingsLogging">
+                </mat-slide-toggle>
+            </div>
+          </mat-expansion-panel-header>
+          <ul>
+            <li class="indent row mx-0 " style="align-items: flex-start;">
+              <div class="col-1 pl-0">
+                <label>{{labelName?.API}}</label>
+                </div>
+                <div class="col-11">
+                  <div class="d-flex">
+                    <mat-form-field appearance="fill">
+                      <input matInput>
+                    </mat-form-field>
+                    <button  mat-flat-button  class="customsaveedit inputButton">API Configuration</button>
+                  </div>
+                </div>
+            </li>
+            <li class="indent row mx-0">
+              <label>{{labelName?.TimeoutDuration}}</label>
+              <div class="d-flex">
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="duration">
+                </mat-form-field>
+                <div class="inputText normal-dropdown">
+                  <mat-form-field appearance="fill">
+                    <mat-select panelClass="normal-panel">
+                      <mat-option aria-placeholder="Sec">
+                        Sec
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </li>
+            <li class="indent mx-0" style="display: block;">
+              <label>{{labelName?.AppendSearchText}}</label>
+              <div class="switchForConfigManager" style="float: right;">
+                <mat-slide-toggle [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" color="primary" class="toggleBtn" formControlName="GeneralSettingsLogging">
+                </mat-slide-toggle>
+            </div>
+            <div class="d-flex mt-3">
+              <div class="col-2">
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="duration">
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill">
+                  <input matInput placeholder="duration">
+                </mat-form-field>
+              </div>
+            <div class="col-2">
+                <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                <i class="icon-add"></i>
+            </div>
+            </div>
+
+            </li>
+          </ul>
+      </mat-expansion-panel> -->
+
+      <mat-expansion-panel (opened)="panelOpenState = true; panelOpenStateKeyConfiguration = false" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <span class="font-weight-bold">
+                  <i class="icon-repeatCustomer"></i>
+                  {{labelName?.RepeatCustomer}}
+                </span>
+            </mat-panel-title>
+            <div class="switchForConfigManager" style="float: right;">
+              <mat-slide-toggle [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" color="primary" class="toggleBtn" [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['RepeatCustomerStatus']['ConfigValue']" (click)="$event.stopPropagation();">
+              </mat-slide-toggle>
+          </div>
+        </mat-expansion-panel-header>
+        <ul>
+          <li class="indent row mx-0">
+            <div class="col-6">
+             <label>{{labelName?.NumberOfDaysToCalculateRepeatCustomer}}</label>
+          </div>
+            <div class="col-4">
+              <mat-form-field appearance="fill" class="maxWidth200PX">
+                <mat-label>{{labelName?.Valueindays}}</mat-label>
+                <input (keypress)="common.numericOnly($event)" [readonly]="!edit || !configdata['RepeatCustomerStatus']['ConfigValue']" matInput type="number" min="1" max="365"
+                 [ngModelOptions]="{standalone: true}" [(ngModel)]="configdata['RepeatCustomerDays']['ConfigValue']"  panelClass="normal-panel" class="example-right-align" placeholder="00">
+              </mat-form-field>
+              <div class="col-12 pl-0" *ngIf="configdata['RepeatCustomerDays']['ConfigValue'] > 365">
+                <mat-hint class="mat-error"> Cannot be beyond 365 days </mat-hint>
+              </div>
+              <div class="col-12 pl-0" *ngIf="configdata['RepeatCustomerDays']['ConfigValue'] == 0">
+                <mat-hint class="mat-error"> Has to be more than 0 days</mat-hint>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </div>
+      </div>
+      <div *ngIf="allConfigData.length == 0" class="noCategoryFound w-100">No Record Found</div>
+    </form>
+  </div>
+</div>

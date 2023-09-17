@@ -1,0 +1,68 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="wrapper">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <legend>Email Notification Master</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.category.errors }">
+                            <mat-label>Category</mat-label>
+                            <input matInput formControlName="category" />
+                            <mat-error *ngIf="f.category.errors">
+                                <ng-container *ngIf="f.category.errors.required">Category is required</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.templatekey.errors }">
+                            <mat-label>Template key</mat-label>
+                            <input matInput formControlName="templatekey" />
+                            <mat-error *ngIf="f.templatekey.errors">
+                                <ng-container *ngIf="f.templatekey.errors.required">Template Key is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.templatevalue.errors }">
+                            <mat-label>Template Value</mat-label>
+                            <input matInput formControlName="templatevalue" />
+                            <mat-error *ngIf="f.templatevalue.errors">
+                                <ng-container *ngIf="f.templatevalue.errors.required">Template Value is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.notifyevent.errors }">
+                            <mat-label>Notify Event</mat-label>
+                            <input matInput formControlName="notifyevent" />
+                            <mat-error *ngIf="f.notifyevent.errors">
+                                <ng-container *ngIf="f.notifyevent.errors.required">Notify Event is required</ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox" [ngClass]="{ 'shake': submittedForm && f.status.errors }">
+                            <mat-checkbox color="primary" [checked]="check" formControlName="status">Status
+                            </mat-checkbox>
+                            <mat-error *ngIf="f.status.errors">
+                                <ng-container *ngIf="f.status.errors.required">Notify Event is required</ng-container>
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button class="btn btn-gray" *ngIf="!reset" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-flat-button color="primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

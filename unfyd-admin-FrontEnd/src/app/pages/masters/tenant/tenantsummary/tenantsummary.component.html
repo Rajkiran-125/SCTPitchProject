@@ -1,0 +1,299 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" style="padding-bottom: 50px;" *ngIf="loader==false &&  productcount == 0 && channelcount == 0 && rolecount == 0 && AllValueTrue == true">
+    <div class="wrapper py-4" *ngIf="loader==false &&  productcount == 0 && channelcount == 0 && rolecount == 0  && AllValueTrue == true">
+        <form [formGroup]="form" *ngIf="loader==false &&  productcount == 0 && channelcount == 0 && rolecount == 0  && AllValueTrue == true" >
+            <div class="row ">
+                    <div class="col-1 text-center">
+                    <mat-icon class="gray cursorPointer" [routerLink]="['/masters/tenant']">keyboard_backspace</mat-icon>
+                </div>
+                <div class="col-11">
+                    <div  style="padding-bottom: 10px;">
+                
+                    <!-- <legend style=" font-size: 20px;"> {{uplicense.FirstName}} {{uplicense.LastName}}</legend> -->
+                    <legend style=" font-size: 20px;">  {{uplicense.ShortCode}}</legend>
+                  
+                    </div>
+                    <div class="formGroup">
+                      
+
+                            <div class="row">
+                                <div class="col-lg-8 col-md-4 col-sm-12" style="padding-bottom:10px">
+                                    <label>
+                                        <b style="font-size: 16px;">{{labelName?.Summary}}</b>
+                                    </label>
+                            </div>
+
+                            </div>
+                            <div class="wrapper darkWrapper" style="overflow:hidden;">
+                                <div class="search-form" style="padding-left:20px;padding-bottom: 50px;">
+                                        <div class="col-lg-1 col-md-1 col-sm-2 text-center pr-0">
+                                      
+
+                                        </div>
+                                            <div class="row">
+                                                    <legend style="font-size:15px">
+                                                        <b>{{labelName?.CompanyInfo}}</b>
+                                                    </legend>
+
+                                            </div>
+
+
+                                    <div class="row" style="padding-bottom:10px">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.FirstName}}</h5>
+                                                <p><b>{{uplicense.FirstName}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+
+                                            <div class="mat-typography">
+                                     
+                                                <h5>{{labelName?.LastName}}</h5>
+                                                <p><b>{{uplicense.LastName}}</b></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.Designation}}</h5>
+                                                <p><b>{{uplicense.Designation}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row" style="padding-bottom:10px">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.CompanyName}}</h5>
+                                                <p><b>{{uplicense.ProcessName}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.EmployeeStrength}}</h5>
+                                                <p><b>{{uplicense.EmployeeStrength}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.DomainShortCode}}</h5>
+                                                <p><b>{{uplicense.ShortCode}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="padding:10px">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.Country}}</h5>
+                                                <p><b>{{displaycountryname}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.MobileNo}}</h5>
+                                                <p><b>{{uplicense.MobileNo}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.EmailID}}</h5>
+                                                <p><b>{{uplicense.EmailId}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="padding:10px">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.ContractType}}</h5>
+                                                <p><b>{{uplicense.ContractType}}</b></p>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.StartDate}}</h5>
+                                                <p><b>{{upstartdate}}</b></p>
+                                               
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="mat-typography">
+
+                                                <h5>{{labelName?.RenewalDate}}</h5>
+                                                <p><b>{{upenddate}}</b></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                           
+                                        
+                                        <div class="row" style="    margin: 0px;padding-top: 20px;">
+                                                <legend style="font-size:15px">
+                                                    <b>{{labelName?.AdditionalInfo}}</b>
+                                                </legend>
+
+                                        </div>
+
+                                        <div class="row" style="padding-left: 10px;padding-top: 10px;">
+                                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                                <div class="mat-typography">
+
+                                                    <div *ngIf="tenantup.AllowLOB == true">
+                                                        <h5>{{labelName?.AllowLOBCreation}}</h5>
+                                                        <p><b>{{labelName?.Enabled}}</b></p>
+                                                    </div>
+                                                    <div *ngIf="tenantup.AllowLOB == false || tenantup.AllowLOB == null">
+                                                        <h5>{{labelName?.AllowLOBCreation}}</h5>
+                                                        <p><b>{{labelName?.Disabled}}</b></p>
+                                                    </div>
+                                  
+                                                </div>
+    
+                                            </div>
+
+                                        </div>
+
+
+
+
+                                        <div class="row" style="padding:10px">
+                                            <legend style="font-size:13px;margin-left: 18px;">
+                                                <b>{{labelName?.Language}}</b>
+                                            </legend>
+                                            <div class="col-lg-4 col-md-4 col-sm-12" *ngFor="let langdata of LanguageData; let i= index">
+                                                <div class="mat-typography" style="padding-bottom: 10px;" >
+                        
+                                                        <div style="border: 1px solid #ccc;border-radius: 5px ;padding: 8px;margin-right: 10px;text-align: center;">
+                                                            <span  [innerHtml]="langdata?.ChannelIcon"></span>
+                                                          
+                                                            {{langdata.Language}}                                                       
+                                                          
+                                                        </div>                                                        
+                                                </div>        
+                                            </div>                                                  
+                                        </div>
+
+
+
+
+                                            <div class="row" style="padding:10px" *ngIf = "a[1]?.channel?.channelid.length > 0">
+                                                <legend style="font-size:13px;margin-left: 18px;">
+                                                    <b>{{labelName?.Channels}}</b>
+                                                </legend>
+                                                <div class="col-lg-4 col-md-4 col-sm-12" *ngFor="let data1 of a[1]?.channel?.channelid; let i= index">
+                                                    <div class="mat-typography" style="padding-bottom: 10px;" >
+                            
+                                                            <div style="border: 1px solid #ccc;border-radius: 5px ;padding: 8px;margin-right: 10px;">
+                                                                <span  [innerHtml]="data1?.ChannelIcon"></span>
+                                                              
+                                                                {{a[1]?.channel?.channelid[i]?.ChannelName}}                                                       
+                                                              
+                                                                <input
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    [(ngModel)]="a[1]?.channel?.channelIdValue[data1?.ChannelId]"                                          
+                                                                    autocomplete="on" type="number" value="0"
+                                                                    min="0" max="999"
+                                                                    style="border: 0px solid #efefef;border-radius: 5px; max-width:35px;margin-left:5px; background-color: #f8f8f8;font-weight: bold;"
+                                                                    readonly />                                     
+                                                            </div>                                                        
+                                                    </div>        
+                                                </div>                                                  
+                                            </div>
+                                        <div class="custom-tab "  >
+                                            <ul class="nav nav-tabs"  > 
+                                                <div *ngFor="let data of productName;let i = index">
+                                                        
+                                                <button  mat-stroked-button (click)="onTabClick(data.Id,i)" style="border-radius: 0px;width:120px"
+                                                [ngStyle]="{'background-color': indexidval === i ? '#efefef ' : 'white' }">
+                                                    {{data.ProductName}}</button>                                                        
+                                                    </div>
+                                            </ul>                                            
+                                            
+                                            <div style="background-color:#efefef ; border-radius: 5px; border:1px solid rgb(236, 236, 236)">
+                                            <div class="row" style="padding:10px">
+                                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                                    <div class="mat-typography">
+        
+                                                        <h5>{{labelName?.Subscription}}</h5>
+                                                        <p><b>{{a[onclicktabId]?.subscription?.value}}</b></p>
+                                                    </div>
+        
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="padding:10px;padding-bottom: 30px;">
+                                                <legend style="font-size:13px;margin-left: 19px;">
+                                                    <b>{{labelName?.Users}}</b>
+                                                </legend>
+                                                <div class="col-lg-4 col-md-4 col-sm-12" *ngFor="let data2 of a[onclicktabId]?.user?.userid; let k= index" style="padding-bottom:10px" >
+                                                    <div class="mat-typography">
+                                          
+                                                        <div
+                                                            style="border: 1px solid #ccc;border-radius: 5px ;padding: 8px;margin-right: 10px;">
+                                                            {{a[onclicktabId]?.user?.userid[k]?.SubType}}
+
+                                                            <input
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                [(ngModel)]="a[onclicktabId]?.user?.useridValue[data2?.Id]" 
+                                                                autocomplete="on" type="number" value="0"
+                                                                min="0" max="999"
+                                                                style="border: 0px solid #efefef;border-radius: 5px; max-width:35px;margin-left:5px;background-color: #efefef;font-weight: bold;"
+                                                                readonly />                                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                      
+
+
+
+                    
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+
+

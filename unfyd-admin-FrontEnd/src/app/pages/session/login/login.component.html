@@ -1,0 +1,217 @@
+    <div class="loginBg">
+            <div class="loginWrapper">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-8 alignCenter d-none d-md-flex">
+                        <div class="loginSlider">
+                            <div class="">
+                                    <div class="middleSlider">
+                                        <div *ngIf="!IsForgotPassword">
+                                            <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
+                                                <ng-container *ngFor="let slide of branding?.bannerimg">
+                                                    <div ngxSlickItem class="slide" *ngIf="slide.status">
+                                                        <a *ngIf="slide.link !== ''" href="{{slide.link}}" target="_blank" class="slideContent">
+                                                            <img loading="lazy" src="{{ slide.image }}" [attr.title]="slide.title"
+                                                                [attr.alt]="slide.title" width="100%">
+                                                            <h2>{{slide.title}}</h2>
+                                                            <p>{{slide.description}}</p>
+                                                        </a>
+                                                        <div *ngIf="slide.link == ''" class="slideContent">
+                                                            <img loading="lazy" src="{{ slide.image }}" [attr.title]="slide.title"
+                                                                [attr.alt]="slide.title" width="100%">
+                                                            <h2>{{slide.title}}</h2>
+                                                            <p>{{slide.description}}</p>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </ngx-slick-carousel>
+                                        </div>
+                                
+                                    <div *ngIf="IsForgotPassword">
+                                        <div>
+                                            <img class="forgotPassImg" src="assets/images/Forgot_password.png" width="100%">
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-4">
+                        <div class="loginPanel">
+                            <div class="alignCenter">  
+                            <div *ngIf="LoginForm == true">
+                                    <div class="logo" *ngIf="branding?.loginImgStatus">
+                                        <img loading="lazy" [attr.title]="branding?.loginheadertext"
+                                            [attr.alt]="branding?.loginheadertext" [src]="branding?.loginheaderimg" />
+                                    </div>
+                                    <p *ngIf="branding?.loginheadertextStatus" class="welcome-text p-0 m-0">
+                                        {{branding?.loginheadertext}}</p>
+                                    <p class="p-0 m-0 mb-4"></p>
+                                    <form [formGroup]="form" class="mat-form loginform">
+                                        <div>
+                                            <mat-form-field appearance="fill"
+                                                [ngClass]="{ 'shake': submittedForm && f.username.errors }" floatLabel="never">
+                                                <input matInput formControlName="username"  maxlength="30" required type="text" placeholder="Username">
+                                                <span class="icon-Username_field" matPrefix></span>
+                                                <mat-error *ngIf="submittedForm && f.username.errors">
+                                                    <ng-container *ngIf="f.username.errors.required">Username is required</ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div>
+                                            <mat-form-field appearance="fill"
+                                                [ngClass]="{ 'shake': submittedForm && f.password.errors }" floatLabel="never">
+                                                <input matInput formControlName="password"  maxlength="30" placeholder="Password" required [type]="hide ? 'password' : 'text'">
+                                                <span class="icon-Password_field" matPrefix></span>
+
+                                                <span matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                                    [attr.aria-pressed]="hide">
+                                                    <span [ngClass]="hide ? 'icon-hide_password' : 'icon-show_password'" matSuffix></span>
+                                                    <!-- <mat-icon [ngClass]="hide ? 'gray' : ''">{{hide ? 'visibility_off' : 'visibility'}}
+                                                    </mat-icon> -->
+                                                </span>
+
+                                                <mat-error *ngIf="submittedForm && f.password.errors">
+                                                    <ng-container *ngIf="f.password.errors.required">Password is required</ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <button mat-flat-button class="btn btn-block" color="primary" type="submit"
+                                            (click)="submit()"><span class="spinner" *ngIf="loader"></span> {{loader ? 'Loading...' :
+                                            'Login'}}</button>
+                                            <div>  
+                                                <div class="forgotpass cursorPointer">
+                                                <span (click)="Forgotpassword()">Forgot Password?</span>
+                                                </div>
+                                            </div>
+                                    </form>
+                            </div>
+                            <div>
+                                <div *ngIf = "CloseForgetPassword" >
+                                    <div class="unlink_crossicon">
+                                        <span class="icon-rejected cross_icon" (click)="CancelForgotPass()"></span>
+                                        <!-- <button class="close" >X</button> -->
+                                    </div>
+                                    <div class="forgotfontdiv"> 
+                                        <span class="forgotpassFont">Forgot Password?</span>
+                                    </div>
+                                </div>
+        
+                                <div *ngIf = "IsForgotPassword == true">                                                                                               
+                                        <form [formGroup]="UserForm" class="mat-form">
+                                            <div>
+                                                <mat-form-field appearance="fill" class="forgotPassInput"
+                                                    [ngClass]="{ 'shake': submittedForm && uf.username.errors }" floatLabel="never">
+                                                    <input matInput formControlName="username"  maxlength="30" required type="text" placeholder="Enter your username">                                          
+                                                    <mat-error *ngIf="submittedForm && uf.username.errors">
+                                                        <ng-container *ngIf="uf.username.errors.required">Username is required</ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                    
+                                            <button mat-flat-button class="btn  btn-block" color="primary" type="submit"
+                                                (click)="SubmitForgotPassUsername()"><span class="spinner" *ngIf="loader"></span> {{loader ? 'Loading...' :
+                                                'Submit'}}</button>        
+                                    </form>
+                                    <div class="otpbyemail" *ngIf ="SendOtpToEmail == true">
+                                        <div class="dumtxt">
+                                            OTP will be sent on your registered Email ID
+                                        </div>
+                                        <div class="email-resend">
+                                            <div class="filed">
+                                                {{this.maskedEmailId}}
+                                            </div>
+                                            <div>
+                                                <button (click)="SendOtpEmail()" class="sendotp">send OTP</button>
+                                                <!-- send OTP -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div  *ngIf="VerifyOtp">
+                                    <div class="unlink_inputs">
+                                    <div>
+                                        <div class="otpbyemail">
+                                            <div class="email-resend">
+                                                <div class="filed">
+        
+                                                        {{this.maskedEmailId}}
+                                                </div>
+                                                <!-- *ngIf="resendOtpbtn"  -->
+                                                <div >
+                                                    <button (click)="SendOtpEmail()" class="sendotp">Resend OTP</button>
+                                                    <!-- send OTP -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="form-group unlink_formgroup mt-4">
+                                            <div class="enterotp mb-2">
+                                                Enter OTP
+                                            </div>
+                                            <input class="otp_inputs unlink_theme_font" type="text" #otp1
+                                                placeholder="0" (keyup)='tabChange(1)' maxlength=1>
+                                            <input class="otp_inputs unlink_theme_font" type="text" #otp2
+                                                placeholder="0" (keyup)='tabChange(2)' maxlength=1>
+                                            <input class="otp_inputs unlink_theme_font" type="text" #otp3
+                                                placeholder="0" (keyup)='tabChange(3)' maxlength=1>
+                                            <input class="otp_inputs unlink_theme_font" type="text" #otp4
+                                                placeholder="0" (keyup)='tabChange(4)' maxlength=1>
+                                        </div>
+                                        <div>
+                                            <button  mat-flat-button color="primary" type="submit" style="margin-top: 10px;"
+                                                (click)="confirmOTP(otp1.value + otp2.value + otp3.value + otp4.value)"
+                                                class="unlink_theme_button unlink_theme_font unlink_mt-20 text-capitalize btn  btn-block">Confirm
+                                                OTP</button>
+                                        </div>
+                                        <div class="dumtxt">
+                                    This OTP will expire in <span class="timer">{{otpcount}} </span>Second
+                                    </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="FinalResetPassword && securitycomplainceresponse == true" class="mat-form">                            
+                                    <form [formGroup]="formChangePassword">
+                                    <div>
+                                        <mat-form-field appearance="fill" floatLabel="never">
+                                            <input matInput [type]="hide1 ? 'password' : 'text'" formControlName="newPassword" (click)="errorMsg()" type="text" placeholder="New Password">
+                                            <button mat-icon-button matSuffix (click)="hide1 = !hide1" [attr.aria-label]="'Hide password'"
+                                            [attr.aria-pressed]="hide">
+                                            <mat-icon>{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                            </button>
+                                            <mat-error *ngIf="fcp?.newPassword?.touched && fcp?.newPassword?.errors?.required"></mat-error>
+                                            <mat-error *ngIf="fcp?.newPassword?.touched && fcp?.newPassword?.errors?.minlength"></mat-error>
+                                            <mat-error *ngIf="fcp?.newPassword?.touched && fcp?.newPassword?.errors?.maxlength"></mat-error>
+                                            <mat-error *ngIf="fcp?.newPassword?.touched && fcp?.newPassword?.errors?.ConfirmedValidator"> Passwords must</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div>
+                                            <mat-form-field appearance="fill"   floatLabel="never">
+                                                <input matInput [type]="hide2 ? 'password' : 'text'" formControlName="confirmPassword" (click)="errorMsg()" type="text" placeholder="Confirm New Password"
+                                                (keyup)="errorMsg()">
+                                                <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'"
+                                                [attr.aria-pressed]="hide">
+                                                <mat-icon>{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                                </button>
+                                                <mat-error *ngIf="fcp?.confirmPassword?.touched && fcp?.confirmPassword?.errors?.required"></mat-error>
+                                                <mat-error *ngIf="fcp?.confirmPassword?.touched && fcp?.confirmPassword?.errors?.minlength"></mat-error>
+                                                <mat-error *ngIf="fcp?.confirmPassword?.touched && fcp?.confirmPassword?.errors?.maxlength"></mat-error>
+                                            </mat-form-field>
+                                    </div>
+                                    </form>                         
+                                    <div *ngIf="passwordNotMatchval == true">
+                                    <b style="color: red;font-size:10px">Confirm New Password does not match</b>
+                                    </div>
+                                    <div *ngIf="passwordHistoryMatch == true">
+                                    <b style="color: red;font-size:9px">New Password Should not match Previous Password</b>
+                                    </div>
+                                    <strength-checker  *ngIf="passwordPolicyapi" (passwordStrength)="passwordStrength($event)" [passwordToVerify] = 'formChangePassword.value.newPassword' [passwordPolicy] = 'passwordPolicyapi' [passwordMatch] = 'passwordmatch'></strength-checker> 
+                                    <button mat-flat-button (click)="submitChangePassword()" 
+                                    class="btn btn-form btn-block" color="primary" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </div>        
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+

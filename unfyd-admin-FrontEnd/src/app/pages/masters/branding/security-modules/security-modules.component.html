@@ -1,0 +1,515 @@
+<div class="inner-container">
+  <ng-container *ngIf="moduleName == 'BlockLocation'">
+    <div class="wrapper py-5">
+      <form [formGroup]="formBlocklocation" #formDirective="ngForm">
+        <div class="row">
+          <div class="col-1 text-center backarrow">
+          </div>
+          <div class="col-lg-7 col-md-10 col-10 pl-0">
+            <legend class="size"> {{reset ? 'Update' : 'Add'}} Block Location</legend>
+            <div class="formGroup mt-3">
+              <div class="row">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.SelectState}}</mat-label>
+                  <mat-select formControlName="state" (selectionChange)="districtfunc($event.value)" #select2>
+                    <mat-select-filter class="two" [displayMember]="'StateName'" [array]="filteredStates"
+                      (filteredReturn)="searchStates =$event"></mat-select-filter>
+                    <mat-option *ngFor="let data of searchStates;" [value]="data.StateID">
+                      {{data.StateName}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.state.errors">
+                    <ng-container *ngIf="f.state.errors.required"> {{labelName?.State}} is required.
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.SelectRegion}}</mat-label>
+                  <mat-select formControlName="region">
+                    <mat-select-filter class="two" [placeholder]="'Search'" [displayMember]="'Districtname'"
+                      [array]="filtereddistrict" (filteredReturn)="searchdistrict =$event"></mat-select-filter>
+                    <mat-option *ngFor="let data of searchdistrict;" [value]="data.DistrictId">{{data.Districtname}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="f.region.errors">
+                    <ng-container *ngIf="f.region.errors.required">{{labelName?.Region}} is required.
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+
+            <div class="btn-group">
+              <!-- <button *ngIf="userConfig?.locationCancel" class="btn btn-gray" (click)="closeDialog(false)" mat-flat-button type="Reset">{{labelName?.Cancel}}</button>
+              <button *ngIf="!reset && userConfig?.locationReset" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button> -->
+              <button *ngIf="!reset  && userConfig?.locationBlockAddNew" class="btn outline" mat-stroked-button
+                color="primary"
+                (click)="submitBlockLocation('saveAndAddNew', formDirective)">{{labelName?.BlockAddNew}}</button>
+              <button *ngIf="userConfig?.locationBlock" class="btn" mat-flat-button color="primary"
+                (click)="submitBlockLocation('add', formDirective)" type="button">{{labelName?.Block}}</button>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="moduleName == 'BlockIPAdd'">
+    <div class="wrapper py-5">
+      <form [formGroup]="formBlockIPAdd" #formDirective1="ngForm">
+        <div class="row">
+          <div class="col-1 text-center backarrow">
+            <!-- <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon> -->
+          </div>
+          <div class="col-lg-7 col-md-10 col-10 pl-0">
+            <legend class="size"> {{reset ? 'Update' : 'Add'}} Block IP Address</legend>
+
+            <div class="formGroup mt-3">
+              <div class="row">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.From}}</mat-label>
+                  <input matInput formControlName="from">
+                  <mat-error *ngIf="fia.from.errors">
+                    <ng-container *ngIf="fia.from.errors.required">{{labelName?.From}} is required.
+                    </ng-container>
+                    <ng-container *ngIf="fia.from.errors.checknull">Whitespace not allowed.
+                    </ng-container>
+                    <ng-container *ngIf="fia.from.errors.pattern">{{labelName?.From}} is invalid.
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.SpamTo}}</mat-label>
+                  <input matInput formControlName="to">
+                  <mat-error *ngIf="fia.to.errors">
+                    <ng-container *ngIf="fia.to.errors.required">{{labelName?.SpamTo}} is required.
+                    </ng-container>
+                    <ng-container *ngIf="fia.to.errors.checknull">Whitespace not allowed.
+                    </ng-container>
+                    <ng-container *ngIf="fia.to.errors.pattern">{{labelName?.SpamTo}} is invalid.
+                    </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+
+            <div class="btn-group">
+              <!-- <button *ngIf="userConfig?.BlockIPReset" class="btn btn-gray" (click)="closeDialog(false)" mat-flat-button type="Reset">{{labelName?.Cancel}}</button>
+              <button *ngIf="!reset && userConfig?.BlockIPCancel" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button> -->
+              <button *ngIf="!reset && userConfig?.BlockIPBlockAddNew" class="btn outline" mat-stroked-button
+                color="primary"
+                (click)="submitIPAddress('saveAndAddNew', formDirective1)">{{labelName?.BlockAddNew}}</button>
+              <button *ngIf="userConfig?.BlockIPBlock" class="btn" mat-flat-button color="primary"
+                (click)="submitIPAddress('add', formDirective1)" type="button">{{labelName?.Block}}</button>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="moduleName == 'SpamControl'">
+    <div class="wrapper py-5">
+      <form [formGroup]="formSpamControl" #formDirective2="ngForm">
+        <div class="row">
+          <div class="col-1 text-center backarrow">
+            <!-- <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon> -->
+          </div>
+          <div class="col-lg-7 col-md-10 col-10 pl-0">
+            <legend class="size">{{reset ? 'Update' : 'Add'}} Rule</legend>
+            <div class="formGroup mt-3">
+              <div class="">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.RuleType}}</mat-label>
+                  <mat-select formControlName="Rule" [disabled]="this.ruleType"
+                    (selectionChange)="onButtonSelected($event)">
+                    <mat-option *ngFor="let item of filteredRule" [value]="item.Key">
+                      <span class="fontSizeContent">{{item.Value}}</span>
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fSC?.Rule?.errors">
+                    <ng-container *ngIf="fSC?.Rule.errors?.required">{{labelName?.RuleType}} is required </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="" *ngIf="formSpamControl.controls.Rule.value">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.RuleName}}</mat-label>
+                  <input matInput formControlName="RuleName">
+                  <mat-error *ngIf="fSC?.RuleName?.errors">
+                    <ng-container *ngIf="fSC?.RuleName.errors?.required">{{labelName?.RuleName}} is required
+                    </ng-container>
+                    <ng-container *ngIf="fSC?.RuleName.errors?.pattern">{{labelName?.RuleName}} is invalid
+                    </ng-container>
+                    <ng-container *ngIf="fSC?.RuleName.errors?.checknull">Whitespace not allowed. </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div
+                *ngIf="(formSpamControl.controls.Rule.value === 'Email') || (formSpamControl.controls.Rule.value === 'Domain')">
+                <div class="">
+                  <mat-form-field appearance="fill">
+                    <mat-label> {{labelName?.Condition}}</mat-label>
+                    <input matInput formControlName="Condition">
+                    <mat-error *ngIf="fSC?.Condition?.errors">
+                      <ng-container *ngIf="fSC?.Condition.errors?.required">{{labelName?.Condition}} is required
+                      </ng-container>
+                      <ng-container *ngIf="fSC?.Condition.errors?.checknull">Whitespace not allowed.</ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="">
+                  <mat-form-field appearance="fill">
+                    <mat-label> {{labelName?.Value}}</mat-label>
+                    <input matInput formControlName="Value">
+                    <mat-error *ngIf="fSC?.Value?.errors">
+                      <ng-container *ngIf="fSC?.Value.errors?.required">{{labelName?.Value}} is required </ng-container>
+                      <ng-container *ngIf="fSC?.Value.errors?.checknull">Whitespace not allowed. </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div *ngIf="formSpamControl.controls.Rule.value === 'IPAddress'">
+                <div class="">
+                  <mat-form-field appearance="fill">
+                    <mat-label> {{labelName?.SpamFrom}}</mat-label>
+                    <input matInput formControlName="From">
+                    <mat-error *ngIf="fSC?.From?.errors">
+                      <ng-container *ngIf="fSC?.From.errors?.required">{{labelName?.SpamFrom}} is required
+                      </ng-container>
+                      <ng-container *ngIf="fSC?.From.errors?.checknull">Whitespace not allowed. </ng-container>
+                      <ng-container *ngIf="fSC.From.errors.pattern">{{labelName?.SpamFrom}} is invalid.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="">
+                  <mat-form-field appearance="fill">
+                    <mat-label> {{labelName?.SpamTo}}</mat-label>
+                    <input matInput formControlName="To">
+                    <mat-error *ngIf="fSC?.To?.errors">
+                      <ng-container *ngIf="fSC?.To.errors?.required">{{labelName?.SpamTo}} is required </ng-container>
+                      <ng-container *ngIf="fSC?.To.errors?.checknull">Whitespace not allowed. </ng-container>
+                      <ng-container *ngIf="fSC.To.errors.pattern">{{labelName?.SpamTo}} is invalid.
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="" *ngIf="formSpamControl.controls.Rule.value">
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.Action}}</mat-label>
+                  <mat-select formControlName="Action">
+                    <mat-option *ngFor="let item of filteredSpamAction" [value]="item.Key">
+                      <span class="fontSizeContent">{{item.Value}}</span>
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="fSC?.Action?.errors">
+                    <ng-container *ngIf="fSC?.Action.errors?.required">{{labelName?.Action}} is required </ng-container>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="btn-group">
+              <!-- <button  *ngIf="userConfig?.spamCancel" class="btn btn-gray" (click)="closeDialog(false)"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+              <button *ngIf="!reset && userConfig?.spamReset" class="btn btn-gray" mat-flat-button (click)="spamReset()"
+                type="Reset">{{labelName?.Reset}}</button>
+              <button *ngIf="!reset && userConfig?.spamSaveAddNew" class="btn outline" mat-stroked-button
+                color="primary" (click)="submitSpam('saveAndAddNew', formDirective2)">{{labelName?.SaveAddNew}}</button>
+              <button *ngIf="reset ? userConfig?.spamUpdate :  userConfig?.spamSave" class="btn" mat-flat-button
+                color="primary" (click)="submitSpam('add', formDirective2)" type="button">{{reset ? labelName?.Update :
+                labelName?.Save}}</button>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="moduleName == 'BlackList'">
+    <div class="wrapper py-5">
+      <form [formGroup]="formBlackList" #formDirective3="ngForm">
+        <div class="row">
+          <div class="col-1 text-center backarrow">
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-12 pl-0">
+            <legend class="size">{{reset ? 'Update' : 'Add'}} BlackList</legend>
+            <div class="formGroup mt-3">
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.Channel}}</mat-label>
+                    <mat-select matInput formControlName="Channel"
+                      (selectionChange)="getChannelSource($event.value);channelValue($event.value)">
+                      <mat-select-trigger *ngIf="formBlackList.controls?.Channel.value"
+                        class="d-flex align-items-center">
+                        <ng-container *ngFor="let item2 of Channel">
+                          <ng-container *ngIf="formBlackList.controls?.Channel.value == item2.ChannelId">
+                            <span [innerHtml]="item2?.ChannelIcon"></span>
+                            <span>{{item2.ChannelName}}</span>
+                          </ng-container>
+                        </ng-container>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let data of Channel" [value]="data.ChannelId">
+                        <span [innerHtml]="data?.ChannelIcon"></span>
+                        <span>{{data.ChannelName}}</span>
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="fbl.Channel?.errors">
+                      <ng-container *ngIf="fbl.Channel?.errors?.required">
+                        {{labelName?.Channel}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.ChannelSource}}</mat-label>
+                    <mat-select matInput formControlName="ChannelSource">
+                      <mat-option *ngFor="let data of ChannelSource"
+                        [value]="data.ChannelSourceId">{{data.ChannelSourceName }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="fbl?.ChannelSource?.errors">
+                      <ng-container *ngIf="fbl?.ChannelSource.errors?.required">
+                        {{labelName?.ChannelSource}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row" *ngIf="formBlackList.controls?.Channel.value">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{this.channelvalue}} Id</mat-label>
+                    <input matInput formControlName="Value">
+                    <mat-error *ngIf="fbl?.Value?.errors">
+                      <ng-container *ngIf="fbl?.Value.errors?.required">{{this.channelvalue}} Id is required
+                      </ng-container>
+                      <ng-container *ngIf="fbl?.Value.errors?.checknull">Whitespace not allowed. </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="row" formArrayName="reason">
+                  <div style="display: flex;justify-content: space-evenly;"
+                    *ngFor="let add of reason().controls; let i=index;" [formGroupName]="i">
+                    <div class="col-lg-10 col-md-10 col-sm-10" style="display: flex;justify-content: space-evenly;">
+                      <div class="col-lg-11 col-md-11 col-sm-10">
+                        <mat-form-field appearance="fill">
+                          <mat-label>{{labelName?.BlackListReason}}</mat-label>
+                          <input matInput type="text" formControlName="reason">
+                          <mat-error *ngIf="reason().controls[i].get('reason').hasError('required')">
+                            {{labelName?.BlackListReason}}
+                            is required </mat-error>
+                          <mat-error *ngIf="add.get('reason')?.errors?.cannotContainSpace">Whitespace
+                            not allowed.</mat-error>
+                          <mat-error *ngIf="reason().controls[i].get('reason').hasError('pattern')">
+                            {{labelName?.BlackListReason}}
+                            is invalid </mat-error>
+                        </mat-form-field>
+
+                      </div>
+
+                      <div class="col-lg-1 col-md-1 col-sm-2">
+                        <div *ngIf="reason().controls.length > 1" class="removediv">
+                          <mat-icon (click)="removereason(i)" class="removematbtn">
+                            delete
+                          </mat-icon>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="col-lg-1 col-md-1 col-sm-2">
+                      <div *ngIf="  (this.reason().at(i).value.reason != '' && this.reason().at(i).value.reason != undefined && !reason().errors &&
+                            reason().controls.length < 5 && i+1 == reason().controls.length)"
+                        style="padding: 2px;padding-top: 4px;border: 1px solid #839eb7;border-radius:4px;height: 30px;width: 30px;text-align: center;">
+                        <mat-icon (click)="addreason()" style="float: right;" color="primary">
+                          add_circle </mat-icon>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="reason().errors" class="col-lg-7 col-md-7 col-sm-2">
+                    <mat-error style="font-size: 11px;" *ngIf="reason().errors">
+                      Reason cannot be dublicate
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.StartDate}}</mat-label>
+                    <input readonly formControlName="StartDate" type="text" [min]="todayDate"
+                      [matDatepicker]="StartDate" matInput>
+                    <mat-datepicker-toggle matSuffix [for]="StartDate"></mat-datepicker-toggle>
+                    <mat-datepicker #StartDate></mat-datepicker>
+                  </mat-form-field>
+
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.EndDate}}</mat-label>
+                    <input [disabled]=" !formBlackList.controls?.StartDate.value " formControlName="EndDate" type="text"
+                      [min]="formBlackList.controls?.StartDate.value" [matDatepicker]="EndDate" matInput>
+                    <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>
+                    <mat-datepicker #EndDate></mat-datepicker>
+                    <mat-hint class="mat-error" *ngIf="IsDateGreater">{{labelName?.EndDate}} should be greater than
+                      {{labelName?.StartDate}}</mat-hint>
+                    <mat-error *ngIf="fbl?.EndDate.errors?.matDatepickerMin">{{labelName?.EndDate}} should be greater
+                      than {{labelName?.StartDate}}</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="btn-group">
+              <!-- <button  *ngIf="userConfig?.BlackListCancel" class="btn btn-gray" (click)="closeDialog(false)" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+              <button *ngIf="!reset  && userConfig?.BlackListReset" class="btn btn-gray" mat-flat-button
+                (click)="blackListReset()" type="Reset">{{labelName?.Reset}}</button>
+              <button *ngIf="!reset  && userConfig?.BlackListSaveAddNew" class="btn outline" mat-stroked-button
+                color="primary"
+                (click)="submitBlackList('saveAndAddNew', formDirective3)">{{labelName?.SaveAddNew}}</button>
+              <button *ngIf="reset ? userConfig?.BlackListUpdate :  userConfig?.BlackListSave" class="btn"
+                mat-flat-button color="primary" (click)="submitBlackList('add', formDirective3)" type="button">{{reset ?
+                labelName?.Update : labelName?.Save}}</button>
+            </div>
+
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="moduleName == 'BlockContent'">
+    <!-- {{contentType}} -->
+    <div class="inner-container">
+      <div class="wrapper">
+        <form [formGroup]="formBlockContent" #formDirective4="ngForm">
+          <div class="row ">
+            <div class="col-1 text-center backarrow ">
+              <!-- <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon> -->
+            </div>
+            <div class="col-lg-7 col-md-7 col-10 pl-0">
+              <legend *ngIf="typevisible === false" class="size">Add</legend>
+              <div class="formGroup mt-3">
+                <div class="row" *ngIf="typevisible === false">
+                  <mat-radio-group formControlName="type">
+                    <mat-radio-button style="font-size: 14px; font-family: Nunito Sans, Regular;"
+                      value="Customer Content Analyzer">{{labelName?.CustomerContentAnalyzer}}</mat-radio-button>
+                    <mat-radio-button style="font-size: 14px; font-family: Nunito Sans, Regular;"
+                      value="Block Content">{{labelName?.BlockContent}}</mat-radio-button>
+                    <mat-radio-button style="font-size: 14px; font-family: Nunito Sans, Regular;"
+                      value="Both">{{labelName?.Both}}</mat-radio-button>
+                  </mat-radio-group>
+                  <mat-hint class="errorMsg"
+                    *ngIf="fBC?.type?.touched && fBC?.type?.errors?.required">{{labelName?.Type}} is required</mat-hint>
+
+                </div>
+                <div class="row"></div>
+                <div class="row" *ngIf="typevisible === false">
+                  <div class="col-lg-6 col-md-6 col-12">
+                    <mat-form-field appearance="fill">
+                      <input matInput placeholder="Type here" formControlName="blockcontent">
+                      <mat-error *ngIf="fBC.blockcontent.errors">
+                        <ng-container *ngIf="fBC.blockcontent.errors.required">Cannot be blank.
+                        </ng-container>
+                        <ng-container *ngIf="fBC.blockcontent?.errors?.checknull">Whitespace not allowed.
+                        </ng-container>
+                        <ng-container *ngIf="fBC.blockcontent?.errors?.pattern">Only alphabets are accepted.
+                        </ng-container>
+                        <ng-container *ngIf="fBC.blockcontent?.errors.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                      </mat-error>
+
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-gray" (click)="back()"   mat-flat-button type="Reset">{{labelName?.Cancel}}</button>
+                <button *ngIf="Id && userConfig?.Update" class="btn" mat-flat-button color="primary"
+                  (click)="submit('add',formDirective4)" type="button">{{labelName?.Update}}</button>
+                <button *ngIf="!Id && userConfig?.Save" class="btn" mat-flat-button color="primary"
+                  (click)="submit('saveAndAddNew',formDirective4)" type="button">Add</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </ng-container>
+  <ng-container *ngIf="moduleName ==  'ContentAnalyser' || moduleName == 'agentBlockContent'">
+    <div class="inner-container">
+      <div class="wrapper">
+        <form [formGroup]="formBlockContent" #formDirective4="ngForm">
+
+          <legend *ngIf="typevisible === true && contentType == 'Block Content'" class="size"> {{labelName?.BlockContent}} </legend>
+          <legend *ngIf="typevisible === true && contentType == 'Customer Content Analyzer'" class="size"> {{labelName?.CustomerContentAnalyzer}} </legend>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-12">
+              <mat-form-field appearance="fill">
+                <mat-label>{{contentType}}
+                </mat-label>
+                <input matInput formControlName="blockcontent">
+                <mat-error *ngIf="fBC.blockcontent.errors">
+                  <ng-container *ngIf="fBC.blockcontent.errors.required">{{contentType}} is required.
+                  </ng-container>
+                  <ng-container *ngIf="fBC.blockcontent?.errors?.checknull">Whitespace not allowed.
+                  </ng-container>
+                  <ng-container *ngIf="fBC.blockcontent?.errors?.pattern">{{contentType}} is invalid.
+                  </ng-container>
+                  <ng-container *ngIf="fBC.blockcontent?.errors.checknull1">
+                    Must be at least 3 characters long.
+                  </ng-container>
+                </mat-error>
+
+              </mat-form-field>
+            </div>
+            <div class=" btn-group">
+              <button type="button" class="btn" mat-flat-button color="primary" (click)="submit('saveAndAddNew',formDirective4)">Add</button></div>
+
+          </div>
+        <div class="formGroup">
+          <div class="row" *ngIf="typevisible === true && contentType == 'Block Content'">
+            <mat-chip-list #chipList aria-label="Video keywords" multiple s>
+              <mat-chip *ngFor="let keyword of agentblockdata" [selected]="keyword"
+                [value]="keyword" (removed)="removeBlockContent(keyword)">
+                {{keyword.Content}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </mat-chip-list>
+
+          </div>
+          <div class="row" *ngIf="typevisible === true && contentType == 'Customer Content Analyzer'">
+            <mat-chip-list #chipList aria-label="Video keywords" multiple s>
+              <mat-chip *ngFor="let keyword of agentanalyzerdata" [selected]="keyword"
+                [value]="keyword" (removed)="removecontentAnalyser(keyword)">
+                {{keyword.Content}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </mat-chip-list>
+
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+</div>

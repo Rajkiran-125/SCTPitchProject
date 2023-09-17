@@ -1,0 +1,168 @@
+<div class="wrapper">
+  <div class="row">
+    <div class="col-4">
+      <div class="left-panel">
+        <div class="d-flex justify-content-between align-item-center">
+          <div class="header">
+            Canned Message
+          </div>
+          <div class="header-icons">
+            <mat-icon class="add_icon">add</mat-icon>
+            <span class="icon-Menu_Icon ml-4"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-8">
+      <div class="main-panel">
+        <div class="wrapper">
+          <form [formGroup]="form">
+            <div class="formGroup">
+              <legend class="master_heading d-none d-md-block">Add New Canned Message</legend>
+              <!-- <legend class="master_heading d-none d-md-block">{{changeModuleDisplayName}}</legend> -->
+              <div class="row" style="padding:0!important;margin:0!important;">
+                <div class="col-lg-4 col-md-4 col-sm-12 pl-0">
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Collection name</mat-label>
+                    <input matInput>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 pl-0">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.Channel}} </mat-label>
+                    <mat-select (selectionChange)="selectedChannel($event.value)" [(value)]="ChannelName">
+                      <mat-select-trigger>
+                        <ng-container *ngFor="let data2 of userChannelName">
+                          <span *ngIf="data2?.ChannelId == ChannelName" [innerHtml]="data2?.ChannelIcon"></span>
+                          <span *ngIf="data2?.ChannelId == ChannelName" [innerHtml]="data2?.ChannelName"></span>
+                        </ng-container>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let data of userChannelName" [value]="data.ChannelId"><span
+                          [innerHtml]="data.ChannelIcon"></span>{{data.ChannelName}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 mob-pad0">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.Language}}</mat-label>
+                    <mat-select (selectionChange)="selectedLanguage($event.value)" [(value)]="language">
+                      <mat-option *ngFor="let data of userLanguageName" [value]="data.id">{{data.language}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 pl-0">
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Article name</mat-label>
+                    <input matInput>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 pl-0">
+                  <div [ngxSummernote]="configs" formControlName="description"></div>
+                </div>
+                <div class="col-12 pl-0 mt-4">
+                  <legend>Tags</legend>
+                  <div class="d-flex align-items-baseline">
+                    <button class="btn outline saveAndAddNew btnwidth ml-2 mr-4" mat-stroked-button
+                      color="primary">Add</button>
+                    <mat-form-field class="example-chip-list chips-input" appearance="legacy">
+                      <mat-chip-list #chipList aria-label="Fruit selection">
+                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
+                          {{fruit.name}}
+                          <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                          </button>
+                        </mat-chip>
+                        <input [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+                      </mat-chip-list>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="btn-group mt-4">
+                  <button class="btn btn-gray" mat-flat-button
+                    type="Reset">Cancel</button>
+                  <button class="btn" mat-flat-button
+                    color="primary" type="submit">Add</button>
+                </div>
+                <!-- <div class="col-12 mob-pad0 marleft pl-0 mt-4" *ngIf="gettreeList.length==0">
+                    <div class="noCategoryFound ">No Record Found</div>
+                  </div> -->
+              </div>
+            </div>
+          </form>
+          <div class="row" *ngIf="IsChildAvail">
+            <div class="col-lg-9 col-md-9 col-sm-12 right-panel">
+              <div>
+                <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree">
+                  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                    <div style="width:100%;"
+                      [ngStyle]="{'border' : !node.ParentId ? '1px solid var(--gray_color_80)':'' ,'border-radius': !node.ParentId ? '10px':'','padding-top' : !node.ParentId ? '7px':'0px' ,'margin-top' : !node.ParentId ? '10px':'auto' ,'padding' : node?.Children ? '12px 10px' : ''  }">
+                      <li class="mat-tree-node borderMain">
+                        <span style="position:fixed;" #spanTrigger class="context-menu-trigger"
+                          #matTrigger="matMenuTrigger" [matMenuTriggerFor]="contextMenuOne"></span>
+                        <div (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" class="mat-tree-border"
+                          style="width:100%;display:flex;justify-content: space-between;align-items:center;height:auto;text-indent:60px;border-bottom : 0px solid rgb(204, 203, 203);border-radius: 10px;cursor: pointer; word-break: break-all;">
+                          <span style="flex: 1;  "
+                            [ngStyle]="{'padding-left' : !node.ParentId ? '0px':'40px', 'font-family' : !node.ParentId ? 'Nunito Sans,Bold':'Nunito Sans, Regular', 'font-weight' : !node.ParentId ? '1000':'normal'  }">
+                            <img *ngIf="!node.ParentId" style="padding-right: 5px;"
+                              src="assets/images/icons/CannedMessage.png" />
+                            {{node.Name}}</span>
+                          <mat-menu #contextMenuOne="matMenu">
+                            <app-add-node (addedNode)="addChildNode($event)" [isTop]="false" [currentNode]="node">
+                            </app-add-node>
+                            <app-edit-node (edittedNode)="editNode($event)" [currentNode]="node"></app-edit-node>
+                            <app-delete-node (deletedNode)="deleteNode($event)" [currentNode]="node"></app-delete-node>
+                          </mat-menu>
+                        </div>
+                      </li>
+                    </div>
+                  </mat-tree-node>
+                  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild">
+                    <div class="mat-tree-node"
+                      [style.backgroundColor]="!nestedTreeControl.isExpanded(node) ? '#f8f8f8' : 'white'" [ngStyle]="{'margin-top' : node.ParentId > 0 ? '0px':'10px','border' : node.ParentId > 0 ? '1px solid var(--gray_color_80)':'1px solid var(--gray_color_80)'
+              ,'border-radius' : node.ParentId > 0 ? '8px':'10px','padding' : node.ParentId > 0 ? '12px 10px 12px 10px':'12px 10px 12px 10px','padding-left' : node.ParentId > 0 ? '25px':'25px'
+              ,'height' : node.ParentId > 0 ? '50px':'auto'  }">
+                      <li class="mat-tree-node borderMain">
+                        <span style="position:fixed;" #spanTrigger class="context-menu-trigger"
+                          #matTrigger="matMenuTrigger" [matMenuTriggerFor]="contextMenuOne"></span>
+                        <div (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" class="mat-tree-border"
+                          style="width:100%;display:flex;justify-content: space-between;align-items:center;height:auto;cursor: pointer;">
+                          <span style="flex: 1;    font-family: Nunito Sans, Bold;"
+                            [ngStyle]="{'font-weight' : node.ParentId > 0 ? 'normal':'1000'}">
+                            <img *ngIf="!node.ParentId" style="padding-right: 5px;"
+                              src="assets/images/icons/CannedMessage.png" />
+                            {{node.Name}}</span>
+                          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.MessageName">
+                            <mat-icon class="mat-icon-rtl-mirror">
+                              {{nestedTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                            </mat-icon>
+                          </button>
+                          <mat-menu #contextMenuOne="matMenu">
+                            <span mat-menu-item>
+                              <app-add-node (addedNode)="addChildNode($event)" [isTop]="false" [currentNode]="node">
+                              </app-add-node>
+                            </span>
+                            <span mat-menu-item>
+                              <app-edit-node (edittedNode)="editNode($event)" [currentNode]="node"></app-edit-node>
+                            </span>
+                          </mat-menu>
+                        </div>
+                      </li>
+                    </div>
+                    <!-- node{{node|json}} -->
+                    <div [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)"
+                      [ngStyle]="{'border-radius' : node.ParentId > 0 ? '5px':'5px' }" style="background: #f8f8f8;"
+                      role="group">
+                      <ng-container matTreeNodeOutlet></ng-container>
+                    </div>
+                  </mat-nested-tree-node>
+                </mat-tree>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

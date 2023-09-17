@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="119" viewBox="0 0 80 119">
+  <g id="Group_12227" data-name="Group 12227" transform="translate(-1264 -428)">
+    <g id="Rectangle_2641" data-name="Rectangle 2641" transform="translate(1264 428)" fill="#fff" stroke="#eaeaea" stroke-width="1">
+      <rect width="80" height="119" rx="5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="79" height="118" rx="4.5" fill="none"/>
+    </g>
+    <path id="Rectangle_2646" data-name="Rectangle 2646" d="M4,0H74a4,4,0,0,1,4,4V20a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V4A4,4,0,0,1,4,0Z" transform="translate(1265 429)" fill="#053c6d" opacity="0.11"/>
+    <g id="Group_12229" data-name="Group 12229" transform="translate(1272 431.5)">
+      <line id="Line_51" data-name="Line 51" x2="22" transform="translate(0.5 7.5)" fill="none" stroke="#053c6d" stroke-width="4"/>
+    </g>
+    <g id="Group_12300" data-name="Group 12300" transform="translate(0 -4)">
+      <rect id="Rectangle_2643" data-name="Rectangle 2643" width="64" height="2" transform="translate(1272 468)" fill="#eaeaea"/>
+      <g id="Group_12299" data-name="Group 12299" transform="translate(-5.5 -2)">
+        <line id="Line_52" data-name="Line 52" x2="12" transform="translate(1277.5 462)" fill="none" stroke="#b4b4b4" stroke-width="1"/>
+        <line id="Line_53" data-name="Line 53" x2="41" transform="translate(1277.5 466)" fill="none" stroke="#707070" stroke-width="1"/>
+      </g>
+    </g>
+    <g id="Group_12303" data-name="Group 12303" transform="translate(0 66)">
+      <rect id="Rectangle_2643-2" data-name="Rectangle 2643" width="30" height="15" rx="2" transform="translate(1272 456)" fill="#053c6d"/>
+      <g id="Group_12299-2" data-name="Group 12299" transform="translate(1278.662 464)">
+        <line id="Line_53-2" data-name="Line 53" x2="16" transform="translate(0.338)" fill="none" stroke="#fff" stroke-width="2"/>
+      </g>
+    </g>
+    <g id="Group_12307" data-name="Group 12307" transform="translate(0 18)">
+      <rect id="Rectangle_2643-3" data-name="Rectangle 2643" width="64" height="2" transform="translate(1272 468)" fill="#eaeaea"/>
+      <g id="Group_12299-3" data-name="Group 12299" transform="translate(-5.5 -2)">
+        <line id="Line_52-2" data-name="Line 52" x2="12" transform="translate(1277.5 462)" fill="none" stroke="#b4b4b4" stroke-width="1"/>
+        <line id="Line_53-3" data-name="Line 53" x2="41" transform="translate(1277.5 466)" fill="none" stroke="#707070" stroke-width="1"/>
+      </g>
+    </g>
+    <g id="Group_12308" data-name="Group 12308" transform="translate(0 40)">
+      <rect id="Rectangle_2643-4" data-name="Rectangle 2643" width="64" height="2" transform="translate(1272 468)" fill="#eaeaea"/>
+      <g id="Group_12299-4" data-name="Group 12299" transform="translate(-5.5 -2)">
+        <line id="Line_52-3" data-name="Line 52" x2="12" transform="translate(1277.5 462)" fill="none" stroke="#b4b4b4" stroke-width="1"/>
+        <line id="Line_53-4" data-name="Line 53" x2="41" transform="translate(1277.5 466)" fill="none" stroke="#707070" stroke-width="1"/>
+      </g>
+    </g>
+  </g>
+</svg>

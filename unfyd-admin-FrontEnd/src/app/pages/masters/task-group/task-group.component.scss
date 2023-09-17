@@ -1,0 +1,70 @@
+.taskGroup{
+
+  .orderBy{
+    font-size: var(--content_title);
+    color: var(--gray_color_50);
+  }
+  .toggleLabel{
+    font-size: var(--content_title);
+    font-weight: bold;
+  }
+  .expansionPanelBorder{
+    border: 1px solid var(--gray_color);
+    background-color: var(--backgroud_color);
+    border-radius: 10px;
+
+    .example-right-align {
+      text-align: right;
+    }
+
+    .toggleButtonBlockContent{
+      mat-button-toggle{
+        height: 36px;
+        display: flex;
+        align-items: center;
+      }
+    }
+    .addFormControl {
+      background-color: var(--white_color);
+      // border-radius: 5px !important;
+      color: var(--primary_color);
+      box-shadow: none;
+      border: 1px solid var(--primary_color);
+      font-weight: bold;
+    }
+
+    input.example-right-align::-webkit-outer-spin-button,
+    input.example-right-align::-webkit-inner-spin-button {
+      display: none;
+    }
+
+    input.example-right-align {
+      -moz-appearance: textfield;
+    }
+
+    .inputText {
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+
+      .mat-form-field-infix{
+        border-right: 1px solid var(--gray_color) !important;
+      }
+    }
+
+    .backgroundWhite{
+      border: 1px solid var(--gray_color);
+      background-color: var(--white_color);
+      border-radius: 10px;
+
+      .borderBottom{
+        border-bottom: 1px solid var(--gray_color);
+      }
+    }
+  }
+}
+.timeinput{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

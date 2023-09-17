@@ -1,0 +1,76 @@
+.post-chip{
+    background-color: #36BC9B
+  }
+  .get-chip{
+    background-color: orange
+  }
+  .put-chip{
+    background-color: red
+  }
+  .dwnld{
+    color: grey;
+  }
+  .noCategoryFound{
+    background-color: var(--backgroud_color);
+      color: #212121;
+      padding: 8px 16px;
+      color: var(--black_color_80);
+      font-weight: bold;
+      white-space: nowrap;
+      font-size: 14px;
+      font-size: var(--medium-font);
+      border: 1px solid #e5e5e5;
+      border-radius: 5px;
+  }
+  
+  .mat-expanded .mat-expansion-panel-header-title .material-icons{
+    transform: rotate(180deg);
+  }
+  
+  .mat-expansion-panel-header-title .open,
+  .mat-expanded .mat-expansion-panel-header-title .close{
+    display: inline-block;
+  }
+  .mat-expanded .mat-expansion-panel-header-title .open,
+  .mat-expansion-panel-header-title .close{
+    display: none;
+  }
+  
+  
+  .CardApi{
+    margin-bottom: 1px;
+  
+  }
+  
+  ::ng-deep {
+  .tabbody{
+     .mat-tab-body-content {
+    height: 100%;
+    overflow: hidden;
+  }
+  }
+  }
+  
+  .fontfam{
+    font-family: Nunito Sans, Regular;
+  }
+  
+  .ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .iconsize{
+    color: #b4b4b4;
+  .mat-icon{
+    font-size: 10px !important;
+  }
+  .material-icons {
+    font-size: 10px !important;
+  }
+  }
+  
+  .catfont{
+    font-family: Nunito Sans, Regular;
+  }

@@ -1,0 +1,178 @@
+<div class="hawkerInfo">
+    <ul>
+        <li><span>Name - {{hawkerDetails.hawkerfirstname + ' ' + hawkerDetails.hawkermiddlename + ' ' +
+                hawkerDetails.hawkerlastname}}</span></li>
+        <li><span *ngIf="hawkerDetails.mobileNo">Mobile No. - {{hawkerDetails.mobileNo}}</span>
+            <span *ngIf="hawkerDetails.contactid">Application No. - {{hawkerDetails.contactid}}</span>
+            <span *ngIf="hawkerDetails.registation">Registration No. - {{hawkerDetails.registation}}</span></li>
+    </ul>
+    <mat-icon *ngIf="hawkerDetails.display" (click)="close()">close</mat-icon>
+
+</div>
+<div class="component-grid">
+    <div class="column" *ngIf="userConfig?.Payment && hawkerDetails.RegistrationStatus !== 'Blacklisted'">
+        <div class="summary">
+            <h3>Summary</h3>
+            <form [formGroup]="form">
+                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.feeType.errors }">
+                    <mat-label>Fee Type</mat-label>
+                    <mat-chip-list #feeType>
+                        <mat-chip *ngFor="let data of fees" (removed)="removeFeeType(data)">
+                            {{data}}
+                            <span matChipRemove *ngIf="!chipDisable">x</span>
+                        </mat-chip>
+                     
+                        <input #feeInput formControlName="feeType" [matAutocomplete]="auto" [matChipInputFor]="feeType"
+                            [disabled]="chipDisable">
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedFeeType($event)">
+                        <mat-option *ngFor="let data of filteredFeeType | async" [value]="data">
+                            {{data}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="submittedForm && f.feeType.errors">
+                        <ng-container *ngIf="f.feeType.errors.required">Fee type is required
+                        </ng-container>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field *ngIf="paymentPanel" appearance="fill"
+                    [ngClass]="{ 'shake': submittedForm && f.paymentType.errors }">
+                    <mat-label>Payment Type</mat-label>
+                    <mat-select formControlName="paymentType" (selectionChange)="changePaymentType($event.value)"
+                       >
+                        <mat-option *ngFor="let data of paymentDropdown;" [value]="data.PaymentType">
+                            {{data.PaymentType}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="submittedForm && f.paymentType.errors">
+                        <ng-container *ngIf="f.paymentType.errors.required">Payment type is required
+                        </ng-container>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field *ngIf="dueForPanel" appearance="fill">
+                    <mat-label>Due For</mat-label>
+                    <mat-select formControlName="dueFor">
+                        <mat-option *ngFor="let data of month;" [value]="data">
+                            {{data}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="summary-info" *ngIf="feeStructure.length>0">
+                    <ng-container *ngIf="tabValue.length==0">
+                        <ul *ngFor="let data of feeStructure">
+                            <ng-container *ngFor="let subData of data | keyvalue : keepOrder">
+                                <li
+                                    [ngClass]="subData.key == 'Amount Payable' ? 'bold' : subData.key == 'Total Amount' ? 'span' : ''">
+                                    <span>{{subData.key}}{{subData.key == 'CGST@' || subData.key == 'SGST@' ?
+                                        gstPercent+'%' :
+                                        ''}}
+                                    </span>
+                               
+                                    <span>
+                                        {{subData.value}}
+                                    </span>
+                                </li>
+                            </ng-container>
+                        </ul>
+                    </ng-container>
+                    <ng-container *ngIf="tabValue.length>0">
+                        <ul>
+                            <li *ngFor="let data of feeStructure">
+                                <span>{{data['Fee Type']}}
+                                </span>
+                                <span>
+                                    {{'₹' + data['Fee Amount']}}
+                                </span>
+                            </li>
+                            <ng-container *ngIf="tabValue.length==1">
+                                <li><span>CGST@{{gstPercent+'%'}}</span><span>{{'₹'+gstAmount}}</span></li>
+                                <li><span>SGST@{{gstPercent+'%'}}</span><span>{{'₹'+gstAmount}}</span></li>
+                            </ng-container>
+                        </ul>
+                        <ul>
+                            <li class="span"><span>Total Amount</span><span>{{'₹'+totalAmt}}</span></li>
+                            <li *ngIf="tabValue.length==1"><span>Advance Fee</span><span>{{'-₹'+advanceFee}}</span></li>
+                            <li *ngIf="discount !== 0"><span>Discount</span><span>{{'-₹'+discount}}</span></li>
+                            <li *ngIf="penalty !== 0"><span>Penalty</span><span>{{'+₹'+penalty}}</span></li>
+                            <li *ngIf="reactivation !== 0"><span>Reactivation Fee</span><span>{{'+₹'+reactivation}}</span></li>
+                            <ng-container *ngIf="tabValue.length>1">
+                                <li><span>CGST@{{gstPercent+'%'}}</span><span>{{'₹'+gstAmount}}</span></li>
+                                <li><span>SGST@{{gstPercent+'%'}}</span><span>{{'₹'+gstAmount}}</span></li>
+                            </ng-container>
+                        </ul>
+                        <ul>
+                            <li class="bold"><span>Amount Payable</span><span>{{'₹'+ amtPayable}}</span></li>
+                        </ul>
+                    </ng-container>
+                </div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Payment Mode</mat-label>
+                    <mat-select formControlName="paymentMode" (selectionChange)="changePaymentMode($event.value)"
+                       >
+                        <mat-option *ngFor="let data of masterConfig?.paymentMode" [value]="data.Key">
+                            {{data.Key}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                
+                
+                <mat-form-field appearance="fill"  *ngIf="referencePanel">
+                    <mat-label>Reference Number</mat-label>
+                    <input type="text" matInput formControlName="referenceNo">
+                </mat-form-field>
+                
+                <div *ngIf="referencePanel" style="margin: 10px;margin-top: 0; margin-bottom: 20px;">
+                 
+                    <mat-checkbox color="primary" (change)="uploadDocument($event.checked, paymentDocument, 'Payment Reference')" style="vertical-align: text-bottom;">
+                    </mat-checkbox>
+                    <mat-label>Payment Reference Document</mat-label>
+                </div>
+               
+                <mat-form-field appearance="fill">
+                    <mat-label>Received By</mat-label>
+                    <input type="text" matInput formControlName="receivedBy" readonly>
+                </mat-form-field>
+                <div class="btn-group">
+                    <button class="btn btn-block" mat-flat-button color="primary" (click)="submit()" type="submit">Save & Print</button>
+                </div>
+               
+            </form>
+
+        </div>
+    </div>
+    <div class="column">
+        <app-filter *ngIf="tabValue.length>0" component="payment" [role]="userDetails.role" [totalCount]="tabValue.length" [type]="'beneficiary'" [tabValue]="tabValue"></app-filter>
+
+        <div class="dataTable">
+            <table>
+                <thead>
+                    <tr *ngIf="tabValue.length>0">
+                        <ng-container *ngFor="let data of tabKey; let i = index">
+                            <th class="column{{i}}" *ngIf="data !== 'Actionable'">{{data}}</th>
+                        </ng-container>
+                    </tr>                    
+                    <tr *ngIf="noData">
+                        <th>No Payment History</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="tabValue.length>0">
+                    <tr *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                        <ng-container *ngFor="let val of tabKey; let i = index">
+                            <td *ngIf="val == 'Sr No'" class="column{{i}}"><span>{{j+1}}</span></td>
+                            <td *ngIf="val == 'Print'" class="column{{i}}">
+                                <mat-icon (click)="print(data)">print</mat-icon>
+                            </td>
+                        
+                            <td *ngIf="val !== 'Actionable' && val !== 'Print'" class="column{{i}}">
+                                <span [innerHtml]="data[tabKey[i]]" [ngClass]="data[tabKey[i]] == 'Paid' ? 'success' : ''"></span>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination" *ngIf="tabValue.length>10">
+            <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+        </div>
+    </div>
+</div>

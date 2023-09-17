@@ -1,0 +1,102 @@
+ <!-- <div class="tile" [ngStyle]="{'background-color': common.color[tile.backgroundColor] ? common.color[tile.backgroundColor] : '#4B89DC'}">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-12">
+      <div class="text-left mainPlaceHolderValue" *ngIf="tile.mainPlaceHolder" style="margin: 5px 0px;">
+        <span class="mainPlaceHolderHeaderTitle">{{tile.mainPlaceHolderHeader ? tile.mainPlaceHolderHeader : 'Main Place Holder'}}</span>
+        <span *ngIf="tile.mainPlaceHolderApi" >{{mainPlaceholderData}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center align-items-center">
+    <div class="alignCenter my-2" [ngClass]="tile?.subPlaceHolder3SelectedValue == 'time' ? 'col-7' : 'col-8'">
+      <div class="cursorPointer"
+      [ngClass]="(tile.api && tile.apiRequest) ? 'cursorPointer' : 'pointerEventNone'"
+      (click)="openDrillDown(1)">
+        <span class="text-left displayValue1" >{{common.roundNumberTilltwoPosition(mainPlaceholderData,'tile')}}</span>
+      </div>
+    </div>
+    <div class="alignCenter my-2" [ngClass]="tile?.subPlaceHolder3SelectedValue == 'time' ? 'col-5' : 'col-4'">
+      <div class="" *ngIf="tile?.subPlaceHolder3SelectedValue && tile.subPlaceHolder3">
+        <ng-container *ngIf="tile?.subPlaceHolder3SelectedValue == 'lineChart'">
+          <div echarts [options]="options1" [ngClass]="fullscreen ? 'lineChart1': tile?.subPlaceHolder2 ? 'lineChart' : 'lineChart1' " style="height: 40px; width: 45px;"></div>
+        </ng-container>
+        <ng-container *ngIf="tile?.subPlaceHolder3SelectedValue == 'gaugeChart'">
+          <div echarts [options]="options1" [ngClass]="fullscreen ? 'lineChart1': tile?.subPlaceHolder2 ? 'lineChart' : 'lineChart1' " style="height: 40px; width: 45px;"></div>
+        </ng-container>
+        <ng-container *ngIf="tile?.subPlaceHolder3SelectedValue == 'time'" >
+          <div class="imgInside" style="height: 40px; width: 45px;">
+            <span class="dullYellowBackground">
+              {{queueTimeValue}}
+            </span>
+          </div>
+        </ng-container>
+      </div>
+  </div>
+  <div class="col-12 d-flex">
+      <div *ngIf="tile.subPlaceHolder1" [ngClass]="(tile.subPlaceHolder1Api && tile.subPlaceHolder1Request) ? 'cursorPointer' : 'pointerEventNone'"  (click)="openDrillDown(2)">
+        <span class="subPlaceHolderHeaderText">{{tile.subPlaceHolder1Header ? tile.subPlaceHolder1Header : 'Sub Place Holder 1'}}</span>
+        <span class="subPlaceHolderHeaderText">-{{subPlaceholder1Data}}</span>
+      </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <div class="cursorPointer" *ngIf="tile.subPlaceHolder2"
+      [ngClass]="(tile.subPlaceHolder2Api && tile.subPlaceHolder2Request) ? 'cursorPointer' : 'pointerEventNone'" (click)="openDrillDown(3)">
+        <span class="subPlaceHolderHeaderText">{{tile.subPlaceHolder2Header ? tile.subPlaceHolder2Header : 'Sub Place Holder 2'}}</span>
+        <span class="subPlaceHolderHeaderText">-{{subPlaceholder2Data}}</span>
+      </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+      <div class="chart" *ngIf="!tile.subPlaceHolder3SelectedValue && tile.subPlaceHolder3">
+        <span class="subPlaceHolderHeaderText text-center">{{tile.subPlaceHolder3Header ? tile.subPlaceHolder3Header : 'Sub Place Holder 3'}}</span>
+      </div>
+  </div>
+  </div>
+</div> -->
+
+
+ <div class="tile" [ngStyle]="{'background-color': common.color[tile.backgroundColor] ? common.color[tile.backgroundColor] : '#4B89DC'}">
+  <div class="row">
+    <!-- <div class="col-12">
+      <div class="text-left mainPlaceHolderValue" *ngIf="tile.mainPlaceHolder">
+        <span class="mainPlaceHolderHeaderTitle" style="font-size: 12px;">{{tile.mainPlaceHolderHeader ? tile.mainPlaceHolderHeader : 'Main Place Holder'}}</span>
+        <span *ngIf="tile.mainPlaceHolderApi" >{{mainPlaceholderData}}</span>
+      </div>
+    </div> -->
+    <div class="col-6 pr-0 leftSideOfCard">
+      <div class="text-left mainPlaceHolderValue" *ngIf="tile.mainPlaceHolder">
+        <span class="mainPlaceHolderHeaderTitle">{{tile.mainPlaceHolderHeader ? tile.mainPlaceHolderHeader : 'Main Place Holder'}}</span>
+        <span *ngIf="tile.mainPlaceHolderApi" >{{mainPlaceholderData}}</span>
+      </div>
+      <div class="cursorPointer displayValue1"
+      [ngClass]="(tile.api && tile.apiRequest) ? 'cursorPointer' : 'pointerEventNone'"
+      (click)="openDrillDown(1)">
+        <span class="text-left">{{common.roundNumberTilltwoPosition(mainPlaceholderData,'tile')}}</span>
+      </div>
+      <div class="text-left placeHolder" *ngIf="tile.subPlaceHolder1" [ngClass]="(tile.subPlaceHolder1Api && tile.subPlaceHolder1Request) ? 'cursorPointer' : 'pointerEventNone'"  (click)="openDrillDown(2)">
+        <span class="">{{tile.subPlaceHolder1Header ? tile.subPlaceHolder1Header : 'Sub Place Holder 1'}}</span>
+        <span>-{{subPlaceholder1Data}}</span>
+      </div>
+    </div>
+    <div class="col-6 pl-0 rightSide" [ngClass]="(tile?.subPlaceHolder3SelectedValue == 'time' || !tile.subPlaceHolder2 ) ? 'align-items-center':''" >
+        <div class="chart" *ngIf="!tile.subPlaceHolder3SelectedValue && tile.subPlaceHolder3">
+          <span class="subPlaceholder3 text-center">{{tile.subPlaceHolder3Header ? tile.subPlaceHolder3Header : 'Sub Place Holder 3'}}</span>
+        </div>
+        <div class="displayChart" *ngIf="tile?.subPlaceHolder3SelectedValue && tile.subPlaceHolder3">
+          <ng-container *ngIf="tile?.subPlaceHolder3SelectedValue == 'lineChart'">
+            <div echarts [options]="options1" [ngClass]="fullscreen ? 'lineChart1': tile?.subPlaceHolder2 ? 'lineChart' : 'lineChart1' "></div>
+          </ng-container>
+          <ng-container *ngIf="tile?.subPlaceHolder3SelectedValue == 'gaugeChart'">
+            <div echarts [options]="options1" [ngClass]="fullscreen ? 'lineChart1': tile?.subPlaceHolder2 ? 'lineChart' : 'lineChart1' "></div>
+          </ng-container>
+          <ng-container *ngIf="tile?.subPlaceHolder3SelectedValue == 'time'">
+            <div class="imgInside">
+              <span class="dullYellowBackground">
+                {{queueTimeValue}}
+              </span>
+            </div>
+          </ng-container>
+        </div>
+        <div class="text-right mt-2 subPlaceholder2 cursorPointer" *ngIf="tile.subPlaceHolder2"
+        [ngClass]="(tile.subPlaceHolder2Api && tile.subPlaceHolder2Request) ? 'cursorPointer' : 'pointerEventNone'" (click)="openDrillDown(3)">
+          <span class="">{{tile.subPlaceHolder2Header ? tile.subPlaceHolder2Header : 'Sub Place Holder 2'}}</span>
+          <span>-{{subPlaceholder2Data}}</span>
+        </div>
+    </div>
+  </div>
+</div>

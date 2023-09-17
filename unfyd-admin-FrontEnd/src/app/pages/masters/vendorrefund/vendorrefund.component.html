@@ -1,0 +1,122 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <legend>Vendor Refund</legend>
+      <div class="formGroup">
+        <div class="row">
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.VendorCode.errors }">
+              <mat-label>{{labelName?.VendorCode}}</mat-label>             
+              <mat-select formControlName="VendorCode">
+                <mat-option *ngFor="let data of masters.vendorCode" [value]="data">{{data}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="f.VendorCode.errors">
+                <ng-container *ngIf="f.VendorCode.errors.required">Vendor Code is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.VendorName.errors }">
+              <mat-label>{{labelName?.VendorName}}</mat-label>
+              <input matInput formControlName="VendorName" appTitleCase/>
+              <mat-error *ngIf="f.VendorName.errors">
+                <ng-container *ngIf="f.VendorName.errors.required">Vendor Name is required
+                </ng-container>
+                <ng-container *ngIf="f.VendorName.errors.pattern">Vendor Name is invalid
+                </ng-container>
+                <ng-container *ngIf="f.VendorName.errors.pattern">{{masters.MaxLengthMessage1}}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ProductType.errors }">
+              <mat-label>{{labelName?.ProductType}}</mat-label>
+              <mat-select formControlName="ProductType" disableOptionCentering>
+                <mat-option *ngFor="let data of masters.productType" [value]="data">{{data}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="f.ProductType.errors">
+                <ng-container *ngIf="f.ProductType.errors.required">Product Type is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ProductCode.errors }">
+              <mat-label>{{labelName?.ProductCode}}</mat-label>
+              <input matInput formControlName="ProductCode" />
+              <mat-error *ngIf="f.ProductCode.errors">
+                <ng-container *ngIf="f.ProductCode.errors.required">Product Code is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ProductName.errors }">
+              <mat-label>{{labelName?.ProductName}}</mat-label>
+              <input matInput formControlName="ProductName" appTitleCase/>
+              <mat-error *ngIf="f.ProductName.errors">
+                <ng-container *ngIf="f.ProductName.errors.pattern">Product Name is invalid
+                </ng-container>
+                <ng-container *ngIf="f.ProductName.errors.pattern">{{masters.MaxLengthMessage1}}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.POOrderNo}}</mat-label>
+              <input  matInput type="text" formControlName="VendorOrderNumber" />
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.VendorReturnQty}}</mat-label>
+              <input matInput type="text" formControlName="VendorReturnQty" />
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.VendorRefundAmount.errors }">
+              <mat-label>{{labelName?.VendorRefundAmount}}</mat-label>
+              <input matInput type="text" formControlName="VendorRefundAmount" />
+              <mat-error *ngIf="f.VendorRefundAmount.errors">
+                <ng-container *ngIf="f.VendorRefundAmount.errors.pattern">Vendor Refund Amount is invalid
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.RefundStatus}}</mat-label>
+              <input matInput formControlName="VendorRefundStatus" appTitleCase/>
+            </mat-form-field>
+          </div>
+
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+                <mat-label>{{labelName?.VendorRefundDateTime}}</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="VendorRefundDateTime" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="btn-group" *ngIf="config?.Update">
+        <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+        <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+        <button class="btn" mat-flat-button color="primary" type="submit">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

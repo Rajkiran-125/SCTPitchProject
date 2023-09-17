@@ -1,0 +1,58 @@
+<div mat-dialog-content>
+  <div id="mydiv"
+    style="color: #123456;font-size: 20px;margin-bottom: 10px;font-family: Nunito Sans, ExtraBold;display: flex;justify-content: space-between;">
+    <div> <b class="dialog-heading">{{data.Component}} Canned Response</b></div>
+    <div>
+      <mat-icon class="close-btn" mat-icon-button (click)="onNoClick()">close</mat-icon>
+    </div>
+
+
+  </div>
+  <div class="matstylenode" id="messg" class="textareamargin">
+    <!-- <mat-form-field class="placeholderstyleadd1" >    
+    <mat-label>MessageName</mat-label>
+    <input matInput [(ngModel)]="data.MessageName" style="margin-bottom: 10px;font-weight: 500;padding: 1px;" required>
+  </mat-form-field> -->
+    <mat-form-field>
+      <!-- <input matInput placeholder="Message" [(ngModel)]="data.Name" style="margin-bottom: 100px;" required> -->
+      <!-- {{data.Name}} -->
+      <textarea #cvc1="ngModel" matInput [(ngModel)]="data.Name" name="Message" placeholder="Message" rows="10"
+        style="resize:none;font-weight: 500;padding: 1px;" pattern="[\{\}a-zA-Z0-9_]+.*$" required></textarea>
+      <mat-error *ngIf="data.Name == '' || data.Name == undefined">Message is required</mat-error>
+      <!-- <mat-error [hidden]="!cvc1?.errors?.pattern">Whitespace not allowed.</mat-error> -->
+      <mat-error [hidden]="!cvc1?.errors?.pattern">Whitespaced not allowed.</mat-error>
+
+      <mat-hint class="mat-error" style="margin-left: 1px;font-size: 10px;color: #d92e2e;"
+        *ngIf="cvc2.touched && whiteError(data.Name)">Must be at least 3 characters long.</mat-hint>
+
+
+
+    </mat-form-field>
+    <div class="inputmargin">
+      <mat-form-field>
+        <input #cvc2="ngModel" matInput placeholder="Add Key" [(ngModel)]="data.KeyNum"
+          style="margin-bottom: 10px;font-weight: 500;padding: 1px;" pattern="[\{\}a-zA-Z0-9_]+.*$" required>
+        <mat-error *ngIf="data.KeyNum == undefined || data.KeyNum.toString() == ''">Key is required</mat-error>
+        <mat-hint class="mat-error" style="margin-left: 1px;font-size: 10px;color: #d92e2e;"
+          *ngIf="MessageHeaderRequired && !data.KeyNum">Key is required</mat-hint>
+        <!-- <mat-error [hidden]="!cvc2?.errors?.pattern">Whitespace not allowed.</mat-error> -->
+        <mat-error [hidden]="!cvc1?.errors?.pattern">Whitespaced not allowed.</mat-error>
+
+        <mat-hint class="mat-error" style="margin-left: 1px;font-size: 10px;color: #d92e2e;"
+          *ngIf="cvc2.touched && whiteError(data.KeyNum)">Must be at least 3 characters long.</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+
+</div>
+<div class="btnmargin">
+  <button mat-stroked-button (click)="onNoClick()" style="position: relative;right: 15px;">
+    Cancel
+  </button>
+  <button mat-flat-button color="primary" (click)="onAddClick()"
+    style="position: relative;padding-left: 50px; padding-right: 50px;">
+    {{data.Component}}
+    <!-- [disabled]="!(data.Name && data.KeyNum)" -->
+    <!-- [mat-dialog-close]="{nodeName: data.Name, nodeDescription: data.Description,nodeKeyNum : data.KeyNum}"  -->
+  </button>
+</div>

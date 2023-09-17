@@ -1,0 +1,225 @@
+.container{
+  
+    .row1{
+        justify-content: center;
+        margin: 2em 0;
+        .backKey{
+            text-align: end;color: gray;
+        }
+        .billsHeading{
+            font-size: larger;
+        }
+
+        .card{
+            margin: 1em 0 0;
+            background-color: #f2f7fc;
+            color: black;
+            width: 100%;
+            border-radius: 15px 15px 0 0;
+            /* box-shadow: 0px 2px 3px #0000001a; */
+            /* box-shadow: var(--box_shadow); */
+            padding: 18px 29px 18px 29px;
+            box-shadow: 1px 3px -1px #dfdfdf;
+            display: flex;
+            border: solid 1px #036cb7;
+            // flex-direction: inherit !important;
+
+            // justify-content: space-between;
+            // align-items: center;
+
+            hr{
+                color: black;
+            }
+            .width100{
+                width: 100%;
+                .price{
+                    text-align: end;
+                }
+            }
+
+            .outAmt{
+                font-weight: bold;
+                // font-size: large;
+                .blue{
+                    color: #036db7;
+                }
+            }
+            .dueTill{
+
+            }
+            .pay1{
+                display: flex;
+                justify-content: center;
+                .pay{
+                    background-color: #036db7;
+                    color: #fff;
+                    border-color: #ffffff !important;
+                    display: inline-block;
+                    font-weight: 400;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    border: 1px solid transparent;
+                    padding: 0.375rem 0.75rem;
+                    font-size: 1rem;
+                    /* line-height: 1.5; */
+                    border-radius: 0.25rem;
+                    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+                    height: auto !important;
+            }
+            }
+            
+        }
+        .bottomOfCard{
+            border: solid 1px black;
+            width: 100%;
+            border-radius: 0 0 15px 15px;
+            padding: 18px 29px 18px 29px;
+            background-color: #036cb7;
+            color: white;
+            .width100{
+                width: 100%;
+                .price{
+                    text-align: end;
+                }
+            }
+        }
+
+        // .card:hover{
+        //     background-color: #036db7;
+        //     color: #ffffff;
+        //     .outAmt{
+        //         .blue{
+        //             color: #ffffff;
+        //         }
+        //     }
+        //     .pay{
+        //         background-color: #fff !important;
+        //         color: #036db7 !important;
+        //         border-color: #036db7 !important;
+        //     }
+        // }
+     
+        .accordian{
+            .mat-expansion-panel{
+                margin: 1em 0;
+                border-radius: 10px;
+                padding: 10px;
+
+                .mat-panel-description{
+                    span{
+                        font-size: large !important;
+                    }
+                    
+                }
+
+            }
+            .flexGrow0{
+                flex-grow: 0 !important;
+                i{
+                    font-size: x-large;
+                    
+                }
+                .fa-star{
+                    color: #ffce65;
+                    
+                }
+                .fa-credit-card{
+                    color: #036db7;
+                }
+                .fa-building-columns{
+                    color: #978d8d;
+                }
+                .fa-wallet{
+                    color: brown;
+                }
+                .upi{
+                    height: 1em;
+                }
+                
+            }
+
+            .pay0{
+                display: flex;
+                justify-content: center;
+            }
+
+            .pay{
+                color: white;
+                background-color: #036db7;
+                font-weight: 400;
+                padding: 0.2em 2em;
+                border-radius: 5px;
+                border: solid 1px #036db7;     
+            }
+            .content{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                // padding: 0 24px;
+                margin: 0 3em;
+
+                .mat-radio-button {
+                    display: grid;
+                    .cardInfo{
+                        margin: 1em 2em 0;
+                        .col-4{
+                            .cvv{
+                                text-align: center;
+                                width: 3em;
+                                border: solid 1px #bdb9b9;
+                                border-radius: 5px;
+                                background-color: #dfdfdf;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+       
+    }
+}
+
+.textCenter{
+    text-align: center;
+}
+
+mat-accordian{
+   
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.red{
+    color: #db4756;
+}
+
+.yellow{
+    color: #fbb424;
+}
+
+.gray{
+    color: #7d7d7d;
+}
+
+.green{
+    color:#36bc9b
+}
+.blue{
+    color:#036db7
+}

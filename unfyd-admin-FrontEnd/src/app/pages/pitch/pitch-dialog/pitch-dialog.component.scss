@@ -1,0 +1,333 @@
+table{
+  font-size: 11px !important;
+  .card-body tr td button{
+    border: none;
+    background: transparent;
+  }
+  border-collapse: collapse;
+  outline: 1px solid #dee2e6;
+  border-radius: 5px 5px 0px 0px;  
+}
+.details{
+  //font-size: var(--content-title);
+  font-size: 11px !important;
+}
+
+.campainInfo-box ::ng-deep .table td, .table th{
+  padding: 0.3rem !important;
+}
+
+.or-button {
+  position: absolute;
+  top: -20px; /* Adjust this value to position the OR button properly */
+  right: 0; /* Position the button at the right edge of the dialog */
+  background-color: white; /* Set the background color to match the table background */
+  padding: 5px; /* Add padding to the button */
+  border: 1px solid #ccc; /* Add a border to the button */
+  border-radius: 4px; /* Add border radius for rounded corners */
+  z-index: 1; /* Ensure the button appears above the dialog content */
+}
+
+.template-card {
+  border: var(--border);
+  border-radius: 10px;
+  margin: 10px;
+}
+.template-card-header {
+  padding: 10px;
+}
+.template-card-body {
+  margin: 0 -15px;
+  border: none!important;
+  img {
+      width: 100%;
+      height: 200px;
+      outline: 0;
+      border: 0!important;
+  }
+}
+.template-card-footer {
+  padding: 10px;
+  p {
+      margin: 0;
+      padding: 0;
+  }
+}
+.close-btn {
+  // position: fixed;
+  float: right;
+  margin: -1rem;
+
+}
+.dialogContent {
+  text-align: center;
+}
+.icon-thumbs_up {
+  background: rgb(54, 188, 155,0.3);
+  padding: 20px;
+  border-radius: 5px;
+  margin: 10px auto;
+  width: 75px;
+
+  mat-icon{
+      color: #36bc9b;
+  }
+}
+.cardfirstlayer {
+  border: 1px solid #ccc;
+  border-radius: 5px 5px 0px 0px;
+  padding: 8px;
+  margin-right: 10px;
+  width: 100%;
+  background: var(--faintGray);
+}
+
+.cardsecondlayer {
+  border: 1px solid #ccc;
+  height: 100%;
+  width: 100%;
+}
+
+.cardthirdlayer {
+  border: 1px solid #ccc;
+  border-radius: 0px 0px 5px 5px;
+  padding: 8px;
+  background: var(--faintGray);
+  width: 100%;
+}
+
+.cardimg {
+  height: 98px;
+  width: 165px;
+}
+
+.cardvideo {
+  height: 93px;
+}
+
+.carddoc {
+  height: 98px;
+  width: 100;
+  border-radius: 4px;
+
+  margin-left: 50px;
+  margin-right: 40px;
+}
+.add-btn button{
+  position: fixed;
+  width: 8%;
+  background: rgb(0, 71, 138);
+  color: #fff;
+  padding: 0.5rem;
+  border: none;
+//  float: left;
+
+  // text-align: center;
+  // align-items: center;
+  border-radius: 5px;
+  // height: 2rem;
+}
+
+.table-container{
+  border: none;
+  height: max-content;
+}
+.table-container h2{
+  color: rgb(0, 71, 138);
+}
+
+// .audienceListTable{
+//   position: relative;
+// }
+
+:host ::ng-deep app-pitch-table.class1 {
+  .table-container{
+    //border:1px solid red;
+    height:300px;
+    overflow:scroll;
+  } 
+}
+
+.audienceListTitle{
+  color: var(--primary_color);
+  // position: fixed;
+}
+
+
+
+
+
+
+.AudListImg {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+.simple-mode {
+  background-image: url('../../../../assets/images/pitch/simpleMode.png');
+}
+.expert-mode {
+  background-image: url('../../../../assets/images/pitch/expertMode.png');
+}
+.existing-mode {
+  background-image: url('../../../../assets/images/pitch/existing.png');
+}
+.AudListName {
+  font-size: var(--small-font);
+}
+.border-right {
+  border-right: 1px solid #efefef;
+}
+.audienceListDialog {
+  margin: -25px;
+}
+
+
+.image-container {
+  position: relative;
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   /* Set the width of the image container */
+  // margin-right: 17rem;
+}
+.main-image {
+  width: auto;
+  height: 320px;
+}
+.overlay-image {
+  position: absolute;
+  width: 120px !important;
+  height: 120px !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  z-index: 1;
+  /* Other styles for the overlay image */
+}
+.deskTop{
+  top: 25%;
+  left: 50%;
+  width: 100px !important;
+  height: 140px !important;
+}
+.templateView{
+  // border:1px solid red;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  // margin-left: 25px;
+}
+.icon {
+  width: 35%;
+  margin: 0 auto; /* Center the .icon div horizontally */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // position: fixed; /* Center the icons inside the .icon div */
+}
+
+.icon a {
+  display: inline-block;
+  margin: 0px 10px !important;
+  background-color: #fff;
+  border: 1px solid #EAEAEA;
+  padding: 0.25rem;
+  width: 18%;
+  height: 5.9vh;
+  text-align: center; /* Center the content inside the <a> tag */
+  line-height: 1.4; /* Adjust line height for vertical centering */
+  border-radius: 50%;
+  cursor: pointer;
+}
+.icon .active {
+  display: inline-block;
+  margin: 0px 10px !important;
+  background-color: #fff;
+  border: 1px solid #EAEAEA;
+  padding: 0.25rem;
+  width: 22%;
+  height: 7.5vh;
+  text-align: center; /* Center the content inside the <a> tag */
+  line-height: 1.4; /* Adjust line height for vertical centering */
+  border-radius: 50%;
+  cursor: pointer;
+}
+.icon a img{
+  margin-top: 5px;
+}
+.icon .active img{
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  filter: brightness(100);
+  color: #fff;
+}
+
+.icon a:focus {
+  background: #053C6D;
+  outline: none; /* Remove default focus outline */
+}
+.icon a.active {
+  background-color: #053C6D;
+  outline: none; /* Remove default focus outline */
+}
+
+
+.table-row {
+  position: relative;
+}
+
+.action-cell {
+  position: relative;
+  padding: 0;
+}
+
+.square-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color:#EAEAEA;
+  color: #212121;
+  padding: 3px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1; /* Ensure it's above the content */
+}
+
+.content{
+  justify-content: center;
+  text-align: center;
+  margin-top: 2.5rem;
+
+  mat-icon{
+    font-size: 1rem;
+  }
+  p{
+    font-size: 1rem;
+  }
+}
+.delConf{
+  justify-content: center;
+  text-align: center;
+  color: #053C6D;
+  font-weight: bold;
+}
+.delbtn{
+  background: #053C6D;
+  color: #fff;
+}
+
+
+
+

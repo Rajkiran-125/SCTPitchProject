@@ -1,0 +1,152 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4 mt-3">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="(userConfig?.Cancel)" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+            <div class="row ">
+                <div class="col-12">
+                    <span class="d-flex backArrow">
+                        <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+                        <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.ViberAccount}}</legend>
+                    </span>
+
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="viberConfigurationsteps" [moduletype]="'voice-configuration'"
+                                [id]="path" [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                            <div class="row marginXDesktop">
+                                <div class="col-10">
+                                    <div class="form_content">
+
+                                        <div class="row"
+                                            style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin-left: 20px;">
+                                            <div class="col-lg-10 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.SaveIncomingData.errors }">
+                                                    <mat-label>{{labelName?.SaveIncomingData}}</mat-label>
+                                                    <input matInput formControlName="SaveIncomingData">
+                                                    <mat-error *ngIf="f.SaveIncomingData.errors">
+                                                        <ng-container
+                                                            *ngIf="f.SaveIncomingData.errors.required">{{labelName?.SaveIncomingData}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.SaveIncomingData?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.SaveIncomingData?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row"
+                                            style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin-left: 20px;">
+                                            <div class="col-lg-10 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.SaveOutgoingData.errors }">
+                                                    <mat-label>{{labelName?.SaveOutgoingData}}</mat-label>
+                                                    <input matInput formControlName="SaveOutgoingData">
+                                                    <mat-error *ngIf="f.SaveOutgoingData.errors">
+                                                        <ng-container
+                                                            *ngIf="f.SaveOutgoingData.errors.required">{{labelName?.SaveOutgoingData}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.SaveOutgoingData?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.SaveOutgoingData?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row"
+                                            style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin-left: 20px;">
+                                            <div class="col-lg-10 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.CreateCustomerAgentSession.errors }">
+                                                    <mat-label>{{labelName?.CreateCustomerAgentSession}}</mat-label>
+                                                    <input matInput formControlName="CreateCustomerAgentSession">
+                                                    <mat-error *ngIf="f.CreateCustomerAgentSession.errors">
+                                                        <ng-container
+                                                            *ngIf="f.CreateCustomerAgentSession.errors.required">{{labelName?.CreateCustomerAgentSession}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.CreateCustomerAgentSession?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.CreateCustomerAgentSession?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row"
+                                            style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin-left: 20px;">
+                                            <div class="col-lg-10 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.DeleteCustomerAgentSession.errors }">
+                                                    <mat-label>{{labelName?.DeleteCustomerAgentSession}}</mat-label>
+                                                    <input matInput formControlName="DeleteCustomerAgentSession">
+                                                    <mat-error *ngIf="f.DeleteCustomerAgentSession.errors">
+                                                        <ng-container
+                                                            *ngIf="f.DeleteCustomerAgentSession.errors.required">{{labelName?.DeleteCustomerAgentSession}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.DeleteCustomerAgentSession?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.DeleteCustomerAgentSession?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row"
+                                            style="display: flex; flex-direction: column; justify-content: center; align-items: center;margin-left: 20px;">
+                                            <div class="col-lg-10 col-md-4 col-sm-12">
+                                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ValidateCustomerAgentSession.errors }">
+                                                    <mat-label>{{labelName?.ValidateCustomerAgentSession}}</mat-label>
+                                                    <input matInput formControlName="ValidateCustomerAgentSession">
+                                                    <mat-error *ngIf="f.ValidateCustomerAgentSession.errors">
+                                                        <ng-container
+                                                            *ngIf="f.ValidateCustomerAgentSession.errors.required">{{labelName?.ValidateCustomerAgentSession}}
+                                                            is required
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.ValidateCustomerAgentSession?.errors?.checknull">Whitespace
+                                                            not allowed
+                                                        </ng-container>
+                                                        <ng-container *ngIf="f.ValidateCustomerAgentSession?.errors.checknull1">
+                                                            Must be at least 3 characters long
+                                                        </ng-container>
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="btn-group my-3">
+                            <!-- <button class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  routerLinkActive="router-link-active"
+                                (click)="back()" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                            <!-- <button *ngIf="! reset" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button> -->
+                            <button class="btn" *ngIf="(userConfig?.Save)" (click)="SaveViber('save')" mat-flat-button
+                                color="primary" type="button">{{labelName?.Save}}</button>
+                            <button class="btn" *ngIf="(userConfig?.Next)" (click)="SaveViber('next')" mat-flat-button
+                                color="primary" type="button">{{labelName?.Next}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

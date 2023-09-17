@@ -1,0 +1,201 @@
+
+.centerAll{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    .card-wrapper {
+        background-color: white;
+        
+      width: 250px;
+      border-radius: 15px;
+      border: 3px solid #333;
+      }
+      .card-header {
+      padding: 10px;
+      }
+      .mar-10 {
+      margin: 10px;
+      }
+      .railway-logo {
+      width: 60px;
+      height: 60px;
+      float: left;
+      background-image: url('/assets/images/qrCode/railways.jpg');
+      background-size: 80%;
+      background-repeat: no-repeat;
+      }
+      
+      .indusEDU-logo {
+      width: 120px;
+      height: 50px;
+      float: right;
+      background-image: url('/assets/images/qrCode/indus.png');
+      background-position: center;
+      background-size: 80%;
+      background-repeat: no-repeat;
+      }
+      .card-userImg {
+      width: 100px;
+      height: 130px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    //   background-image: url('/assets/images/qrCode/SubirprofilePhoto.png');
+      background-position: center;
+      background-size: 113% ;//  140%;
+      background-repeat: no-repeat;
+      margin: 0px auto;
+      margin-top: 0;
+      }
+      .card-qrCode {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      // background-image: url('/assets/images/qrCode/qr.png');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      float: right;
+      }
+      .card-body {
+      background-image:  url('/assets/images/qrCode/half-circle.png');
+      background-size: 130%;
+      background-repeat: no-repeat;
+      background-position: -30px -10px;
+      padding: 0!important;
+      }
+      .card-body-text {
+      padding: 10px;
+      text-align: center;
+      background: #2980b9;
+      color: #fff;
+      }
+      .card-body-text h6 {
+      font-size: 16px;
+      margin: 5px;
+      color: #fff !important;
+      }
+      .card-body-text p {
+      font-size: 12px;
+      margin: 0;
+      padding: 0;
+      }
+      .clear {
+      clear: both;
+      }
+      .card-footer {
+      padding: 10px;
+      }
+      .card-footer h6 {
+      padding: 5px;
+      margin: 0;
+      }
+      .authorised-sign,
+      .issueby-sign {
+      width: 45%;
+      float: left;
+      font-size: 12px;
+      margin-top:30px;
+      }
+      .authorised-sign {
+      margin-right: 10%;
+      }
+  
+      .card-wrapper {
+          width: 250px;
+          border-radius: 15px;
+          border: 3px solid #333;
+          }
+          .card-header-back {
+          width: 100%;
+          height: 50px;
+          background-image:  url('/assets/images/qrCode/top-halfcirlce.png');
+          background-size: 100%;
+          background-repeat: no-repeat;
+          background-position: center;
+          }
+          .mar-10 {
+          margin: 1px;
+          }
+          .card-body-back {
+          padding: 0 10px;
+          }
+          .card-body-text {
+          padding: 10px;
+          text-align: center;
+          background: #2980b9;
+          color: #fff;
+          letter-spacing: 0.03px;
+          }
+          .card-body-text h6 {
+          font-size: 16px;
+          margin: 5px;
+          }
+          .card-body-text p {
+          font-size: 12px;
+          margin: 0;
+          padding: 0;
+          }
+          .clear {
+          clear: both;
+          }
+          .card-address ul {
+          padding: 0;
+          margin: 0 15px;
+          }
+          .card-address ul li {
+              list-style: disc;
+          font-size: 13px;
+          }
+          .card-address p {
+          font-size: 13px;
+          }
+          .footer-logo {
+          width: 100%;
+          height: 50px;
+          background-image:  url('/assets/images/qrCode/indus.png');
+          background-size: 80%;
+          background-repeat: no-repeat;
+          background-position: center;
+          margin-bottom: 20px;
+          }
+          .card-footer-back {
+          padding: 0 10px;
+          text-align: center;
+          }
+  }
+
+  .green-sticker{
+    background-color: green;
+    border-radius: 25px !important;
+    border: solid 1px;
+    width: fit-content;
+    padding: 1px 3px !important;
+    .mat-icon{
+        border: 1px solid black;
+        /* width: 16px; */
+        border-width: 50%;
+        border-radius: 25px;
+        background: white;
+        color: green;
+      }
+}
+  .red-sticker{
+    background-color: red;
+    border-radius: 25px !important;
+    border: solid 1px;
+    width: fit-content;
+    padding: 1px 3px !important;
+    .mat-icon{
+        border: 1px solid black;
+        /* width: 16px; */
+        border-width: 50%;
+        border-radius: 25px;
+        background: white;
+        color: red;
+      }
+}
+.word-break{
+  word-wrap: break-word;
+}

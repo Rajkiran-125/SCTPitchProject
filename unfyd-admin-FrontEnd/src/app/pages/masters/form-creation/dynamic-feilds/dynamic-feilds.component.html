@@ -1,0 +1,525 @@
+<div *ngFor="let item of allFormControl; let i = index;" (selectionChange)="changesDone()" (click)="changesDone()"
+    (change)="changesDone()" (toggleChange)="changesDone()" (mouseover)="changesDone()" (keyup)="changesDone()"
+    (keypress)="changesDone()">
+    <ng-container *ngIf="selectedIndex == i">
+        <div class=" col-lg-12 col-md-12 col-sm-12 my-3">
+            <div class="AddFormControls">
+                <div class="form-bg">
+                    <div class="mainFormControl">
+                        <div class="text-right">
+                            <span *ngIf="userConfig?.Delete" class="cursorPointer"
+                                (click)="deleteFormControl( i,item.Id)">
+                                <mat-icon class="deleteIcon">delete</mat-icon>
+                            </span>
+                        </div>
+                        <div class="row m-0 p-0">
+                            <div class="col-lg-6 col-md-6 col-sm-12 placeholder"
+                                [ngClass]="checkRegex(regex.alphabet,item.label) == false ? '':'mb-3' ">
+                                <mat-form-field appearance="fill" class="">
+                                    <mat-label>{{labelName?.PlaceHolder}}</mat-label>
+                                    <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.label"
+                                        (keyup)="addFormControlName(i);changesDone()" matInput>
+                                </mat-form-field>
+                            </div>
+                            <mat-hint class="error mb-3 col-12 mt-1"
+                                *ngIf="checkRegex(regex.alphabet,item.label) == false">
+                                {{labelName?.PlaceHolder}} is required and must be alphabets only.
+                            </mat-hint>
+                        </div>
+                        <div class="row m-0 p-0 mb-3">
+                            <div class="col-12 types">
+                                <span class="mr-3 font-weight-bold">{{labelName?.Type}}</span>
+                                <mat-radio-group aria-labelledby="example-radio-group-label" class="" color="primary"
+                                    [ngModelOptions]="{standalone: true}" [(ngModel)]="item.type"
+                                    (change)="changeControlType(i); changesDone()">
+                                    <mat-radio-button class="" *ngFor="let type of formControlTypes" [value]="type">
+                                        {{type | titlecase}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                        <div *ngIf="item.type == 'input'">
+                            <div class="row m-0 p-0">
+                                <div class="col-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Type</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.dataType">
+                                            <mat-option *ngFor="let data of dataTypeArray | orderBy: 'Key'"
+                                                [value]="data">
+                                                {{data}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row m-0 p-0">
+                                <div class="col-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.RegularExpression}}</mat-label>
+                                        <input type="text" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.regularExpression" matInput (keyup)="changesDone()"
+                                            (keypress)="changesDone()">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row m-0 p-0">
+                                <div class="col-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                                        <input type="text" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.value" matInput (keyup)="changesDone()"
+                                            (keypress)="changesDone()">
+                                        <mat-hint class="error"
+                                            *ngIf="item.regularExpression != null && item.value != null && item.value != ''">
+                                            <ng-container
+                                                *ngIf="checkRegex(item.regularExpression,item.value) == false">
+                                                {{labelName?.DefaultValue}} is not as per Regular expressions.
+                                            </ng-container>
+                                        </mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="item.type == 'list'">
+                            <div class="row m-0 p-0">
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.ParentList}}</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.parent"
+                                            (selectionChange)="changeParentId(item,i); changesDone()">
+                                            <mat-option *ngFor="let data of filterParentDropDown(item.formControlName)"
+                                                [value]="data" (click)="selectedParent(data)">
+                                                {{data}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.value">
+                                            <mat-option *ngFor="let data of defaultValueForDropDown(i) | orderBy"
+                                                [value]="data.option">
+                                                {{data.option}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="item.type == 'checkbox'">
+                            <div class="row m-0 p-0">
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.value">
+                                            <mat-option [value]="true">{{labelName?.Checked}}</mat-option>
+                                            <mat-option [value]="false">{{labelName?.Unchecked}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.NestedControl}}</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.nestedControlOfWhom"
+                                            (selectionChange)="setNestedParentControl(item.nestedControlOfWhom,item.formControlName,i); changesDone()"
+                                            multiple>
+                                            <mat-option *ngFor="let data of filterNestedControls(i)" [value]="data">
+                                                {{data}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0" *ngIf="item.type != 'button'">
+                            <div class="col-12 mandatory">
+                                <span class="">{{labelName?.Mandatory}}</span>
+                                &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="item.mandatory" class="toggleBtn" (toggleChange)="changesDone()"
+                                    (change)="changesDone()"></mat-slide-toggle>
+                            </div>
+                            <div *ngIf="item.type == 'list'" class="col-12 mandatory">
+                                <span class="">{{labelName?.Dynamic}}</span>
+                                &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="item.Dynamic" class="toggleBtn" (toggleChange)="changesDone();"
+                                    (change)="changesDone();toggleChange($event.checked,item)"></mat-slide-toggle>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="innerFormControl">
+                        <span class="">
+                            &nbsp;
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="item.type == 'list' && !item.Dynamic" class="addAttributeFormArea">
+                    <div *ngIf="item.type == 'list'" class="list">
+                        <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                            <span class="AttributeListValues">{{labelName?.AttributeListValues}}</span>
+                            <mat-icon class="primary-color cursorPointer"
+                                (click)="addAttribute(item.formControlName,i)">add</mat-icon>
+                        </div>
+                        <div class="d-flex align-items-center options"
+                            *ngFor="let item2 of item.listOfValues;let k = index">
+                            <div class="d-contents">
+                                <div class="col-3 pr-1 flex1" *ngIf="item2.parent3FormControl">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.ParentList}} 3</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item2.parent3Value">
+                                            <mat-option
+                                                *ngFor="let data of returnParentDropDown(i,item2.parent3Id,3,k) | orderBy"
+                                                [value]="data.key">
+                                                {{data.value}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-3 pr-1 flex1" *ngIf="item2.parent2FormControl">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.ParentList}} 2</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item2.parent2Value">
+                                            <mat-option
+                                                *ngFor="let data of returnParentDropDown(i,item2.parent2Id,2,k) | orderBy"
+                                                [value]="data.key">
+                                                {{data.value}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-3 pr-1 flex1" *ngIf="item2.parent1FormControl">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.ParentList}} 1</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item2.parent1Value">
+                                            <mat-option
+                                                *ngFor="let data of returnParentDropDown(i,item2.parent1Id,1,k) | orderBy"
+                                                [value]="data.key">
+                                                {{data.value}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-3 pr-1 flex1">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.TypeHere}}</mat-label>
+                                        <input type="text" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.listOfValues[k].option" matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <span class="pl-3 cursorPointer" (click)="deleteListOfValues(i,k)">
+                                <mat-icon class="deleteIcon">delete</mat-icon>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="item.type == 'list' && item.Dynamic" class="addAttributeFormArea">
+                    <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                        <span class="AttributeListValues">{{labelName?.APIConfiguration}}</span>
+                    </div>
+                    <div class="row APIUrl">
+                        <div class="col-12 d-flex mt-3 my-3">
+                            <div class="col-3">
+                                <div class="inputText normal-dropdown">
+                                    <mat-form-field appearance="fill">
+                                        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.APIMETHOD"
+                                            (selectionChange)="getMethod($event.value)" panelClass="normal-panel">
+                                            <mat-option *ngFor="let data of apiMethod | orderBy: 'Key'"
+                                                [value]="data.Value">
+                                                {{data.Key}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="inputText">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>aaaaaa</mat-label>
+                                        <input type="text" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.APIURL" matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                        <span class="AttributeListValues">{{labelName?.AddHeader}}</span>
+                        <mat-icon class="primary-color cursorPointer"
+                            (click)="addHeader(item.formControlName,i)">add</mat-icon>
+                    </div>
+                    <div class="row  d-flex align-items-center options mt-3 my-3"
+                        *ngFor="let item2 of item.buttonHeaders;let k = index">
+                        <div class="col-5 APIUrl d-flex align-items-center">
+                            <span class="text mr-2">{{labelName?.Key}}</span>
+                            <div class="inputText w-80">
+                                <mat-form-field appearance="fill">
+                                    <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.Key"
+                                        matInput>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-5 APIUrl d-flex align-items-center">
+                            <span class="text mr-2">{{labelName?.Value}}</span>
+                            <div class="inputText w-80 normal-dropdown">
+                                <mat-form-field appearance="fill">
+                                    <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.Value"
+                                        matInput>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <span class="mx-2 cursorPointer" (click)="deleteButtonParameter(i,k)">
+                            <mat-icon class="deleteIcon">delete</mat-icon>
+                        </span>
+                    </div>
+                    <div class="attributeBorder row d-flex justify-content-between m-0 p-0"
+                        *ngIf="item.Dynamic && item.parent == null">
+                        <span class="AttributeListValues">{{labelName?.AddBody}}</span>
+                        <mat-icon class="primary-color cursorPointer"
+                            (click)="addBody(item.formControlName,i)">add</mat-icon>
+                    </div>
+                    <div class="row  d-flex align-items-center options mt-3 my-3"
+                        *ngFor="let item2 of item.buttonBody;let k = index">
+                        <div class="col-5 APIUrl d-flex align-items-center">
+                            <span class="text mr-2">{{labelName?.Key}}</span>
+                            <div class="inputText w-80">
+                                <mat-form-field appearance="fill">
+                                    <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.Key"
+                                        matInput>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-5 APIUrl d-flex align-items-center">
+                            <span class="text mr-2">{{labelName?.Value}}</span>
+                            <div class="inputText w-80 normal-dropdown">
+                                <mat-form-field appearance="fill">
+                                    <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.Value"
+                                        matInput>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <span class="mx-2 cursorPointer" (click)="deleteButtonBodyParameter(i,k)">
+                            <mat-icon class="deleteIcon">delete</mat-icon>
+                        </span>
+                    </div>
+                    <ng-container class="col-12 d-flex align-items-center mt-3 inputText">
+                        <mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="item.RequestFormat"
+                            class="toggleBtn mb-2">{{labelName?.RequestFormat}}</mat-slide-toggle>
+                        <ng-container *ngIf="item.RequestFormat">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.RequestFormat}}</mat-label>
+                                <textarea rows="7" type="text" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="item.Format" matInput></textarea>
+                            </mat-form-field>
+                        </ng-container>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ResponseFormat}}</mat-label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.FormatResponse"
+                                matInput />
+                        </mat-form-field>
+                        <ng-container *ngIf="item.type == 'list' && item.Dynamic">
+                            <div class="row">
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.Key}}</mat-label>
+                                        <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.Key"
+                                            matInput>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.Value}}</mat-label>
+                                        <input type="text" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.Value" matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <div *ngIf="item.type == 'button'" class="addAttributeFormArea">
+                    <div *ngIf="item.type == 'button'" class="list">
+                        <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                            <span class="AttributeListValues">{{labelName?.APIConfiguration}}</span>
+                        </div>
+                        <div class="col-12 d-flex align-items-center mt-3">
+                            <div class="inputText">
+                                <mat-checkbox color="primary" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="item.IsSearch">{{labelName?.IsSearch}}</mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="row APIUrl">
+                            <div class="col-12 d-flex align-items-center mt-3">
+                                <span class="text">{{labelName?.APIUrl}}</span>
+                                <div class="inputText">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>aaaaaa</mat-label>
+                                        <input type="text" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.APIURL" matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex align-items-center my-3">
+                                <span class="text">{{labelName?.Method}}</span>
+                                <div class="inputText normal-dropdown">
+                                    <mat-form-field appearance="fill">
+                                        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.APIMETHOD"
+                                            (selectionChange)="getMethod($event.value)" panelClass="normal-panel">
+                                            <mat-option *ngFor="let data of apiMethod | orderBy: 'Key'"
+                                                [value]="data.Value">
+                                                {{data.Key}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                            <span class="AttributeListValues">{{labelName?.AddHeader}}</span>
+                            <mat-icon class="primary-color cursorPointer"
+                                (click)="addHeader(item.formControlName,i)">add</mat-icon>
+                        </div>
+                        <div class="row  d-flex align-items-center options"
+                            *ngFor="let item2 of item.buttonHeaders;let k = index">
+                            <div class="col-5 APIUrl d-flex align-items-center">
+                                <span class="text mr-2">{{labelName?.Key}}</span>
+                                <div class="inputText w-80">
+                                    <mat-form-field appearance="fill">
+                                        <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.Key"
+                                            matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-5 APIUrl d-flex align-items-center">
+                                <span class="text mr-2">{{labelName?.Value}}</span>
+                                <div class="inputText w-80 normal-dropdown">
+                                    <mat-form-field appearance="fill">
+                                        <input type="text" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item2.Value" matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <span class="mx-2 cursorPointer" (click)="deleteButtonParameter(i,k)">
+                                <mat-icon class="deleteIcon">delete</mat-icon>
+                            </span>
+                        </div>
+
+                        <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                            <span class="AttributeListValues">{{labelName?.AddBody}}</span>
+                            <mat-icon class="primary-color cursorPointer" *ngIf="!deleteMethod"
+                                (click)="addBody(item.formControlName,i)">add</mat-icon>
+                        </div>
+                        <div class="row  d-flex align-items-center options"
+                            *ngFor="let item2 of item.buttonBody;let k = index">
+                            <div class="col-5 APIUrl d-flex align-items-center">
+                                <span class="text mr-2">{{labelName?.Key}}</span>
+                                <div class="inputText w-80">
+                                    <mat-form-field appearance="fill">
+                                        <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.Key"
+                                            matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-5 APIUrl d-flex align-items-center">
+                                <span class="text mr-2">{{labelName?.Value}}</span>
+                                <div class="inputText w-80 normal-dropdown">
+                                    <mat-form-field appearance="fill">
+                                        <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.Value"
+                                            panelClass="normal-panel">
+                                            <ng-container
+                                                *ngIf="returnFormControlLists(item.buttonBody,i,k).length != 0">
+                                                <mat-option
+                                                    *ngFor="let data of returnFormControlLists(item.buttonBody,i,k)"
+                                                    [value]="data">
+                                                    {{returnFormControlLabel(data)}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <span class="mx-2 cursorPointer" (click)="deleteButtonBodyParameter(i,k)">
+                                <mat-icon class="deleteIcon">delete</mat-icon>
+                            </span>
+                        </div>
+
+                        <div class="col-12 d-flex align-items-center mt-3">
+                            <div class="inputText">
+                                <mat-checkbox color="primary" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="item.RequestFormat">{{labelName?.RequestFormat}}</mat-checkbox>
+                            </div>
+                        </div>
+                        <ng-container class="col-12 d-flex align-items-center mt-3 inputText">
+                            <ng-container *ngIf="item.RequestFormat">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RequestFormat}}</mat-label>
+                                    <textarea type="text" [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="item.Format" matInput></textarea>
+                                </mat-form-field>
+                            </ng-container>
+                            <ng-container>
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.ResponseFormat}}</mat-label>
+                                    <input type="text" [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="item.FormatResponse" matInput />
+                                </mat-form-field>
+                            </ng-container>
+                        </ng-container>
+
+                        <ng-container *ngIf="item.IsSearch">
+                            <div class="d-flex align-items-center options mt-3">
+                                <div class="inputText">
+                                    <mat-checkbox color="primary" [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="item.FormDisable">{{labelName?.FormDisable}}</mat-checkbox>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="inputText">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.SearchControl}}</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.SearchFormControl" panelClass="normal-panel">
+                                            <ng-container
+                                                *ngIf="returnFormControlLists(item.buttonBody,i,0).length != 0">
+                                                <mat-option
+                                                    *ngFor="let data of returnFormControlLists(item.buttonBody,i,0)"
+                                                    [value]="data">
+                                                    {{returnFormControlLabel(data)}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="inputText">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.PatchControl}}</mat-label>
+                                        <mat-select [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.PatchControl" panelClass="normal-panel" multiple>
+                                            <ng-container
+                                                *ngIf="returnFormControlLists(item.buttonBody,i,0).length != 0">
+                                                <mat-option
+                                                    *ngFor="let data of returnFormControlLists(item.buttonBody,i,0)"
+                                                    [value]="data">
+                                                    {{returnFormControlLabel(data)}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

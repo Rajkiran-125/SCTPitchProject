@@ -1,0 +1,25 @@
+::ng-deep {
+  .setting-accordion {
+    font-size: var(--content_title) !important;
+    label {
+      font-size: var(--content) !important;
+    }
+  }
+  .inputText {
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.inputButton{
+    height: 39px;
+    border-radius: 0px;
+    min-width: unset;
+}
+
+
+.addKeys{
+  color: var(--primary_color);
+  font-weight: bold;
+}

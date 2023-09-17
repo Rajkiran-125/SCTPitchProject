@@ -1,0 +1,307 @@
+// // legend{
+// //   color: var(--primary_color);
+// //   font-weight: bold;
+// // }
+// .top_block {
+//   display: flex;
+//   justify-content: center;
+// }
+// .business {
+//   margin-bottom: 40px;
+// }
+// .btn-gray {
+//   font-weight: bold;
+//   color: var(--black_color_70) !important;
+// }
+// .Save {
+//   background:var(--primary_color);
+//   color: var(--white_color) !important;
+//   font-size: var( --small-font);
+// }
+// .Next{
+//    border: 1px solid var(--primary_color);
+//     font-weight:bold;
+//     background: var(--white_color);
+//     color: var(--primary_color) !important;
+// }
+// mat-icon{
+//   font-size: var(--extralarge-font);
+// }
+// .wrapper{
+//   padding: 3vh 8vh 0vh !important;
+// }
+
+::ng-deep {
+
+  .uf-cobrowse-channel-icon, .uf-email-channel-icon, .uf-whatsapp-channel-icon, .uf-linechat-channel-icon, .uf-buzz-channel-icon, .uf-voiceivr-channel-icon, .uf-facebook-channel-icon, .uf-facebook-messenger-channel-icon, .uf-instagram-channel-icon, .uf-instagramDM-channel-icon, .uf-twitter-channel-icon, .uf-twitter-DM-channel-icon, .uf-video-channel-icon, .uf-voice-channel-icon, .uf-webchat-channel-icon, .uf-applemsg-channel-icon, .uf-googlemsg-channel-icon, .uf-mobileapp-channel-icon, .uf-sms-channel-icon, .uf-telegram-channel-icon, .uf-viber-channel-icon{
+      margin-left: 0;
+  }
+  .setting-accordion {
+      .mat-expansion-panel {
+          background-color: var(--white_color);
+          .mat-expansion-panel-body {
+              padding: 0 24px 16px;
+          }
+      }
+  }
+
+  .wrapper form legend {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, .87);
+      margin-bottom: 5px;
+  }
+
+.mat-button-toggle-group{
+  margin-right: 12px;
+  .mat-button-toggle-label-content{
+      padding: 0px 10px;
+      width: 40px;
+      line-height: 34.81px;
+      text-align: center;
+
+  }
+}
+
+}
+.mat-slide-toggle.toggleBtn {
+  margin-right: 0;
+}
+
+.border_bottom {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+
+  &:after {
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      bottom: 0px;
+      height: 1px;
+      display: block;
+      clear: both;
+      content: '';
+      background-color: var(--gray_color_80);
+  }
+}
+
+
+
+.max_75 {
+  width: 75%;
+}
+
+.gray_bg {
+  background-color: var(--backgroud_color);
+  padding: 18.8125px 18.8125px 0 18.8125px;
+  //height: 80px;
+}
+.equalTo{
+  text-align: center;
+  line-height: 36.81px;
+}
+.sub-accordion{
+  padding-bottom: 18.8125px;
+
+  .mat-expansion-panel{
+    .mat-expansion-panel-header{
+      font-size: var(--small-font);
+    }
+  }
+}
+.static_label{
+  margin-bottom: 5px;
+}
+
+.mat-btn {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin: 8.4px 0;
+
+  &.blue {
+      color: var(--primary_color);
+  }
+
+  &.red {
+      color: var(--universalRed);
+  }
+  &.no-mar{
+      margin: 0 8px;
+  }
+}
+.middleLabel{
+  ::ng-deep{
+      .mat-form-field-infix{
+          border-top: 0.42187em solid transparent !important;
+          border-bottom: 0.42188em solid transparent !important;
+      }
+      .mat-form-field-appearance-fill .mat-select-arrow-wrapper {
+          transform: translateY(0%);
+      }
+  }
+}
+.labelBeforeSlide {
+  vertical-align: top;
+  line-height: 24px;
+  margin-right:0.5rem;
+  margin-bottom:0.5rem;
+}
+
+hr{
+  margin-top: 0;
+}
+
+app-flushing{
+  width: 100%;
+}
+.example-list {
+  height: 250px;
+  overflow-y: auto;
+  border: solid 1px #ccc;
+  min-height: 60px;
+  background: white;
+  border-radius: 4px;
+  display: block;
+}
+
+
+
+.example-box {
+  padding: 20px 10px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.image{
+  width: 80px;
+  height: 40px;
+}
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  max-width: 330px;
+  height: 45px;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--gray_color);
+  background-color: var(--gray_color_60);
+  .uploadTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mat-icon,
+  img {
+    width: 100%;
+    height: 100%;
+    border: var(--border);
+  }
+  strong {
+    color: var(--gray-dark) !important;
+    font-size: var(--content) !important;
+  }
+
+  .mat-icon {
+    width: 100%;
+    line-height: 130px;
+    font-size: 50px !important;
+    color: var(--gray_color);
+    cursor: pointer;
+  }
+
+  input[type="file"],
+  .loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .loader {
+    background-color: rgba($color: #212121, $alpha: 0.4);
+    .spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      &:before {
+        content: "";
+        box-sizing: border-box;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--white_color);
+        border-top-color: var(--primary_color);
+        animation: spinner 0.8s linear infinite;
+      }
+    }
+  }
+
+  input[type="file"] {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0;
+    opacity: 0;
+  }
+
+  &.shake {
+    .mat-icon {
+      border-color: var(--error);
+    }
+  }
+
+  .toggleBtn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 99;
+  }
+
+  &:hover {
+    .editHover {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

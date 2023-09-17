@@ -1,0 +1,96 @@
+<!-- <button (click)="Navigate()">click Me</button> -->
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container col-lg-12 col-md-12 col-sm-12">
+    <div class="wrapper">
+        <div class="row mt-2">
+            <div class="main-row col-lg-12 col-md-12 col-sm-12 py-0 px-2">
+                    <div class="col-lg-2 col-md-6 col-sm-12">   
+                        <mat-form-field appearance="fill" class="dropdownButtonField">                  
+                        <mat-label>Type</mat-label>
+                        <mat-select  class="skilldrop" [(ngModel)]="selectedTypeOption"
+                        (selectionChange)="Type($event)" >
+                        <!-- (selectionChange)="filterTableData($event,'typeOption')" > -->                          
+                        <mat-option *ngFor="let item of ddTypes" [value]="item.Id">
+                            {{item?.Value}}
+                        </mat-option>
+                        </mat-select>
+                       </mat-form-field>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12">   
+                        <mat-form-field appearance="fill" class="dropdownButtonField">
+                        <mat-label>Channels</mat-label>
+                        <mat-select  class="skilldrop" [(ngModel)]="selectedChannelsOption"
+                        (selectionChange)="Channels($event)">
+                          <mat-option *ngFor="let data of ddChannels"
+                                     [value]="data.ChannelId" style="padding:0 5px;">
+                                     <span [innerHtml]="data?.ChannelIcon"
+                                     style="vertical-align:sub;"></span>
+                                     <span>{{data.ChannelName}}</span>
+                          </mat-option> 
+                        </mat-select>
+                    </mat-form-field>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12">   
+                        <mat-form-field appearance="fill" class="dropdownButtonField">
+                        <mat-label>Channel Source</mat-label>
+                        <mat-select  class="skilldrop" >
+                        <mat-option *ngFor="let item of ddChannelSource" [value]="item.Id">
+                            {{item?.Value}}
+                        </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12">   
+                        <mat-form-field appearance="fill" class="dropdownButtonField">
+                            <mat-label>Campaigns</mat-label>
+                            <mat-select class="skilldrop" (selectionChange)="Campaigns($event)">
+                                <mat-option *ngFor="let item of ddCampaigns" [value]="item.Id">
+                                    {{item?.Value}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-2 col-md-6 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>From</mat-label>
+                            <input matInput [ngxMatDatetimePicker]="pickerFrom" [(ngModel)]="defaultDate">
+                            <mat-datepicker-toggle matSuffix
+                                [for]="$any(pickerFrom)"></mat-datepicker-toggle>
+                            <ngx-mat-datetime-picker #pickerFrom [showSpinners]="true" [showSeconds]="true" [stepHour]="1" [stepMinute]="1"
+                                [stepSecond]="1">
+                            </ngx-mat-datetime-picker>
+                        </mat-form-field>
+                      </div>   
+                      <div class="col-lg-2 col-md-6 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>To</mat-label>
+                            <input matInput [ngxMatDatetimePicker]="pickerTo" [(ngModel)]="defaultDate">
+                            <mat-datepicker-toggle matSuffix
+                                [for]="$any(pickerTo)"></mat-datepicker-toggle>
+                            <ngx-mat-datetime-picker #pickerTo [showSpinners]="true" [showSeconds]="true" [stepHour]="1" [stepMinute]="1"
+                                [stepSecond]="1">
+                            </ngx-mat-datetime-picker>
+                        </mat-form-field>
+                      </div>         
+            </div>  
+        </div>
+        <div class="tileCard">
+          <ng-container *ngFor="let item of [0,1,2,3,4]; let i=index">
+            <app-pitch-tile-card [bgColor]="getColor(i)" [heading]="getHeading(i)" 
+            [tileCardLeftData]="getTileCardLeftData(i)" [tileCardRightData]="getTileCardRightData(i)"
+            [tileCardMainCount]="getTileCardMainCount(i)"
+            [tabValue]="tabValue"></app-pitch-tile-card>
+          </ng-container>
+        </div>
+        <div>
+            <!-- <span class="material-icons">sort</span> -->
+            <app-pitch-table [tabValue]="tabValue" [type]="type"
+            class="class2"></app-pitch-table>
+        </div>
+    </div>
+</div>
+
+
+
+
+

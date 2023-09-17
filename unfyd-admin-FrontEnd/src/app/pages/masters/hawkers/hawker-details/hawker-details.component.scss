@@ -1,0 +1,36 @@
+.wrapper{
+    border-radius: 0;
+    box-shadow: none;
+    border: var(--border);
+    padding: 0 20px;
+    max-height: fit-content!important;
+}
+.wrapper-padding {
+    padding-top: 30px!important; 
+}
+.text-wrap {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    white-space: normal;
+}
+.mat-radio-group{
+    margin-bottom: 18.8px;
+    display: block;
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 20px;
+  }
+}
+
+.legend {
+    background-color: var(--gray_color_80);
+   // color: var(--white_color);
+    border-radius: 5px;
+    padding: 8px 10px;
+    margin: 5px 0;
+  }
+
+  label {
+      margin-bottom: 0!important;
+  }

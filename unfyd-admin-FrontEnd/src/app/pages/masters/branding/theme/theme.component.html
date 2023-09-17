@@ -1,0 +1,96 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <form [formGroup]="form">
+    <div class="row d-flex align-items-center">
+      <div class="col-12 text-left">
+        <mat-icon class="legendheader gray mr-2 cursorPointer" (click)="back()">keyboard_backspace</mat-icon>    
+        <span  *ngIf="theme =='darkbluetheme' " class="large-font primary-color font-weight-bold">Dark Blue Theme</span>
+        <span  *ngIf="theme =='greentheme' " class="large-font primary-color font-weight-bold">Green Theme</span>
+        <span  *ngIf="theme =='bluetheme' " class="large-font primary-color font-weight-bold">Blue Theme</span>
+        <span  *ngIf="theme =='orangetheme' " class="large-font primary-color font-weight-bold">Orange Theme</span>
+        <span  *ngIf="theme =='darktheme' " class="large-font primary-color font-weight-bold">Dark Theme</span>
+        <span  *ngIf="theme =='customizetheme' " class="large-font primary-color font-weight-bold">Customize Theme</span>
+      </div>
+    </div>
+    <div class="row my-3 d-flex align-items-center">
+      <div class="col-5 text-left d-flex align-items-center pl-5">
+        <span style="font-family: Nunito Sans, Regular;">Primary Color</span>
+        <div class="d-flex align-items-center colorPickerdiv mx-3 width250">
+        <div  class="cursorPointer colorBorder colorTile"  [matMenuTriggerFor]="menu" [ngStyle]="{'background-color': common.color2[color2]}" style="height: 30px;padding-left: 55px;" [style.pointer-events]="iscustomizetheme ? 'auto' : 'none'"></div>
+         <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+          <div class="row m-2" (click) = "$event.stopPropagation()">
+           <div class="col-12">
+             <span class="selectColor">SelectColor</span>
+           </div>
+           <div class="col-3 py-2 px-1" *ngFor="let item of common.colorArray2">
+             <div class="row justify-content-center">
+               <div class="cursorPointer colorTile d-flex align-items-center justify-content-center" [ngStyle]="{'background-color': common.color2[item]}" (click)="color2 = item">
+                <i class="icon-color-selected white-color" *ngIf="item == color2"></i>
+             </div>
+          </div>
+          <div class="row justify-content-center fontBelowColor">
+            {{item|titlecase}}
+          </div>
+        </div>
+      </div>
+    </mat-menu>
+    <span class="mx-3 font-weight-bold">{{common.color2[color2]}}</span>
+        </div>
+      </div>
+      <div class="col-5 text-left d-flex align-items-center">
+          <span style="font-family: Nunito Sans, Regular;">Font Style</span>
+          <div class="mx-3 width250 normal-dropdown ">
+            <mat-form-field appearance="fill">
+              <mat-select value="10" formControlName="Font" panelClass="normal-panel " class="font-weight-bold">
+                <mat-option value="10">Nunito Sans</mat-option>
+                <mat-option value="11">Times New Roman</mat-option>
+                <mat-option value="12">Arial</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        <div class="col-2 text-left d-flex align-items-center">
+          <button mat-flat-button color="primary" (click)="add()">Save</button> &nbsp;
+        </div>
+      </div>
+    </div>
+    <div class="row my-3 d-flex align-items-center px-2" *ngIf="color2 == 'darkblue'">
+      <img src="assets/images/admin/darkBlueTheme.png" class="themeImg"  alt="dark Blue" srcset="">
+    </div>
+    <div class="row my-3 d-flex align-items-center px-2" *ngIf="color2 == 'blue'">
+      <img src="assets/images/admin/blueTheme.png" class="themeImg"  alt="blue" srcset="" >
+    </div>
+    <div class="row my-3 d-flex align-items-center px-2" *ngIf="color2 == 'green'" >
+      <img src="assets/images/admin/themeChange.png" class="themeImg"  alt="green" srcset="">
+    </div>
+    <div class="row my-3 d-flex align-items-center px-2" *ngIf="color2 == 'orange'">
+      <img src="assets/images/admin/orangeTheme.png" class="themeImg"  alt="orange" srcset="" >
+    </div>
+    <div class="row my-3 d-flex align-items-center px-2" *ngIf="color2 == 'gray'">
+      <img src="assets/images/admin/darkTheme.png" class="themeImg" alt="gray" srcset="" >
+    </div>
+    
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  </form>
+    </div>
+  </div>
+

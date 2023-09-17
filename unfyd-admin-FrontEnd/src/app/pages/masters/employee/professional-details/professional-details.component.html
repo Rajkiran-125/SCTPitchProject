@@ -1,0 +1,269 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <app-steps [steps]="employeeFormSteps" [id]="path"></app-steps>
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend>Professional Details</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.officialemail.errors }">
+                            <mat-label>Official Email</mat-label>
+                            <input matInput formControlName="officialemail">
+                            <mat-error *ngIf="submittedForm && f.officialemail.errors">
+                                <ng-container *ngIf="f.officialemail.errors.pattern">Official email is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            
+                            <mat-checkbox color="primary" formControlName="isphysicallychallenged"
+                                (change)="uploadDocument($event.checked, speciallyAbled, 'Specially Abled')">
+                                Specially Abled ?</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.isphysicallychallenged"
+                                (click)="viewDocument('Specially Abled', 'document')" #tooltip="matTooltip"
+                                matTooltip="View">
+                                remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="isreferencecheckdone"
+                                (change)="uploadDocument($event.checked, referece, 'Reference')">
+                                Is Reference Check Done ?</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.isreferencecheckdone"
+                                (click)="viewDocument('Reference', 'document')" #tooltip="matTooltip" matTooltip="View">
+                                remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="ispoliceverificationdone"
+                                (change)="uploadDocument($event.checked, policeVerification, 'Police Verificaton')">
+                                Is Police Verification Done ?</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.ispoliceverificationdone"
+                                (click)="viewDocument('Police Verificaton', 'document')" #tooltip="matTooltip"
+                                matTooltip="View">remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="anyongoingcases"
+                                (change)="uploadDocument($event.checked, ongoingCases, 'Ongoing Cases')">
+                                Any Ongoing Cases ?</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.anyongoingcases"
+                                (click)="viewDocument('Ongoing Cases', 'document')" #tooltip="matTooltip"
+                                matTooltip="View">remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.accountnumber.errors }">
+                            <mat-label>Account Number</mat-label>
+                            <input matInput formControlName="accountnumber">
+                            <mat-error *ngIf="submittedForm && f.accountnumber.errors">
+                                <ng-container *ngIf="f.accountnumber.errors.pattern">Account number is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Organization Name</mat-label>
+                            <input matInput formControlName="organizationname" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.designationid.errors }">
+                            <mat-label>Designation ID</mat-label>
+                            <input matInput formControlName="designationid">
+                            <mat-error *ngIf="submittedForm && f.designationid.errors">
+                                <ng-container *ngIf="f.designationid.errors.pattern">Designation ID is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.employeeid.errors }">
+                            <mat-label>Employee ID</mat-label>
+                            <input matInput formControlName="employeeid">
+                            <mat-error *ngIf="submittedForm && f.employeeid.errors">
+                                <ng-container *ngIf="f.employeeid.errors.pattern">Employee ID is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Employee Type</mat-label>
+                            <mat-select formControlName="employeetype">
+                                <mat-option *ngFor="let data of masters.employeeType" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Employee Status</mat-label>
+                            <mat-select formControlName="employeestatus">
+                                <mat-option *ngFor="let data of masters.employeeStatus" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Reporting Manager</mat-label>
+                            <input matInput formControlName="reportingto" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Department</mat-label>
+                            <input matInput formControlName="department" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="isresumeuploaded"
+                                (change)="uploadDocument($event.checked, resume, 'Resume')">
+                                Is Resume uploaded ?</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.isresumeuploaded"
+                                (click)="viewDocument('Resume', 'document')" #tooltip="matTooltip" matTooltip="View">
+                                remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="isofferletteruploaded"
+                                (change)="uploadDocument($event.checked, offerLetter, 'Offer Letter')">
+                                Offer Letter</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.isofferletteruploaded"
+                                (click)="viewDocument('Offer Letter', 'document')" #tooltip="matTooltip"
+                                matTooltip="View">remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="isaptltrcnsltagmtuploaded"
+                                (change)="uploadDocument($event.checked, appointmentLetter, 'Appointment Letter')">
+                                Is Appointment Letter / ConsultantAgreement uploaded ?</mat-checkbox>
+                            <mat-icon class="view" *ngIf="form.value.isaptltrcnsltagmtuploaded"
+                                (click)="viewDocument('Appointment Letter', 'document')" #tooltip="matTooltip"
+                                matTooltip="View">remove_red_eye</mat-icon>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Is RelievingLetter / Resignation Acceptance Letter uploaded ?</mat-label>
+                            <input matInput formControlName="rlvgltrresgacceptanceltr" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.operationlocation.errors }">
+                            <mat-label>Operating Location</mat-label>
+                            <mat-select formControlName="operationlocation" disableOptionCentering #select3>
+
+                                <mat-select-filter *ngIf="select3.focused" [placeholder]="'Filter'"
+                                    [displayMember]="'Districtname'" [array]="district"
+                                    (filteredReturn)="filtereddistrict =$event"></mat-select-filter>
+
+                                <mat-option *ngFor="let data of filtereddistrict;" [value]="data.DistrictId">
+                                    {{data.Districtname}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Date Of Joining</mat-label>
+                            <input (focus)="dateofjoining.open()" (click)="dateofjoining.open()" readonly
+                                formControlName="dateofjoining" type="text" [matDatepicker]="dateofjoining" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="dateofjoining"></mat-datepicker-toggle>
+                            <mat-datepicker #dateofjoining></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Date Of Leaving</mat-label>
+                            <input (focus)="dateofleaving.open()" (click)="dateofleaving.open()" readonly
+                                formControlName="dateofleaving" type="text" [matDatepicker]="dateofleaving" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="dateofleaving"></mat-datepicker-toggle>
+                            <mat-datepicker #dateofleaving></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Date Of Confirmation</mat-label>
+                            <input (focus)="dateofconfirmation.open()" (click)="dateofconfirmation.open()" readonly
+                                formControlName="dateofconfirmation" type="text" [matDatepicker]="dateofconfirmation"
+                                matInput>
+                            <mat-datepicker-toggle matSuffix [for]="dateofconfirmation"></mat-datepicker-toggle>
+                            <mat-datepicker #dateofconfirmation></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>BAND</mat-label>
+                            <mat-select formControlName="band">
+                                <mat-option *ngFor="let data of masters.band" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.ctc.errors }">
+                            <mat-label>CTC</mat-label>
+                            <input matInput formControlName="ctc">
+                            <mat-error *ngIf="submittedForm && f.ctc.errors">
+                                <ng-container *ngIf="f.ctc.errors.pattern">CTC is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Salary Slips</mat-label>
+                            <input matInput formControlName="salaryslips" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Form 16</mat-label>
+                            <input matInput formControlName="form16" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Reference check form filled</mat-label>
+                            <input matInput formControlName="refcheckformfilled" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Service Area</mat-label>
+                            <input matInput formControlName="servicearea" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Industry Type</mat-label>
+                            <input matInput formControlName="industrytype" appTitleCase>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-stroked-button (click)="submit('save')" type="button">Save</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit('next')" type="button">Next Academic
+                    Details >></button>
+            </div>
+        </form>
+    </div>
+</div>

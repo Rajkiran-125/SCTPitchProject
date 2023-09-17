@@ -1,0 +1,20 @@
+
+<footer>
+
+    <ng-container *ngIf="!authentication">
+
+        <a *ngIf="branding?.copyrighttextStatus && branding?.copyrighturlStatus" href="https://{{branding?.copyrighturl}}" target="_blank">{{branding?.copyrighttext}}</a>
+
+        <span class="red-color" *ngIf="branding?.copyrighttextStatus && !branding?.copyrighturlStatus">{{branding?.copyrighttext}}</span>
+
+    </ng-container>
+    <ng-container *ngIf="authentication" >
+
+        <a *ngIf="branding?.footertextStatus && branding?.footerurlStatus" href="https://{{branding?.footerurl}}" target="_blank">{{branding?.footertext}}</a>
+
+        <span class="red-color" *ngIf="branding?.footertextStatus && !branding?.footerurlStatus">{{branding?.footertext}}</span>
+
+    </ng-container>
+
+</footer>
+

@@ -1,0 +1,32 @@
+
+  <div class="tile" [ngStyle]="{backgroundColor:bgColor}">
+    <!-- <div class="tile" [ngStyle]="{'background-color': common.color[tile.backgroundColor] ? common.color[tile.backgroundColor] : '#4B89DC'}"> -->
+    <div class="row">
+      <div class="col-12">
+        <div class="text-left ml-2 mainPlaceHolderValue mb-1 mt-1">
+          <span class="mainPlaceHolderHeaderTitle">
+            {{heading}}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-12 font-weight-bold">
+          <div class="countHeight text-left ml-2 mb-1 mt-1">
+            <span class="w-100 countData">{{tileCardMainCount}}</span>
+          </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-around mb-1" >
+        <div class="row pl-0">
+          <div class="col-12">
+            <span class="boottomSide">{{tileCardLeftData}}</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-center">
+            <span class="boottomSide">{{tileCardRightData}}</span>
+          </div>
+        </div>
+      </div>
+  </div>

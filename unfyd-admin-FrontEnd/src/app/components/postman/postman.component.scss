@@ -1,0 +1,117 @@
+::ng-deep {
+  .setting-accordion {
+      .mat-expansion-panel {
+          background-color: var(--white_color);
+          .mat-expansion-panel-body {
+              padding: 0 24px 16px;
+          }
+      }
+  }
+
+  // .wrapper form legend {
+  //     font-size: 14px;
+  //     font-weight: 400;
+  //     color: rgba(0, 0, 0, .87);
+  //     margin-bottom: 5px;
+  // }
+
+.mat-button-toggle-group{
+  margin-right: 12px;
+  .mat-button-toggle-label-content{
+     // width: 5vw;
+      line-height: 34.81px;
+      text-align: center;
+
+  }
+}
+.mat-tab-group{
+  margin-bottom: 18.8125px;
+  background-color: var(--white_color);
+  .mat-tab-header{
+      margin-bottom: 0;
+      .mat-tab-label-container{
+        border-top: 1px solid var(--gray_color);
+          .mat-tab-list{
+              .mat-tab-labels{
+                  .mat-tab-label{
+                      min-width: auto;
+                      margin: 0 9.40625px;
+                      padding: 0;
+                  }
+              }
+          }
+      }
+  }
+  .mat-tab-body-wrapper{
+      .mat-tab-body{
+          height: 201px;
+          padding: 18.8125px 18.8125px 0 18.8125px;
+          .mat-tab-body-content{
+              overflow-x: hidden;
+          }
+          }
+  }
+}
+
+}
+.mat-slide-toggle.toggleBtn {
+  margin-right: 0;
+}
+
+.border_bottom {
+  position: relative;
+
+  &:after {
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      bottom: 0px;
+      height: 1px;
+      display: block;
+      clear: both;
+      content: '';
+      background-color: var(--gray_color_80);
+  }
+}
+
+.mat-btn {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+
+  &.blue {
+      color: var(--primary_color);
+  }
+
+  &.red {
+      color: var(--universalRed);
+  }
+  &.no-mar{
+      margin: 0 8px;
+  }
+}
+
+.max_75 {
+  width: 75%;
+}
+
+.gray_bg {
+  background-color: var(--backgroud_color);
+  padding: 18.8125px 18.8125px 0 18.8125px;
+}
+.equalTo{
+  text-align: center;
+  line-height: 36.81px;
+}
+.sub-accordion{
+  padding-bottom: 18.8125px;
+}
+.static_label{
+  margin-bottom: 5px;
+}
+
+.applyBorder{
+  border: 1px solid var(--gray_color);
+  border-radius: 10px;
+}

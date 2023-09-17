@@ -1,0 +1,98 @@
+<div class="inner-container col-lg-12 col-md-12 col-sm-12">
+  <div class="wrapper">
+   <div class="d-flex justify-content-between">
+    <div class="d-flex">
+      <mat-icon class="gray cursorPointer my-1 ml-n3"
+      (click)="goBack()">keyboard_backspace</mat-icon>
+      <h3 class="ml-3 heading">{{CampaignName}}</h3>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="campaignView">
+        <mat-slide-toggle class="slideToggle" [checked]="isChecked == 'Start' ? true : false">
+          
+        </mat-slide-toggle> 
+      </div>
+      
+      <div class="addCampaign" (click)="goToUpdateCampaign()">
+       <button class="btn"><mat-icon style="color:rgb(202, 202, 202);">mode_edit</mat-icon></button> 
+      </div>
+    </div>
+   </div>
+   <div class="mb-4 mt-2 pl-4">
+    <div class="entireRow"> 
+        <div class="card bigCard">
+            <div class="card-body">
+              <h5 class="card-subtitle font-weight-bold">Campaign Details</h5>
+              <div class="d-flex justify-content-left mb-3">
+                <span class="span1">Channel <b>:</b></span>
+                <span class="span1 ml-2">{{ChannelName}}</span>
+              </div>
+              <div class="d-flex justify-content-left mb-3">
+                <span class="span1">Channel Source <b>:</b></span>
+                <span class="span1 ml-2" *ngFor="let item of ChannelSource">
+                  {{item.ChannelSourceNames}}</span>
+              </div>
+              <div class="d-flex justify-content-left mb-3">
+                <span class="span1">Start Time <b>:</b></span>
+                <!-- <span class="span1 ml-2">{{StartTime | date:'dd/MM/yyyy hh:mm:ss'}}</span> -->
+                <span class="span1 ml-2">{{StartTime}}</span>
+              </div>
+              <div class="d-flex justify-content-left mb-3">
+                <span class="span1">End Time <b>:</b></span>
+                <!-- <span class="span1 ml-2">{{EndTime | date:'dd/MM/yyyy hh:mm:ss'}}</span> -->
+                <span class="span1 ml-2">{{EndTime}}</span>
+              </div> 
+              <!-- <a routerLink="/campaign/details" class="card-link">More Details</a> -->
+              <a (click)="dialogView()" class="card-link">More Details</a>
+             </div>
+        </div>
+    
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-subtitle font-weight-bold">Sent Status</h5>
+                <div echarts [options]="doughnutChartData"  class="chartHeight"></div> 
+           </div>
+        </div>
+     
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-subtitle font-weight-bold">Average Speed</h5>
+              <div echarts [options]="lineChartData" class="chartHeight"></div> 
+            </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-subtitle font-weight-bold">Delivery Status</h5>
+             <div class="row venn">
+               <div class="col-12 displayCenter">
+              <div class="circle circle1" [ngStyle]="{'background':common.color['yellow']}">
+                <div class="">
+                  <span class="span1">{{'Block 1'}}</span>
+                  <span class="span2" matTooltip="{{vennBlock1}}">{{common.roundNumberTilltwoPosition(vennBlock1)}}L</span>
+                </div>
+              </div>
+              <div class="circle circle2" [ngStyle]="{'border-color':common.color['yellow']}">
+                <div class="">
+                  <span class="span1">{{'Block 2'}}</span>
+                  <span class="span2" matTooltip="{{vennBlock2}}">{{common.roundNumberTilltwoPosition(vennBlock2)}}L</span>
+                </div>
+              </div>
+              <div class="circle circle3" [ngStyle]="{'background':common.color['red']}">
+                <div class="">
+                  <span class="span1">{{'Block 3'}}</span>
+                  <span class="span2" matTooltip="{{vennBlock3}}">{{common.roundNumberTilltwoPosition(vennBlock3)}}L</span>
+                </div>
+              </div>
+               </div> 
+             </div>
+           </div>
+        </div>
+    
+    </div>    
+  </div>
+    <div class="CampaignViewTable">
+      <app-pitch-table [tabValue]="tabValue" [type]="type"></app-pitch-table>
+    </div>
+  </div>
+</div>

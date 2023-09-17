@@ -1,0 +1,97 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <ng-container *ngIf="stockSearch">
+            <div class="search-form">
+                <form [formGroup]="form">
+                    <legend>Search</legend>
+                    <div class="formGroup">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.ApplicantNo}}</mat-label>
+                                    <input type="text" matInput formControlName="hawkerid" />
+                                </mat-form-field>                                                  
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RegistrationNo}}</mat-label>
+                                    <input type="text" matInput formControlName="registrationno" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.FirstName}}</mat-label>
+                                    <input type="text" matInput formControlName="firstname" appTitleCase/>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.MiddleName}}</mat-label>
+                                    <input type="text" matInput formControlName="middlename" appTitleCase/>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.LastName}}</mat-label>
+                                    <input type="text" matInput formControlName="lastname" appTitleCase/>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.MobileNumber}}</mat-label>
+                                    <input type="text" matInput formControlName="mobilenumber" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                            <button (click)="reset()" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                            <button (click)="searchHawker()" class="btn" mat-flat-button color="primary"
+                                type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <app-filter *ngIf="tabValue.length>0" component="stock-issue" [role]="userDetails.role" [totalCount]="tabValue.length" [type]="'hawker'" [tabValue]="tabValue">
+            </app-filter>
+<app-loader *ngIf="loader"></app-loader>
+
+            <div class="dataTable">
+                <table>
+                    <thead>
+                        <tr *ngIf="tabValue.length>0">
+                                <th class="column{{i}}" *ngFor="let data of tabKey; let i = index">{{data}}</th>
+                        </tr>
+                        <tr *ngIf="noData">
+                            <th>No record found</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="tabValue.length>0">
+                        <ng-container
+                            *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                            <tr>
+                                <ng-container *ngFor="let val of tabKey; let i = index">
+                                    <td *ngIf="val == 'Sr No'" class="column{{i}}"><span>{{j+1}}</span></td>
+                                    <td *ngIf="val !== 'Sr No' && val !== 'Applicant No.'" class="column{{i}}">
+                                        <span [innerHtml]="data[tabKey[i]]"></span>
+                                    </td>
+                                    <td *ngIf="val == 'Applicant No.'" class="column{{i}}">
+                                        <span><a href="javascript:void(0)"
+                                                (click)="openDialog(data)">{{data[tabKey[i]]}}</a></span>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" *ngIf="tabValue.length>10">
+                <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!stockSearch">
+            <app-stock [hawkerDetails]="data"></app-stock>
+        </ng-container>
+    </div>
+</div>

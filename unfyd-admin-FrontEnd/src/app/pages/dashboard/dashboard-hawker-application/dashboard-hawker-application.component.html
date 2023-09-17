@@ -1,0 +1,53 @@
+<app-loader class="" *ngIf="loader"></app-loader>
+
+<div *ngIf="!loader">
+  <div class="row mx-0 my-3  d-flex align-items-center">
+    <div class="col-8 text-left">
+      <span class="font-bold">Applicants</span>
+    </div>
+    <div class="col-4 text-right">
+      <select class="form-control rounded smallSelect" id="exampleFormControlSelect1" [(ngModel)]="selectedGrievance"
+          (change)="getInformation('usp_unfyd_hawker_application_dashboard',selectedGrievance)">
+          <option>Day</option>
+          <option>Month</option>
+          <option>Year</option>
+        </select>
+    </div>
+  </div>
+  <div class="row mx-0 d-flex justify-content-center" >
+    <div class="col-12 text-center">
+      <span class="extraLargeFont font-weight-bold"> {{sum}}</span>
+    </div>
+  </div>
+  <div class="row mx-0 d-flex justify-content-center" >
+    <div class="col-4 my-0 text-center mx-0" *ngFor="let item of trainingData | keyvalue;let i= index">
+        <div class="col-12 m-0 p-0 d-flex justify-content-center">
+          <div class="circle d-flex align-items-center justify-content-center rounded-circle font-weight-bold" ngClass="color{{i}}" >
+            {{item.value}}
+          </div>
+        </div>
+        <div class="row m-0">
+        <div class="col-12 m-0 p-0 text-center">
+          <span class="smallText">{{item.key}}</span> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-0 my-3">
+    <div class="col-2">
+      <mat-icon (click)="changeDate('prev')">keyboard_arrow_left</mat-icon>
+    </div>
+    <div class="col-8 text-center dashboardDate">
+        <span class="" *ngIf="selectedGrievance == 'Day'">{{ hawkerAppDate | date:'dd MMM yyyy'}}</span>
+      <span class="" *ngIf="selectedGrievance == 'Month'">{{ hawkerAppDate | date : 'MMM yyyy'}}</span>
+      <span class="" *ngIf="selectedGrievance == 'Year'">{{ hawkerAppDate | date:'yyyy'}}</span>
+    </div>
+    <div class="col-2">
+      <span [ngClass]="nextDisable ? 'disabledIT' :'cursorPointer'">
+        <mat-icon (click)="changeDate('next')">keyboard_arrow_right</mat-icon>
+      </span>
+    </div> 
+  </div>
+
+</div>

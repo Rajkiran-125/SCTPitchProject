@@ -1,0 +1,274 @@
+.entireRow{
+  display: flex;
+  flex-wrap: nowrap;
+  gap:1rem !important;
+  // width: 100%;
+}
+.heading{
+  font-weight: bold;
+  color: var(--primary_color);
+}
+
+.bigCard{
+  width: 20rem !important;
+  height: 14rem;
+}
+.card{
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border-radius: 12px;
+  width: 15.5rem;
+  height: 15rem;
+  .card-link {
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: var(--content) !important;
+  }
+  .card-body{
+    padding: 15px 10px !important;
+    .span1{
+      font-size: var(--content) !important;
+      line-height: 15px;
+    }
+  }
+}
+// .card1{
+//   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+//   border-radius: 12px;
+//   width: 14rem;
+//   .card-link {
+//     text-decoration: underline;
+//   }
+// }
+// .card2 {
+//   // padding: 5px;
+//   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+//   border-radius: 12px;
+//   width: 12rem;
+//   .card-link {
+//     text-decoration: underline;
+//   }
+// }
+
+
+.venn{
+    display: flex;
+    align-items: center;
+    margin: 0px 0 20px;
+    // height: 32vh !important;
+
+    .displayCenter {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+
+      .circle {
+        overflow: hidden;
+        line-height: 16px;
+        border-radius: 100%;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .circle1 {
+        box-shadow: 0px 0px 6px #0000001a;
+        width: 15vh;
+        height: 15vh;
+        margin-left: -47% !important;
+        z-index: 1;
+        color: var(--white_color);
+        .span1 {
+          font-size: var(--content);
+          width: auto;
+          display: block;
+        }
+        .span2 {
+          display: inline-block;
+          text-align: center;
+          font: normal normal normal var(--extralarge-font) Nunito Sans;
+          letter-spacing: 0px;
+        }
+      }
+
+      .circle2 {
+        width: 12vh;
+        height: 12vh;
+        border: 2px solid var(--unnamed-color-fbad17);
+        background: #ffffff 0% 0% no-repeat padding-box;
+        box-shadow: 0px 0px 6px #0000001a;
+        border: 2px solid;
+        margin-top: 26% !important;
+        margin-left: -15% !important;
+        overflow: visible;
+        z-index: 2;
+        .span1 {
+          font-size: var(--content);
+          width: auto;
+          display: block;
+        }
+        .span2 {
+          display: inline-block;
+          text-align: center;
+          font: normal normal normal var(--extralarge-font) Nunito Sans;
+          letter-spacing: 0px;
+          font-size: small;
+        }
+      }
+
+      .circle3 {
+        width: 11vh;
+        height: 11vh;
+        background: #ffe1a8 0% 0% no-repeat padding-box;
+        color: var(--white_color);
+        box-shadow: 0px 0px 6px #0000001a;
+        margin-top: 11vh;
+        margin-left: -20vh;
+        overflow: auto;
+        z-index: 3;
+        .span1 {
+          font-size: var(--content);
+          width: auto;
+          display: block;
+        }
+        .span2 {
+          display: inline-block;
+          text-align: center;
+          font: normal normal normal var(--extralarge-font) Nunito Sans;
+          letter-spacing: 0px;
+        }
+      }
+    }
+  }
+
+  .CampaignViewTable ::ng-deep .dataTable table tbody tr td:nth-child(1) {
+    text-align: left;
+  }
+  .CampaignViewTable ::ng-deep .dataTable table thead tr th:nth-child(1){
+    text-align: left;
+  }
+
+
+
+   .campaignView ::ng-deep .mat-slide-toggle-bar {
+      height: 22px !important;
+      width:65px !important;
+      border-radius: 5px !important;
+      background-color: #c5c4c4;
+      text-align: center;
+    }
+    .campaignView ::ng-deep .mat-slide-toggle-thumb{
+      top:4px !important;
+      right:3px !important;
+      position: relative;
+      width: 56px !important;
+      border-radius: 5px !important;
+      display: block !important;
+      background-color: #fc3164 !important;
+      text-align: center;
+    } 
+    .campaignView ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+      width:65px !important;
+      background-color: #c5c4c4;
+    }
+    .campaignView   ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
+      width: 56px !important;
+      background-color: #3dbf87 !important;
+      text-align: center;
+    }
+    
+    :host {
+      .mat-slide-toggle {
+        &.mat-checked {
+          ::ng-deep.mat-slide-toggle-thumb::after {
+            content: 'Active';
+            color: #fff;
+          }
+        }
+        &:not(.mat-checked) {
+          ::ng-deep.mat-slide-toggle-thumb::after {
+            content: 'Inactive';
+            color: #fff;
+          }
+        }
+      }
+    }
+
+  
+   
+
+ 
+  
+
+
+
+
+
+    .addCampaign{
+      position: relative;
+      border: 1px solid (--black_color_80) !important;
+      width: 3%;
+      padding: 15px;
+      height: 5px;
+      border-radius: 4px;
+      background-color: #ffffff;
+      box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    }
+    .addCampaign mat-icon{
+      position: absolute;
+      top:1px;
+      right:0px;
+      left:3px;
+      
+    }
+  
+  
+  
+   
+  
+    @media screen and (max-width: 767px){
+      .card{
+        width: 100% !important;
+      }
+      .card2{
+        width: 100% !important;
+      }
+      .bigCard{
+        width: 100% !important;
+      }
+    }
+    @media only screen and (max-width: 1024px) and (min-width: 767px){
+      .card{
+        width: 48% !important;
+      }
+      .card2{
+        width: 48% !important;
+      }
+      .bigCard{
+        width: 48% !important;
+      }
+    }
+
+    @media only screen and (min-width: 1025px) and (max-width:1400px)  {
+
+      .card{
+
+        .card-link {
+
+          font-size: 11px !important;
+
+        }
+
+        .card-body{
+
+          .span1{
+
+            font-size: 11px !important;
+
+          }
+
+        }
+
+      }
+
+    }
+ 

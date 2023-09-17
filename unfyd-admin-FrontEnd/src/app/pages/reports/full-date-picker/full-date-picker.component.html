@@ -1,0 +1,45 @@
+<form [formGroup]="form">
+    <div class="formGroup">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <mat-form-field appearance="fill"
+                    [ngClass]="{ 'shake': submittedForm && f.fromDate.errors }" (click)="$event.stopPropagation()">
+                    <mat-label>From Date</mat-label>
+                    <input (focus)="fromDate?.open()" (click)="fromDate?.open()" readonly
+                        formControlName="fromDate" type="text" [matDatepicker]="fromDate"
+                        [max]="maxDate" [min]="minDate" matInput>
+                    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                    <mat-datepicker #fromDate></mat-datepicker>
+                    <mat-error *ngIf="submittedForm && f.fromDate.errors">
+                        <ng-container *ngIf="f.fromDate.errors.required">From Date is required
+                        </ng-container>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <mat-form-field appearance="fill"
+                    [ngClass]="{ 'shake': submittedForm && f.toDate.errors }" (click)="$event.stopPropagation()">
+                    <mat-label>To Date</mat-label>
+                    <input (focus)="toDate.open()" (click)="toDate.open()" readonly
+                        formControlName="toDate" type="text" [matDatepicker]="toDate" [max]="maxDate"
+                        [min]="minDate" matInput>
+                    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                    <mat-datepicker #toDate></mat-datepicker>
+                    <mat-error *ngIf="submittedForm && f.toDate.errors">
+                        <ng-container *ngIf="f.toDate.errors.required">To date is required
+                        </ng-container>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+
+        
+        <div class="btn-group ">
+            <button (click)="reset()" (click)="$event.stopPropagation()" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+            <button (click)="searchHawker()" (click)="$event.stopPropagation()" class="btn" mat-flat-button color="primary"
+                >Search</button>
+        </div>
+    </div>
+    </div>
+</form>

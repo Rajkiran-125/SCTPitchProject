@@ -1,0 +1,61 @@
+<div class="inner-container height-adjust">
+    <div class="wrapper">
+        <ng-container *ngIf="paymentSearch">
+                <form [formGroup]="form">
+                    <legend class="report_heading mt-4">{{changeModuleDisplayName}}</legend>
+                </form>
+            <app-filter component="" [type]="type" [paginationArray]="paginationArray"
+                [tabValue]="tabValue" [addBtn]="false"></app-filter>
+
+            <app-loader *ngIf="loader"></app-loader>
+            <div *ngIf="!loader">
+                <div class="dataTable" style="overflow: auto;">
+                    <table>
+                        <thead>
+                            <tr *ngIf="tabValue.length>0">
+                                <ng-container *ngFor="let data of finalField; let i = index">
+                                    <th [ngClass]="!data.checked ? 'tabCol' : ''" class="column{{i}}" (click)="sortUsers(data.value, data.order)">{{data.value}}
+                                        <span [ngSwitch]="data.order">
+                                            <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                                            <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                                        </span>
+                                    </th>
+                                </ng-container>
+                            </tr>
+                            <tr *ngIf="noData">
+                                <th>No record found</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="tabValue.length>0">
+                            <ng-container *ngFor="let data of tabValue | filter: search; let j = index">
+                                <tr>
+                                    <ng-container *ngFor="let val of finalField; let i = index">
+                                        <td *ngIf="val.value == 'Sr No'" [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                                            <span>{{((currentpage-1)*(itemsReportPerPage))+(j+1)}}</span>
+                                        </td>
+                                        <td *ngIf="val.value !== 'Sr No' && val.value !== 'Channel'"
+                                        [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                                            <span >{{data[val.value] == '' ? '-' :data[val.value] == ' ' ?'-':
+                                                data[val.value]}}</span>
+                                        </td>
+                                        <td *ngIf="val.value == 'Channel'" [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                                            <span [innerHTML]="data[val.value]">
+                                            </span>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" *ngIf="paginationArray.length>10">
+                    <pagination-controls (pageChange)="pageChange($event)" previousLabel="" nextLabel="">
+                    </pagination-controls>
+                </div>
+                <input type="hidden"
+                    *ngFor="let data of paginationArray | paginate: { itemsPerPage: itemsReportPerPage, currentPage: currentpage }">
+            </div>
+        </ng-container>
+
+    </div>
+</div>

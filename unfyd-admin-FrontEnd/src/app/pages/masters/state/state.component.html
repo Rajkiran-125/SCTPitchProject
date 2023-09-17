@@ -1,0 +1,55 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend>State</legend>
+                <div class="formGroup">
+                    <div class="row">
+
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.countryid.errors }">
+                                <mat-label>Country</mat-label>
+                                <mat-select
+                                    formControlName="countryid"
+                                   
+                                    #select>
+                                    <mat-option *ngFor="let data of countrylist" [value]="data.CountryID"
+                                        >{{ data.CountryName }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.statename.errors }">
+                                <mat-label>State Name</mat-label>
+                                <input matInput  formControlName="statename" appTitleCase>
+                                <mat-error *ngIf="f.statename.errors">
+                                    <ng-container *ngIf="f.statename.errors.maxlength"> 
+                                        {{masters.MaxLengthMessage1}}
+                                   </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.statecode.errors }">
+                                <mat-label>State Code</mat-label>
+                                <input matInput  formControlName="statecode" appTitleCase maxlength="50">                      
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Description</mat-label>
+                                <input matInput formControlName="description" appTitleCase maxlength="100">
+                            </mat-form-field>
+                        </div>
+                    </div>
+            
+                </div>
+    
+                <div class="btn-group">
+                    <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                    <button class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                    <button class="btn" mat-flat-button color="primary" (click)="submit()" type="button">Save</button>
+                </div>
+        </form>
+    </div>
+    </div>

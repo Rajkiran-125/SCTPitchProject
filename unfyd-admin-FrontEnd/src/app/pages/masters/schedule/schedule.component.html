@@ -1,0 +1,436 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form" #formDirective="ngForm">
+            <div class="row">
+                <div class="col-1 text-center backarrow">
+                    <mat-icon class="cursorPointer gray" (click)="back()">keyboard_backspace</mat-icon>
+                </div>
+                <div class="col-lg-11 col-md-10 col-10 pl-0">
+                    <legend>{{Id == null ? 'Add New ' : 'Update '}} Schedule</legend>
+                    <div class="formGroup mt-3">
+                        <div class="row">
+                            <div class="col-lg-9 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label> {{labelName?.Name}}</mat-label>
+                                    <input matInput formControlName="Name">
+                                    <mat-error *ngIf="f.Name?.errors">
+                                        <ng-container *ngIf="f.Name?.errors?.required"> {{labelName?.Name}} is required.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Name?.errors?.pattern"> {{labelName?.Name}} is invalid.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Name?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Name?.errors?.checknull1">Must be at least 3 characters
+                                            long.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div>
+                        <div class="row mt-3">
+                                <div class="col-12">
+                                    <label for=""><b> {{labelName?.Frequency}}</b></label>
+                                </div>
+                                <div class="col-12">
+                                    <div style="padding: 20px 3px;">
+                                        <mat-label style="padding-right: 75px;"> {{labelName?.Occurs}}</mat-label>
+                                        <mat-radio-group formControlName="action" class="font">
+                                            <mat-radio-button (change)="actions($event);SummaryDescription()" value="Daily"
+                                                class="font dailyWeekMonth"> {{labelName?.Daily}}</mat-radio-button>
+                                            <mat-radio-button (change)="actions($event);SummaryDescription()" value="Weekly"
+                                                class="font dailyWeekMonth"> {{labelName?.Weekly}}</mat-radio-button>
+                                            <mat-radio-button (change)="actions($event);SummaryDescription()" value="Monthly"
+                                                class="font dailyWeekMonth"> {{labelName?.Monthly}}</mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                    <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                                        *ngIf="ActionRequired == true">Please Select the radio button</mat-hint>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-12">
+                                    <div *ngIf="actionname=='Daily'">
+                                        <span style="padding-right: 45px;" class="font">
+                                            {{labelName?.RecursEvery}}</span>
+                                        <button class=" btn-gray placeholderremove" (click)="increment(-1); SummaryDescription()"><span
+                                                class="minusfont">-</span></button>
+                                        <button class="placeholdercount"><span>{{DailyCount}}</span></button>
+                                        <button type="button" class="btn-gray placeholderadd"
+                                            (click)="increment(1); SummaryDescription()"><span class="addfont">+</span></button>
+                                        &nbsp;&nbsp;
+                                        <mat-label style="padding-right: 45px;" class="daysWeeksFont">
+                                            {{labelName?.Days}}</mat-label>
+                                    </div>
+                                    <div *ngIf="actionname=='Weekly'" class="row">
+                                        <div class="col-12">
+                                            <mat-label style="padding-right: 45px;">
+                                                {{labelName?.RecursEvery}}</mat-label>
+                                            <button class=" btn-gray placeholderremove"
+                                                (click)="Weekincrement(-1); SummaryDescription()"><span class="minusfont">-</span></button>
+                                            <span class="placeholdercount">
+                                                {{WeekDailyCount}}
+                                            </span>
+                                            <button type="button" class="btn-gray placeholderadd"
+                                                (click)="Weekincrement(1); SummaryDescription()"><span class="addfont">+</span></button>
+                                            &nbsp;&nbsp;
+                                            <mat-label style="padding-right: 45px;" class="daysWeeksFont">
+                                                {{labelName?.Weekon}}</mat-label>
+                                        </div>
+                                        <div class="col-12 mt-4 mb-2">
+                                            <mat-checkbox *ngFor="let weekday of weekdays" color="primary"
+                                                style="padding-right: 20px;" [(ngModel)]="weekday.selected"
+                                                [ngModelOptions]="{standalone: true}" (click)="WeekSelectFalse(); SummaryDescription()">
+                                                {{ weekday.name }}
+                                            </mat-checkbox>
+                                            <mat-hint class="mat-error" *ngIf="weekdayNotSelected"
+                                                style="padding-top: 5px;font-size: 12px;">Please select the
+                                                Day</mat-hint>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="actionname=='Monthly'">
+
+                                        <div class='row' style="padding: 12px 3px;">
+                                            <div class="col-lg-3 col-md-9 col-sm-12 dayThe">
+                                                <mat-radio-group formControlName="secondaction">
+                                                    <mat-radio-button (change)="firstactions($event);SummaryDescription()" class="font"
+                                                        value="Day" style="padding-right: 60px;">
+                                                        {{labelName?.Day}}</mat-radio-button>
+                                                    <mat-radio-button (change)="firstactions($event);SummaryDescription()" class="font"
+                                                        value="The"> {{labelName?.The}}</mat-radio-button>
+                                                </mat-radio-group>
+                                            </div>
+
+                                            <ng-container *ngIf="firstactionname=='Day'">
+                                                <div class="col-lg-3 col-md-9 col-sm-12">
+                                                    <button class=" btn-gray placeholderremove"
+                                                        (click)="Monthincrement(-1); SummaryDescription()"><span
+                                                            class="minusfont">-</span></button>
+                                                            <button class="placeholdercount"><span>{{MonthInterval}}</span></button>
+                                                    <button type="button" class="btn-gray placeholderadd"
+                                                        (click)="Monthincrement(1); SummaryDescription()"><span
+                                                            class="addfont">+</span></button>
+                                                    &nbsp;&nbsp;
+                                                    <mat-label> {{labelName?.ofEvery}}</mat-label>
+                                                </div>
+                                                &nbsp;
+                                                <div class="col-lg-3 col-md-9 col-sm-12">
+                                                    <button class=" btn-gray placeholderremove"
+                                                        (click)="Thirdincrement(-1); SummaryDescription()"><span
+                                                            class="minusfont">-</span></button>
+                                                    <button class="placeholdercount"><span>{{ThirdDailyCount}}</span></button>
+                                                    <button type="button" class="btn-gray placeholderadd"
+                                                        (click)="Thirdincrement(1); SummaryDescription()"><span
+                                                            class="addfont">+</span></button>
+                                                    &nbsp;&nbsp;
+                                                    <mat-label class="daysWeeksFont"> {{labelName?.Months}}</mat-label>
+                                                </div>
+                                            </ng-container>
+
+                                            <ng-container *ngIf="firstactionname=='The'">
+                                                <div class="col-lg-2 col-md-9 col-sm-12">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label> {{labelName?.Select}}</mat-label>
+                                                        <mat-select formControlName="RomanNum" (selectionChange)="SummaryDescription()">
+                                                            <mat-option *ngFor="let data of DayNum" [value]="data">
+                                                                {{data}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <mat-error *ngIf="f.RomanNum.errors">
+                                                            <ng-container *ngIf="f.RomanNum.errors.required">
+                                                            </ng-container>
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-lg-2 col-md-9 col-sm-12">
+                                                    <mat-form-field appearance="fill">
+                                                        <mat-label> {{labelName?.SelectDays}}</mat-label>
+                                                        <mat-select formControlName="Weeks" (selectionChange)="SummaryDescription()">
+                                                            <mat-option *ngFor="let data of weekdays"
+                                                                [value]="data.name">
+                                                                {{data.name}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <mat-error *ngIf="f.Weeks.errors">
+                                                            <ng-container *ngIf="f.Weeks.errors.required">Please select
+                                                                the Day
+                                                            </ng-container>
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <mat-label class="mt-1"></mat-label>
+                                                <div class="col-lg-3 col-md-9 col-sm-12 d-flex">
+                                                    <!-- <div style="display: -webkit-inline-box;" class=" "> -->
+
+                                                    <div class="placeholderBtn">
+                                                        <button class=" btn-gray placeholderremove"
+                                                            (click)="initsecincrement(-1); SummaryDescription()"><span
+                                                                class="minusfont">-</span></button>
+                                                        <button class="placeholdercount"><span>{{SecDailyCount}}</span></button>
+                                                        <button type="button" class="btn-gray placeholderadd"
+                                                            (click)="initsecincrement(1); SummaryDescription()"><span
+                                                                class="addfont">+</span></button>
+                                                    </div>
+                                                    <!-- </div> -->
+                                                    &nbsp;&nbsp;
+                                                    <mat-label class="mt-1 daysWeeksFont">
+                                                        {{labelName?.Months}}</mat-label>
+                                                </div>
+
+
+                                            </ng-container>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                        </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-8 col-md-6 col-sm-12">
+                                <label for=""><b> {{labelName?.DailyFrequency}}</b></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-11 col-md-9 col-sm-12">
+                                <div style="padding: 15px 3px;">
+                                    <mat-radio-group formControlName="OccurAction">
+                                        <mat-radio-button (change)="secondactions($event);SummaryDescription()" value="Occurs once at"
+                                            class="font"> {{labelName?.Occursonceat}}</mat-radio-button>
+                                        <mat-radio-button (change)="secondactions($event);SummaryDescription()" value="Occurs Every"
+                                            class="font"> {{labelName?.OccursEvery}}</mat-radio-button>
+                                    </mat-radio-group>
+                                    <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                                        *ngIf="SecActionRequired == true">Please Select the radio button</mat-hint>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-bottom: 10px;">
+                            <div class="row" *ngIf="secondactionname=='Occurs once at'">
+                                <div class="ml-3 ">
+                                    <div class=" d-flex align-items-center pr-0 TimePickerStyle"
+                                        [matMenuTriggerFor]="timeFrom">
+                                        <input class="form-input border-0 w-100"
+                                            value="{{configdata?.hour ? configdata?.hour > 9 ? configdata?.hour : '0'+configdata?.hour : '00'}}:{{configdata?.minute ? configdata?.minute > 9 ? configdata?.minute : '0'+configdata?.minute : '00'}}:{{configdata?.second ? configdata?.second > 9 ? configdata?.second : '0'+configdata?.second : '00'}}"
+                                            [disabled]="true" placeholder="00:00:00" />
+                                        <mat-icon class="timerIconPosition">access_time</mat-icon>
+                                        <mat-menu #timeFrom="matMenu"
+                                            class="w-100 px-2  d-flex align-items-center cardMoreFetures"
+                                            xPosition="before">
+                                            <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();SelectTime1False();SummaryDescription();
+                                        $event.stopPropagation();" [(ngModel)]="configdata" (change)="SummaryDescription();"
+                                                [ngModelOptions]="{standalone: true}" [seconds]="true" [hourStep]="1"
+                                                [minuteStep]="1" [secondStep]="1">
+                                            </ngb-timepicker>
+                                        </mat-menu>
+                                    </div>
+                                </div>
+                            </div>
+                            <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                                *ngIf="SelectTime1 == true">Time is required</mat-hint>
+                        </div>
+                        <div *ngIf="secondactionname=='Occurs Every'">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-9 col-sm-12">
+                                    <mat-label style="padding-right: 45px;"> {{labelName?.RecursEvery}}</mat-label>
+                                    <button class=" btn-gray placeholderremove" (click)="secincrement(-1);SummaryDescription()"><span
+                                            class="minusfont">-</span></button>
+                                    <button class="placeholdercount"><span>{{DailyCountSec}}</span></button>
+                                    <button type="button" class="btn-gray placeholderadd"
+                                        (click)="secincrement(1);SummaryDescription()"><span class="addfont">+</span></button>
+                                    &nbsp;&nbsp;
+                                </div>
+                                <div class="col-lg-2 col-md-9 col-sm-12" style="margin-left: -35px;">
+                                    <mat-form-field appearance="fill">
+                                        <!-- <mat-label>Select Time</mat-label> -->
+                                        <mat-select formControlName="Hours" (selectionChange)="SelectDailyCountSecFunc($event.value);SummaryDescription()">
+                                            <mat-option *ngFor="let data of SelectTime" [value]="data">
+                                                {{data}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row" style=" padding-left: 15px;">
+                                <div class="mr-3 d-flex justify-content-between align-items-center">
+                                    <div class=" d-flex align-items-center pr-0 " [matMenuTriggerFor]="timeFrom2">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label> {{labelName?.StartTime}}</mat-label>
+                                            <input matInput class="w-100" readonly
+                                                value="{{configdataStart?.hour ? configdataStart?.hour > 9 ? configdataStart?.hour : '0'+configdataStart?.hour : '00'}}:{{configdataStart?.minute ? configdataStart?.minute > 9 ? configdataStart?.minute : '0'+configdataStart?.minute : '00'}}:{{configdataStart?.second ? configdataStart?.second > 9 ? configdataStart?.second : '0'+configdataStart?.second : '00'}}"
+                                                placeholder="Start Time" />
+                                            <mat-icon class="timerIconPosition" matSuffix>access_time</mat-icon>
+                                        </mat-form-field>
+                                        <mat-menu #timeFrom2="matMenu"
+                                            class="w-100 px-2  d-flex align-items-center cardMoreFetures"
+                                            xPosition="before">
+                                            <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();SelectTime2False();SummaryDescription();
+                                                $event.stopPropagation();" [(ngModel)]="configdataStart" (change)="SummaryDescription();"
+                                                [ngModelOptions]="{standalone: true}" [seconds]="true" [hourStep]="1"
+                                                [minuteStep]="1" [secondStep]="1">
+                                            </ngb-timepicker>
+                                        </mat-menu>
+                                    </div>
+                                </div>
+                                <div class="mr-3 d-flex justify-content-between align-items-center">
+                                    <div class=" d-flex align-items-center pr-0 " [matMenuTriggerFor]="timeFrom3">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label> {{labelName?.EndTime}}</mat-label>
+                                            <input matInput class=" w-100" readonly
+                                                value="{{configdataEnd?.hour ? configdataEnd?.hour > 9 ? configdataEnd?.hour : '0'+configdataEnd?.hour : '00'}}:{{configdataEnd?.minute ? configdataEnd?.minute > 9 ? configdataEnd?.minute : '0'+configdataEnd?.minute : '00'}}:{{configdataEnd?.second ? configdataEnd?.second > 9 ? configdataEnd?.second : '0'+configdataEnd?.second : '00'}}"
+                                                placeholder="00:00:00" />
+                                            <mat-icon class="timerIconPosition" [matMenuTriggerFor]="timeFrom3"
+                                                matSuffix>access_time</mat-icon>
+                                        </mat-form-field>
+                                        <mat-menu #timeFrom3="matMenu"
+                                            class="w-100 px-2  d-flex align-items-center cardMoreFetures"
+                                            xPosition="before">
+                                            <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault(); SelectTime3False();SummaryDescription();$event.stopPropagation();" [(ngModel)]="configdataEnd"
+                                                [ngModelOptions]="{standalone: true}" [seconds]="true" [hourStep]="1" (change)="SummaryDescription();"
+                                                [minuteStep]="1" [secondStep]="1">
+                                            </ngb-timepicker>
+                                        </mat-menu>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row errorPadding" *ngIf="SelectTime2 == true || SelectTime3 == true">
+                                <div class="col-3">
+                                    <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                                        *ngIf="SelectTime2 == true"> {{labelName?.StartTime}} is required</mat-hint>
+                                </div>
+                                <div class="col-3">
+                                    <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                                        *ngIf="SelectTime3 == true"> {{labelName?.EndTime}} is required</mat-hint>
+                                </div>
+                            </div>
+                            <div class="row errorPadding" *ngIf="StartTimeEndTimeGreater() ">
+                                <div class="col-6">
+                                    <mat-hint class="mat-error"
+                                        *ngIf="StartTimeEndTimeGreater() && (configdataEnd.hour !== 0 || configdataEnd.minute !== 0 || configdataEnd.second !== 0)"
+                                        style="margin-left: 86px;"> {{labelName?.EndTime}} should be greater than
+                                        {{labelName?.StartTime}}</mat-hint>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6 col-sm-12">
+                                <label for=""><b> {{labelName?.Duration}}</b></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-11 col-md-9 col-sm-12">
+                                <div style="padding: 15px 3px;">
+                                    <mat-radio-group formControlName="thirdaction">
+                                        <mat-radio-button (change)="thirdactions($event);SummaryDescription()" value="Start and End Date"
+                                            class="font">{{labelName?.StartEndDate}}</mat-radio-button>
+                                        <mat-radio-button (change)="thirdactions($event);SummaryDescription()" value="No End Date"
+                                            class="font">{{labelName?.NoEndDate}}</mat-radio-button>
+                                    </mat-radio-group>
+                                    <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                                        *ngIf="ThirdActionRequired == true">Please Select the radio button</mat-hint>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="thirdactionname == 'Start and End Date'">
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label> {{labelName?.StartDate}}</mat-label>
+                                    <input readonly formControlName="StartDate" type="text" [min]="todayDate"
+                                        [matDatepicker]="StartDate" (click)=SummaryDescription()  (dateChange)="SummaryDescription()" matInput>
+                                    <mat-datepicker-toggle matSuffix [for]="StartDate" (click)=SummaryDescription()></mat-datepicker-toggle>
+                                    <mat-datepicker #StartDate></mat-datepicker>
+                                    <mat-error *ngIf="f.StartDate.errors">
+                                        <ng-container *ngIf="f.StartDate.errors.required"> {{labelName?.StartDate}} is
+                                            required.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label> {{labelName?.EndDate}}</mat-label>
+                                    <input formControlName="EndDate" type="text" [min]="todayDate"
+                                        (click)=IsDateGreaterFalse();SummaryDescription() [matDatepicker]="EndDate"  (dateChange)="SummaryDescription()" matInput>
+                                    <mat-datepicker-toggle matSuffix [for]="EndDate"
+                                        (click)=IsDateGreaterFalse();SummaryDescription()></mat-datepicker-toggle>
+                                    <mat-datepicker #EndDate></mat-datepicker>
+                                    <mat-error *ngIf="f.EndDate.errors">
+                                        <ng-container *ngIf="f.EndDate.errors.required"> {{labelName?.EndDate}} is
+                                            required.
+                                        </ng-container>
+                                    </mat-error>
+                                    <mat-hint class="mat-error" *ngIf="IsDateGreater"> {{labelName?.EndDate}} should be
+                                        greater than {{labelName?.StartDate}}</mat-hint>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="thirdactionname == 'No End Date'">
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label> {{labelName?.StartDate}}</mat-label>
+                                    <input readonly formControlName="NewDate" type="text" [min]="todayDate"
+                                        [matDatepicker]="NewDate" (click)=SummaryDescription()  (dateChange)="SummaryDescription()" matInput>
+                                    <mat-datepicker-toggle matSuffix [for]="NewDate"    (click)=SummaryDescription()></mat-datepicker-toggle>
+                                    <mat-datepicker  #NewDate></mat-datepicker>
+                                    <mat-error *ngIf="f.NewDate.errors">
+                                        <ng-container *ngIf="f.NewDate.errors.required"> {{labelName?.StartDate}} is
+                                            required.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-6 col-sm-12 mb-3">
+                                <label for=""><b> {{labelName?.Summary}}</b></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-9 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label> {{labelName?.Description}}</mat-label>
+
+                                    <textarea matInput formControlName="Description" style="height:70px" maxlength="500" readonly></textarea>
+                                    <mat-error *ngIf="f.Description?.errors">
+                                        <ng-container *ngIf="f.Description?.errors?.pattern"> {{labelName?.Description}}
+                                            is invalid.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Description?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Description?.errors?.checknull1">Must be at least 3
+                                            characters long.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.Description?.errors?.maxlength">Cannot be beyond 500
+                                            characters.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <!-- <button *ngIf="userConfig?.Cancel" class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">
+                            {{labelName?.Cancel}}</button> -->
+                        <button *ngIf="Id == null && userConfig?.Reset" id="reset" #reset class="btn btn-gray" mat-flat-button
+                            type="Reset" (click)="resetfunc()"> {{labelName?.Reset}}</button>
+                        <button *ngIf="!Id" class="btn outline" mat-stroked-button
+                            color="primary" (click)="submit('SaveAndAddNew',formDirective)">
+                            {{labelName?.SaveAndAddNew}}</button>
+                        <button *ngIf="Id !== null ? (userConfig?.Update) : (userConfig?.Save)" class="btn" mat-flat-button
+                            color="primary" type="button" (click)="submit('Save',formDirective)">{{ reset ?
+                            labelName?.Update : labelName?.Save }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

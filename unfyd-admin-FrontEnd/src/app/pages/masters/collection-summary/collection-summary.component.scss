@@ -1,0 +1,42 @@
+// ::ng-deep{
+//     .wrapper{
+//         padding: 0 0 !important;
+//     }
+// }
+::ng-deep {
+
+  
+
+  .btn {
+    color: var(--primary_color);
+    font-size: var(--medium-font);
+  }
+
+  .form-control {
+    width: max-content !important;
+    height: auto !important;
+  }
+}
+
+.blue-color {
+  color: #4B89DC
+}
+
+.green-color {
+  // color:var(--success)
+  color: #36BC9B;
+}
+
+.red-color {
+  // color: var(--error);
+  color: #ED5564;
+}
+
+.dropDown {
+  font-size: 14px !important;
+  padding: 5px 5px !important;
+}
+
+select{
+  width: 85px !important;
+}

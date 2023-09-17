@@ -1,0 +1,133 @@
+<app-loader *ngIf="loader"></app-loader>
+<!-- {{finalField|json}}{{tabValue|json}} -->
+
+<div class="inner-container" *ngIf="tabValue.length > 0">
+    
+    <ng-container>
+    <app-filter [type]="type" [tabValue]="tabValue" class="mobileFilter" [pitchTable]="true"></app-filter>
+    </ng-container>
+
+  <div class="table-container px-0 py-0">
+    <div class="dataTable">
+      <table>
+        <thead>
+          <!-- {{ChannelNameIconArray | json}} -->
+          <tr>
+            <ng-container *ngFor="let data of finalField; let i = index" >             
+              <th class="{{'column'+i}}">
+                  {{data.value == 'Actionable' ? 'Action' : data.value}}
+              </th>
+            </ng-container>
+          </tr>
+          <tr *ngIf="tabValue.length == 0">
+            <th>No record found</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="tabValue.length > 0">
+          <tr
+            *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; 
+            let j = index" (click)="openCampaignDetailsView(data,j,data.RunningStatus )">
+            
+            <!-- {{tabValue|json}} -->
+            <ng-container *ngFor="let val of finalField; let i = index">
+              <!-- {{finalField|json}} -->
+              <!-- {{data | json}} -->
+              <!-- {{data.RunningStatus}}:{{j}} -->
+              <td>
+                <div class="d-flex" *ngIf=" val.value === 'Edit'" (click)="$event.stopPropagation()">
+                  <mat-icon [matMenuTriggerFor]="menu" class="cursor: pointer; position: relative; ">more_horiz</mat-icon>
+                  <mat-menu #menu="matMenu" class="master_action">                 
+                    <button mat-menu-item (click)="editCampaign(data)">
+                      <mat-icon>edit</mat-icon>
+                      <span>Edit</span>
+                    </button>
+                    <button mat-menu-item (click)="deleteCampaign(data)">
+                      <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                      <span>Delete</span>
+                    </button>
+                  </mat-menu>
+                </div>
+
+                <div class="campaignList" *ngIf=" val.value==='RunningStatus'" (click)="$event.stopPropagation()">
+                  <mat-slide-toggle  
+                  class="slideToggle" [checked]="data.RunningStatus == 'Start' ? true : false"
+                  (click)="changeCampaignStatus(data,j)">
+                  </mat-slide-toggle> 
+                </div>
+                <!-- {{data[val.value] | json}} -->
+                <ng-container *ngIf="val.value === 'Channels'">
+                  <div *ngFor="let row of ChannelNameIconArray">
+                      <!-- Only display icons for the current row -->
+                      <div class="d-flex" *ngIf="row.CampaignID === data.CampaignID">
+                          <div *ngFor="let iconHtml of row.icons" [innerHTML]="iconHtml"></div>
+                      </div>
+                  </div>
+              </ng-container>
+                
+                
+                
+                
+                <!-- <ng-container>
+                  <div class="d-flex" *ngIf="val.value === 'Channels'">
+                    <div *ngFor="let iconHtml of ChannelNameIconArray" [innerHTML]="iconHtml"></div>
+                  </div>
+                </ng-container> -->
+                <ng-container *ngIf="val.value === 'StartDateTime' || val.value === 'Sent' || val.value === 'Created On'
+                 || val.value === 'EndDateTime' || val.value === 'MaxCreatedDate'">
+                  <span>{{ formatDateTime(data[val.value]) }}</span>
+                </ng-container>
+                <!-- <ng-container *ngIf="val.value === 'EndDateTime' || val.value === 'Sent' || val.value === 'Created On'">
+                  <span>{{ formatDateTime(data[val.value]) }}</span>
+                </ng-container> -->
+                  <ng-container *ngIf="data[val.value] !== 'false' ? data[val.value] : '' ">
+                    <span *ngIf="val.value !== 'RunningStatus' && val.value !== 'Channels' && val.value !== 'StartDateTime'
+                    && val.value !== 'Sent' && val.value !== 'Created On' && val.value !== 'EndDateTime' && 
+                    val.value !== 'MaxCreatedDate'" 
+                    [ngStyle]="data[val.value] === 'Active' ? { 'color': '#00E676' } : data[val.value] === 'Inactive' ? { 'color': '#FBAD17' }:''" 
+                    >{{data[val.value] == '' ? false :data[val.value] == '' ? false: data[val.value]}}</span>
+                  </ng-container>
+               
+                
+
+              </td>
+            </ng-container>
+          </tr>     
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pagination" *ngIf="tabValue.length>10">
+    <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+  </div>
+  <!-- <div class="pagination" *ngIf="tabValue.length > itemsPerPage">
+    <pagination-controls (pageChange)="currentPage = $event" previousLabel="" nextLabel=""></pagination-controls>
+  </div> -->
+</div>
+
+
+<!------------- Empty Table --------------->
+
+<div class="inner-container pl-4" *ngIf="tabValue.length == 0">
+  <ng-container>
+    <app-filter [type]="type" [tabValue]="tabValue" class="mobileFilter" [pitchTable]="true"></app-filter>
+  </ng-container>
+  <!-- {{tabValue | json}} -->
+  <div class="table-container px-0 py-0">
+    <div class="dataTable">
+      <table>
+        <thead>
+          <tr>
+            <th>No record found</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Nitesh  -->
+
+
+
+

@@ -1,0 +1,47 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <app-steps [steps]="trainerFormSteps" [id]="path"></app-steps>
+    <div class="wrapper mat-form">
+        <form [formGroup]="form">
+            <legend>Bank Details</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.accountnumber.errors }">
+                            <mat-label>Account Number</mat-label>
+                            <input matInput formControlName="accountnumber">
+                            <mat-error *ngIf="submittedForm && f.accountnumber.errors">
+                                <ng-container *ngIf="f.accountnumber.errors.pattern">Account no. is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.ifsc.errors }">
+                            <mat-label>IFSC Code</mat-label>
+                            <input matInput formControlName="ifsc">
+                            <mat-error *ngIf="submittedForm && f.ifsc.errors">
+                                <ng-container *ngIf="f.ifsc.errors.pattern">IFSC code is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Bank Name</mat-label>
+                            <input matInput formControlName="bankname">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-stroked-button (click)="submit('save')" type="button">Save</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit('next')" type="button">Next Professional Details >></button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<!-- {{fullscreen}} -->
+<div class="tile" [ngStyle]="{'background-color': common.color[tile.backgroundColor] ? common.color[tile.backgroundColor] : '#4B89DC'}">
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center mainPlaceHolderValue mb-1" *ngIf="tile.mainPlaceHolder">
+        <span class="mainPlaceHolderHeaderTitle">{{tile.mainPlaceHolderHeader ? tile.mainPlaceHolderHeader : 'Main Place Holder'}}</span>
+        <!-- <span *ngIf="tile.mainPlaceHolderApi" >{{mainPlaceholderData}}</span> -->
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center align-items-center">
+    <div class="" [ngClass]="tile.subPlaceHolder1 && tile.subPlaceHolder2 ? 'col-6' : tile.subPlaceHolder1 && !tile.subPlaceHolder2 ? 'col-12' : 'col-6'" *ngIf="tile.subPlaceHolder1">
+      <div class="row countHeight">
+        <div class="col-12 d-flex  text-center font-weight-bold align-items-center">
+          <span class="w-100 countData">{{common.roundNumberTilltwoPosition(subPlaceholder1Data,'managementTile')}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <span class="subHeading">{{tile.subPlaceHolder1Header ? tile.subPlaceHolder1Header : 'Sub Place Holder 1'}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="" [ngClass]="tile.subPlaceHolder1 && tile.subPlaceHolder2 ? 'col-6' : !tile.subPlaceHolder1 && tile.subPlaceHolder2 ? 'col-12' : 'col-6'" *ngIf="tile.subPlaceHolder2">
+      <div class="row countHeight">
+        <div class="col-12 d-flex text-center font-weight-bold align-items-center">
+          <span class="w-100 countData">{{common.roundNumberTilltwoPosition(subPlaceholder2Data,'managementTile')}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <span class="subHeading">{{tile.subPlaceHolder2Header ? tile.subPlaceHolder2Header : 'Sub Place Holder 2'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

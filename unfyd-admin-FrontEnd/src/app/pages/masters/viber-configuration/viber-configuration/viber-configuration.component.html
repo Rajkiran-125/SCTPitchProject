@@ -1,0 +1,73 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+        <div class="wrapper">
+            <form [formGroup]="form">
+                <div class="formGroup">
+
+                    <div class="row">
+                        <div class="card" style="border:0;box-shadow:none;">
+                          <legend class="positionAbsolute">
+                            <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+                        </legend>
+                            <div class="{{channel?.ChannelName}} logoposition"></div>
+                            <div style="text-align: center;">
+                                <p class="channelHead">
+                                    <strong>{{channel?.ChannelName}}</strong>
+                                </p>
+                                <p class="channelLicense"> {{labelName?.TotalAccounts}} {{channelData.length}}</p>
+                            </div>
+                            <div>
+                                <button
+                                  class="btnposition addButton0"   [routerLink]="['/masters/channel-configuration/viber-configuration/viber-details',channel?.Id,'add']"
+                                  *ngIf="channel?.ChannelName.toUpperCase() ==='VIBER' && userConfig?.Add">{{labelName?.AddNewAccounts}}</button>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4" *ngFor="let data of channelData; let i = index">
+                    <div class="card card1 d-flex" style="align-items: unset;" >
+                        <div class="channel-data-content">
+                            <div class="icon-viber channelIconHeader" [ngStyle]="{'background': common.color[data.value.Profilepic]}"></div>
+                            <div class="pointer vertical-rotate">
+                                <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                                <mat-menu #menu="matMenu" class="master_action">
+                                    <span class="m-3 mb-4 font-weight-bold">More Actions</span>
+                                    <button mat-menu-item [routerLink]="['/masters/channel-configuration/viber-configuration/viber-details',channel?.Id,'update',viberchannel[i].ChannelSrcID]">
+                                        <mat-icon class="editIcon" >edit</mat-icon>
+                                        <span>Edit</span>
+                                    </button>
+                                    <button mat-menu-item (click)="deleteChannel(data)" class="d-flex">
+                                       <span class="delete"></span>
+                                       <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                                       <span  style="vertical-align: super;">Delete</span>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                        <div class="channel-data-content">
+                            <div>Channel Source Name</div>
+                            <div>{{data.value.ChannelSourceName}}</div>
+                        </div>
+                        <div class="channel-data-content">
+                            <div>Username</div>
+                            <div>{{data.value.UserName}}</div>
+                        </div>
+                        <div class="channel-data-content">
+                            <div>Host</div>
+                            <div>{{data.value.HostName}}</div>
+                        </div>
+                        <div class="channel-data-content">
+                            <div>Password</div>
+                            <div>*********<span class="icon-hide_password"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

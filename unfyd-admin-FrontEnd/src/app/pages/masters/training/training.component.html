@@ -1,0 +1,160 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+<div class="wrapper">
+    <form [formGroup]="form">
+        <legend>Training</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingbatchid.errors }">
+                            <mat-label>{{labelName?.BatchId}}</mat-label>
+                            <input matInput formControlName="trainingbatchid" maxlength="50">
+                            <mat-error *ngIf="f.trainingbatchid.errors">
+                                <ng-container *ngIf="f.trainingbatchid.errors.required">Training Batch Id is required
+                                </ng-container>                                         
+                            </mat-error>
+                        </mat-form-field>
+                    </div>                
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingbeneficiaryname.errors }">
+                            <mat-label> {{labelName?.HawkerName}}</mat-label>                      
+                            <mat-select formControlName="trainingbeneficiaryname" appTitleCase  #select>
+                                <mat-option *ngFor="let data of hawkerlist" [value]="data.Id">{{data.firstName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> 
+                    </div>                
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingcentername.errors }">
+                            <mat-label> {{labelName?.Center}}</mat-label>                           
+                            <mat-select formControlName="trainingcentername" appTitleCase  #select>
+                                <mat-option *ngFor="let data of trainingCenterList" [value]="data.Id">{{data.trainingCenter}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.trainingcentername.errors">
+                                <ng-container *ngIf="f.trainingcentername.errors.required">Training Center Name is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>                
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainername.errors }">
+                            <mat-label> {{labelName?.TrainerName}}</mat-label>                         
+                            <mat-select formControlName="trainername" appTitleCase  #select>
+                                <mat-option *ngFor="let data of trainerList" [value]="data.Id">{{data.firstName}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.trainername.errors">
+                                <ng-container *ngIf="f.trainername.errors.required">Trainer Name is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.traininginitiationdatetime.errors }">
+                            <mat-label> {{labelName?.TrainingStart}}</mat-label>
+                            <input matInput (focus)="traininginitiationdatetime.open()" (click)="traininginitiationdatetime.open()" readonly
+                            formControlName="traininginitiationdatetime" type="text" [matDatepicker]="traininginitiationdatetime">
+                            <mat-datepicker-toggle matSuffix [for]="traininginitiationdatetime"></mat-datepicker-toggle>
+                            <mat-datepicker #traininginitiationdatetime></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingcoursename.errors }">
+                            <mat-label>{{labelName?.CourseName}}</mat-label>                        
+                            <mat-select formControlName="trainingcoursename" appTitleCase  #select>
+                                <mat-option *ngFor="let data of courseList" [value]="data.Id">{{data.courseName}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.trainingcoursename.errors">
+                                <ng-container *ngIf="f.trainingcoursename.errors.required">Training Course Name is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingcompletiondatetime.errors }">
+                            <mat-label> {{labelName?.TrainingEnd}}</mat-label>
+                            <input matInput (focus)="trainingcompletiondatetime.open()" (click)="trainingcompletiondatetime.open()" readonly
+                            formControlName="trainingcompletiondatetime" type="text" [matDatepicker]="trainingcompletiondatetime">
+                            <mat-datepicker-toggle matSuffix [for]="trainingcompletiondatetime"></mat-datepicker-toggle>
+                            <mat-datepicker #trainingcompletiondatetime></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">                      
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="trainingcertificateissued">Certificate Issued</mat-checkbox>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingcertificatenumber.errors }">
+                            <mat-label> {{labelName?.CertificateNumber}}</mat-label>
+                            <input matInput formControlName="trainingcertificatenumber">
+                            <mat-error *ngIf="f.trainingcertificatenumber.errors">
+                                <ng-container *ngIf="f.trainingcertificatenumber.errors.required">Training Certificate Number is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingattendancestatus.errors }">
+                            <mat-label>{{labelName?.AttendanceStatus}}</mat-label>                           
+                            <mat-select formControlName="trainingattendancestatus">
+                                <mat-option *ngFor="let data of masters.trainingAttendance" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.trainingattendancestatus.errors">
+                                <ng-container *ngIf="f.trainingattendancestatus.errors.required">Training Attendance Status is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingcompletionstatus.errors }">
+                            <mat-label> {{labelName?.CompletionStatus}}</mat-label>                         
+                            <mat-select formControlName="trainingcompletionstatus">
+                                <mat-option *ngFor="let data of masters?.completionStatus" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f.trainingcompletionstatus.errors">
+                                <ng-container *ngIf="f.trainingcompletionstatus.errors.required">Training Completion Status is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>                  
+                </div>
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <form [formGroup] = "uploadForm" (ngSubmit)="submitDocuments()">      
+                            <label for="documentProof" class="imgUpload">
+                                <div class="title" >
+                                    <mat-icon>upload</mat-icon>
+                                    <span>Upload Documents</span>
+                                </div>
+                                <input id="documentProof" type="file"   name="uploaddocuments"  
+                             (change)="onFileSelect($event)" >
+                                <img [src]="certificatephotoSrc" *ngIf="certificatephotoSrc">
+                            </label>
+                            <div class="updateDown">
+                              <button class="btn btn-gray" mat-flat-button type="submit">Upload</button>
+                            </div>
+                          </form>
+                    </div>
+                        </div>
+            </div>
+            <div class="btn-group" *ngIf="config?.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit()" type="button">Save</button>
+            </div>
+    </form>
+</div>
+</div>

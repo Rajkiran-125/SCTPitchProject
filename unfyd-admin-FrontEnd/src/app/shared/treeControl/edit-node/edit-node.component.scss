@@ -1,0 +1,43 @@
+.edit-btn {
+  cursor: pointer;
+  position: fixed;
+  left: 91%;
+  font-size: 18px;
+}
+
+
+
+::ng-deep {
+  .matstylenode{
+    .mat-form-field-label{
+      font-weight: 600;
+      margin-left: 5px;
+      margin-top: 2px;
+  }
+  .mat-form-field-infix {  
+    background: #f8f8f8;
+  }
+  }
+}
+
+.dialog-heading{
+  margin-left: 10px;
+  font-size: 16px !important;
+}
+.btnmargin{
+  margin-left: 25px;
+}
+
+
+@media screen and (max-width:767px) {
+  .dialog-heading{
+    margin-left: 0px !important;
+  }
+  .btnmargin{
+    margin-left: 15px;
+  }
+}
+
+
+
+

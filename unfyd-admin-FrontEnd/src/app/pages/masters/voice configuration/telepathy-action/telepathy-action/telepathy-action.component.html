@@ -1,0 +1,305 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper" >
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="(userConfig?.Cancel)" (click)="back()"></span>
+          </div>
+      
+        <form [formGroup]="form">
+            <div class="row ">
+                <div class="col-12">
+                    <span class="d-flex backArrow">
+                        <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+                        <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.VoiceConfiguration}}</legend>
+                      </span>
+                      <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="voiceConfigurationsteps" [moduletype]="'voice-configuration'" [id]="path"
+                            [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                            <div class="row marginXDesktop">
+                            <div class="col-12">
+                                <div class="form_content">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.InboundNumber}}</mat-label>
+                                                <input matInput formControlName="InboundNumber">
+                                                <mat-error *ngIf="f.InboundNumber.errors">
+                                                    <ng-container *ngIf="f.InboundNumber.errors.required">Inbound Number is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.InboundNumber?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.InboundNumber?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                      </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4" style="display: flex">
+                                            <label for="">{{labelName?.Enable}}</label>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <div class="toggle-btn">
+                                                <div class="on-off-toggle">
+                                                    <input class="on-off-toggle__input" type="checkbox" id="bopisrv" formControlName="Enable"/>
+                                                    <label for="bopisrv" class="on-off-toggle__slider"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.QueuePickup}}</mat-label>
+                                                <input matInput formControlName="Queue">
+                                                <mat-error *ngIf="f.Queue.errors">
+                                                    <ng-container *ngIf="f.Queue.errors.required">{{labelName?.QueuePickup}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.Queue.errors.pattern">{{labelName?.QueuePickup}} is invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.Queue?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.Queue?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.Dial}}</mat-label>
+                                                <input matInput formControlName="DialWebhook">
+                                                <mat-error *ngIf="f.DialWebhook.errors">
+                                                    <ng-container *ngIf="f.DialWebhook.errors.required">{{labelName?.Dial}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.DialWebhook.errors.pattern">{{labelName?.Dial}} is invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.DialWebhook?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.DialWebhook?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.Consult}}</mat-label>
+                                                <input matInput formControlName="ConsultWebhook">
+                                                <mat-error *ngIf="f.ConsultWebhook.errors">
+                                                    <ng-container *ngIf="f.ConsultWebhook.errors.required">{{labelName?.Consult}} is required.
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.ConsultWebhook.errors.pattern">{{labelName?.Consult}} is invalid.
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.ConsultWebhook?.errors?.checknull">Whitespace not allowed.
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.ConsultWebhook?.errors.checknull1">
+                                                        Must be at least 3 characters long.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.Hold}}</mat-label>
+                                                <input matInput formControlName="HoldWebhook">
+                                                <mat-error *ngIf="f.HoldWebhook.errors">
+                                                    <ng-container *ngIf="f.HoldWebhook.errors.required">{{labelName?.Hold}} is required.
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.HoldWebhook.errors.pattern">{{labelName?.Hold}} is invalid.
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.HoldWebhook?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.HoldWebhook?.errors.checknull1">
+                                                        Must be at least 3 characters long.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.OnCall}}</mat-label>
+                                                <input matInput formControlName="OnCallCompletion">
+                                                <mat-error *ngIf="f.OnCallCompletion.errors">
+                                                    <ng-container *ngIf="f.OnCallCompletion.errors.required">{{labelName?.OnCall}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.OnCallCompletion.errors.pattern">{{labelName?.OnCall}} is invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.OnCallCompletion?.errors?.checknull">Whitespace not allowed.
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.OnCallCompletion?.errors.checknull1">
+                                                        Must be at least 3 characters long.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div style="flex: 1;">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.NewInteraction}}</mat-label>
+                                                <input matInput formControlName="NewInteraction">
+                                                <mat-error *ngIf="f.NewInteraction.errors">
+                                                    <ng-container *ngIf="f.NewInteraction.errors.required">{{labelName?.NewInteraction}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.NewInteraction.errors.pattern">{{labelName?.NewInteraction}} is invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.NewInteraction?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.NewInteraction?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div style="margin-left: 20px;">
+                                            <button class="btn outline" mat-stroked-button color="primary" (click)="addField()">Add Action</button>
+                                        </div>
+                                    </div>
+                                    <div formArrayName="NewInteractionFormarray" *ngFor="let item of NewInteractionFormarray?.controls; let i = index;">
+                                    <div class="row" [formGroupName]="i">
+
+                                        <div class="col-lg-3 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Select</mat-label>
+                                                <mat-select  formControlName="hsmvalue" (selectionChange)="getChannelSource($event.value,i)">
+                                                    <mat-option *ngFor="let data of VoiceDropdown" [value]="data.Key">{{ data.Value }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="item.get('hsmvalue')?.errors">
+                                                  <ng-container *ngIf="item.get('hsmvalue').errors?.required">Please select the value
+                                                  </ng-container>
+                                              </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                          <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="item.get('hsmvalue').value && ChannelSource.length > i">
+                                            <mat-form-field appearance="fill">
+                                              <mat-label>{{labelName?.ChannelSource}}</mat-label>
+                                              <mat-select matInput formControlName="ChannelSource" (selectionChange)="getTemplate($event.value, i)">
+                                                <mat-option *ngFor="let data of ChannelSource[i]"
+                                                  [value]="data.ChannelSourceId">{{data.ChannelSourceName }}</mat-option>
+                                              </mat-select>
+                                              <mat-error *ngIf="item.get('ChannelSource')?.errors">
+                                                <ng-container *ngIf="item.get('ChannelSource')?.errors?.required">
+                                                  {{labelName?.ChannelSource}} is required
+                                                </ng-container>
+                                              </mat-error>
+                                            </mat-form-field>
+                                          </div>
+
+
+                                        <div class="col-lg-3 col-md-4 col-sm-12" *ngIf="item.get('ChannelSource').value ">
+                                            <mat-form-field appearance="fill">
+
+                                                <mat-label>{{labelName?.SelectTemplate}}</mat-label>
+                                                <mat-select  formControlName="hsmtemplate">
+                                                    <mat-option *ngFor="let data of findNonAdults(TemplateData[i], i)" [value]="data.Actionable">
+                                                        {{ item.get('hsmvalue').value == 1 ? data['Template Name'] : data['TemplateName']}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="item.get('hsmtemplate')?.errors">
+                                                  <ng-container *ngIf="item.get('hsmtemplate')?.errors?.required">Please select the Template
+                                                  </ng-container>
+                                              </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-sm-12">
+                                            <mat-icon class="red-color cursorPointer" (click)="removeField(i)" style="margin-top: 10px;">delete_outline</mat-icon>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div style="flex: 1;">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.NotificationWebhook}}</mat-label>
+                                                <input matInput formControlName="NotificationWebhook">
+                                                <mat-error *ngIf="f.NotificationWebhook.errors">
+                                                    <ng-container *ngIf="f.NotificationWebhook.errors.required">{{labelName?.NotificationWebhook}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.NotificationWebhook.errors.pattern">{{labelName?.NotificationWebhook}} is invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.NotificationWebhook?.errors?.checknull">Whitespace not allowed
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.NotificationWebhook?.errors.checknull1">
+                                                        Must be at least 3 characters long
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div style="margin-left: 20px;">
+                                            <button class="btn outline" (click)=" addItem()" mat-stroked-button color="primary">Add Action</button>
+                                        </div>
+                                    </div>
+                                    <div formArrayName="NotificationFormarray" *ngFor="let item of NotificationFormarray?.controls; let p = index;">
+                                    <div class="row" [formGroupName]="p">
+                                        <div class="col-lg-3 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Select</mat-label>
+                                                <mat-select  formControlName="sechsmvalue" (selectionChange)="getNewChannelSource($event.value,p)">
+                                                    <mat-option *ngFor="let data of VoiceDropdown" [value]="data.Key">{{ data.Value }}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="item.get('sechsmvalue')?.errors">
+                                                  <ng-container *ngIf="item.get('sechsmvalue')?.errors.required">Please select the value
+                                                  </ng-container>
+                                              </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="item.get('sechsmvalue').value && NewChannelSource.length > p">
+                                            <mat-form-field appearance="fill">
+                                              <mat-label>{{labelName?.ChannelSource}}</mat-label>
+                                              <mat-select matInput formControlName="newChannelSource" (selectionChange)="getNewTemplate($event.value, p)">
+                                                <mat-option *ngFor="let data of NewChannelSource[p]"
+                                                  [value]="data.ChannelSourceId">{{data.ChannelSourceName }}</mat-option>
+                                              </mat-select>
+                                              <mat-error *ngIf="item.get('newChannelSource')?.errors">
+                                                <ng-container *ngIf="item.get('newChannelSource').errors?.required">
+                                                  {{labelName?.ChannelSource}} is required
+                                                </ng-container>
+                                              </mat-error>
+                                            </mat-form-field>
+                                          </div>
+
+                                        <div class="col-lg-3 col-md-4 col-sm-12" *ngIf="item.get('newChannelSource').value">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.SelectTemplate}}</mat-label>
+                                                <mat-select  formControlName="sechsmtemplate">
+                                                    <mat-option *ngFor="let data of findNonAdults2(NewTemplateData[p], p)" [value]="data.Actionable">
+                                                        {{ item.get('sechsmvalue').value == 1 ? data['Template Name'] : data['TemplateName']}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="item.get('sechsmtemplate').errors">
+                                                  <ng-container *ngIf="item.get('sechsmtemplate').errors.required">Please select the Template
+                                                  </ng-container>
+                                              </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-sm-12">
+                                            <mat-icon class="red-color cursorPointer" (click)="removeGroup(p)" style="margin-top: 10px;">delete_outline</mat-icon>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        </div>
+                        <div class="btn-group my-3" >
+                          <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                          <button *ngIf="userConfig?.SaveAddNew" class="btn outline"   mat-stroked-button color="primary"  (click)="savevoice('next')">{{labelName?.SaveAddNew }}</button>
+                            <button *ngIf="(userConfig?.Save)" (click)="savevoice('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                            <!-- <button  *ngIf=" (userConfig?.SaveAddNew) " (click)="savetwitter('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.SaveAddNew }}</button> -->
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>

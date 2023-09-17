@@ -1,0 +1,33 @@
+<div class="centerAll">
+<div class="card-wrapper" id="pdfTable" #pdfTable>
+    <div class="card-header">
+      <div class="railway-logo"></div>
+      <div class="indusEDU-logo"></div>
+    </div>
+    <div class="clear"></div>
+    <div class="card-body">
+      <div class="card-userImg" [style.background-image]="'url('+photograph+')'">
+      </div>
+      <div class="clear"></div>
+      <div class="card-body-text">
+        <h6 class="word-break">{{ personalName }}</h6>
+        <div class="d-flex justify-content-center font-italic">
+          <p *ngIf="registrationStatus == 'Active'" class="green-sticker rounded"> <mat-icon> check </mat-icon>Authorised Hawker</p>
+          <p *ngIf="registrationStatus != 'Active'" class="red-sticker rounded"><mat-icon> close </mat-icon>Unauthorised Hawker</p>
+        </div>
+        
+        <p>Registration No. {{ RegistrationNo }}</p>
+      </div>
+    </div>
+    <div class="card-footer">
+      <h6>Issuing Date: {{ IssuingDate | date: 'd MMM, y':'+0000' }}</h6>
+      <div class="authorised-sign">
+        <p>Authorised Signature of Indus Edutrain</p>
+      </div>
+      <div class="issueby-sign">
+        <p>Issuing Officer Railway Authority</p>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>

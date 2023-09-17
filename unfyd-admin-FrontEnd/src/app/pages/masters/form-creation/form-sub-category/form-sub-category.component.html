@@ -1,0 +1,50 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="row d-flex align-items-center">
+
+
+      <div class="col-8 text-left pl-0 d-flex align-items-center">
+        <mat-icon class="gray cursorPointer mr-3" (click)="goTo('back')">keyboard_backspace</mat-icon>
+        <span class="header" *ngIf="type && labelName">{{ labelName[type] |titlecase}} Forms</span>
+      </div>
+      <div class="col-2 text-right">
+        <button *ngIf="userConfig?.Add" mat-mini-fab class="addForm">
+          <mat-icon class="primary-color" (click)="goTo('add')" >add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <mat-icon class="gray cursorPointer invisible d-none" (click)="goTo('')">keyboard_backspace</mat-icon>
+      <div *ngIf="allFormsData.length">
+        <div class="col-12 outerCard" *ngFor="let item of allFormsData">
+          <div class="card">
+            <div class="d-flex justify-content-between">
+              <i class="icon-{{item.Icon ? item.Icon : 'ticket'}} icons"></i>
+              <mat-icon class="more cursorPointer" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+              <mat-menu #menu="matMenu" class="w-100">
+                <button *ngIf="userConfig?.Edit" mat-menu-item (click)="editForm(item.FormType)"><mat-icon>edit</mat-icon>Edit</button>
+                <button *ngIf="userConfig?.Preview" mat-menu-item (click)="previewForm(item.FormType)"><mat-icon>remove_red_eye</mat-icon>Preview</button>
+              </mat-menu>
+            </div>
+            <div class="cardContent">
+              <div>
+                <strong class="cardHeading">{{item.FormType | titlecase}}</strong>
+              </div>
+              <div class="mat-nav-content lineHeight43px">
+                <span class="cardInnerContent">
+                  {{item?.Description}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-10" *ngIf="!allFormsData.length">
+        <div class="noFormsAvailable m-4">
+          <span>{{labelName?.NoFormsAvailable}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>

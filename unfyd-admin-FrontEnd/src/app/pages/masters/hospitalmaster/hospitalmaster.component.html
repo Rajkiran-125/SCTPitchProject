@@ -1,0 +1,253 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <form [formGroup]="form">
+      <legend>Hospital Master</legend>
+      <div class="formGroup">
+        <div class="row">
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.hospital_name.errors }">
+              <mat-label>{{labelName?.HospitalName}}</mat-label>
+              <input matInput formControlName="hospital_name" minlength="3" appTitleCase />
+              <mat-error *ngIf="submittedForm && f.hospital_name.errors">
+                <ng-container *ngIf="f.hospital_name.errors.required">Hospital name is required</ng-container>
+                <ng-container *ngIf="f.hospital_name.errors.minlength">
+                  {{ minMessage }}
+                </ng-container>
+                <ng-container *ngIf="f.hospital_name.errors.maxlength">
+                  {{ maxMessage }}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.specializedin.errors }">
+              <mat-label>{{labelName?.SpecializedIn}}</mat-label>
+              <mat-select formControlName="specializedin">
+                <mat-option *ngFor="let data of DoctorSpeciality" [value]="data.Specialty">{{ data.Specialty }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="submittedForm && f.specializedin.errors">
+                <ng-container *ngIf="f.specializedin.errors.required">specialized in is required</ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.doctorname.errors }">
+              <mat-label>{{labelName?.DoctorName}}</mat-label>
+              <input matInput formControlName="doctorname" minlength="3" appTitleCase />
+              <mat-error *ngIf="submittedForm && f.doctorname.errors">
+                <ng-container *ngIf="f.doctorname.errors.required">Doctor name is required</ng-container>
+                <ng-container *ngIf="f.doctorname.errors.minlength">
+                  {{ minMessage }}
+                </ng-container>
+                <ng-container *ngIf="f.doctorname.errors.maxlength">
+                  {{ maxMessage }}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <div class="check-box">
+              <div class="checkbox">
+                <mat-checkbox color="primary" formControlName="emergency">{{labelName?.IsforEmergency}}
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.dean_name.errors }">
+              <mat-label>{{labelName?.DeanName}}</mat-label>
+              <input matInput formControlName="dean_name" minlength="3" appTitleCase />
+              <mat-error *ngIf="submittedForm && f.dean_name.errors">
+                <ng-container *ngIf="f.dean_name.errors.minlength">
+                  {{ minMessage }}
+                </ng-container>
+                <ng-container *ngIf="f.dean_name.errors.maxlength">
+                  {{ maxMessage }}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <div class="check-box">
+              <div class="checkbox">
+                <mat-checkbox color="primary" formControlName="isdoctor">{{labelName?.IsDoctor}}
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.mobile.errors }">
+              <mat-label>{{labelName?.MobileNumber}}</mat-label>
+              <input matInput formControlName="mobile" minlength="10" maxlength="10" />
+              <mat-error *ngIf="submittedForm && f.mobile.errors">
+                <ng-container *ngIf="f.mobile.errors.minlength">
+                  {{ mobileMessage }}
+                </ng-container>
+                <ng-container *ngIf="f.mobile.errors.maxlength">
+                  {{ mobileMessage }}
+                </ng-container>
+                <ng-container *ngIf="f.mobile.errors.required">
+                  {{labelName?.MobileNumber}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.landline.errors }">
+              <mat-label>{{labelName?.LandlineNumber}}</mat-label>
+              <input matInput formControlName="landline" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.email.errors }">
+              <mat-label>{{labelName?.EmailID}}</mat-label>
+              <input matInput formControlName="email" minlength="11" maxlength="100" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.Website}}</mat-label>
+              <input matInput formControlName="website" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.WorkingHours}}</mat-label>
+              <input matInput formControlName="working_hours" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.AddressLine1}}</mat-label>
+              <input matInput formControlName="address1" appTitleCase />
+              <mat-error *ngIf="submittedForm && f.address1.errors">
+                <ng-container *ngIf="f.address1.errors.required">
+                  {{labelName?.AddressLine1}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{labelName?.AddressLine2}}</mat-label>
+              <input matInput formControlName="address2" appTitleCase />
+              <mat-error *ngIf="submittedForm && f.address2.errors">
+                <ng-container *ngIf="f.address2.errors.required">
+                  {{labelName?.AddressLine2}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.country.errors }">
+              <mat-label>{{labelName?.Country}}</mat-label>
+              <mat-select formControlName="country" (selectionChange)="getStates($event.value)" #select>
+                <mat-option *ngFor="let data of countrylist" [value]="data.CountryID">{{
+                  data.CountryName }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="submittedForm && f.country.errors">
+                <ng-container *ngIf="f.country.errors.required">
+                  {{labelName?.Country}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.state.errors }">
+              <mat-label>{{labelName?.State}}</mat-label>
+              <mat-select formControlName="state" (selectionChange)="getDistrict($event.value)" #select2>
+                <mat-select-filter *ngIf="select2.focused" [placeholder]="'Filter'" [displayMember]="'StateName'"
+                  [array]="states" (filteredReturn)="filteredstates =$event"></mat-select-filter>
+                <mat-option *ngFor="let data of filteredstates" [value]="data.StateID">{{ data.StateName
+                  }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="submittedForm && f.state.errors">
+                <ng-container *ngIf="f.state.errors.required">
+                  {{labelName?.State}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.district.errors }">
+              <mat-label>{{labelName?.District}}</mat-label>
+              <mat-select formControlName="district" #select3 (selectionChange)="getZipcodes($event.value)">
+
+                <mat-select-filter *ngIf="select3.focused" [placeholder]="'Filter'" [displayMember]="'Districtname'"
+                  [array]="district" (filteredReturn)="filtereddistrict =$event"></mat-select-filter>
+
+                <mat-option *ngFor="let data of filtereddistrict;" [value]="data.DistrictId">
+                  {{data.Districtname}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="submittedForm && f.district.errors">
+                <ng-container *ngIf="f.district.errors.required">
+                  {{labelName?.District}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.pincode.errors }">
+              <mat-label>{{labelName?.PINCode}}</mat-label>
+              <mat-select formControlName="pincode" #select>
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'Pincode'" [array]="zipcodes"
+                  (filteredReturn)="filtereddzipcodes =$event"></mat-select-filter>
+                <mat-option *ngFor="let data of filtereddzipcodes;" [value]="data.Pincode">
+                  {{data.Pincode}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="submittedForm && f.pincode.errors">
+                <ng-container *ngIf="f.pincode.errors.required">
+                  {{labelName?.PINCode}} is required
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill" [ngClass]="{ shake: submittedForm && f.registrationno.errors }">
+              <mat-label>{{labelName?.RegistrationNo}}</mat-label>
+              <input matInput formControlName="registrationno" minlength="3" />
+              <mat-error *ngIf="submittedForm && f.registrationno.errors">
+                <ng-container *ngIf="f.registrationno.errors.pattern">
+                  Registration No is invalid
+                </ng-container>
+                <ng-container *ngIf="f.registrationno.errors.minlength">
+                  {{ minMessage }}
+                </ng-container>
+                <ng-container *ngIf="f.registrationno.errors.maxlength">
+                  {{ maxMessage }}
+                </ng-container>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group" *ngIf="config?.Update">
+        <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">
+          Cancel
+        </button>
+        <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+        <button class="btn" mat-flat-button color="primary" (click)="submit('save')" type="button">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

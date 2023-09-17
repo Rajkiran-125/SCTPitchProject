@@ -1,0 +1,65 @@
+<div class="inner-container">
+    <div class="wrapper">
+            <form [formGroup]="form">
+                <div class="formGroup">
+                  <div class="row">
+                    <div class="col-11 pr-0">
+                      <div class="card-layout">
+                        <div class="row justify-content-between align-items-center mb-3">
+                          <div class="col-lg-4 col-md-8 col-8">
+                            <legend class="primary-color font-weight-bold size d-none d-md-block">{{labelName?.ChannelConfiguration}}</legend>
+                          </div>
+                   
+                              <div class="col-lg-2 col-md-4 col-4 text-right">
+                                <button *ngIf="userConfig?.Update" class="btn" mat-flat-button color="primary" type="button" [disabled]="!(changesArray.length > 0)" (click)="updateChanges()">{{labelName?.Update}}</button>
+                              </div>
+                            <div class="d-none">
+                                <button *ngIf="userConfig?.Add" class="btn color mr-5" mat-flat-button (click)="add()">{{labelName?.Add}}</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <ng-container *ngFor="let data of channelType; let i = index">
+                            <div class="col-md-6 col-lg-4 col-xl-3 col-sm-12 ">
+                              <div class="cards">
+                                <div class="row">
+                                  <div class="col-12 d-flex justify-content-between align-items-start">
+                                    <div class="{{data.ChannelName}} logoposition cursorPointer" (click)="goToPage(data)"></div>
+                                    <div class="d-flex align-items-center">
+                                      <span class="allowedChannels cursorPointer" (click)="goToPage(data)">{{data?.LicenseCount}}</span>
+                                      <mat-slide-toggle color="primary" class="toggleBtn" [checked]="data.EnableChannelConfig" (toggleChange)="changeStatusOfChannel(data,i)"></mat-slide-toggle>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row mt-2 cursorPointer" (click)="goToPage(data)">
+                                  <div class="col-12">
+                                    <span class="font-weight-bold">{{data.ChannelName}}</span>
+                                  </div>
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col-12 d-flex">
+                                    <div class="priority">
+                                      <span class="plusMinusIcon" (click)="checkChangeDetection('minus',i)">-</span>
+                                      <span>{{data?.ChannelPriority}}</span>
+                                      <span class="plusMinusIcon" (click)="checkChangeDetection('plus',i)">+</span>
+                                    </div>
+                                    <span class="priorityText" >Priority</span>
+                                  </div>
+                                </div>
+                           
+                          </div>
+                      </div>
+                          </ng-container>
+
+                          <ng-container *ngIf="channelType.length <=0">
+                              <div class="col-12 mt-3">
+                                <div class="noDataFound">No Channel Found</div>
+                              </div>
+                          </ng-container>
+                    </div>
+                </div>
+                    </div>
+                  </div>
+            </div>
+        </form>
+    </div>
+</div>

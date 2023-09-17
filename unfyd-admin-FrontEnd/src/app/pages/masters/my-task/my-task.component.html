@@ -1,0 +1,319 @@
+
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="inner-container" *ngIf="!loader">
+            <div>
+                <legend>Add Task</legend>
+            </div>
+        </div>
+        <form [formGroup]="form">
+            <div class="formGroup">
+                <div class="row" style="padding:0!important;margin:0!important;">
+                    <div style="width:100%;">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Task Group</mat-label>
+                            <mat-select matInput formControlName="Category">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>                
+                <div class="row" >
+                    <div>
+                        <h4 class="h4">System Defined Fields</h4>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Task Name</mat-label>
+                            <input matInput appTitleCase formControlName="TaskName"/>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Category</mat-label>
+                            <mat-select matInput formControlName="Category">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Sub Category</mat-label>
+                            <mat-select matInput formControlName="SubCategory">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Source</mat-label>
+                            <mat-select matInput formControlName="Source">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Priority</mat-label>
+                            <mat-select matInput formControlName="Priority">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Agent</mat-label>
+                            <mat-select matInput formControlName="Agent">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Channel</mat-label>
+                            <mat-select matInput formControlName="Channel">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>WhatsApp HSM Name</mat-label>
+                            <mat-select matInput formControlName="WhatsappHSMName">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Email Template Name</mat-label>
+                            <mat-select matInput formControlName="EmailTemplateName">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Schedule Name</mat-label>
+                            <mat-select matInput formControlName="ScheduleName">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Customer Name</mat-label>
+                            <input matInput appTitleCase formControlName="CustomerName"/>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Gender</mat-label>
+                            <mat-select matInput formControlName="Gender">
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Mobile No.</mat-label>
+                            <input matInput appTitleCase formControlName="MobileNo" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>WhatsApp No.</mat-label>
+                            <input matInput appTitleCase formControlName="WhatsappNo" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Email ID</mat-label>
+                            <input matInput appTitleCase formControlName="EmailID" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Date Of Birth</mat-label>
+                            <input type="date" matInput appTitleCase formControlName="DOB" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Date Of Anniversary</mat-label>
+                            <input type="date" matInput appTitleCase formControlName="DOA" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Preferred Language</mat-label>
+                            <mat-select matInput formControlName="PreferredLanguage" >
+                                <mat-option value="en">1</mat-option>
+                                <mat-option value="hi">2</mat-option>
+                                <mat-option value="bn">3</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Preferred Time to Connect</mat-label>
+                            <input type="time" matInput appTitleCase formControlName="PreferredTimeConnect" />
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div style="display: block;width: 100%;">
+                        <h4 class="h4">User Defined Fields</h4>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 1</mat-label>
+                            <input type="text" matInput appTitleCase formControlName="Attribute1"/>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 2</mat-label>
+                            <input type="text" matInput appTitleCase formControlName="Attribute2" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 3</mat-label>
+                            <input type="text" matInput appTitleCase formControlName="Attribute3" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 4</mat-label>
+                            <input type="text" matInput appTitleCase formControlName="Attribute4" />
+                        </mat-form-field> 
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 5</mat-label>
+                            <input type="text" matInput appTitleCase formControlName="Attribute5" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 6</mat-label>
+                            <input type="date" matInput appTitleCase formControlName="Attribute6" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 7</mat-label>
+                            <input type="date" matInput appTitleCase formControlName="Attribute7" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 8</mat-label>
+                            <input type="date" matInput appTitleCase formControlName="Attribute8" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 9</mat-label>
+                            <input type="date" matInput appTitleCase formControlName="Attribute9" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 10</mat-label>
+                            <input type="date" matInput appTitleCase formControlName="Attribute10" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 11</mat-label>
+                            <textarea type="text" maxlength="250" matInput appTitleCase formControlName="Attribute11" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 12</mat-label>
+                            <textarea type="text" maxlength="250" matInput appTitleCase formControlName="Attribute12" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 13</mat-label>
+                            <textarea type="text" maxlength="250" matInput appTitleCase formControlName="Attribute13" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 14</mat-label>
+                            <textarea type="text" maxlength="250" matInput appTitleCase formControlName="Attribute14" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 15</mat-label>
+                            <textarea type="text" maxlength="250" matInput appTitleCase formControlName="Attribute15" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 16</mat-label>
+                            <textarea type="text" maxlength="1000" matInput appTitleCase formControlName="Attribute16" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 17</mat-label>
+                            <textarea type="text" maxlength="1000" matInput appTitleCase formControlName="Attribute17" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 18</mat-label>
+                            <textarea type="text" maxlength="1000" matInput appTitleCase formControlName="Attribute18" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 19</mat-label>
+                            <textarea type="text" maxlength="5000" matInput appTitleCase formControlName="Attribute19" ></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Attribute 20</mat-label>
+                            <textarea type="text" maxlength="5000" matInput appTitleCase formControlName="Attribute20" ></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="btn-group mt-1" >
+                    <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                    <button class="btn" mat-flat-button color="primary" (click)="addTask()" type="button">Add Task</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

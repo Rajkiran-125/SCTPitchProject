@@ -1,0 +1,65 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <app-steps [steps]="trainerFormSteps" [id]="path"></app-steps>
+    <div class="wrapper mat-form">
+        <form [formGroup]="form">
+            <legend>Social Details</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.whatsappnumber.errors }">
+                            <mat-label>WhatsApp No.</mat-label>
+                            <input matInput formControlName="whatsappnumber" maxlength="10">
+                            <mat-error *ngIf="submittedForm && f.whatsappnumber.errors">
+                                <ng-container *ngIf="f.whatsappnumber.errors.pattern">WhatsApp no. is invalid
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <div class="checkbox">
+                            <mat-checkbox color="primary" formControlName="authorisingwhatsapp">Authorising WhatsApp
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Facebook ID</mat-label>
+                            <input matInput formControlName="facebookid">
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Twitter Handle</mat-label>
+                            <input matInput formControlName="twitterhandle">
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Linkedin ID</mat-label>
+                            <input matInput formControlName="linkedin">
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Skype ID</mat-label>
+                            <input matInput formControlName="skype">
+                        </mat-form-field>
+                    </div>
+                    <div class="col col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Instagram ID</mat-label>
+                            <input matInput formControlName="instagram">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-stroked-button (click)="submit('save')" type="button">Save</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit('next')" type="button">Next Bank Details >></button>
+            </div>
+        </form>
+    </div>
+</div>

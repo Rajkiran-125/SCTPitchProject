@@ -1,0 +1,141 @@
+::ng-deep {
+  .alertSettings {
+    .wrapper {
+      padding: 30px 40px !important;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0.34375em;
+    }
+  }
+}
+
+.displayNone {
+  display: none !important;
+}
+
+.table-container {
+  max-height: 66vh;
+  overflow-y: auto;
+}
+::ng-deep {
+  .mat-menu-panel.master_action {
+    width: auto !important;
+    min-height: auto !important;
+  }
+}
+.master_heading {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  text-align: left;
+  letter-spacing: 0px;
+  margin: 0px 0px 20px;
+}
+
+.action-area .action-btn {
+  border: 1px solid #eaeaea;
+  border: 1px solid var(--gray_color_80);
+  border-radius: 4px;
+  color: #b4b4b4;
+  color: var(--gray_color);
+  height: 35px;
+  width: 40px;
+  line-height: 30px;
+  margin: 0 610px;
+}
+.legendheader {
+  font-size: var(--title);
+  margin-left: 5px;
+}
+.dataTable {
+  overflow-x: auto;
+  border-radius: 10px;
+  height: calc(100% - 60px);
+}
+.mat-stroked-button {
+  line-height: 40px;
+}
+::ng-deep {
+  .alertSettingDropdown{
+    .mat-form-field-infix{
+      border-top-width: 5.90625px !important;
+      border-bottom: 2px solid transparent !important;
+    }
+  }
+}
+@media screen and (min-width: 768px) {
+  ::ng-deep {
+    .alertSettingDropdown{
+      .mat-form-field-infix{
+        padding: 0.7em 0.5em 0.7em 0px !important;
+        border-top: unset !important;
+
+        .mat-select-arrow-wrapper{
+        transform: translateY(0%) !important;
+      }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px){
+  .inner-container{
+    padding: 0px 0px 5px 0px !important; 
+
+    .wrapper{
+      padding: 0vh 2vh 0vh !important;
+      overflow: hidden !important;
+
+      .dataTable {
+        height: 345px !important;
+      }
+
+      .blue-dropdown{
+        margin-bottom: 10px !important;
+      }
+      .btnMargin{
+        margin-top: 20px !important;
+      }
+      .filter{
+        align-items: flex-start !important;
+      }
+      .width_100{
+        width: 100% !important;
+        margin-top: 10px;
+      }
+    }
+  }
+  .inner-container1{
+    padding: 5px 0px 5px 0px !important;
+    .wrapper{
+      padding: 0vh 1vh 0vh !important;
+    }
+  }
+
+  ::ng-deep{
+    .alertSettingDropdown{
+      .mat-form-field-appearance-fill .mat-form-field-infix {
+        border-top: 15px solid transparent !important;
+      }
+    }
+  }
+
+  
+}
+
+
+@media screen and (min-width:768px) and (max-width:991px){
+
+  .alertSettings {
+    .wrapper {
+      padding: 0vh 1.5vh 0vh;
+
+      .marginright{
+        margin-right: 55px ;
+      }
+    }
+  }
+
+}
+
+

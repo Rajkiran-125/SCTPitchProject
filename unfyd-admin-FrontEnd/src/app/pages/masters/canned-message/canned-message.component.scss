@@ -1,0 +1,19 @@
+
+
+.header-icons{
+  .add_icon{
+    color: var(--primary_color);
+    font-size: 24px !important;
+  }
+  .icon-Menu_Icon{
+    color: var(--gray_color);
+    font-size: 16px;
+  }
+}
+::ng-deep{
+  .chips-input{
+    .mat-form-field-flex{
+      border: 0px solid !important;
+    }
+  }
+}

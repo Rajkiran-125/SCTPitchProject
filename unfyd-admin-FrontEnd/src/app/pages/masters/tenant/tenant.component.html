@@ -1,0 +1,363 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" [routerLink]="['/masters/tenant']"></span>
+          </div>
+        <form [formGroup]="form">
+            <div class="row ">
+                <!-- <div class="col-1 text-center backarrow">
+                    <mat-icon class="gray cursorPointer" [routerLink]="['/masters/tenant']">keyboard_backspace
+                    </mat-icon>
+                </div> -->
+                <div class="col-lg-12 col-md-12 col-10">
+                    <span class="d-flex">
+                        <span>
+                            <mat-icon class="gray cursorPointer" [routerLink]="['/masters/tenant']">keyboard_backspace
+                            </mat-icon>
+                        </span>
+                        <span>
+                            <legend *ngIf="editObj?.FirstName == null" class="ml-2">Add New Tenant</legend>
+                            <legend *ngIf="editObj?.FirstName != null" class="ml-2">Update Tenant</legend>
+                        </span>
+                    </span>
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="tenantFormSteps" [id]="path"></app-steps>
+
+                            <div class="top_block">
+                                <div class="form_content">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.FirstName}}</mat-label>
+                                                <input matInput formControlName="firstname">
+                                                <mat-error *ngIf="f.firstname.errors">
+                                                    <ng-container *ngIf="f.firstname.errors.required">{{labelName?.FirstName}} is
+                                                        required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.firstname.errors.pattern">{{labelName?.FirstName}} is
+                                                        invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.firstname.errors.maxlength">
+                                                        {{masters.MaxLengthMessage1}}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.firstname?.errors?.checknull">Whitespace not allowed.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.LastName}}</mat-label>
+                                                <input matInput formControlName="lastname">
+                                                <mat-error *ngIf="f.lastname.errors">
+                                                    <ng-container *ngIf="f.lastname.errors.required">{{labelName?.LastName}} is
+                                                        required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.lastname.errors.pattern">{{labelName?.LastName}} is invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.lastname.errors.maxlength">
+                                                        {{masters.MaxLengthMessage1}}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.lastname?.errors?.checknull">Whitespace not allowed.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.Designation}}</mat-label>
+                                                <input matInput formControlName="designation">
+                                                <mat-error *ngIf="f.designation.errors">
+                                                    <ng-container *ngIf="f.designation.errors.required">{{labelName?.Designation}} is
+                                                        required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.designation.errors.pattern">{{labelName?.Designation}} is
+                                                        invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.designation.errors.maxlength">
+                                                        {{masters.MaxLengthMessage1}}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.designation?.errors?.checknull">Whitespace not allowed.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.CompanyName}}</mat-label>
+                                                <input matInput formControlName="companyname">
+                                                <mat-error *ngIf="f.companyname.errors">
+                                                    <ng-container *ngIf="f.companyname.errors.required">{{labelName?.CompanyName}} is
+                                                        required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.companyname.errors.maxlength">
+                                                        {{masters.MaxLengthMessage1}}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.companyname?.errors?.checknull">Whitespace not allowed.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12 dropDown">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.EmployeeStrength}}</mat-label>
+                                                <mat-select formControlName="employeestrength" [(value)]="empstr">
+                                                    <mat-option value="0-500 Employee">0-500 Employee</mat-option>
+                                                    <mat-option value="500-1000 Employee">500-1000 Employee</mat-option>
+                                                    <mat-option value="1000-1500 Employee">1000-1500 Employee
+                                                    </mat-option>
+                                                    <mat-option value="1500-2000 Employee">1500-2000 Employee
+                                                    </mat-option>
+                                                    <mat-option value="2000-2500 Employee">2000-2500 Employee
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.employeestrength.errors">
+                                                    <ng-container *ngIf="f.employeestrength.errors.required">{{labelName?.EmployeeStrength}} is required
+                                                    </ng-container>
+
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.DomainShortCode}}</mat-label>
+                                                <input matInput  maxlength="30" formControlName="domainshortcode">
+                                                <mat-error *ngIf="f.domainshortcode.errors">
+                                                    <ng-container *ngIf="f.domainshortcode.errors.required">{{labelName?.DomainShortCode}}
+                                                        is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.domainshortcode.errors.maxlength">{{labelName?.DomainShortCode}} Cannot be
+                                                        beyond 6 Characters
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.domainshortcode.errors.minlength">{{labelName?.DomainShortCode}} Cannot be
+                                                        less than 3 Characters
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.domainshortcode.errors.pattern">{{labelName?.DomainShortCode}}
+                                                        is Invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.domainshortcode?.errors?.checknull">Whitespace not allowed.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-12 dropDown">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.Country}}</mat-label>
+                                                <mat-select  formControlName="country"
+                                                    (selectionChange)="AutoSelectCountryCode($event)"   #tenant1>
+                                                    <mat-select-filter class = 'two' [placeholder]="'Search'" *ngIf="tenant1.focused"
+                                                        [displayMember]="'CountryName'" [array]="country"
+                                                        (filteredReturn)="searchcountry =$event"></mat-select-filter>
+                                                    <mat-option *ngFor="let data of searchcountry;"
+                                                        [value]="data.CountryCode">{{data.CountryName}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.country.errors">
+                                                    <ng-container *ngIf="f.country.errors.required">{{labelName?.Country}} is
+                                                        required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12 contactNoWithCountryCode">
+                                            <mat-select class="countrycodeDropdown" formControlName="countrycode"
+                                                (selectionChange)="selectCountry($event.value)">
+                                                <mat-select-trigger>
+                                                    <i  class="flag-icon flag-icon-{{countryCodeSelected?.country_code | lowercase}}"></i>
+                                                    +{{countryCodeSelected?.dial_code}}
+                                                </mat-select-trigger>
+                                                <mat-option *ngFor="let data of countryCode | orderBy: 'dial_code'"
+                                                    [value]="data">
+                                                    <i
+                                                        class="flag-icon flag-icon-{{data?.country_code | lowercase}}"></i>
+                                                    +{{data?.dial_code}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.PhoneNo}}</mat-label>
+                                                <input  matInput formControlName="phoneno"
+                                                    (keypress)="numericOnly($event)" (keyup)="valPhone(countryCodeSelected)"
+                                                    [(ngModel)]="phone">
+                                                <span matPrefix class="countryFlag"></span>
+                                                <mat-error *ngIf="f.phoneno.errors">
+                                                    <ng-container *ngIf="f.phoneno.errors.required">{{labelName?.PhoneNo}} is
+                                                        Required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.phoneno.errors.pattern">{{labelName?.PhoneNo}} is
+                                                        Invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.phoneno.errors.minlength">
+                                                      Mininmum length is {{phminlength}}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.phoneno.errors.maxlength">
+                                                       Maximum length is {{phmaxlength}}
+                                                   </ng-container>
+                                                </mat-error>
+                                                <mat-hint class="mat-error" *ngIf="phvalid == false">{{labelName?.PhoneNo}} is Invalid</mat-hint>
+                                            </mat-form-field>
+                                            <mat-form-field appearance="fill" *ngIf="isDisabled">
+
+                                                <input maxlength="4" matInput formControlName="phoneotp"
+                                                    placeholder="0 0 0 0">
+                                                <span matPrefix style="margin-right: 100px;">{{labelName?.OTP}}</span>
+
+                                            </mat-form-field>
+
+                                            <span>
+                                                <div *ngIf="proper" >
+                                                    <button class="btn outline" mat-stroked-button (click)="flip()"
+                                                        color="primary">{{labelName?.sendotp}}</button>
+                                                </div>
+                                            </span>
+
+                                            <div class="row" style="margin-left: 1px;">
+                                                <span>
+                                                    <button class="btn outline" mat-stroked-button color="primary"
+                                                        *ngIf="isDisabled">{{labelName?.resendotp}}</button>
+                                                </span>
+                                                <span style="padding-left: 10px;">
+                                                    <button class="btn outline" mat-stroked-button color="primary"
+                                                        *ngIf="isDisabled" (click)="phoneverify()"
+                                                        style="background-color:rgba(30, 204, 117, 0.726);color: white;">Verify</button>
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.EmailID}}</mat-label>
+                                                <input matInput formControlName="emailid" [(ngModel)]="email"
+                                                    (keyup)="valemail()">
+                                                <mat-error *ngIf="f.emailid.errors">
+                                                    <ng-container *ngIf="f.emailid.errors.required">{{labelName?.EmailID}} is required
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.emailid.errors.pattern">{{labelName?.EmailID}} is invalid
+                                                    </ng-container>
+                                                    <ng-container *ngIf="f.emailid?.errors?.checknull">Whitespace not allowed.
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+
+
+                                            <mat-form-field appearance="fill" *ngIf="isemailotpDisabled">
+
+                                                <input maxlength="4" matInput formControlName="emailotp"
+                                                    placeholder="0 0 0 0">
+                                                <span matPrefix style="margin-right: 90px;">{{labelName?.OTP}}</span>
+
+                                            </mat-form-field>
+
+                                            <span>
+                                                <div *ngIf="properemail" >
+                                                    <button class="btn outline" mat-stroked-button (click)="flipemail()"
+                                                        color="primary">{{labelName?.sendotp}}</button>
+                                                </div>
+                                            </span>
+
+                                            <div class="row" style="margin-left: 1px;">
+                                                <span>
+                                                    <button class="btn outline" mat-stroked-button color="primary"
+                                                        *ngIf="isemailotpDisabled">{{labelName?.resendotp}}</button>
+                                                </span>
+                                                <span style="padding-left: 10px;">
+                                                    <button class="btn outline" mat-stroked-button color="primary"
+                                                        *ngIf="isemailotpDisabled" (click)="emailverify()"
+                                                        style="background-color:rgba(30, 204, 117, 0.726);color: white;">Verify</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="font-size: 12px;padding-bottom: 15px;">
+                                        <div class="col-lg-10 col-md-10 col-12 ml-1">
+                                            <mat-label appearance="fill">{{labelName?.ContractType}}</mat-label>
+                                            <mat-radio-group formControlName="contracttype" style="margin-left:20px;">
+                                                <mat-radio-button value="Trial">{{labelName?.Trial}}</mat-radio-button>
+                                                <mat-radio-button value="License">{{labelName?.License}}
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                            <mat-error *ngIf="f.contracttype.errors">
+                                                <ng-container *ngIf="f.contracttype.errors.required">Select Any One
+                                                    {{labelName?.ContractType}}
+                                                </ng-container>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.StartDate}}</mat-label>
+                                                <input readonly formControlName="startDate" type="text"
+                                                    [min]="todayDate" [matDatepicker]="startDate" matInput disabled>
+                                                <mat-datepicker-toggle matSuffix [for]="startDate">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #startDate></mat-datepicker>
+                                                <mat-error *ngIf="f.startDate.errors">
+                                                    <ng-container *ngIf="f.startDate.errors.required">{{labelName?.StartDate}} is
+                                                        required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>{{labelName?.RenewalDate}}</mat-label>
+                                                <input readonly formControlName="endDate" type="text" [min]="todayDate"
+                                                    [max]="maxDate" [matDatepicker]="endDate" matInput>
+                                                <mat-datepicker-toggle matSuffix [for]="endDate">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #endDate></mat-datepicker>
+                                                <mat-error *ngIf="f.endDate.errors">
+                                                    <ng-container *ngIf="f.endDate.errors.required">{{labelName?.RenewalDate}} is
+                                                        required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row d-none d-block d-md-none">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <!-- <button [routerLink]="['/masters/tenant']" class="btn btn-gray btnwidth mr-2" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                            <button  *ngIf="userConfig?.Reset && path == null" class="btn btn-gray btnwidth" mat-flat-button type="Reset" (click)="resetFunc()">{{labelName?.Reset}}</button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 mt-2">
+                            <button *ngIf="userConfig?.Save" class="btn btnwidth mr-2" mat-flat-button color="primary" (click)="savefunction()"
+                            type="button">{{labelName?.Save}}</button>
+                        <button *ngIf="userConfig?.Next" class="btn btnwidth" mat-flat-button color="primary" (click)="nextfunction()"
+                            type="button">{{labelName?.Next}}</button>
+                        </div>
+                      </div>
+
+                       <div class="btn-group d-none d-md-block">
+                        <!-- <button [routerLink]="['/masters/tenant']" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Cancel}}</button> -->
+                        <button  *ngIf="userConfig?.Reset && path == null" class="btn btn-gray" mat-flat-button type="Reset" (click)="resetFunc()">{{labelName?.Reset}}</button>
+                        <button *ngIf="userConfig?.Save" class="btn" mat-flat-button color="primary" (click)="savefunction()"
+                            type="button">{{labelName?.Save}}</button>
+                        <button *ngIf="userConfig?.Next" class="btn" mat-flat-button color="primary" (click)="nextfunction()"
+                            type="button">{{labelName?.Next}}</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,386 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="wrapper">
+        <div *ngIf="type == 'security-modules'"> <legend class="primary-color font-weight-bold size">{{(newLabelName?newLabelName:changeModuleDisplayName)}}</legend></div>
+        <div  *ngIf="type !== 'security-modules'"> <legend class="primary-color font-weight-bold size">{{(newLabelName?newLabelName:changeModuleDisplayName) | titlecase}}</legend></div>
+    <div class="row" *ngIf="type == 'label'">
+        <div class="col-lg-3 col-md-6 col-sm-12 blue-dropdown">
+            <div class="blue-dropdown">
+                <mat-form-field appearance="fill">
+                  <mat-label>Application</mat-label>
+                    <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="productName" panelClass="blue-panel"
+                        (selectionChange)="selectedProduct($event.value); ">
+                        <mat-option *ngFor="let data of productType" [value]="data.Id">{{data.ProductName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <mat-form-field appearance="fill">
+                <mat-label>Language</mat-label>
+                <mat-select matinput matInput (selectionChange)="setLanguage($event.value);getContacts()"
+                    [(ngModel)]="languageName">
+                    <mat-option *ngFor="let data of languageData"
+                        [value]="data.LanguageCode">{{data.Language}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row pt-2" *ngIf="type == 'approvals'">
+        <div class="col-lg-3 col-md-6 col-sm-12 blue-dropdown">
+            <mat-form-field appearance="fill">
+              <mat-label>Application</mat-label>
+                <mat-select [ngModelOptions]="{standalone: true}" panelClass="blue-panel" [(ngModel)]="productID" (selectionChange)="productChanged()" >
+                    <mat-option *ngFor="let data of productType" [value]="data.Id">{{data.ProductName}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row pt-2" *ngIf=" type == 'sla' ">
+      <div class="col-lg-3 col-md-6 col-sm-12 blue-dropdown">
+          <mat-form-field appearance="fill">
+            <mat-label>Application</mat-label>
+              <mat-select [ngModelOptions]="{standalone: true}" panelClass="blue-panel" [(ngModel)]="slaproductID" (selectionChange)="productChanged()" >
+                  <mat-option *ngFor="let data of productType" [value]="data.Id">{{data.ProductName}}</mat-option>
+              </mat-select>
+          </mat-form-field>
+      </div>
+  </div>
+  <div class="row pt-2" *ngIf=" type == 'BusinessOrchestration' ">
+    <div class="col-lg-3 col-md-6 col-sm-12 blue-dropdown">
+        <mat-form-field appearance="fill">
+          <mat-label>Application</mat-label>
+            <mat-select [ngModelOptions]="{standalone: true}" panelClass="blue-panel" [(ngModel)]="BOProductID" (selectionChange)="productChanged()" >
+                <mat-option *ngFor="let data of productType" [value]="data.Id">{{data.ProductName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+  <div class="row pt-2" *ngIf="type == 'scheduler'">
+    <div class="col-lg-3 col-md-6 col-sm-12 blue-dropdown">
+        <mat-form-field appearance="fill">
+          <mat-label>Application</mat-label>
+            <mat-select [ngModelOptions]="{standalone: true}" panelClass="blue-panel" [(ngModel)]="schedulerproductID" (selectionChange)="productChanged()" >
+                <mat-option *ngFor="let data of productType" [value]="data.Id">{{data.ProductName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+
+    <div *ngIf="type == 'beneficiary' || type == 'users' || type== 'product-group' || type == 'approvals'" mat-tab-nav-bar>
+        <ng-container *ngIf="type == 'beneficiary'">
+            <a mat-tab-link *ngFor="let data of hawkerStatusSteps" (click)="onTabChange(data.tab)"
+                [active]="tab == data.tab" class="userNavtab">
+                {{data.label}} </a>
+        </ng-container>
+        <ng-container *ngIf="type == 'users'">
+            <a mat-tab-link *ngFor="let data of userStatusSteps" (click)="onTabChange(data.tab)"
+                [active]="tab == data.tab" class="userNavtab">
+                {{data.label}} </a>
+        </ng-container>
+        <ng-container *ngIf="type == 'approvals'" >
+          <a mat-tab-link *ngFor="let data of approvalTabs" (click)="onTabChange(data.tab)"
+              [active]="tab == data.tab" class="userNavtab">
+              {{data.label}} </a>
+      </ng-container>
+        <ng-container *ngIf="type == 'product-group'">
+            <a mat-tab-link *ngFor="let data of productgrouptable" (click)="onTabChange1(data.tabs)"
+                [active]="tabs == data.tabs" class="userNavtab">
+                {{data.label}} </a>
+        </ng-container>
+
+
+    </div>
+    <app-filter [hasChecked]="hasChecked" [component]="''" [role]="userDetails?.role" [pgValMaster] ="true"
+        [type]="type == 'user-group' ? 'UserGroup' : type" [tabValue]="tabValue" [addBtn]="true" [bulkId]="bulkId" [tab] = "tab" [tabs]="tabs"
+         [resetBtnValue]="resetBtnValue"  [ProductGroupValMaster]="ProductGroup" [CategoryValMaster]="Category" [isDialog]="isDialog"
+         [selectedlanguage]="selectedlanguage" [ProductGroupTab] = "this.tabs"  [ruleType]="ruleType" [schedulerproductID]="schedulerproductID" [BOProductID]="BOProductID"
+        [approvalModules] = "approvalModules"  [moduleName]="moduleName" [selectedApprovalModules]="selectedApprovalModules" [slaproductID]="slaproductID" [productID] ="productID"
+        [taskGroupInfo]="taskGroupInfo" [taskGroupId]="taskGroupId"
+        >
+    </app-filter>
+    <div class="px-0 py-0">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" *ngIf="type == 'state' || type == 'district' && type != 'form-event'">
+                    <mat-label>Country</mat-label>
+                    <mat-select name="Country" value="Country" (selectionChange)="getCountry($event.value)" #select>
+                        <mat-option *ngFor="let data of countrylist" [value]="data.CountryID">{{ data.CountryName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <mat-form-field appearance="fill" *ngIf="type == 'district' && type != 'form-event'">
+                    <mat-label>State</mat-label>
+                    <mat-select name="state" value="state" (selectionChange)="getDistrict($event.value)" #select>
+                        <mat-select-filter [placeholder]="'Filter'" [displayMember]="'StateName'" [array]="statelist"
+                            (filteredReturn)="filteredstates =$event"></mat-select-filter>
+                        <mat-option *ngFor="let data of filteredstates" [value]="data.StateID">{{ data.StateName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="table-container dataTable userTable"  [ngStyle]="{'height':this.type == 'users' ? '60vh': ''}">
+            <table>
+                <thead>
+                    <tr *ngIf="tabValue.length>0">
+                        <ng-container *ngFor="let data of finalField; let i = index">
+                            <th *ngIf="data.value !== 'CHECKBOX' && (data.value !== 'Actionable' || type !=='users' || type == 'users' && (this.userResetButton !== 'resetPassword') && (this.userResetButton !== 'forceLogout') && (this.userResetButton !== 'forceUnlock'))"
+                             [ngClass]="!data.checked ? 'tabCol' : ''"
+                                class="{{'column'+i}}" (click)="sortUsers(data.value, data.order)">
+                                <ng-container class="Header_All"
+                                    *ngIf="data.value == 'Sr No' && (type == 'maskingrule' || type == 'holidays' ||  type == 'security-modules' || type == 'skills' || type == 'rm-mapping' || type == 'scheduler' || type == 'event' || type == 'accounts' || type == 'tenant' ||  type == 'ScorecardTemplate' || type == 'hierarchy'|| type == 'alert-setting' ||  type == 'contact' || type == 'user-group' || type == 'contact-center-location' || type == 'blockcontent' ||type == 'BusinessOrchestration' ||  type == 'hub-admin-access-controller' || type == 'hubModules' || type == 'break-not-ready-reason-codes' || type == 'product-group' || type == 'users' || this.tab == 'GETALLUSERS'); else else_content">
+                                    <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary"
+                                        [indeterminate]="hasChecked.length >0 && !allSelected"
+                                        [checked]="hasChecked.length >0 && allSelected"
+                                        [disabled]="!data.CHECKBOX && maxNo"
+                                        (change)="bulkCheckboxCheck($event.checked, data)"></mat-checkbox>
+                                </ng-container>
+                                <ng-template #else_content>{{data.value == 'Actionable' ? 'Action' : data.value}}
+                                    <span [ngSwitch]="data.order">
+                                        <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                                        <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                                    </span>
+                                </ng-template>
+                            </th>
+
+
+                        </ng-container>
+                    </tr>
+                    <tr *ngIf="tabValue.length == 0">
+                        <th>No record found</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="tabValue.length>0">
+                    <tr
+                        *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index" (dblclick)="goToApprovalWithId(data)">
+
+                        <ng-container *ngFor="let val of finalField; let i = index">
+                            <td *ngIf="val.value == 'Sr No' && type != 'accounts' && type === 'holidays' &&  type == 'security-modules' && type != 'contact' && type != 'skills' && type != 'rm-mapping' && type != 'scheduler' && type != 'event' && type!='alert-setting'  && this.tab != 'GETALLUSERS' && this.tab !='GETALLDISABLEUSERS' && type != 'user-group' && type != 'contact-center-location' && type !='ScorecardTemplate'  && type != 'break-not-ready-reason-codes' && type != 'hierarchy' && type != 'hubModules' && type != 'Privilege' && type !='blockcontent' && type != 'BusinessOrchestration' && type !='tenant' && type != 'quicklinks'  && type != 'schedule' && type != 'customerproduct' && type != 'product-group'  "
+                                [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}}">
+                                <mat-checkbox
+                                    *ngIf="(type == 'beneficiary' && userDetails.RoleType == 'ER Officer' && tab == 'In Process')"
+                                    [(ngModel)]="data.CHECKBOX" color="primary" [disabled]="!data.CHECKBOX && maxNo"
+                                    (change)="onCheckboxChecked($event.checked, data)"></mat-checkbox>
+                                <span>{{((page-1)*(itemsPerPage))+(j+1)}}</span>
+                            </td>
+                            <td *ngIf="val.value == 'Sr No' && (type == 'maskingrule' ||type === 'holidays' ||  type == 'security-modules'|| type == 'skills' || type == 'rm-mapping' || type == 'scheduler' || type == 'event'|| type == 'contact' || type == 'blockcontent' || type == 'accounts' || this.tab == 'GETALLUSERS'|| type == 'user-group' || type == 'contact-center-location' || type == 'ScorecardTemplate'  || type == 'hierarchy' || type == 'BusinessOrchestration' || type == 'hubModules' || type == 'Privilege' ||type == 'tenant' || type == 'quicklinks'  || type == 'schedule' ||type == 'customerproduct' || type == 'product-group'  || type == 'alert-setting' || type == 'break-not-ready-reason-codes'|| this.tab =='GETALLDISABLEUSERS' )"
+                                [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}}">
+                                <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary"
+                                    [disabled]="!data.CHECKBOX && maxNo"
+                                    (change)="singleCheckboxCheck($event.checked, data)"></mat-checkbox>
+                            </td>
+                            <td *ngIf="val.value == 'Created On' || val.value == 'Modified On'"
+                                [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}}">
+                                <span
+                                    [matTooltip]="data[finalField[i].value] && data[finalField[i].value].length > 20 ? data[finalField[i].value] : ''">{{data[finalField[i].value]}}</span>
+                            </td>
+                            <td *ngIf="type == 'beneficiary' && val.value == 'Actionable'"
+                                [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}} action">
+                                <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                                <mat-menu #menu="matMenu" class="master_action">
+                                    <button mat-menu-item *ngIf="userConfig?.Payment "
+                                        (click)="contactAction(data[finalField[i].value]?.split(',')[0], 'Payment')">
+                                        <i class="icon-payment_details"></i>
+                                        <span>Payment</span>
+                                    </button>
+                                    <button mat-menu-item *ngIf=" userConfig?.Delete &&  tab !== 'Deleted'"
+                                        (click)="openDialog('delete', data[finalField[i].value]?.split(',')[0])">
+                                        <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                                        <span>Delete</span>
+                                    </button>
+
+                                    <button mat-menu-item*ngIf="data[finalField[i].value]?.split(',')[1] !== ''"
+                                        (click)="generateIdCard(data[finalField[i].value]?.split(',')[0], data[finalField[i].value]?.split(',')[1])">
+                                        <i class="icon-download"></i>
+                                        <span>Download</span>
+                                    </button>
+                                </mat-menu>
+                            </td>
+
+
+
+                            <td *ngIf="type !== 'TaskGroup' && type !== 'sla' && type !== 'skills' && type !=='rm-mapping' && type!== 'scheduler' && type !== 'event' && type !== 'accounts' && type !== 'contact'  && type !== 'blockcontent' && type !== 'user-group'  && type !== 'ScorecardTemplate' && type !== 'taskgroup' && type !== 'contact-center-location' && type !== 'break-not-ready-reason-codes' && type !== 'campaigns' &&type !== 'beneficiary' && type !== 'hierarchy' && type!== 'tenant' && type!== 'broadcast' && type !== 'quicklinks' && type !== 'schedule'  && type!== 'customerproduct' && type !== 'product-group' && type !== 'hubModules' && type!== 'Privilege' && type !== 'BusinessOrchestration' && type == 'users' && (this.userResetButton !== 'resetPassword') && type == 'users' && (this.userResetButton !== 'forceLogout') && type=='users' && (this.userResetButton !== 'forceUnlock') &&  val.value == 'Actionable' "
+                                [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}} action">
+                                <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                                <mat-slide-toggle
+                                    *ngIf="type == 'users' && tab !== 'GETALLDISABLEUSERS' && tab == 'GETALLUSERS' && (this.userResetButton !== 'resetPassword') && (this.userResetButton !== 'forceLogout') && (this.userResetButton !== 'forceUnlock')"
+                                    [disabled]="data['Login Status'] == 'Logged Out' ? true : false" color="primary"
+                                    [checked]="data['Login Status'] == 'Logged In' ? true : false" class="toggleBtn"
+                                    (change)="flip(data[finalField[i].value],$event)" #tooltip="matTooltip"
+                                    matTooltip="Logout">
+                                </mat-slide-toggle>
+                                <i class="icon-LockUsers" #tooltip="matTooltip" matTooltip="LockUser"
+                                    style="color: red;"
+                                    *ngIf="(data['Account Status'] == 'Locked' ? true : false) && (this.userResetButton !== 'resetPassword') && (this.userResetButton !== 'forceLogout') && (this.userResetButton !== 'forceUnlock')"
+                                    (click)="flip1( data[finalField[i].value],true)"></i>
+                                <i class="icon-UnlockUsers" style="margin: 5px" #tooltip="matTooltip"
+                                    matTooltip="UnlockUsers"
+                                    [ngClass]="data['Account Status'] == 'Active' ? 'disabledIT':''"
+                                    *ngIf="(data['Account Status'] == 'Active' ? true : false) && (this.userResetButton !== 'resetPassword') && (this.userResetButton !== 'forceLogout') && (this.userResetButton !== 'forceUnlock')"></i>
+                                <mat-menu #menu="matMenu" class="master_action">
+                                    <ng-container *ngIf="hasChecked.length==0">
+                                        <button mat-menu-item
+                                            *ngIf="userConfig?.ResetPassword && type == 'users'&& isResetEnabled == true && tab !== 'GETALLDISABLEUSERS' && tab == 'GETALLUSERS' && (this.userResetButton !== 'resetPassword') && (this.userResetButton !== 'forceLogout') && (this.userResetButton !== 'forceUnlock')"
+                                            (click)="userActionable(data[finalField[i].value],'resetPassword')">
+                                            <i class="icon-ResetPassword"></i>
+                                            <span>Reset Password</span>
+                                        </button>
+                                    </ng-container>
+                                    <ng-container *ngIf="hasChecked.length==0">
+
+                                        <button mat-menu-item *ngIf=" tab !== 'GETALLDISABLEUSERS' "
+                                            (click)="contactAction(data[finalField[i].value], 'Edit')">
+                                            <!-- (this.userResetButton !== 'resetPassword') && (this.userResetButton !== 'forceLogout') && &&  (this.userResetButton !== 'forceUnlock') -->
+                                            <mat-icon>edit</mat-icon>
+                                            <span>Edit</span>
+                                        </button>
+                                    </ng-container>
+                                    <button mat-menu-item
+                                        *ngIf="userConfig?.Delete && type !== 'adminConfig' && tab !== 'GETALLDISABLEUSERS' "
+                                        (click)="openDialog('delete', data[finalField[i].value])">
+                                        <!-- (this.userResetButton !== 'resetPassword') && (this.userResetButton !== 'forceLogout') && &&   (this.userResetButton !== 'forceUnlock') -->
+                                        <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                                        <span>Delete</span>
+                                    </button>
+
+                                    <!-- <ng-container *ngIf="(userConfig?.View) && hasChecked.length == 0 ">
+                                        <button mat-menu-item *ngIf="userConfig?.View && type == 'maskingrule'"
+                                            (click)="view(type,data)">
+                                            <mat-icon>remove_red_eye</mat-icon>
+                                            <span>View</span>
+                                        </button>
+                                    </ng-container> -->
+                                    <button mat-menu-item *ngIf="userConfig?.Activate && tab == 'GETALLDISABLEUSERS'"
+                                        (click)="activateUser( data[finalField[i].value])">
+                                        <mat-icon>Active</mat-icon>
+                                        <span>Activate</span>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                            <td *ngIf="(type === 'sla' || type === 'label' ||  type === 'adminConfig' || type === 'maskingrule' || type === 'holidays' ||  type == 'security-modules' || type === 'skills' || type === 'rm-mapping' || type === 'scheduler' || type === 'event' || type ==='contact' ||type === 'blockcontent' || type === 'accounts' || type === 'ScorecardTemplate' || type === 'taskgroup'  || type === 'user-group' || type === 'contact-center-location' || type === 'break-not-ready-reason-codes' || type === 'campaigns' || type === 'hierarchy' || type === 'tenant' ||type === 'BusinessOrchestration' || type === 'hubModules' ||  type === 'Privilege' || type === 'quicklinks' || type ===  'schedule' || type === 'broadcast'|| type ==='product-group'|| type === 'customerproduct' || type === 'TaskGroup' || type === 'task') && val.value == 'Actionable'"
+                                [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}} action">
+                                <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                                <mat-menu #menu="matMenu" class="master_action">
+                                    <ng-container *ngIf="(userConfig?.View) && hasChecked.length == 0 ">
+                                        <button mat-menu-item *ngIf="userConfig?.View && type == 'maskingrule'"
+                                            (click)="view(type,data)">
+                                            <mat-icon>remove_red_eye</mat-icon>
+                                            <span>View</span>
+                                        </button>
+                                    </ng-container>
+                                    <button mat-menu-item *ngIf="(userConfig?.Edit) && hasChecked.length == 0 && type != 'task'"
+                                        (click)="contactAction(data[finalField[i].value], 'Edit')">
+                                        <mat-icon>edit</mat-icon>
+                                        <span>Edit</span>
+                                    </button>
+
+                                    <button mat-menu-item
+                                        *ngIf="(userConfig?.Delete && (type === 'Privilege' || type === 'hubModules' || type === 'users') && userDetails.UserName === 'unfyd-admin') || (userConfig?.Delete && (type !== 'Privilege' && type !== 'hubModules' && type !== 'users'))"
+                                        (click)="hasChecked.length == 0 ? openDialog('delete', data[finalField[i].value]) : openDialogBulkDelete('delete', data[finalField[i].value])">
+                                        <mat-icon class="red-color cursorPointer" >delete_outline</mat-icon>
+                                        <span>Delete</span>
+                                    </button>
+
+
+                                </mat-menu>
+                            </td>
+
+                            <td *ngIf="val.value == 'Is Training Certificate Photo'"
+                                [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}}">
+                                <div class="media-profile">
+                                    <img src='{{data[finalField[i].value]}}' class="case-profile" alt="Document" />
+                                </div>
+                            </td>
+                            <td *ngIf="val.value == 'Applicant Id'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                                class="{{'column'+i}}"><span>
+                                    <a *ngIf="userConfig?.View "
+                                        (click)="contactAction(data[finalField[i].value], 'View')"
+                                        href="javascript:void(0)">{{data[finalField[i].value]}}</a>
+                                    <span *ngIf="!userConfig?.View" [innerHtml]="data[finalField[i].value]"></span>
+                                </span>
+                            </td>
+                            <td *ngIf="val.value !== 'Status' && val.value !== 'Rechurn Rule' && val.value !== 'Sort Condition' && val.value !== 'Filter Condition' && val.value !== 'Sr No' && val.value !== 'AgentId' && val.value !== 'Created On' &&  val.value !== 'Modified On' && val.value !== 'Actionable' && val.value !== 'Applicant Id' && val.value !== 'Is Training Certificate Photo'"
+                                [ngClass]="!val.checked ? 'tabCol' : ''" class="{{'column'+i}}"
+                                (click)="SummaryPreview(val,data,type)">
+                                <ng-container *ngIf="isNaN(data[finalField[i].value]) ; else notNaN1">
+                                    <span
+                                        *ngIf="data[finalField[i].value] !== true && data[finalField[i].value] !== false && data[finalField[i].value]?.length>20"
+                                        #tooltip="matTooltip" [matTooltip]="data[finalField[i].value]">{{
+                                        (data[finalField[i].value]?.length>20)? (data[finalField[i].value] |
+                                        slice:0:20)+'...':(data[finalField[i].value]) }}</span>
+                                    <span
+                                        *ngIf="data[finalField[i].value] !==true && data[finalField[i].value] !==false && data[finalField[i].value]?.length < 20">{{
+                                        data[finalField[i].value] }}</span>
+                                </ng-container>
+                                <ng-template #notNaN1>
+
+                                    <ng-container *ngIf="!isNaN(data[finalField[i].value]) ; else elsePartNaN1">
+
+                                        <ng-container
+                                            *ngIf="(val.value).toLowerCase() == 'channel' || (val.value).toLowerCase() == 'channels' || (val.value).toLowerCase() == 'transcript'; else NotInnerHTML">
+                                            <span
+                                                *ngIf="data[finalField[i].value] !== true && data[finalField[i].value] !== false; else elsePartNaN1"
+
+                                                [innerHTML]="data[val.value] == null? '-':htmlDecode(data[val.value])"></span>
+                                        </ng-container>
+                                        <ng-template #NotInnerHTML>
+                                            <ng-container *ngIf="(val.value).toLowerCase() == 'description'">
+                                            <span *ngIf="data[finalField[i].value] !== true && data[finalField[i].value] !== false; else elsePartNaN1"
+                                                [innerHTML]="">{{htmlDecodeTable(data[finalField[i]?.value])}}</span>
+                                            </ng-container>
+
+                                            <ng-container *ngIf="(val.value).toLowerCase() !== 'description'">
+                                            <span *ngIf="data[finalField[i].value] !== true && data[finalField[i].value] !== false; else elsePartNaN1"
+                                                [innerHTML]="">{{data[finalField[i]?.value]}}</span>
+                                            </ng-container>
+                                        </ng-template>
+
+                                    </ng-container>
+                                </ng-template>
+                                <ng-template #elsePartNaN1>
+                                    {{data[finalField[i]?.value]}}
+
+                                </ng-template>
+                            </td>
+                            <td *ngIf="(val.value === 'Rechurn Rule' || val.value === 'Sort Condition' || val.value === 'Filter Condition') && type == 'TaskGroup'">
+                              <span (click)="viewTaskGroupInfo(val.value,data)" class="viewTaskGroupInfo">View</span>
+                            </td>
+                            <td *ngIf="val.value === 'Status'" [ngClass]="!val.checked ? 'tabCol' : ''">
+                                <div class="refresh mt-2" *ngIf="type == 'TaskGroup' else elseStatus">
+                                  <ui-switch matTooltip="Status" [(ngModel)]="data[finalField[i].value]" (change)="changeStatus(val.value, data)"
+                                    size="small" defaultBgColor="#EAEAEA" checkedLabel="On" uncheckedLabel="Off" checkedTextColor="white"
+                                    uncheckedTextColor="red">
+                                  </ui-switch>
+                                </div>
+                                <ng-template #elseStatus>
+                                  <span [style.color]="getStatusColor(data[finalField[i]?.value])">{{ data[finalField[i]?.value] }}</span>
+                                </ng-template>
+                              </td>
+                            <td *ngIf="val.value == 'AgentId'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                                class="{{'column'+i}}">
+                                <span>
+
+                                </span>
+                                <ng-container *ngFor="let item of data[finalField[i].value].split(',');let r = index">
+                                    <ng-container *ngFor="let item1 of agents">
+                                        <span *ngIf="item1.id == item">{{item1?.UserName}}
+                                            <span *ngIf="r != data[finalField[i].value].split(',').length-1">,</span>
+                                        </span>
+                                    </ng-container>
+                                </ng-container>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+    <div class="pagination" *ngIf="tabValue.length>10">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+    </div>
+    </div>
+</div>

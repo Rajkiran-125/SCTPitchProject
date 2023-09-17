@@ -1,0 +1,1624 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader  && !isFullScreen">
+  <div class="wrapper wrapperCss dashboardNav">
+    <nav class="padding0" mat-tab-nav-bar>
+      <ng-container *ngFor="let data of navbar">
+        <a mat-tab-link [active]="tabSelected == data.label" (click)="drawer.close();changeTab(data);"
+          [active]="tabSelected == data.label">
+          {{ data.label |uppercase}}</a>
+      </ng-container>
+    </nav>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="buttonContainer d-flex" *ngIf="addDashboardCard">
+        <div class="dashboardFilterButton" (click)="add()">
+          <i class="icon-add" *ngIf="addDashboardCard" color="primary"></i>
+          <i *ngIf="!addDashboardCard" class="icon-rejected"></i>
+      </div>
+        <div class="dashboardFilterButton d-none d-flex d-md-flex d-lg-none" (click)="drawer1.toggle();" [ngClass]="filterEnabled ? 'primary-color':''">
+          <i class="icon-filter"></i>
+        </div>
+        <div class="dashboardFilterButton d-none d-lg-flex" (click)="filterEnabled = !filterEnabled" [ngClass]="filterEnabled ? 'primary-color':''">
+          <i class="icon-filter"></i>
+        </div>
+          <div class="dashboardFilterButton cursorPointer" matTooltip="Fullscreen" (click)="openFullscreen()">
+              <i class="icon-expand"></i>
+          </div>
+          <div class="dashboardFilterButton d-none" matTooltip="Exit Fullscreen" (click)="closeFullscreen()">
+              <i class="icon-collapse"></i>
+          </div>
+          <div class="dashboardFilterButton d-none">
+              <i class="icon-export"></i>
+          </div>
+          <div class="dashboardFilterButton" (click)="enableEdit()">
+              <i class="icon-arrange" *ngIf="edit"></i>
+          </div>
+          <div class="dashboardFilterButton " (click)="drawer.toggle(); editDashboard = (!editDashboard)">
+              <i class="icon-edit" href="#editContainer"></i>
+          </div>
+          <button *ngIf="userConfig?.SaveDragDrop && !edit" (click)="enableEdit()" class="btn" mat-flat-button color="primary" type="button">Save</button>
+      </div>
+      <div class="d-block d-lg-none">
+        <mat-drawer #drawer1 class="example-sidenav mobiledrawer" mode="side" position="end" disableClose style="width: 35vw;">
+          <div class="row m-0 w-100">
+            <div class="col-12 p-0">
+              <div class="d-flex justify-content-between p-3 border border-light">
+                <span class="editDashboardMainTitle">{{labelName?.Filter}}</span>
+                <mat-icon class="cursorPointer" (click)="drawer1.toggle();">close</mat-icon>
+              </div>
+            </div>
+            <div class="col-12 p-0">
+              <div class="filterContainer">
+                <div class="filterOptions">
+                            <div class="inputText normal-dropdown mx-3">
+                                <mat-form-field appearance="fill">
+                                    <mat-select panelClass="normal-panel" placeholder={{labelName?.GroupName}} [(ngModel)]="selectedGetGroupList" disableOptionCentering multiple>
+                                        <mat-option *ngFor="let data of getGroupList" [value]="data.GroupID">
+                                            {{data.GroupName |titlecase}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="inputText normal-dropdown mx-3">
+                                <mat-form-field appearance="fill">
+                                    <mat-select panelClass="normal-panel" placeholder={{labelName?.channelType}} [(ngModel)]="selectedChannelType" disableOptionCentering multiple>
+                                        <mat-option *ngFor="let data of userChannelName; let i = index" [value]="data.ChannelId">
+                                            <span [innerHtml]="data?.ChannelIcon"></span>
+                                            <span>{{data.ChannelName}}</span>
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="inputText normal-dropdown mx-3">
+                                <mat-form-field appearance="fill">
+                                    <mat-select panelClass="normal-panel" placeholder={{labelName?.skillType}} [(ngModel)]="selectedSkillType" disableOptionCentering multiple>
+                                        <mat-option *ngFor="let data of skillType" [value]="data.Id">{{data.SkillName|titlecase}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="inputText normal-dropdown mx-3" *ngIf="tabSelected == 'BOT'">
+                                <mat-form-field appearance="fill">
+                                    <mat-select panelClass="normal-panel" placeholder={{labelName?.GroupName}} disableOptionCentering>
+                                        <mat-option value="a">abcd</mat-option>
+    
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="inputText normal-dropdown mx-3">
+                                <mat-form-field appearance="fill">
+                                    <mat-select panelClass="normal-panel" placeholder={{labelName?.showDateFilter}} [(ngModel)]="selectedDateFilterDropdown" disableOptionCentering>
+    
+                                        <mat-option *ngFor="let item of dateFilterDropdown" [value]="item?.Key">{{item?.Value}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="px-3">
+                              <button mat-focus-indicator color="primary" (click)="applyFilterForDashboard()" class="btn btn-block btnMargin mat-flat-button mat-button-base mat-primary">
+                                Apply Filter</button>
+                            </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </mat-drawer>
+       </div>
+      <div class="custom-switchtoggle d-flex mx-2">
+        <ui-switch [(ngModel)]="enableReload" matTooltip="Auto Refresh" (ngModelChange)="enableReloadMethod()"
+          size="small" defaultBgColor="#EAEAEA" checkedLabel="On" uncheckedLabel="Off" checkedTextColor="white"
+          uncheckedTextColor="red"></ui-switch>
+      </div>
+      <!-- <div class="dashboardFilterButton cursorPointer" (click)="add();common.hubControlEvent('Dashboard','click','button','search','','')" *ngIf="editDashboard">
+        <i class="icon-add" *ngIf="addDashboardCard"></i>2
+        <i *ngIf="!addDashboardCard" class="icon-rejected"></i>
+      </div> -->
+    </div>
+
+  </div>
+</div>
+
+
+<div *ngIf="localizationDataAvailable && userConfig" class="dashboardContainer1 cardsWidthDashboard">
+  <mat-drawer-container class="matContainerForEditDashboard" autosize>
+    <mat-drawer #drawer class="example-sidenav mobileDrawer" mode="side" position="end" disableClose style="width:25vw;">
+      <div class="row m-0 w-100">
+        <div class="col-12 p-0">
+          <div class="d-flex justify-content-between p-3 border border-light">
+            <span class="editDashboardMainTitle">{{labelName?.EditDashboard}}</span>
+            <mat-icon class="cursorPointer" (click)="drawer.toggle(); editDashboard = (!editDashboard); resetEditForm()">close</mat-icon>
+          </div>
+        </div>
+        <div class="col-12 p-0">
+          <div class="">
+            <mat-accordion class="">
+              <mat-expansion-panel  [expanded]="expansionPanelSelected == 1" (opened)="panelOpenState1 = true;expansionPanelSelected = 1" (closed)="panelOpenState1 = false"
+                [ngClass]="panelOpenState1 ? 'panelOpenedHeader':''">
+                <mat-expansion-panel-header>
+                  <mat-panel-title style="display:flex;justify-content:space-between;margin-right:0;"
+                    [ngClass]="panelOpenState1 ? 'panelOpenedTitle':''">
+                    <span class="">{{labelName?.Tile}}</span>
+                    <div class="mr-3" *ngIf="panelOpenState1">
+                      <i class="icon-add d-none"></i>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-accordion class="">
+                  <div *ngFor="let item of tiles;let i = index" class="innerPanelData">
+                    <mat-expansion-panel [expanded]="expansionPanelSelected == 1 && tileStep == i" (opened)="panelOpenState = true;setStep(1,i)" (closed)="panelOpenState = false">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title class="d-flex justify-content-between mr-0 innerPanelDataTitle">
+                          <span class="header-title">{{item.mainPlaceHolderHeader ? item.mainPlaceHolderHeader : labelName?.MainPlaceHolder}}</span>
+                          <div class="d-flex align-items-center">
+                            <mat-icon class="delete cursorPointer" *ngIf="userConfig?.Delete" (click)="deleteCard('tile',i)">delete</mat-icon>
+                            <mat-slide-toggle [(ngModel)]="item.visible" color="primary"
+                              class="toggleBtn cursorPointer mr-3">
+                            </mat-slide-toggle>
+                          </div>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.CountApiURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.countApi">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.CountApiRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign" rows="2"
+                              [(ngModel)]="item.countRequest"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.DrilldownApiURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.api">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.DrilldownApiRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign"
+                              [(ngModel)]="item.apiRequest"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.RefreshRate}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.reloadTimeEnable" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100" *ngIf="item.reloadTimeEnable">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.RefreshRateTime}}</span>
+                            <!-- <input type="time" step="2" [(ngModel)]="item.reloadTime"
+                             class="inputInsideTextLeftAlign"> -->
+                             <div class="example-container inputText normal-dropdown reloadTimeUI w-40">
+                              <mat-form-field appearance="fill">
+                                <input matInput type="number" min="1" [(ngModel)]="item.reloadTime" panelClass="normal-panel" class="example-right-align" placeholder="00">
+                                <mat-select matSuffix placeholder="Min"  class="ml-2" [(ngModel)]="item.reloadTimeType">
+                                  <mat-option *ngFor="let item of reloadDurationDropdown"  [value]="item.Key">{{item.Value}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center">
+                            <span class="innerTitle">{{labelName?.BackgroundColor}}</span>
+                            <div class="cursorPointer colorBorder colorTile" [matMenuTriggerFor]="menu"
+                              [ngStyle]="{'background-color': common.color[item.backgroundColor]}"></div>
+                            <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                              <div class="row m-2" (click)="$event.stopPropagation()">
+                                <div class="col-12">
+                                  <span class="selectColor">{{labelName?.SelectColor}}</span>
+                                </div>
+                                <div class="col-3 py-2 px-1" *ngFor="let color of common.colorArray">
+                                  <div class="row justify-content-center">
+                                    <div class="cursorPointer colorTile d-flex align-items-center justify-content-center"
+                                      [ngStyle]="{'background-color': common.color[color]}"
+                                      (click)="item.backgroundColor = color;">
+                                      <i class="icon-color-selected white-color"
+                                        *ngIf="color == item.backgroundColor"></i>
+                                    </div>
+                                  </div>
+                                  <div class="row justify-content-center fontBelowColor">
+                                    {{color|titlecase}}
+                                  </div>
+                                </div>
+                              </div>
+                            </mat-menu>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4 innerTitleWithBGColor">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                            <span class="innerTitle">{{labelName?.MainPlaceHolder}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.mainPlaceHolder" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX  ml-2">
+                            <span class="innerTitle">{{labelName?.Header}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.mainPlaceHolderHeader">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4 innerTitleWithBGColor">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                            <span class="innerTitle">{{labelName?.SubPlaceHolderOne}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.subPlaceHolder1" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="item.subPlaceHolder1">
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                              <span class="innerTitle">{{labelName?.Header}}</span>
+                              <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder1Header">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                              <span class="innerTitle">{{labelName?.DrilldownApiURL}}</span>
+                              <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder1Api">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX ml-2">
+                              <span class="innerTitle">{{labelName?.DrilldownApiRequest}}</span>
+                              <textarea type="text" class="inputInsideTextLeftAlign"
+                                [(ngModel)]="item.subPlaceHolder1Request"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4 innerTitleWithBGColor">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                            <span class="innerTitle">{{labelName?.SubPlaceHolderTwo}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.subPlaceHolder2" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="item.subPlaceHolder2">
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                              <span class="innerTitle">{{labelName?.Header}}</span>
+                              <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder2Header">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                              <span class="innerTitle">{{labelName?.DrilldownApiURL}}</span>
+                              <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder2Api">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX  ml-2">
+                              <span class="innerTitle">{{labelName?.DrilldownApiRequest}}</span>
+                              <textarea type="text" class="inputInsideTextLeftAlign"
+                                [(ngModel)]="item.subPlaceHolder2Request"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4 innerTitleWithBGColor">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                            <span class="innerTitle">{{labelName?.SubPlaceHolderThree}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.subPlaceHolder3" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="item.subPlaceHolder3">
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                              <span class="innerTitle">{{labelName?.Header}}</span>
+                              <input type="text" class="inputInside " placeholder="Sub Place Holder 3"
+                                [(ngModel)]="item.subPlaceHolder3Header">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                              <span class="innerTitle">{{labelName?.Select}}</span>
+
+                              <mat-select [(ngModel)]="item.subPlaceHolder3SelectedValue" class="min-width inputInside"
+                                (selectionChange)="tileSubplaceholder3TypeEdit(i)">
+                                <mat-option *ngFor="let subplaceholder3type of common.subPlaceHolder3Values"
+                                  [value]="subplaceholder3type.Key">{{subplaceholder3type.Value}}</mat-option>
+                              </mat-select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100" *ngIf="item.subPlaceHolder3SelectedValue == 'lineChart'">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                              <span class="innerTitle">{{labelName?.APIURL}}</span>
+                              <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder3Api">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100" *ngIf="item.subPlaceHolder3SelectedValue == 'lineChart'">
+                          <div class="col-12 pl-4">
+                            <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX ml-2">
+                              <span class="innerTitle">{{labelName?.APIRequest}}</span>
+                              <textarea type="text" class="inputInsideTextLeftAlign"
+                                [(ngModel)]="item.subPlaceHolder3Request"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                    </mat-expansion-panel>
+                  </div>
+                </mat-accordion>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel [expanded]="expansionPanelSelected == 2" (opened)="panelOpenState2 = true;expansionPanelSelected = 2" (closed)="panelOpenState2 = false"
+                [ngClass]="panelOpenState2 ? 'panelOpenedHeader':''">
+                <mat-expansion-panel-header>
+                  <mat-panel-title style="display:flex;justify-content:space-between;margin-right:0;"
+                    [ngClass]="panelOpenState2 ? 'panelOpenedTitle':''">
+                    <span class="">{{labelName?.ChartsAndGraphs}}</span>
+                    <div class="mr-3" *ngIf="panelOpenState2">
+                      <i class="icon-add d-none"></i>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-accordion class="">
+                  <div *ngFor="let item of botCards;let i = index" class="innerPanelData">
+                    <mat-expansion-panel [expanded]="expansionPanelSelected == 2 && chartAndGraphStep == i" *ngIf="item.dashboardControlTypeSelected == dashboardControlType[1]?.Key" (opened)="panelOpenState = true;setStep(2,i)" (closed)="panelOpenState = false">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title class="d-flex justify-content-between mr-0 innerPanelDataTitle">
+                          <span class="header-title">{{item.header ? item.header : labelName?.Header}}</span>
+                          <div class="d-flex align-items-center">
+                            <mat-icon class="delete cursorPointer d-none" *ngIf="userConfig?.Delete" (click)="deleteCard('tile',i)">delete</mat-icon>
+                            <mat-slide-toggle [(ngModel)]="item.visible" color="primary"
+                              class="toggleBtn cursorPointer mr-3">
+                            </mat-slide-toggle>
+                          </div>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.Header}}</span>
+                            <input type="text" class="inputInside " placeholder="Header" [(ngModel)]="item.header">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.CountApiURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.dataApi">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.CountApiRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign" rows="2"
+                              [(ngModel)]="item.dataRequest"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.DrilldownApiURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.api">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.DrilldownApiRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign"
+                              [(ngModel)]="item.apiRequest"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.RefreshRate}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.reloadTimeEnable" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100" *ngIf="item.reloadTimeEnable">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.RefreshRateTime}}</span>
+                            <!-- <input type="time" step="2" [(ngModel)]="item.reloadTime"
+                             class="inputInsideTextLeftAlign"> -->
+                             <div class="example-container inputText normal-dropdown reloadTimeUI w-40">
+                              <mat-form-field appearance="fill">
+                                <input matInput type="number" min="1" [(ngModel)]="item.reloadTime" panelClass="normal-panel" class="example-right-align" placeholder="00">
+                                <mat-select matSuffix placeholder="Min"  class="ml-2" [(ngModel)]="item.reloadTimeType">
+                                  <mat-option *ngFor="let item of reloadDurationDropdown"  [value]="item.Key">{{item.Value}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.showDateChangePart}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.showDateChangePart" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.DisplayDateFilter}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.displayDateFilter" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100" *ngIf="item.displayDateFilter">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ml-2">
+                            <span class="innerTitle">{{labelName?.DateFilter}}</span>
+                            <mat-select [(ngModel)]="item.dateFilter" class="min-width inputInside" multiple>
+                              <mat-option *ngFor="let subplaceholder3type of dateFilterDropdown"
+                                [value]="subplaceholder3type.Key">{{subplaceholder3type.Value}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div
+                          class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.Charttype}}</span>
+                            <mat-select [(ngModel)]="item.chartAndGraph" class="min-width inputInside">
+                              <mat-option *ngFor="let subplaceholder3type of chartandGraphDropdown"
+                                [value]="subplaceholder3type.Key">{{subplaceholder3type.Value}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row m-0 w-100"
+                       *ngIf="item.chartAndGraph &&
+                          item.chartAndGraph != 'Venn' &&
+                          item.chartAndGraph != 'Gauge' &&
+                          item.chartAndGraph != 'BarChart' &&
+                          item.chartAndGraph != 'BarChartIconOnTop' &&
+                          item.chartAndGraph != 'GaugeWithProgressBars'">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.HideLegend}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.hideLegend" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row m-0 w-100" *ngIf="item.chartAndGraph == 'BarChartIconOnTop'">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.Sectionbelowbarcharticonontop}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.sectionBelowBarChartIconOnTop" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+
+                      <ng-container *ngIf="item.chartAndGraph == 'BarChartIconOnTop' && item.sectionBelowBarChartIconOnTop">
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                              <span class="innerTitle" matTooltip={{labelName?.SectionBelowBarChartIconOnTopLeftText}}>{{labelName?.SectionBelowBarChartIconOnTopLeftText}}</span>
+                              <input type="text" [(ngModel)]="item.sectionBelowBarChartIconOnTopLeftText"
+                                class="inputInside ">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                              <span class="innerTitle" matTooltip={{labelName?.SectionBelowBarChartIconOnTopRightText}}>{{labelName?.SectionBelowBarChartIconOnTopRightText}}</span>
+                              <input type="text" [(ngModel)]="item.sectionBelowBarChartIconOnTopRightText"
+                                class="inputInside">
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                      <div class="row m-0 w-100" *ngIf="item.chartAndGraph == 'DoughnutChart'">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.DisplayInsideDoughnut}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.displayInnerTextDoughnut" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row m-0 w-100" *ngIf="item.displayInnerTextDoughnut">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.DisplaySum}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.showSum" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row m-0 w-100" *ngIf="item.displayInnerTextDoughnut">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.TextInsideDoughnut}}</span>
+                            <input type="text" [(ngModel)]="item.innerTextDoughnut"
+                             class="inputInside ">
+                          </div>
+                        </div>
+                      </div>
+
+                      <ng-container *ngIf="item.chartAndGraph == 'Gauge' || item.chartAndGraph == 'GaugeWithProgressBars'">
+
+
+
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div class="w-100 d-flex justify-content-between align-items-center">
+                              <span class="innerTitle">{{labelName?.BackgroundColor}}</span>
+                              <div class="cursorPointer colorBorder colorTile" [matMenuTriggerFor]="menu"
+                                [ngStyle]="{'background-color': common.color[item.gaugePercentColor]}"></div>
+                              <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                                <div class="row m-2" (click)="$event.stopPropagation()">
+                                  <div class="col-12">
+                                    <span class="selectColor">{{labelName?.SelectColor}}</span>
+                                  </div>
+                                  <div class="col-3 py-2 px-1" *ngFor="let color of common.colorArray">
+                                    <div class="row justify-content-center">
+                                      <div class="cursorPointer colorTile d-flex align-items-center justify-content-center"
+                                        [ngStyle]="{'background-color': common.color[color]}"
+                                        (click)="item.gaugePercentColor = color;">
+                                        <i class="icon-color-selected white-color"
+                                          *ngIf="color == item.gaugePercentColor"></i>
+                                      </div>
+                                    </div>
+                                    <div class="row justify-content-center fontBelowColor">
+                                      {{color|titlecase}}
+                                    </div>
+                                  </div>
+                                </div>
+                              </mat-menu>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row m-0 w-100" *ngIf="item.chartAndGraph == 'GaugeWithProgressBars'">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom pl-2">
+                              <span class="innerTitle">Gauge Data Key</span>
+                              <input type="text" [(ngModel)]="item.gaugePercentCountDataKey" class="inputInside">
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- <div class="col-12" *ngIf="chartandGraph.chartAndGraph == 'GaugeWithProgressBars'">
+                          <mat-form-field appearance="fill">
+                            <mat-label>Gauge Data Key</mat-label>
+                            <input type="text" [(ngModel)]="chartandGraph.gaugePercentCountDataKey" matInput>
+                          </mat-form-field>
+                        </div> -->
+
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4 innerTitleWithBGColor">
+                            <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                              <span class="innerTitle">{{labelName?.DisplayGaugePercent}}</span>
+                              <mat-slide-toggle [(ngModel)]="item.gaugePercentCount" color="primary"
+                                class="toggleBtn cursorPointer">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100" *ngIf="item.gaugePercentCount">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  pl-2">
+                              <span class="innerTitle">{{labelName?.GaugePercent}}</span>
+                              <input type="text" [(ngModel)]="item.gaugePercentCountText" class="inputInside ">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100" *ngIf="item.chartAndGraph != 'GaugeWithProgressBars'">
+                          <div class="col-12 pl-4 innerTitleWithBGColor">
+                            <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                              <span class="innerTitle">{{labelName?.DisplayTextBelowGaugeCount}}</span>
+                              <mat-slide-toggle [(ngModel)]="item.textBelowGaugeCount" color="primary"
+                                class="toggleBtn cursorPointer">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100" *ngIf="item.textBelowGaugeCount">
+                          <div class="col-12 pl-4">
+                            <div
+                              class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  pl-2">
+                              <span class="innerTitle"
+                                matTooltip={{labelName?.TextBelowGaugeCount}}>{{labelName?.TextBelowGaugeCount}}</span>
+                              <input type="text" [(ngModel)]="item.textBelowGaugeCountText" class="inputInside ">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row m-0 w-100" *ngIf="item.textBelowGaugeCount">
+                          <div class="col-12 pl-4">
+                            <div class="w-100 d-flex justify-content-between align-items-center pl-2">
+                              <span class="innerTitle">{{labelName?.BackgroundColor}}</span>
+                              <div class="cursorPointer colorBorder colorTile" [matMenuTriggerFor]="menu"
+                                [ngStyle]="{'background-color': common.color[item.textBelowGaugeColor]}"></div>
+                              <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                                <div class="row m-2" (click)="$event.stopPropagation()">
+                                  <div class="col-12">
+                                    <span class="selectColor">{{labelName?.SelectColor}}</span>
+                                  </div>
+                                  <div class="col-3 py-2 px-1" *ngFor="let color of common.colorArray">
+                                    <div class="row justify-content-center">
+                                      <div
+                                        class="cursorPointer colorTile d-flex align-items-center justify-content-center"
+                                        [ngStyle]="{'background-color': common.color[color]}"
+                                        (click)="item.textBelowGaugeColor = color;">
+                                        <i class="icon-color-selected white-color"
+                                          *ngIf="color == item.textBelowGaugeColor"></i>
+                                      </div>
+                                    </div>
+                                    <div class="row justify-content-center fontBelowColor">
+                                      {{color|titlecase}}
+                                    </div>
+                                  </div>
+                                </div>
+                              </mat-menu>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="item.chartAndGraph == 'LicenseUsageBarChart'">
+                        <div class="row m-0 w-100">
+                          <div class="col-12 pl-4">
+                            <div class="w-100 d-flex justify-content-between align-items-center  pl-2">
+                              <span class="innerTitle">{{labelName?.LineColor}}</span>
+                              <div class="cursorPointer colorBorder colorTile" [matMenuTriggerFor]="menu"
+                                [ngStyle]="{'background-color': common.color[item.maxLicenseAllowedLineColor]}"></div>
+                              <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                                <div class="row m-2" (click)="$event.stopPropagation()">
+                                  <div class="col-12">
+                                    <span class="selectColor">{{labelName?.SelectColor}}</span>
+                                  </div>
+                                  <div class="col-3 py-2 px-1" *ngFor="let color of common.colorArray">
+                                    <div class="row justify-content-center">
+                                      <div
+                                        class="cursorPointer colorTile d-flex align-items-center justify-content-center"
+                                        [ngStyle]="{'background-color': common.color[color]}"
+                                        (click)="item.maxLicenseAllowedLineColor = color;">
+                                        <i class="icon-color-selected white-color"
+                                          *ngIf="color == item.maxLicenseAllowedLineColor"></i>
+                                      </div>
+                                    </div>
+                                    <div class="row justify-content-center fontBelowColor">
+                                      {{color|titlecase}}
+                                    </div>
+                                  </div>
+                                </div>
+                              </mat-menu>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                      <div class="row m-0 w-100" *ngIf="item.chartAndGraph && item.chartAndGraph != 'Gauge'">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                            <span class="innerTitle">Blocks</span>
+                            <div class="d-flex align-items-center">
+                              <span class="font-weight-bold">{{item.blocks.length}}</span>
+                              <div class="addBlocksButton" (click)="addBlockAddDashboardCard(i)"
+                                *ngIf="item.chartAndGraph != 'LineChart' && item.chartAndGraph != 'LicenseUsageBarChart' && item.chartAndGraph != 'Venn'"
+                                [ngClass]="item.chartAndGraph == 'GaugeWithProgressBars' && item.blocks.length == 5 ? 'disabledIT' : ''">
+                                +</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <ng-container *ngIf="item.chartAndGraph && item.chartAndGraph != 'Gauge'">
+                        <div *ngFor="let innerItem of item.blocks;let j = index; let first = first">
+                          <div class="row m-0 w-100">
+                            <div class="col-12 pl-4 innerTitleWithBGColor">
+                              <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                                <span class="innerTitle"
+                                  *ngIf="item.chartAndGraph != 'LicenseUsageBarChart'">{{labelName?.Block}}
+                                  {{j+1}}</span>
+                                <span class="innerTitle" *ngIf="item.chartAndGraph == 'LicenseUsageBarChart'">{{ j == 0
+                                  ? labelName?.LicenseUsed : labelName?.LicenseOverruled}}</span>
+                                <div>
+                                  <mat-slide-toggle [(ngModel)]="innerItem.visible"
+                                    *ngIf="item.chartAndGraph != 'Venn' && item.chartAndGraph != 'LineChart'"
+                                    color="primary" class="toggleBtn cursorPointer">
+                                  </mat-slide-toggle>
+                                  <mat-icon class="red-color cursorPointer"
+                                    *ngIf="item.chartAndGraph != 'LicenseUsageBarChart' && item.chartAndGraph != 'Venn' && item.chartAndGraph != 'LineChart' && userConfig?.Delete"
+                                    (click)="deleteBlockAddDashboardCard(i,j)">delete</mat-icon>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row m-0 w-100">
+                            <div class="col-12 pl-4">
+                              <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  pl-2">
+                                <span class="innerTitle">{{labelName?.Header}}</span>
+                                <input type="text" [(ngModel)]="innerItem.header" class="inputInside ">
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row m-0 w-100" *ngIf="item.chartAndGraph == 'GaugeWithProgressBars'">
+                            <div class="col-12 pl-4">
+                              <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom pl-2">
+                                <span class="innerTitle">Block Key</span>
+                                <input type="text" [(ngModel)]="innerItem.key" class="inputInside">
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row m-0 w-100"
+                            *ngIf="(item.chartAndGraph != 'Venn' && item.chartAndGraph != 'GaugeWithProgressBars') || (item.chartAndGraph == 'Venn' && first)">
+                            <div class="col-12 pl-4">
+                              <div class="w-100 d-flex justify-content-between align-items-center pl-2">
+                                <span class="innerTitle">{{labelName?.BackgroundColor}}</span>
+                                <div class="cursorPointer colorBorder colorTile" [matMenuTriggerFor]="menu"
+                                  [ngStyle]="{'background-color': common.color[innerItem.backgroundColor]}"></div>
+                                <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                                  <div class="row m-2" (click)="$event.stopPropagation()">
+                                    <div class="col-12">
+                                      <span class="selectColor">{{labelName?.SelectColor}}</span>
+                                    </div>
+                                    <div class="col-3 py-2 px-1" *ngFor="let color of common.colorArray">
+                                      <div class="row justify-content-center">
+                                        <div class="cursorPointer colorTile d-flex align-items-center justify-content-center"
+                                          [ngStyle]="{'background-color': common.color[color]}"
+                                          (click)="innerItem.backgroundColor = color;">
+                                          <i class="icon-color-selected white-color"
+                                            *ngIf="color == innerItem.backgroundColor"></i>
+                                        </div>
+                                      </div>
+                                      <div class="row justify-content-center fontBelowColor">
+                                        {{color|titlecase}}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </mat-menu>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row m-0 w-100" *ngIf="item.chartAndGraph == 'BarChartIconOnTop'">
+                            <div class="col-12 pl-4">
+                              <div class="w-100 d-flex justify-content-between align-items-center pl-2">
+                                <span class="innerTitle">{{labelName?.SelectIconAndIconColor}}</span>
+                                <div class="d-flex">
+                                  <div class="cursorPointer mx-1 colorBorder colorTile selectedIconOnAddDashboard"
+                                    [matMenuTriggerFor]="menu" class="icon-{{innerItem?.selectedIcon}}"
+                                    [ngStyle]="{'color': innerItem.selectedIconColor ? common.color[innerItem.selectedIconColor] : common.color['blue'] }">
+                                  </div>
+                                  <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                                    <div class="row m-2 matMenuIcons" (click)="$event.stopPropagation()">
+                                      <div class="col-12">
+                                        <span class="selectColor">{{labelName?.SelectIcon}}</span>
+                                      </div>
+                                      <div class="col-3 py-2 px-1" *ngFor="let item1 of AllIcons">
+                                        <div class="row justify-content-center primary-color">
+                                          <div class="cursorPointer colorTile d-flex align-items-center justify-content-center onHoverIcon" class="icon-{{item1}}"
+                                            [ngClass]="innerItem.selectedIcon == item1 ? 'selectedIconOnAddDashboardMatMenu':''"
+                                            (click)="innerItem.selectedIcon = item1">
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </mat-menu>
+
+                                  <div class="cursorPointer colorBorder colorTile" [matMenuTriggerFor]="menu1"
+                                    [ngStyle]="{'background-color': common.color[innerItem.selectedIconColor]}"></div>
+                                  <mat-menu #menu1="matMenu" class="w-100  overflow-hidden">
+                                    <div class="row m-2" (click)="$event.stopPropagation()">
+                                      <div class="col-12">
+                                        <span class="selectColor">{{labelName?.SelectColor}}</span>
+                                      </div>
+                                      <div class="col-3 py-2 px-1" *ngFor="let color of common.colorArray">
+                                        <div class="row justify-content-center">
+                                          <div
+                                            class="cursorPointer colorTile d-flex align-items-center justify-content-center"
+                                            [ngStyle]="{'background-color': common.color[color]}"
+                                            (click)="innerItem.selectedIconColor = color;">
+                                            <i class="icon-color-selected white-color"
+                                              *ngIf="color == innerItem.selectedIconColor"></i>
+                                          </div>
+                                        </div>
+                                        <div class="row justify-content-center fontBelowColor">
+                                          {{color|titlecase}}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </mat-menu>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </ng-container>
+
+                    </mat-expansion-panel>
+                  </div>
+                </mat-accordion>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel [expanded]="expansionPanelSelected == 3" (opened)="panelOpenState3 = true;expansionPanelSelected = 3" (closed)="panelOpenState3 = false"
+                [ngClass]="panelOpenState3 ? 'panelOpenedHeader':''">
+                <mat-expansion-panel-header>
+                  <mat-panel-title style="display:flex;justify-content:space-between;margin-right:0;"
+                    [ngClass]="panelOpenState3 ? 'panelOpenedTitle':''">
+                    <span class="">{{labelName?.List}}</span>
+                    <div class="mr-3" *ngIf="panelOpenState3">
+                      <i class="icon-add d-none"></i>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-accordion class="">
+                  <div *ngFor="let item of botCards;let i = index" class="innerPanelData">
+                    <mat-expansion-panel [expanded]="expansionPanelSelected == 3 && listStep == i"
+                      *ngIf="item.dashboardControlTypeSelected == dashboardControlType[2]?.Key"
+                      (opened)="panelOpenState = true;setStep(3,i)" (closed)="panelOpenState = false">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title class="d-flex justify-content-between mr-0 innerPanelDataTitle">
+                          <span class="header-title">{{item.header ? item.header : labelName?.Header}}</span>
+                          <div class="d-flex align-items-center">
+                            <mat-icon class="delete cursorPointer d-none" *ngIf="userConfig?.Delete"
+                              (click)="deleteCard('tile',i)">delete</mat-icon>
+                            <mat-slide-toggle [(ngModel)]="item.visible" color="primary"
+                              class="toggleBtn cursorPointer mr-3">
+                            </mat-slide-toggle>
+                          </div>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.Header}}</span>
+                            <input type="text" class="inputInside " placeholder="Header" [(ngModel)]="item.header">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.CountApiURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.dataApi">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.CountApiRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign" rows="2"
+                              [(ngModel)]="item.dataRequest"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.DrilldownApiURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.api">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.DrilldownApiRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign"
+                              [(ngModel)]="item.apiRequest"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.RefreshRate}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.reloadTimeEnable" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100" *ngIf="item.reloadTimeEnable">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                            <span class="innerTitle">{{labelName?.RefreshRateTime}}</span>
+                            <!-- <input type="time" step="2" [(ngModel)]="item.reloadTime"
+                             class="inputInsideTextLeftAlign"> -->
+                             <div class="example-container inputText normal-dropdown reloadTimeUI w-40">
+                              <mat-form-field appearance="fill">
+                                <input matInput type="number" min="1" [(ngModel)]="item.reloadTime" panelClass="normal-panel" class="example-right-align" placeholder="00">
+                                <mat-select matSuffix placeholder="Min"  class="ml-2" [(ngModel)]="item.reloadTimeType">
+                                  <mat-option *ngFor="let item of reloadDurationDropdown"  [value]="item.Key">{{item.Value}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.showDateChangePart}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.showDateChangePart" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.DisplayDateFilter}}</span>
+                            <mat-slide-toggle [(ngModel)]="item.displayDateFilter" color="primary"
+                              class="toggleBtn cursorPointer">
+                            </mat-slide-toggle>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100" *ngIf="item.displayDateFilter">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">{{labelName?.DateFilter}}</span>
+                            <mat-select [(ngModel)]="item.dateFilter" class="min-width inputInside" multiple>
+                              <mat-option *ngFor="let subplaceholder3type of dateFilterDropdown"
+                                [value]="subplaceholder3type.Key">{{subplaceholder3type.Value}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom">
+                            <span class="innerTitle">{{labelName?.CustomFilter}}</span>
+                            <div class="d-flex">
+                              <mat-slide-toggle [(ngModel)]="item.customFilter" color="primary"
+                                class="toggleBtn cursorPointer">
+                              </mat-slide-toggle>
+                              <div class="addBlocksButton" *ngIf="item.customFilter" (click)="addCustomFilter(i)">+</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="item.customFilter">
+                        <div class="pl-2"
+                          *ngFor="let item2 of item.customFilterValues;let k = index; let first = first">
+                          <div class="row m-0 w-100">
+                            <div class="col-12 pl-4">
+                              <div
+                                class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                                <span class="innerTitle">{{labelName?.CustomFilterField}} {{(k+0)}}</span>
+                                <div class="d-flex">
+                                  <input type="text" class="inputInside " [(ngModel)]="item2.customFilterField">
+                                  <mat-icon class="red-color cursorPointer" (click)="removeCustomField(i,k)"
+                                    *ngIf="!first && userConfig?.Delete">delete</mat-icon>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                            <span class="innerTitle">Blocks</span>
+                            <div class="d-flex align-items-center">
+                              <span class="font-weight-bold">{{item.blocks.length}}</span>
+                              <div class="addBlocksButton" (click)="addBlockAddDashboardCard(i)">+</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <ng-container>
+                        <div *ngFor="let innerItem of item.blocks;let j = index; let first = first">
+                          <div class="row m-0 w-100">
+                            <div class="col-12 pl-4 innerTitleWithBGColor">
+                              <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                                <span class="innerTitle"
+                                  *ngIf="item.chartAndGraph != 'LicenseUsageBarChart'">{{labelName?.Block}}
+                                  {{j+1}}</span>
+                                <span class="innerTitle" *ngIf="item.chartAndGraph == 'LicenseUsageBarChart'">{{ j == 0
+                                  ? labelName?.LicenseUsed : labelName?.LicenseOverruled}}</span>
+                                <div>
+                                  <mat-slide-toggle [(ngModel)]="innerItem.visible"
+                                    *ngIf="item.chartAndGraph != 'Venn' && item.chartAndGraph != 'LineChart'"
+                                    color="primary" class="toggleBtn cursorPointer">
+                                  </mat-slide-toggle>
+                                  <mat-icon class="red-color cursorPointer"
+                                    *ngIf="item.chartAndGraph != 'LicenseUsageBarChart' && item.chartAndGraph != 'Venn' && item.chartAndGraph != 'LineChart'"
+                                    (click)="deleteBlockAddDashboardCard(i,j)">delete</mat-icon>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row m-0 w-100">
+                            <div class="col-12 pl-4">
+                              <div
+                                class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom pl-2 ">
+                                <span class="innerTitle">{{labelName?.Header}}</span>
+                                <input type="text" [(ngModel)]="innerItem.header" class="inputInside ">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row m-0 w-100">
+                            <div class="col-12 pl-4">
+                              <div
+                                class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom pl-2">
+                                <span class="innerTitle">{{labelName?.Header}} {{labelName?.columnWidth}}</span>
+
+                                <div class="custinput ms">
+                                  <input type="number" inputmode="numeric" pattern="[0-9]*"
+                                    class="padd-right inputInside " [(ngModel)]="innerItem.columnWidth" min="1" max="12"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                                </div>
+                              </div>
+                              <mat-hint class="red-color small-font" *ngIf="innerItem.columnWidth > 12">
+                                {{labelName?.columnWidth}} Cannot be More than 12
+                              </mat-hint>
+                              <mat-hint class="red-color small-font" *ngIf="columnWidthMoreThan12(i)">
+                                All {{labelName?.columnWidth}} is > 12
+                              </mat-hint>
+                            </div>
+                          </div>
+                          <div class="row m-0 w-100">
+                            <div class="col-12 pl-4">
+                              <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX pl-2">
+                                <span class="innerTitle">{{labelName?.Charttype}}</span>
+                                <mat-select [(ngModel)]="innerItem.displayType" class="min-width inputInside">
+                                  <mat-option [value]="'text'">{{'text' | titlecase}}</mat-option>
+                                  <mat-option [value]="'icon'">{{'icon' | titlecase}}</mat-option>
+                                </mat-select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+
+                    </mat-expansion-panel>
+                  </div>
+                </mat-accordion>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel  [expanded]="expansionPanelSelected == 4" (opened)="panelOpenState4 = true;expansionPanelSelected = 4" (closed)="panelOpenState4 = false"
+              [ngClass]="panelOpenState4 ? 'panelOpenedHeader':''">
+              <mat-expansion-panel-header>
+                <mat-panel-title style="display:flex;justify-content:space-between;margin-right:0;"
+                  [ngClass]="panelOpenState4 ? 'panelOpenedTitle':''">
+                  <span class="">Management Tile</span>
+                  <div class="mr-3" *ngIf="panelOpenState4">
+                    <i class="icon-add d-none"></i>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-accordion class="">
+                <div *ngFor="let item of managementTiles;let i = index" class="innerPanelData">
+                  <mat-expansion-panel [expanded]="expansionPanelSelected == 4 && managementTileStep == i" (opened)="panelOpenState = true;setStep(4,i)" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="d-flex justify-content-between mr-0 innerPanelDataTitle">
+                        <span class="header-title">{{item.mainPlaceHolderHeader ? item.mainPlaceHolderHeader : labelName?.MainPlaceHolder}}</span>
+                        <div class="d-flex align-items-center">
+                          <mat-icon class="delete cursorPointer" *ngIf="userConfig?.Delete" (click)="deleteCard('managementTile',i)">delete</mat-icon>
+                          <mat-slide-toggle [(ngModel)]="item.visible" color="primary"
+                            class="toggleBtn cursorPointer mr-3">
+                          </mat-slide-toggle>
+                        </div>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                          <span class="innerTitle">{{labelName?.CountApiURL}}</span>
+                          <input type="text" class="inputInside " [(ngModel)]="item.countApi">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                          <span class="innerTitle">{{labelName?.CountApiRequest}}</span>
+                          <textarea type="text" class="inputInsideTextLeftAlign" rows="2"
+                            [(ngModel)]="item.countRequest"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                          <span class="innerTitle">{{labelName?.DrilldownApiURL}}</span>
+                          <input type="text" class="inputInside " [(ngModel)]="item.api">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                          <span class="innerTitle">{{labelName?.DrilldownApiRequest}}</span>
+                          <textarea type="text" class="inputInsideTextLeftAlign"
+                            [(ngModel)]="item.apiRequest"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                          <span class="innerTitle">{{labelName?.RefreshRate}}</span>
+                          <mat-slide-toggle [(ngModel)]="item.reloadTimeEnable" color="primary"
+                            class="toggleBtn cursorPointer">
+                          </mat-slide-toggle>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-0 w-100" *ngIf="item.reloadTimeEnable">
+                      <div class="col-12 pl-4">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom ">
+                          <span class="innerTitle">{{labelName?.RefreshRateTime}}</span>
+                          <!-- <input type="time" step="2" [(ngModel)]="item.reloadTime"
+                           class="inputInsideTextLeftAlign"> -->
+                           <div class="example-container inputText normal-dropdown reloadTimeUI w-40">
+                            <mat-form-field appearance="fill">
+                              <input matInput type="number" min="1" [(ngModel)]="item.reloadTime" panelClass="normal-panel" class="example-right-align" placeholder="00">
+                              <mat-select matSuffix placeholder="Min"  class="ml-2" [(ngModel)]="item.reloadTimeType">
+                                <mat-option *ngFor="let item of reloadDurationDropdown"  [value]="item.Key">{{item.Value}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4">
+                        <div class="w-100 d-flex justify-content-between align-items-center">
+                          <span class="innerTitle">{{labelName?.BackgroundColor}}</span>
+                          <div class="cursorPointer colorBorder colorTile" [matMenuTriggerFor]="menu"
+                            [ngStyle]="{'background-color': common.color[item.backgroundColor]}"></div>
+                          <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                            <div class="row m-2" (click)="$event.stopPropagation()">
+                              <div class="col-12">
+                                <span class="selectColor">{{labelName?.SelectColor}}</span>
+                              </div>
+                              <div class="col-3 py-2 px-1" *ngFor="let color of common.colorArray">
+                                <div class="row justify-content-center">
+                                  <div class="cursorPointer colorTile d-flex align-items-center justify-content-center"
+                                    [ngStyle]="{'background-color': common.color[color]}"
+                                    (click)="item.backgroundColor = color;">
+                                    <i class="icon-color-selected white-color"
+                                      *ngIf="color == item.backgroundColor"></i>
+                                  </div>
+                                </div>
+                                <div class="row justify-content-center fontBelowColor">
+                                  {{color|titlecase}}
+                                </div>
+                              </div>
+                            </div>
+                          </mat-menu>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4 innerTitleWithBGColor">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                          <span class="innerTitle">{{labelName?.MainPlaceHolder}}</span>
+                          <mat-slide-toggle [(ngModel)]="item.mainPlaceHolder" color="primary"
+                            class="toggleBtn cursorPointer">
+                          </mat-slide-toggle>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX  ml-2">
+                          <span class="innerTitle">{{labelName?.Header}}</span>
+                          <input type="text" class="inputInside " [(ngModel)]="item.mainPlaceHolderHeader">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4 innerTitleWithBGColor">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                          <span class="innerTitle">{{labelName?.SubPlaceHolderOne}}</span>
+                          <mat-slide-toggle [(ngModel)]="item.subPlaceHolder1" color="primary"
+                            class="toggleBtn cursorPointer">
+                          </mat-slide-toggle>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="item.subPlaceHolder1">
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">{{labelName?.Header}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder1Header">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">Key</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder1Key">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">{{labelName?.DrilldownApiURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder1Api">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX ml-2">
+                            <span class="innerTitle">{{labelName?.DrilldownApiRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign"
+                              [(ngModel)]="item.subPlaceHolder1Request"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <div class="row m-0 w-100">
+                      <div class="col-12 pl-4 innerTitleWithBGColor">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                          <span class="innerTitle">{{labelName?.SubPlaceHolderTwo}}</span>
+                          <mat-slide-toggle [(ngModel)]="item.subPlaceHolder2" color="primary"
+                            class="toggleBtn cursorPointer">
+                          </mat-slide-toggle>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="item.subPlaceHolder2">
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">{{labelName?.Header}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder2Header">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">Key</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder2Key">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">{{labelName?.DrilldownApiURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder2Api">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX  ml-2">
+                            <span class="innerTitle">{{labelName?.DrilldownApiRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign"
+                              [(ngModel)]="item.subPlaceHolder2Request"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <div class="row m-0 w-100 d-none">
+                      <div class="col-12 pl-4 innerTitleWithBGColor">
+                        <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX">
+                          <span class="innerTitle">{{labelName?.SubPlaceHolderThree}}</span>
+                          <mat-slide-toggle [(ngModel)]="item.subPlaceHolder3" color="primary"
+                            class="toggleBtn cursorPointer">
+                          </mat-slide-toggle>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="item.subPlaceHolder3">
+                      <div class="row m-0 w-100 d-none">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">{{labelName?.Header}}</span>
+                            <input type="text" class="inputInside " placeholder="Sub Place Holder 3"
+                              [(ngModel)]="item.subPlaceHolder3Header">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100 d-none">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">Key</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder3Key">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100 d-none">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">{{labelName?.Select}}</span>
+
+                            <mat-select [(ngModel)]="item.subPlaceHolder3SelectedValue" class="min-width inputInside"
+                              (selectionChange)="tileSubplaceholder3TypeEdit(i)">
+                              <mat-option *ngFor="let subplaceholder3type of common.subPlaceHolder3Values"
+                                [value]="subplaceholder3type.Key">{{subplaceholder3type.Value}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100 d-none" *ngIf="item.subPlaceHolder3SelectedValue == 'lineChart'">
+                        <div class="col-12 pl-4">
+                          <div
+                            class="w-100 d-flex justify-content-between align-items-center paddingY6PX borderBottom  ml-2">
+                            <span class="innerTitle">{{labelName?.APIURL}}</span>
+                            <input type="text" class="inputInside " [(ngModel)]="item.subPlaceHolder3Api">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-0 w-100 d-none" *ngIf="item.subPlaceHolder3SelectedValue == 'lineChart'">
+                        <div class="col-12 pl-4">
+                          <div class="w-100 d-flex justify-content-between align-items-center paddingY6PX ml-2">
+                            <span class="innerTitle">{{labelName?.APIRequest}}</span>
+                            <textarea type="text" class="inputInsideTextLeftAlign"
+                              [(ngModel)]="item.subPlaceHolder3Request"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                  </mat-expansion-panel>
+                </div>
+              </mat-accordion>
+            </mat-expansion-panel>
+
+            </mat-accordion>
+          </div>
+        </div>
+
+
+        <div class="col-12 buttonsAtBottom py-1">
+          <div class="btn-group">
+            <button id="reset" #reset class="btn btn-gray" mat-flat-button
+              (click)="resetEditForm()">{{labelName?.Reset}}</button>
+            <button class="btn" mat-flat-button color="primary" type="button"
+              (click)="apply()">{{labelName?.Preview}}</button>
+            <button class="btn" mat-flat-button color="primary" (click)="update()">{{labelName?.Update}}</button>
+
+          </div>
+        </div>
+      </div>
+    </mat-drawer>
+
+   <!-- <div class="d-block d-lg-none">
+    <mat-drawer #drawer1 class="example-sidenav mobiledrawer" mode="side" position="end" disableClose style="width: 35vw;">
+      <div class="row m-0 w-100">
+        <div class="col-12 p-0">
+          <div class="d-flex justify-content-between p-3 border border-light">
+            <span class="editDashboardMainTitle">{{labelName?.Filter}}</span>
+            <mat-icon class="cursorPointer" (click)="drawer1.toggle();">close</mat-icon>
+          </div>
+        </div>
+        <div class="col-12 p-0">
+          <div class="filterContainer">
+            <div class="filterOptions">
+                        <div class="inputText normal-dropdown mx-3">
+                            <mat-form-field appearance="fill">
+                                <mat-select panelClass="normal-panel" placeholder={{labelName?.GroupName}} [(ngModel)]="selectedGetGroupList" disableOptionCentering multiple>
+                                    <mat-option *ngFor="let data of getGroupList" [value]="data.GroupID">
+                                        {{data.GroupName |titlecase}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="inputText normal-dropdown mx-3">
+                            <mat-form-field appearance="fill">
+                                <mat-select panelClass="normal-panel" placeholder={{labelName?.channelType}} [(ngModel)]="selectedChannelType" disableOptionCentering multiple>
+                                    <mat-option *ngFor="let data of userChannelName; let i = index" [value]="data.ChannelId">
+                                        <span [innerHtml]="data?.ChannelIcon"></span>
+                                        <span>{{data.ChannelName}}</span>
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="inputText normal-dropdown mx-3">
+                            <mat-form-field appearance="fill">
+                                <mat-select panelClass="normal-panel" placeholder={{labelName?.skillType}} [(ngModel)]="selectedSkillType" disableOptionCentering multiple>
+                                    <mat-option *ngFor="let data of skillType" [value]="data.Id">{{data.SkillName|titlecase}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="inputText normal-dropdown mx-3" *ngIf="tabSelected == 'BOT'">
+                            <mat-form-field appearance="fill">
+                                <mat-select panelClass="normal-panel" placeholder={{labelName?.GroupName}} disableOptionCentering>
+                                    <mat-option value="a">abcd</mat-option>
+
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="inputText normal-dropdown mx-3">
+                            <mat-form-field appearance="fill">
+                                <mat-select panelClass="normal-panel" placeholder={{labelName?.showDateFilter}} [(ngModel)]="selectedDateFilterDropdown" disableOptionCentering>
+
+                                    <mat-option *ngFor="let item of dateFilterDropdown" [value]="item?.Key">{{item?.Value}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="px-3">
+                          <button mat-focus-indicator color="primary" (click)="applyFilterForDashboard()" class="btn btn-block btnMargin mat-flat-button mat-button-base mat-primary">
+                            Apply Filter</button>
+                        </div>
+            </div>
+        </div>
+		    </div>
+		</div>
+    </mat-drawer>
+   </div> -->
+
+
+   <div class="dashboardContainer" #widgetsContent id="widgetsContent" [ngClass]="!isFullScreen ? 'normalScreen' : 'FullScreen'">
+
+      <ng-container *ngIf="tiles.length > 0">
+        <div class="row iPadspace" *ngFor="let item1 of returnTilesArray()" >
+          <div class="col-sm-12 infoCards justify-content-center">
+            <div class="infoCards titleCards">
+              <ng-container *ngFor="let item of [0,1,2,3,4]">
+                <ng-container *ngIf="tiles.length >= (5*item1)+item">
+                  <ng-container *ngIf="tiles[(5*item1)+item]?.visible">
+                    <app-tile-card [tile]="tiles[(5*item1)+item]" class="marginX" [test]="test"
+                      [autoReload]="autoReload"></app-tile-card>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="managementTiles.length > 0">
+        <div class="row iPadspace" *ngFor="let item1 of returnmanagementTilesArray()">
+          <div class="col-sm-12 infoCards justify-content-center">
+            <div class="titleCards">
+              <ng-container *ngFor="let item of [0,1,2,3]">
+                <ng-container *ngIf="managementTiles.length >= (4*item1)+item">
+                  <ng-container *ngIf="managementTiles[(4*item1)+item]?.visible">
+                    <app-management-tile [tile]="managementTiles[(4*item1)+item]" class="marginXM" [test]="test"
+                      [autoReload]="autoReload"></app-management-tile>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="row m-0 dashboardcards" #contenedor cdkDropListGroup>
+        <ng-container *ngFor="let item of botCards; let i = index">
+          <div class="col-lg-3 col-md-6 col-sm-12 colPadding" *ngIf="item.visible">
+            <div class="" cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="{ item: item, index: i }"
+              (cdkDropListDropped)="drop($event)">
+              <div class="inner" cdkDrag [cdkDragDisabled]="edit">
+                <div *ngIf="!edit" class="edit dragIcon">
+
+                </div>
+                <div class="" *cdkDragPlaceholder></div>
+                <div class="borderEAEAEA">
+                  <app-dashboard-card [chartandGraph]="item" [test]="test" [autoReload]="autoReload" [index]="i"
+                    [dashboardControlTypeSelected]="item.dashboardControlTypeSelected" (cardObject)="deleteItem($event)"
+                    (editData)="getStep($event)"></app-dashboard-card>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+  </mat-drawer-container>
+
+</div>

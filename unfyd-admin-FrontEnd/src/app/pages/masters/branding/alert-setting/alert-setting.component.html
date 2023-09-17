@@ -1,0 +1,136 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container alertSettings" *ngIf="!loader">
+  <div class="wrapper">
+    <form [formGroup]="form">
+      <legend class="legendheader">{{changeModuleLabelDisplayName}}</legend>
+      <div class="formGroup">
+        <div class="group">
+          <div class="row">
+            <div class="col-lg-2 col-md-2 col-12">
+              <div class="blue-dropdown">
+                <mat-form-field appearance="fill">
+                  <mat-label>Application </mat-label>
+                  <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="productName" panelClass="blue-panel"
+                    (selectionChange)="selectedProduct($event.value)">
+                    <mat-option *ngFor="let data of productType" [value]="data.Id">{{data.ProductName}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-12 d-flex align-items-center marginright">
+              <mat-form-field appearance="fill" class="">
+                <mat-label >{{labelName?.Language}}</mat-label>
+                <mat-select  matInput formControlName="language">
+                  <mat-option *ngFor="let data of userLanguageName | orderBy:'language'"
+                    [value]="data.langcode">{{data.language}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-12">
+              <button mat-stroked-button color="primary" class="outline width_100"
+                (click)="getAlertdetail()">{{labelName?.View}}</button>
+            </div>
+
+            <div class="d-none col-lg-3 col-md-3 col-sm-12">
+              <div class="action-area">
+                <a mat-raised-button *ngIf="hasChecked?.length > 0" (click)="bulkdelete()"
+                  class="action-btn d-flex justify-content-center align-items-center bulkDelete">
+                  <span class="icon-Delete-Icon"></span>
+                </a>
+              </div>
+              <a *ngIf="userConfig?.Add" mat-raised-button class="width-100" color="primary"
+                (click)="openAlertDialog('alert-setting',null)">{{labelName?.Add}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="inner-container1" *ngIf="!loader">
+      <ng-container>
+        <app-filter [hasChecked]="hasChecked" component="" [role]="userDetails.role" [type]="type" [tabValue]="tabValue"
+          [productID]="productName" [addBtn]="'true'" [AlertMsgData]="AlertMsgData"
+          [AlertLanguage]="form.value.language" class="mobileFilter"></app-filter>
+      </ng-container>
+      <div class="table-container px-0 py-0">
+        <div class="dataTable">
+          <table>
+            <thead>
+              <tr *ngIf="tabValue.length !== 0">
+                <ng-container *ngFor="let data of finalField; let i = index">
+                  <th *ngIf="data.value !== 'CHECKBOX'" [ngClass]="!data.checked ? 'tabCol' : ''" class="{{'column'+i}}"
+                    (click)="sortUsers(data.value, data.order)">
+                    <ng-container *ngIf="data.value == 'Sr No'; else else_content">
+                      <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary"
+                        [indeterminate]="hasChecked.length >0 && !allSelected"
+                        [checked]="hasChecked.length >0 && allSelected" [disabled]="!data.CHECKBOX && maxNo"
+                        (change)="bulkCheckboxCheck($event.checked, data)"></mat-checkbox>
+
+                    </ng-container>
+                    <ng-template #else_content>{{data.value == 'Actionable' ? 'Action' : data.value}}
+                      <span [ngSwitch]="data.order">
+                        <span *ngSwitchCase="'desc'"><mat-icon>swap_vert</mat-icon></span>
+                        <span *ngSwitchCase="'asc'"><mat-icon>swap_vert</mat-icon></span>
+                      </span>
+                    </ng-template>
+                  </th>
+                </ng-container>
+              </tr>
+              <tr *ngIf="tabValue.length == 0">
+                <th>No record found</th>
+              </tr>
+            </thead>
+            {{form.value.alertPopupIcon}}
+            <tbody *ngIf="tabValue.length>0">
+              <tr
+                *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                <ng-container *ngFor="let val of finalField; let i = index">
+                  <td *ngIf="val.value == 'Sr No' " class="column{{i}}" [ngClass]="!val.checked ? 'tabCol' : ''">
+                    <mat-checkbox [(ngModel)]="data.CHECKBOX" color="primary" [disabled]="!data.CHECKBOX && maxNo"
+                      (change)="singleCheckboxCheck($event.checked, data)"></mat-checkbox>
+                  </td>
+                  <td *ngIf="val.value == 'Actionable'" class="column{{i}}" [ngClass]="!val.checked ? 'tabCol' : ''">
+                    <mat-icon class="cursorPointer" [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                    <mat-menu #menu="matMenu" class="master_action cursorPointer">
+                      <ng-container *ngIf="(userConfig?.View) && hasChecked.length == 0 ">
+                        <button *ngIf="userConfig?.View" mat-menu-item (click)="previewAlert(data)">
+                          <mat-icon class="view">
+                            remove_red_eye</mat-icon>
+                          <span>{{labelName?.View}}</span>
+                        </button>
+                      </ng-container>
+                      <ng-container *ngIf="(userConfig?.Edit) && hasChecked.length == 0 ">
+
+                        <button *ngIf="userConfig?.Edit" mat-menu-item
+                          [routerLink]="['/masters/branding/alert-setting/edit']"
+                          [queryParams]="{ id: data.Actionable,Product : this.productName, Language: form.value.language }"
+                          class="cursorPointer cursorPointer">
+                          <mat-icon class="edit">edit</mat-icon>
+                          <span>{{labelName?.Edit}}</span>{{productID}}
+                        </button>
+                      </ng-container>
+                      <button *ngIf="userConfig?.Delete" mat-menu-item (click)="openDialogDelete('delete', data)"
+                        class="cursorPointer" color="red">
+                        <mat-icon class="red-color cursorPointer">delete</mat-icon>
+                        <span>{{labelName?.Delete}}</span>
+                      </button>
+                    </mat-menu>
+                  </td>
+                  <td *ngIf="val.value !== 'Sr No' && val.value !== 'Actionable' && val.value !== 'PopupIcon' "
+                    [matTooltip]="data[val.value] && data[val.value].length > 20 ? data[val.value] : ''"
+                    [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                    <span>{{data[val.value] == ' ' ? 'false' :data[val.value] == ' ' ?'false': data[val.value]}}</span>
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="pagination" *ngIf="tabValue.length>10">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

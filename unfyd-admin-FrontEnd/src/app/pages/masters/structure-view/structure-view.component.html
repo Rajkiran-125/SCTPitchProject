@@ -1,0 +1,52 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-10">
+        <div class="row">
+          <div class="col-12">
+            <span class="header">Structure</span>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12 d-flex justify-content-between align-items-center">
+            <span class="font-weight-bold smallFont">{{data.length}} {{data.length> 1 ? 'Templates':'Template'}}</span>
+            <button *ngIf="userConfig?.Add" mat-mini-fab class="addForm" [routerLink]="['/masters/structure/add']">
+              <mat-icon class="primary-color" >add</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <ng-container *ngIf="data.length">
+            <div class="col-4 outerCard" *ngFor="let item of data">
+              <div class="card">
+                <div class="d-flex justify-content-between">
+                  <strong class="cardHeading">{{item.StructureName | titlecase}}</strong>
+                  <mat-icon class="more cursorPointer" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+                  <mat-menu #menu="matMenu" class="w-100 master_action">
+                    <button *ngIf="userConfig?.Edit" mat-menu-item [routerLink]="['/masters/structure/update/'+item.Id]"><mat-icon>edit</mat-icon>Edit</button>
+                    <button *ngIf="userConfig?.Delete" class="red-color" mat-menu-item (click)="delete(item.Id)"><mat-icon class="red-color">delete</mat-icon>Delete</button>
+                  </mat-menu>
+                </div>
+                <div class="cardContent">
+                  <div class="mat-nav-content lineHeight43px">
+                    <span class="cardInnerContent">
+                      {{item?.Description}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!data.length">
+            <div class="col-12">
+              <div class="noFormsAvailable mt-4">
+                <span>{{labelName?.NoFormsAvailable ? labelName?.NoFormsAvailable : 'No Forms Available'}}</span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>

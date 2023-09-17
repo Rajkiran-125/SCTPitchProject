@@ -1,0 +1,90 @@
+<!-- <div class="row">
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        <div class="search-bar">
+            <input type="text" class="search-click" placeholder="Search" />
+            
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2">
+        <button class="filter-save btn" mat-flat-button color="primary" (click)="filterApply();toggleFilter()">Apply</button>
+    </div>
+</div> -->
+
+
+<div class="action-bar ">
+    
+        <div class="action-area">    
+            
+            <div class="d-flex">
+                <ng-container>
+                    
+                    <!-- pagination number filter -->
+                    <div class="item-perpage">
+                        <label>Show</label>
+                        <select (change)="setItemsPerPage($event.target.value)" *ngIf=" type !== 'PrivilegeViewTable'">
+                            <option>10</option>
+                        </select>
+                        <label>entries</label>
+                    </div>
+                    <!-- pagination number filter -->
+                       
+                    <!-- <div class="mr-2 mt-1" >
+                        <mat-icon #tooltip="matTooltip" matTooltip="Search"
+                            style="font-size: 25px !important;color: var(--gray_color);">
+                            search
+                        </mat-icon>
+                    </div> -->
+    
+                    <mat-button-toggle-group *ngIf="type =='hsm-template'"  #group="matButtonToggleGroup" value="table" class="toggleButtonsForFilter mx-1" name="fontStyle" aria-label="Font Style">
+                    <mat-button-toggle  matTooltip="Grid View" value="card" >
+                            <span ><i class="icon-GridView" style="color: var(--gray_color);"></i></span>    
+                      </mat-button-toggle>
+                      <mat-button-toggle   matTooltip="List View"  value="table" >
+                          <span ><i class="icon-ListView" style="color: var(--gray_color);"></i></span>
+                      </mat-button-toggle>
+                    </mat-button-toggle-group>
+    
+                    <!-- search input icon -->
+                    
+                    <div class="search-bar">
+                        <input type="text" class="search-click"/>
+                        <mat-icon class="cursorPointer">search</mat-icon>
+                    </div>
+
+                    <!-- download icon -->
+                    <a mat-raised-button class="action-btn" [matMenuTriggerFor]="report"><i
+                        #tooltip="matTooltip" matTooltip="Export" class="icon-export"></i></a>
+                    <!-- Choose file icon -->
+                    <a mat-raised-button class="action-btn chooseFileIcon" [matMenuTriggerFor]="columnFilter">
+                        <i #tooltip="matTooltip" matTooltip="Field Chooser" class="icon-table_sort"></i>
+                    </a>
+                    <!-- Choose file icon -->
+
+                    <mat-menu class="mat-menu-panel" xPosition="before" #columnFilter="matMenu">
+                        <ul class="checkbox-dropdown" cdkDropList [cdkDropListData]="finalField"
+                            (cdkDropListDropped)="drop($event)">
+                            <ng-container *ngFor="let data of finalField; let i = index">
+                                <li cdkDrag (click)="$event.stopPropagation()">
+                                    <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+                                    <mat-checkbox labelPosition="before" color="primary" [checked]="data.checked"
+                                        (change)="columnSorting($event.checked, data.value, 'column'+i)">
+                                        {{data.value}}</mat-checkbox>
+                                </li>
+                            </ng-container>
+                        </ul>
+                        <div class="table-sorting-btn">
+                            <button mat-flat-button color="primary" class="btn btn-block"
+                                (click)="saveColumnSorting()">Save</button>
+                        </div>
+                    </mat-menu>
+
+                    <mat-menu class="dropdown" xPosition="before" #report="matMenu">
+                        <button mat-menu-item (click)="reports('day')">Last 1 Day</button>
+                        <button mat-menu-item (click)="reports('week')">Last 7 Days</button>
+                        <button mat-menu-item (click)="reports('month')">Last 1 Month</button>
+                    </mat-menu>
+                </ng-container>
+            </div>
+           
+        </div>
+    </div>

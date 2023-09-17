@@ -1,0 +1,69 @@
+.doughnutChart{
+  background-color: var(--backgroud_color);
+}
+
+.dashboardFilterButton {
+  cursor: pointer;
+  background-color: var(--white_color);
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray_color);
+  // margin: 0px 7px;
+  border-radius: 5px;
+  font-size: 17px !important;
+  border: 1px solid var(--gray_color);
+  &:hover {
+    color: var(--primary_color);
+  }
+  .icon-add{
+    color: var(--primary_color);
+  }
+}
+
+.category{
+  border: 1px solid var(--gray_color_80);
+  background-color: var(--backgroud_color);
+  border-radius: 35px;
+  padding: 8px 14px;
+  font-size: var(--content);
+  margin: 0 5px;
+}
+
+::ng-deep {
+  .taskGroup{
+    .mat-expansion-panel-body{
+      padding: 0 16px;
+    }
+  }
+  .refresh {
+    .switch small {
+      border-radius: 25%;
+    }
+    .switch.switch-small {
+      border-radius: 5px;
+
+      &.checked{
+        .switch-label-checked{
+          font-size: var(--content);
+        }
+      }
+
+      .switch-pane{
+        .switch-label-unchecked{
+          font-size: var(--content);
+          color: var(--white_color) !important;
+        }
+      }
+    }
+    .switch {
+      //background: var(--gray_color_80) !important;
+      background: var(--red) !important;
+      &.checked {
+        background: var(--universalGreen) !important;
+      }
+    }
+  }
+}

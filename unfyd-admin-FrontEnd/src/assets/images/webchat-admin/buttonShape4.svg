@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="134" height="40" viewBox="0 0 134 40">
+  <g id="Group_12239" data-name="Group 12239" transform="translate(-663 -689)">
+    <g id="Group_12236" data-name="Group 12236" transform="translate(104 12)">
+      <g id="Group_12237" data-name="Group 12237" transform="translate(0 -106)">
+        <path id="Rectangle_2643" data-name="Rectangle 2643" d="M10,0H124a10,10,0,0,1,10,10V40a0,0,0,0,1,0,0H10A10,10,0,0,1,0,30V10A10,10,0,0,1,10,0Z" transform="translate(559 783)" fill="#053c6d"/>
+        <path id="Path_24163" data-name="Path 24163" d="M3.6,3.6H16.4v9.6H4.536l-.936.936V3.6M3.6,2A1.6,1.6,0,0,0,2.008,3.6L2,18l3.2-3.2H16.4A1.6,1.6,0,0,0,18,13.2V3.6A1.6,1.6,0,0,0,16.4,2Zm1.6,8h6.4v1.6H5.2Zm0-2.4h9.6V9.2H5.2Zm0-2.4h9.6V6.8H5.2Z" transform="translate(577 793)" fill="#fff"/>
+        <text id="Chat_with_us" data-name="Chat with us" transform="translate(605 805)" fill="#fff" font-size="12" font-family="NunitoSans-Regular, Nunito Sans"><tspan x="0" y="0">Chat with us</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

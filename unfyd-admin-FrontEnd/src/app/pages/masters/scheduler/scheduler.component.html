@@ -1,0 +1,448 @@
+<!-- <p>scheduler works!</p> -->
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-1">
+                    <mat-icon class="cursorPointer gray backarrow" (click)=" back()">keyboard_backspace</mat-icon>
+                </div>
+                <div class="col-lg-7 col-md-9 col-10 pl-0">
+                    <legend class="size" *ngIf="!this.path">{{labelName?.AddNewScheduler}}</legend>
+                    <legend class="size" *ngIf="this.path">{{labelName?.UpdateScheduler}}</legend>
+                    <div class="formGroup mt-3">
+                        <div style="padding: 15px 3px">
+                            <mat-label style="padding-right:20px">{{labelName?.ScheduleType}}</mat-label>
+                            <mat-radio-group formControlName="scheduletype">
+                                <mat-radio-button style="padding-right:20px" (change)="scheduleButton($event)"
+                                    value="onetime">{{labelName?.OneTime}}</mat-radio-button>
+                                <mat-radio-button (change)="scheduleButton($event)"
+                                    value="recurring">{{labelName?.Recurring}}</mat-radio-button>
+
+                                <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                                    *ngIf="scheduleType() && submittedForm">
+                                    {{labelName?.ScheduleType}} is required
+                                </mat-hint>
+                            </mat-radio-group>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Name}}</mat-label>
+                                    <input matInput formControlName="name">
+                                    <mat-error *ngIf="f?.name?.errors">
+                                        <ng-container *ngIf="f?.name?.errors?.required">
+                                            {{labelName?.Name}} is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.name?.errors?.pattern">{{labelName?.Name}} is invalid.
+                                        </ng-container>
+                                        <ng-container *ngIf="f?.name?.errors?.checknull1">Must be at least 3 characters
+                                            long.
+                                        </ng-container>
+                                        <ng-container *ngIf="f?.name?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Description}}</mat-label>
+                                    <input matInput formControlName="description">
+                                    <mat-error *ngIf="f?.description?.errors">
+                                        <ng-container *ngIf="f?.description?.errors?.checknull1">Must be at least 3
+                                            characters long
+                                        </ng-container>
+                                        <ng-container *ngIf="f.description?.errors?.pattern">{{labelName?.Description}} is invalid.
+                                        </ng-container>   
+                                        <ng-container *ngIf="f?.description?.errors?.maxlength">
+                                            Cannot be beyond 300 characters
+                                        </ng-container>
+
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <!-- <mat-form-field appearance="fill">
+                                    <mat-label>Select Report</mat-label>
+                                    <mat-select formControlName="selectreport">
+                                        <mat-option value="report1">Report 1</mat-option>
+                                        <mat-option value="report2">Report 2</mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.selectreport.errors">
+                                        <ng-container *ngIf="f.selectreport?.errors?.required">Report is required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field> -->
+
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.SelectReport}}</mat-label>
+                                    <mat-select formControlName="selectreport">
+                                        <mat-option *ngFor="let data of ReportOption" [value]="data.ReportName">
+                                            {{data.ReportName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.selectreport.errors">
+                                        <ng-container
+                                            *ngIf="f.selectreport?.errors?.required">{{labelName?.SelectReport}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.EmailAccount}}</mat-label>
+                                    <mat-select formControlName="emailacc">
+                                        <!-- <mat-option value="1">Email 1</mat-option>
+                                        <mat-option value="2">Email 2</mat-option> -->
+                                        <mat-option *ngFor="let data of EmailAccountOption" [value]="data.ChannelSrcID">
+                                            {{data.ConfigValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.emailacc.errors">
+                                        <ng-container *ngIf="f.emailacc.errors.required">{{labelName?.EmailAccount}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+
+                                    
+
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.SendTo}}</mat-label>
+                                    <mat-chip-list #chipList aria-label="Video keywords" multiple
+                                        formControlName="sendto">
+                                        <mat-chip *ngFor="let keyword of form.value.sendto" [selected]="keyword"
+                                            [value]="keyword" (removed)="removeKeyword(keyword)">
+                                            {{keyword}}
+                                            <button matChipRemove>
+                                                <mat-icon>cancel</mat-icon>
+                                            </button>
+                                        </mat-chip>
+                                        <input placeholder="New Email..." [matChipInputFor]="chipList"
+                                            (matChipInputTokenEnd)="addKeywordFromInput($event)">
+                                    </mat-chip-list>
+
+                                    <mat-error>
+                                        <ng-container *ngIf="f.sendto?.errors?.required">
+                                            {{labelName?.SendTo}} is required
+                                        </ng-container>
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('sendto').hasError('sameEmail')" class="small-font">Email
+                                        cannot be Duplicate</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <!-- <div class="col-lg-12 col-md-12 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Template</mat-label>
+                                    <mat-select formControlName="template">
+                                        <mat-option *ngFor="let data of TemplateOption" [value]="data.Id">
+                                            {{data.TemplateName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.template.errors">
+                                        <ng-container *ngIf="f.template.errors.required">Template is required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div> -->
+
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Template}}</mat-label>
+                                    <mat-select formControlName="template">
+                                        <mat-option *ngFor="let data of TemplateOption" [value]="data.Id">
+                                            {{data.TemplateName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.template.errors">
+                                        <ng-container *ngIf="f.template.errors.required">{{labelName?.Template}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.SelectSchedule}}</mat-label>
+                                    <mat-select formControlName="SelectSchedule">
+                                        <mat-option *ngFor="let data of ScheduleOption" [value]="data.Id">
+                                            {{data.ScheduleName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.SelectSchedule.errors">
+                                        <ng-container
+                                            *ngIf="f.SelectSchedule.errors.required">{{labelName?.SelectSchedule}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="form.value.scheduletype != 'recurring'">
+                            <div style="padding-left: 15px">
+                                <mat-label style="padding-right:20px ">{{labelName?.Start}}</mat-label>
+                                <mat-radio-group formControlName="starttype">
+                                    <mat-radio-button style="padding-right:20px" (change)="startButton($event)"
+                                        value="startnow">{{labelName?.Now}}</mat-radio-button>
+                                    <mat-radio-button (change)="startButton($event)"
+                                        value="startlater">{{labelName?.Later}}</mat-radio-button>
+
+                                    <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                                        *ngIf="startType() && submittedForm">
+                                        Please select start condition
+                                    </mat-hint>
+
+                                </mat-radio-group>
+
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-top: 15px;" *ngIf="form.value.scheduletype != 'recurring'">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.StartDate}}</mat-label>
+                                    <input readonly formControlName="startdate" type='text' [min]="todayDate"
+                                        [matDatepicker]="startdate" matInput>
+
+                                    <mat-datepicker-toggle matSuffix [for]="startdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #startdate></mat-datepicker>
+                                    <!-- <mat-error *ngIf="f.startdate.errors && submittedForm"> -->
+                                    <mat-error *ngIf="f.startdate.errors">
+                                        <ng-container *ngIf="f.startdate.errors.required ">{{labelName?.StartDate}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.StartTime}}</mat-label>
+                                    <input matInput class="form-input border-0 w-100" [matMenuTriggerFor]="menu3"
+                                        value="{{form.get('starttime').value?.hour ? form.get('starttime').value?.hour > 9 ? form.get('starttime').value?.hour : '0'+form.get('starttime').value?.hour : '00'}}:{{form.get('starttime').value?.minute ? form.get('starttime').value?.minute > 9 ? form.get('starttime').value?.minute : '0'+form.get('starttime').value?.minute : '00'}}:{{form.get('starttime').value?.second ? form.get('starttime').value?.second > 9 ? form.get('starttime').value?.second : '0'+form.get('starttime').value?.second : '00'}}" />
+                                    <mat-icon class="timerIconPosition" [matMenuTriggerFor]="menu3"
+                                        matSuffix>access_time</mat-icon>
+                                    <mat-menu #menu3="matMenu"
+                                        class="w-100 px-2  d-flex align-items-center cardMoreFetures"
+                                        xPosition="before">
+                                        <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                                           $event.stopPropagation();" formControlName="starttime" [seconds]="true"
+                                            [hourStep]="1" [minuteStep]="1" [secondStep]="1">
+                                        </ngb-timepicker>
+                                    </mat-menu>
+                                    <mat-error *ngIf="f.starttime.errors && submittedForm">
+                                        <ng-container *ngIf="f.starttime.errors.required">{{labelName?.StartTime}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+
+                                </mat-form-field>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row" *ngIf="form.value.scheduletype == 'recurring'">
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.StartDate}}</mat-label>
+                                    <input readonly formControlName="startdaterecu" type='text' [min]="todayDate"
+                                        [matDatepicker]="startdaterecu" matInput>
+
+                                    <mat-datepicker-toggle matSuffix [for]="startdaterecu"></mat-datepicker-toggle>
+                                    <mat-datepicker #startdaterecu></mat-datepicker>
+
+                                    <mat-error *ngIf="f.startdaterecu.errors && submittedForm">
+                                        <ng-container *ngIf="f.startdaterecu.errors.required">{{labelName?.StartDate}}
+                                            is required
+                                        </ng-container>
+                                    </mat-error>
+
+
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.StartTime}}</mat-label>
+
+                                    <div class="timeinput">
+                                        <input matInput class="form-input border-0 w-100" [matMenuTriggerFor]="menu3"
+                                            value="{{form.get('starttimerec').value?.hour ? form.get('starttimerec').value?.hour > 9 ? form.get('starttimerec').value?.hour : '0'+form.get('starttimerec').value?.hour : '00'}}:{{form.get('starttimerec').value?.minute ? form.get('starttimerec').value?.minute > 9 ? form.get('starttimerec').value?.minute : '0'+form.get('starttimerec').value?.minute : '00'}}:{{form.get('starttimerec').value?.second ? form.get('starttimerec').value?.second > 9 ? form.get('starttimerec').value?.second : '0'+form.get('starttimerec').value?.second : '00'}}" />
+                                        <mat-icon class="timerIconPosition"
+                                            [matMenuTriggerFor]="menu3">access_time</mat-icon>
+                                    </div>
+                                    <mat-menu #menu3="matMenu"
+                                        class="w-100 px-2  d-flex align-items-center cardMoreFetures"
+                                        xPosition="before">
+                                        <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                                           $event.stopPropagation();" formControlName="starttimerec" [seconds]="true"
+                                            [hourStep]="1" [minuteStep]="1" [secondStep]="1">
+                                        </ngb-timepicker>
+                                    </mat-menu>
+
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.EndDate}}</mat-label>
+                                    <input readonly formControlName="enddaterecu" type='text' [min]="todayDate"
+                                        [matDatepicker]="enddaterecu" matInput>
+
+                                    <mat-datepicker-toggle matSuffix [for]="enddaterecu"></mat-datepicker-toggle>
+                                    <mat-datepicker #enddaterecu></mat-datepicker>
+                                    <mat-error *ngIf="f.enddaterecu.errors && submittedForm">
+                                        <ng-container *ngIf="f.enddaterecu.errors.required">{{labelName?.EndDate}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+                                    <!-- <mat-hint class="mat-error" *ngIf="timevaluereq == true">
+                                        End Time is required
+
+                                    </mat-hint>
+                                     -->
+                                    <mat-hint class="mat-error"
+                                        *ngIf="IsDateGreater && submittedForm == true">{{labelName?.EndDate}}
+                                        Should be greater than Start Date
+
+                                    </mat-hint>
+
+
+
+                                </mat-form-field>
+                            </div>
+                            <div class="colp-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.EndTime}}</mat-label>
+
+                                    <div class="timeinput">
+                                        <input matInput class="form-input border-0 w-100" [matMenuTriggerFor]="menu4"
+                                            value="{{form.get('endtimerec').value?.hour ? form.get('endtimerec').value?.hour > 9 ? form.get('endtimerec').value?.hour : '0'+form.get('endtimerec').value?.hour : '00'}}:{{form.get('endtimerec').value?.minute ? form.get('endtimerec').value?.minute > 9 ? form.get('endtimerec').value?.minute : '0'+form.get('endtimerec').value?.minute : '00'}}:{{form.get('endtimerec').value?.second ? form.get('endtimerec').value?.second > 9 ? form.get('endtimerec').value?.second : '0'+form.get('endtimerec').value?.second : '00'}}" />
+
+                                        <mat-icon class="timerIconPosition"
+                                            [matMenuTriggerFor]="menu4">access_time</mat-icon>
+                                    </div>
+                                    <mat-menu #menu4="matMenu"
+                                        class="w-100 px-2  d-flex align-items-center cardMoreFetures"
+                                        xPosition="before">
+                                        <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                                           $event.stopPropagation();" formControlName="endtimerec" [seconds]="true"
+                                            [hourStep]="1" [minuteStep]="1" [secondStep]="1">
+                                        </ngb-timepicker>
+                                    </mat-menu>
+
+                                    <mat-error *ngIf="f.endtimerec.errors && submittedForm">
+                                        <ng-container *ngIf="f.endtimerec.errors.required">{{labelName?.EndTime}} is
+                                            required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                                <div class="row">
+                                    <mat-hint class="mat-error"
+                                        *ngIf="StartTimeEndTimeGreater() && (form.value.endtimerec !== 0 || form.value.endtimerec.minute !== 0 || form.value.endtimerec.second !== 0) && f.endtimerec.touched && f.starttimerec.touched">{{labelName?.EndTime}}
+                                        should be greater than Start Time</mat-hint>
+                                </div>
+
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+                    <div class="row d-none d-block d-md-none">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <!-- <button class="btn btn-gray btnwidth" (click)="back()" mat-flat-button
+                                type="Reset">{{labelName?.Cancel}}</button> -->
+                            <button class="btn btn-gray btnwidth ml-2" mat-flat-button
+                                *ngIf="!path && userConfig?.Reset" type="Reset"
+                                (click)="resetfunc()">{{labelName?.Reset}}</button>
+                            <button class="btn btnwidth mt-2" mat-flat-button type="button" mat-flat-button
+                                color="primary" (click)="startSubmit('')"
+                                *ngIf="!path ? (userConfig?.Update) : (userConfig?.Save)">{{labelName?.Save}}</button>
+                            <button class="btn btnwidth ml-2 mt-2"
+                                *ngIf="buttonname != 'recurring' && buttonvalue != 'startlater' && !path?(userConfig?.Update) : (userConfig?.Save)"
+                                mat-flat-button color="primary" type="button"
+                                (click)="startSubmit('start')">{{labelName?.Start}}</button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 mt-2">
+                            <button class="btn btnwidth"
+                                *ngIf="buttonname == 'recurring' || buttonvalue == 'startlater'" mat-flat-button
+                                color="primary" type="button"
+                                (click)="startSubmit('submit')">{{labelName?.Submit}}</button>
+                            <button class="btn btnwidth" mat-flat-button color="primary" (click)="startSubmit('')"
+                                type="button" *ngIf="path && userConfig?.Update">{{labelName?.Update}}</button>
+                        </div>
+                    </div>
+
+
+                    <div class="btn-group d-none d-md-block">
+                        <!-- <button class="btn btn-gray btnwidth" (click)="back()" mat-flat-button
+                            type="Reset">{{labelName?.Cancel}}</button> -->
+
+
+                        <button class="btn btn-gray" mat-flat-button *ngIf="!path && userConfig?.Reset" type="Reset"
+                            (click)="resetfunc()">{{labelName?.Reset}}</button>
+
+
+                        <button class="btn" mat-flat-button type="button" mat-flat-button color="primary"
+                            (click)="startSubmit('')"
+                            *ngIf="!path ? (userConfig?.Update) : (userConfig?.Save)">{{labelName?.Save}}</button>
+                        <!-- buttonname != 'recurring' && -->
+                        <button class="btn"
+                            *ngIf="buttonname != 'recurring' && buttonvalue != 'startlater' && !path?(userConfig?.Update) : (userConfig?.Save) || this.form.value.starttype == 'startnow' && form.value.scheduletype == 'onetime'"
+                            mat-flat-button color="primary" type="button"
+                            (click)="startSubmit('start')">{{labelName?.Start}}</button>
+
+
+                        <button class="btn"
+                            *ngIf="(buttonname == 'recurring' || buttonvalue == 'startlater'  || form.value.scheduletype == 'recurring') && !path "
+                            mat-flat-button color="primary" type="button"
+                            (click)="startSubmit('submit')">{{labelName?.Submit}}</button>
+                        <!-- || this.form.value.starttype != 'startlater' && form.value.scheduletype != 'onetime' -->
+                        <!-- <button class="btn" *ngIf="path && userConfig?.Update && (this.form.value.starttype != 'startlater' && form.value.scheduletype != 'onetime' && form.value.scheduletype != 'recurring')"
+                            mat-flat-button color="primary" type="button"
+                            (click)="startSubmit('submit')">Submit</button> -->
+
+                        <button class="btn btnwidth" mat-flat-button color="primary" (click)="startSubmit('')"
+                            type="button" *ngIf="path && userConfig?.Update">{{labelName?.Update}}</button>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

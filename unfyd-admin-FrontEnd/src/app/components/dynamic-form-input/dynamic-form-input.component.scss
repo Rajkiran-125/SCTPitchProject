@@ -1,0 +1,9 @@
+::ng-deep{
+.mat-form-field-prefix {
+    padding: 0 9px;
+    mat-icon {
+        text-align: center;
+        color: var(--gray_color);
+    }
+}
+}

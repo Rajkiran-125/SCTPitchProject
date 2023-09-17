@@ -1,0 +1,242 @@
+<!-- {{form.value|json}} -->
+<!-- <div class="inner-conainer">
+  <div class="wrapper py-5"> -->
+      <form [formGroup]="form">
+        <fieldset formGroupName="customer_profile">
+          <div class="row">
+              <div class="col-12 mb-2">
+                  <div class="gray_bg" [ngClass]="applyBorder ? 'applyBorder':''">
+                    <div class="headerBox">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-10">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Method</mat-label>
+                                    <mat-select formControlName="method">
+                                        <mat-option *ngFor="let data of method"
+                                            [value]="data">{{data}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-10 p-0">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>API</mat-label>
+                                    <input matInput formControlName="api">
+                                    <mat-error
+                                        *ngIf="!form.get('customer_profile.api').valid && form.get('customer_profile.api').touched">
+                                        Name is invalid.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-2">
+                              <button color="primary" mat-stroked-button class="editBtn addBtnBlue">
+                                  <mat-icon class="mat-btn blue"
+                                        (click)="checkApi()">send</mat-icon>
+                              </button>
+                            </div>
+                        </div>
+                    </div>
+                  
+                      <div>
+                        <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTab"
+                        (selectedTabChange)="onTabChanged($event);">
+                        <mat-tab label="Params">
+                            <div formArrayName="params"
+                                *ngFor="let item of form.get('customer_profile').get('params')['controls']; let i = index; let first = first">
+                                <div class="row" [formGroupName]="i">
+                                    <div class="col-lg-3 col-md-3 col-10">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Key</mat-label>
+                                            <input matInput formControlName="key">
+                                            <mat-error
+                                                *ngIf="form.get('customer_profile').get('params')['controls'][i].get('key').errors?.required">
+                                                Age required.
+                                            </mat-error>
+
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-10">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Value</mat-label>
+                                            <input matInput formControlName="value">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-2">
+                                      <a mat-raised-button class="action-btn" *ngIf="first" (click)="add('customer_profile_params')"><i class="icon-add"></i></a>
+                                        <!-- <mat-icon class="mat-btn blue"
+                                            (click)="add('customer_profile_params')"
+                                            *ngIf="first" matTooltip="Add">add</mat-icon> -->
+                                        <mat-icon class="mat-btn red"
+                                            (click)="remove(i, 'customer_profile_params')"
+                                            *ngIf="!first"
+                                            matTooltip="Remove">delete_outline</mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Auth">
+                            <div class="row" formGroupName="auth">
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Type</mat-label>
+                                        <mat-select formControlName="type"
+                                            (selectionChange)="authTypeChange($event.value)">
+                                            <mat-option *ngFor="let data of authType"
+                                                [value]="data">{{data}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-8">
+                                    <ng-container *ngIf="selectedAuthType == authType[1]">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Key</mat-label>
+                                            <input matInput formControlName="key">
+                                        </mat-form-field>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Value</mat-label>
+                                            <input matInput formControlName="value">
+                                        </mat-form-field>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Add To</mat-label>
+                                            <mat-select formControlName="add_to">
+                                                <mat-option *ngFor="let data of add_to"
+                                                    [value]="data">{{data}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </ng-container>
+                                    <ng-container *ngIf="selectedAuthType == authType[2]">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Token</mat-label>
+                                            <input matInput formControlName="token">
+                                        </mat-form-field>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Headers">
+                            <div formArrayName="header"
+                                *ngFor="let item of form.get('customer_profile').get('header')['controls']; let i = index; let first = first">
+                                <div class="row" [formGroupName]="i">
+                                    <div class="col">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Key</mat-label>
+                                            <input matInput formControlName="key">
+                                            <mat-error
+                                                *ngIf="form.get('customer_profile').get('header')['controls'][i].get('key').errors?.required">
+                                                Age required.
+                                            </mat-error>
+
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Value</mat-label>
+                                            <input matInput formControlName="value">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col">
+                                        <mat-icon class="mat-btn blue"
+                                            (click)="add('customer_profile_header')"
+                                            *ngIf="first" matTooltip="Add">add</mat-icon>
+                                        <mat-icon class="mat-btn red"
+                                            (click)="remove(i, 'customer_profile_header')"
+                                            *ngIf="!first"
+                                            matTooltip="Remove">delete_outline</mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Body">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Body</mat-label>
+                                <textarea rows="9" formControlName="body"
+                                    matInput></textarea>
+                            </mat-form-field>
+                        </mat-tab>
+                        <mat-tab label="Code" [disabled]="requestTab">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Code</mat-label>
+                                <textarea rows="9" matInput [value]="request | json"
+                                    disabled></textarea>
+                            </mat-form-field>
+                        </mat-tab>
+                        <mat-tab label="Response" [disabled]="!responseTab">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Response</mat-label>
+                                <textarea rows="9" matInput [value]="response | json"
+                                    disabled></textarea>
+                            </mat-form-field>
+                        </mat-tab>
+                    </mat-tab-group>
+                    <fieldset formGroupName="token_generation">
+                        <div class="row">
+                            <div class="col-12 pb-2 mb-2"><mat-slide-toggle
+                                    disableRipple="true" labelPosition="before"
+                                    class="toggleBtn" color="primary"
+                                    formControlName="isTrue"
+                                    (change)="toggle($event.checked, 'token_generation')">Token
+                                    Generation</mat-slide-toggle></div>
+                            <ng-container *ngIf="token_generation">
+                                <div class="col-3">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Method</mat-label>
+                                        <mat-select formControlName="method">
+                                            <mat-option *ngFor="let data of method"
+                                                [value]="data">{{data}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-9">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>API</mat-label>
+                                        <input matInput formControlName="api">
+                                        <mat-error
+                                            *ngIf="!form.get('customer_profile.token_generation.api').valid && form.get('customer_profile.token_generation.api').touched">
+                                            Name is invalid.
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Body</mat-label>
+                                        <input matInput formControlName="body">
+                                    </mat-form-field>
+                                </div>
+                                <legend class="col-12">Add Headers</legend>
+                                <div class="col-12" formArrayName="header"
+                                    *ngFor="let item of form.get('customer_profile')['controls']['token_generation'].get('header').controls; let i = index; let first = first">
+                                    <div class="row" [formGroupName]="i">
+                                        <div class="col">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Key</mat-label>
+                                                <input matInput formControlName="key">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Value</mat-label>
+                                                <input matInput formControlName="value">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col">
+                                            <mat-icon class="mat-btn blue"
+                                                (click)="add('token_generation')"
+                                                *ngIf="first"
+                                                matTooltip="Add">add</mat-icon>
+                                            <mat-icon class="mat-btn red"
+                                                (click)="remove(i, 'token_generation')"
+                                                *ngIf="!first"
+                                                matTooltip="Remove">delete_outline</mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </fieldset>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </fieldset>
+      </form>
+  <!-- </div>
+</div> -->

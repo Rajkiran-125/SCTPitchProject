@@ -1,0 +1,243 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+        <div class="wrapper">
+            <form [formGroup]="form">
+                <div class="formGroup">
+
+                    <div class="row">
+                        <div class="card" style="border:0;box-shadow:none;">
+                            <legend class="positionAbsolute">
+                                <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+                            </legend>
+                            <div class="{{channel?.ChannelName}} logoposition"></div>
+                            <div style="text-align: center;">
+                                <p class="channelHead">
+                                    <strong>{{channel?.ChannelName}}</strong>
+                                </p>
+                                <p class="channelLicense m-2"> {{labelName?.TotalAccounts}} {{local== 1 ? channelData.length : local == 2 ? webchatData1.length: 0}}</p>
+                            </div>
+                            <div>
+                                <button *ngIf="channel?.ChannelName.toUpperCase() ==='EMAIL'"
+                                    (click)="openDialog('openchannel')" class="btnposition btn ">{{labelName?.AddNew}}</button>
+                            </div>
+                            <div>
+                                <button *ngIf="channel?.ChannelName.toUpperCase() ==='WHATSAPP'"
+                                    [ngClass]="channelType.length > 0 && channelType[0].LicenseCount <= channelData.length ? 'disabledIT' : ''"
+                                    [routerLink]="['/masters/channel-configuration/channel-details',channel?.Id,'add']"
+                                    class="btnposition addButton0">{{labelName?.AddNewAccount}}</button>
+                            </div>
+                            <div *ngIf="channel?.ChannelName.toUpperCase() ==='WEBCHAT'">
+                                <button (click)="openWebchatDialog('Webchat-Name-popup',null)"
+                                    class="btnposition addButton0" style="margin-left:35px;">Add New Webchat</button>
+                                <div class="d-flex m-2">                       
+                                    <div class="mt-2">
+                                        Channel wise Priority 
+                                    </div>
+                                    <div class="mt-1 ml-2">
+                                        <mat-slide-toggle color="primary" class="toggleBtn" [checked]="data.IsDefault"></mat-slide-toggle>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row">
+
+                <div class="col-lg-4 col-md-4 col-sm-4" *ngFor="let data of channelData; let i = index">
+                    <!-- new -->{{common.IconData[data.value.W] |json}}
+                    <div class="card card1 d-flex" style="align-items: unset;">
+                        <div class="channel-data-content">
+                            <div class="icon-whatsapp channelIconHeader" [ngStyle]="{'background': common.color[data.value.iconColor]}">
+                                <span class="plugin-name whatsapp_header">{{data.value.WhatsApp_Provider}}</span>
+                            </div>
+                            <div class="pointer vertical-rotate">
+                                <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                                <mat-menu #menu="matMenu" class="master_action">
+                                    <span class="m-3 mb-4 font-weight-bold">More Actions</span>
+                                    <button mat-menu-item [routerLink]="['/masters/channel-configuration/channel-configuration-edit',channel?.Id,'update',whtsachannel[i].ChannelSrcID]">
+                                    <mat-icon class="editIcon">edit</mat-icon>
+                                    <span>Edit</span>
+                                    </button>
+                                    <button mat-menu-item (click)="fileDuplicate(data)" *ngIf="channel?.ChannelName.toUpperCase() ==='WEBCHAT'">
+                                        <span class="duplicate"></span>
+                                        <span style="vertical-align: super;">Duplicate</span>
+                                    </button>
+                                    <button mat-menu-item (click)="deleteChannel(data)" *ngIf="userConfig?.Delete">
+                                    <span class="delete"></span>
+                                    <span  style="vertical-align: super;">Delete</span>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                        <div class="channel-data-content">
+                            <div class="mt-1">{{labelName?.MobileNumber}}</div>
+                            <div class="mt-1">{{data?.value?.countrycode}}{{data?.value?.contactnumber}}
+                            </div>
+                        </div>
+                        <div class="channel-data-content" style="border:none;">
+                            <div>{{labelName?.HSMTemplate}}</div>
+                            <div class="d-flex">
+                                <span class="hsmcount">{{data.HSMCount}}</span>
+                                <button *ngIf=" userConfig?.AddHSM" class="btn outline addButton" mat-stroked-button color="primary"
+                                [routerLink]="['/masters/channel-configuration/hsm-template/add']" [queryParams]="{ filter: 'add-hsm',channelid : local, uniquecode : data.ChannelSrcID}">
+                                {{labelName?.Add}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- new -->
+
+                    <!-- old -->
+                    <!-- <div class="card d-flex" style="align-items: unset;">
+                        [ngClass]="
+                            data.value.whatsappicon == 'option3' ? 'optional-icon whatsapp-icon1':
+                            data.value.whatsappicon == 'option4' ? 'optional-icon whatsapp-icon2' :
+                            data.value.whatsappicon == 'option5' ? 'optional-icon whatsapp-icon3' :
+                            data.value.whatsappicon == 'option2' ? 'optional-icon whatsapp-icon4' : 'optional-icon whatsapp-icon1'
+                            "
+                        <div class="icon-whatsapp iconHeaderOnCard"></div>
+                        <div class="channel-data-content">
+                            <div>{{labelName?.WhatsaAppProvider}}</div>
+                            <div>{{data.value.WhatsApp_Provider}}</div>
+                        </div>
+
+                        <div class="channel-data-content">
+                            <div>{{labelName?.MobileNumber}}</div>
+                            <div>{{data?.value?.countrycode}}{{data?.value?.contactnumber}}</div>
+                        </div>
+                        <div class="channel-data-content">
+                            <div>{{labelName?.HSMTemplate}}</div>
+                            <div class="d-flex">
+                                <div class="px-2">{{data.value.databaseusername}}</div>
+                                <button class="btn outline addButton" mat-stroked-button color="primary">Add</button>
+
+                                [routerLink]="['/masters/branding/hsm-template/add']" [queryParams]="{ filter: 'add-hsm',channelid : local, uniquecode : data.UniqueId}"
+                                <span class="hsmcount">{{data.HSMCount}}</span>
+                                <button *ngIf=" userConfig?.AddHSM" class="btn outline addButton" mat-stroked-button color="primary"
+                                [routerLink]="['/masters/channel-configuration/hsm-template/add']" [queryParams]="{ filter: 'add-hsm',channelid : local, uniquecode : data.ChannelSrcID}">
+                                {{labelName?.Add}}
+                                </button>
+
+                            </div>
+                        </div>
+                        <div class="align-center">
+                            <button class="btnposition fontSizeContent">
+                                <mat-icon *ngIf="userConfig?.Edit" class="editIcon mx-2"
+                                    [routerLink]="['/masters/channel-configuration/channel-configuration-edit',channel?.Id,'update',whtsachannel[i].ChannelSrcID]">edit</mat-icon>
+                                [queryParams]="{whatsappvender : data.value.WhatsApp_Provider,iconColor: data.value.iconColor}"
+                                <mat-icon *ngIf="userConfig?.Delete" class="red-color mx-2"
+                                    (click)="deleteChannel(data)">delete</mat-icon>
+                            </button>
+                        </div>
+                    </div> -->
+                    <!-- old -->
+                </div>
+            </div>
+            <div class="row" *ngIf="channel?.ChannelName.toUpperCase() !=='WHATSAPP'">
+                <!--WEBCHAT-->
+
+                <div class="col-lg-4 col-md-4 col-sm-4" *ngFor="let data of webchatData1; let i = index">
+                    <div class="card d-flex" style="align-items: unset;">
+                        
+                        <div class="channel-data-content">
+                            <div class="webchatIcon iconHeaderOnCard" [ngStyle]="{'background-color': common.IconData[data.value.webchatIconColor]}">
+                                <span class="plugin-name">{{data.value.WebchatName}}</span>
+                            </div>
+                            
+                            <div class="pointer vertical-rotate">
+                                <mat-icon [matMenuTriggerFor]="menu">more_horiz</mat-icon>
+                                <mat-menu #menu="matMenu" class="master_action">
+                                    <span class="m-3 mb-4 font-weight-bold">More Actions</span>
+                                    <button mat-menu-item [routerLink]="['/masters/channel-configuration/configuration-webchat/',channel?.Id,'UPDATE',data.ChannelSrcID]">
+                                    <mat-icon class="editIcon">edit</mat-icon>
+                                    <span>Edit</span>
+                                    </button>
+                                    <button mat-menu-item (click)="fileDuplicate(data)">
+                                        <!-- <mat-icon class="cursorPointer">file_copy</mat-icon> -->
+                                        <span class="duplicate"></span>
+                                        <span style="vertical-align: super;">Duplicate</span>
+                                    </button>
+                                    <button mat-menu-item (click)="deleteWebchatChannel(data, i)">
+                                    <!-- <mat-icon  class="red-color">delete</mat-icon> -->
+                                    <span class="delete"></span>
+                                    <span style="vertical-align: super;">Delete</span>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+
+                        <div class="channel-data-content">
+                            <div class="mt-1">Webchat Script</div>
+                            <div title="{{data.value.WebchatScript}}" style="cursor:pointer;">
+                                <!-- <mat-icon cdkCopyToClipboard="{{data.value.WebchatScript}}" class="mat-icon notranslate material-icons mat-icon-no-color my-2 primary"
+                                        style="font-size:20px!important;">file_copy</mat-icon> -->
+                                <span cdkCopyToClipboard="{{data.value.WebchatScript}}" (click)="copyMSG()" class="duplicate_copy mr-1 mt-1"></span>
+                            </div>
+                        </div>
+
+                        <div class="channel-data-content" style="border:none;">
+                            <div>Status</div>
+                            <div class="custom-switchtoggle">
+                                <ui-switch  id="{{i}}" [checked]="data.IsDefault" [id]="data.IsDefault" matTooltip="Auto Refresh" (change)="enableWebchat(data)"
+                                    size="small" defaultBgColor="#EAEAEA" checkedLabel="Active" uncheckedLabel="Inactive" checkedTextColor="white"
+                                    uncheckedTextColor="red"></ui-switch>
+<!-- 
+                                <mat-slide-toggle color="primary" class="toggleBtn" style="margin-right:5px!important;" (toggleChange)="enableWebchat(data)"
+                                    [checked]="data.IsDefault"></mat-slide-toggle> -->
+                            </div>      
+                        </div>
+
+                        <!-- <div class="align-center">
+                            <button class="btnposition fontSizeContent">
+                                <mat-icon *ngIf="userConfig?.Edit" class="editIcon mx-2"
+                                    [routerLink]="['/masters/channel-configuration/configuration-webchat/',channel?.Id,'UPDATE',data.ChannelSrcID]">edit</mat-icon>
+                               
+                                <mat-icon *ngIf="userConfig?.Delete" class="red-color mx-2"
+                                    (click)="deleteWebchatChannel(data, i)">delete</mat-icon>
+                            </button>
+                        </div> -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!--WEBCHAT CARD-->
+            <!--
+            <div class="row" *ngIf="channel?.ChannelName.toUpperCase() !=='WHATSAPP'">
+                <div class="col-lg-4 col-md-4 col-sm-4" >
+                   
+                    <div class="card d-flex" style="align-items: unset;" >                       
+                        <div class="Webchat iconHeaderOnCard" ></div>
+                            <div class="channel-data-content">
+                                <div>Webchat Account</div>
+                                <div>Infobip</div>
+                            </div>
+
+                        <div class="channel-data-content">
+                            <div>Dummy Text</div>
+                            <div>Test</div>
+                        </div>
+                        <div class="channel-data-content" >
+                            <div class="d-flex">
+                             
+                            <span class="hsmcount">Test</span>
+                              <button *ngIf=" userConfig?.AddHSM" class="btn outline addButton" mat-stroked-button color="primary"
+                              [routerLink]="['/masters/channel-configuration/hsm-template/add']" [queryParams]="{ filter: 'add-hsm',channelid : local, uniquecode :2}">
+                                Add
+                              </button>
+                            </div>
+                        </div>
+  
+                        <div class="align-center">  
+                            <button class="btnposition fontSizeContent">
+                                <mat-icon class="editIcon mx-2"  [routerLink]="['/masters/channel-configuration/channel-configuration-edit',channel?.Id,'update',2]">edit</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+</div>

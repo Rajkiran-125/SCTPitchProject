@@ -1,0 +1,12 @@
+.queryBuilder{
+  .iconPrimarySize{
+    font-size: 25px !important;
+    color: var(--primary_color);
+    cursor: pointer;
+  }
+  .iconDeleteSize{
+    font-size: 25px !important;
+    color: var(--danger);
+    cursor: pointer;
+  }
+}

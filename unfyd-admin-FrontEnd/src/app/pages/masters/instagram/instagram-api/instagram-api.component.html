@@ -1,0 +1,123 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4 mt-3">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="(userConfig?.Cancel)"  (click)="back()"></span>
+          </div>
+        <form [formGroup]="form">
+                <div class="row ">
+                    <div class="col-12">
+                        <span class="d-flex backArrow">
+                            <mat-icon class="gray cursorPointer" (click)="backspace()">keyboard_backspace</mat-icon>
+                            <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.InstagramDm}}</legend>
+                        </span>
+                        <div class="formGroup">
+                            <div class="masters_block">
+                              <app-steps [steps]="intagramsteps" [moduletype]="'instagram'" [id]="path"
+                                  [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                                <div class="row paddingX5">
+
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.SaveIncomingData}}</mat-label>
+                                            <input matInput formControlName="SaveIncomingData" />
+                                            <mat-error *ngIf="f.SaveIncomingData.errors"  class="addEllipsis">
+                                            <ng-container *ngIf="f.SaveIncomingData.errors.required">{{labelName?.SaveIncomingData}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.SaveIncomingData?.errors?.checknull">Whitespace not allowed
+
+                                            </ng-container>
+                                            <ng-container *ngIf="f.SaveIncomingData?.errors?.pattern">{{labelName?.SaveIncomingData}} is invalid
+
+                                            </ng-container>
+                                            <ng-container *ngIf="f.SaveIncomingData?.errors?.checknull1">
+                                                Must be at least 3 characters long.
+                                              </ng-container>
+
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.SaveOutgoingData}}</mat-label>
+                                            <input matInput formControlName="SaveOutgoingData" />
+                                            <mat-error *ngIf="f.SaveOutgoingData.errors"  class="addEllipsis">
+                                            <ng-container *ngIf="f.SaveOutgoingData.errors.required">{{labelName?.SaveOutgoingData}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.SaveOutgoingData?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                            <ng-container *ngIf="f.SaveOutgoingData?.errors?.pattern">{{labelName?.SaveOutgoingData}} is invalid
+                                            </ng-container>
+                                            <ng-container *ngIf="f.SaveOutgoingData?.errors?.checknull1">
+                                                Must be at least 3 characters long.
+                                              </ng-container>
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.CreateCustomerAgentSession}}</mat-label>
+                                            <input matInput formControlName="CreateCustomerAgentSession" />
+                                            <mat-error *ngIf="f.CreateCustomerAgentSession.errors"  class="addEllipsis">
+                                            <ng-container *ngIf="f.CreateCustomerAgentSession.errors.required">{{labelName?.CreateCustomerAgentSession}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.CreateCustomerAgentSession?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                            <ng-container *ngIf="f.CreateCustomerAgentSession?.errors?.pattern">{{labelName?.CreateCustomerAgentSession}} is invalid
+                                            </ng-container>
+                                            <ng-container *ngIf="f.CreateCustomerAgentSession?.errors?.checknull1">
+                                                Must be at least 3 characters long.
+                                              </ng-container>
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.DeleteCustomerAgentSession}}</mat-label>
+                                            <input matInput formControlName="DeleteCustomerAgentSession" />
+                                            <mat-error *ngIf="f.DeleteCustomerAgentSession.errors"  class="addEllipsis">
+                                            <ng-container *ngIf="f.DeleteCustomerAgentSession.errors.required">{{labelName?.DeleteCustomerAgentSession}} is required
+                                            </ng-container>
+                                            <ng-container *ngIf="f.DeleteCustomerAgentSession?.errors?.checknull">Whitespace not allowed
+                                            </ng-container>
+                                            <ng-container *ngIf="f.DeleteCustomerAgentSession?.errors?.pattern">{{labelName?.DeleteCustomerAgentSession}} is invalid
+                                            </ng-container>
+                                            <ng-container *ngIf="f.DeleteCustomerAgentSession?.errors?.checknull1">
+                                                Must be at least 3 characters long.
+                                              </ng-container>
+                                        </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.ValidateCustomerAgentSession}}</mat-label>
+                                            <input matInput formControlName="ValidateCustomerAgentSession" />
+                                            <mat-error *ngIf="f.ValidateCustomerAgentSession.errors"  class="addEllipsis">
+                                                <ng-container *ngIf="f.ValidateCustomerAgentSession.errors.required">{{labelName?.ValidateCustomerAgentSession}} is required
+                                                </ng-container>
+                                                <ng-container *ngIf="f.ValidateCustomerAgentSession?.errors.checknull">Whitespace not allowed
+                                                </ng-container>
+                                                <ng-container *ngIf="f.ValidateCustomerAgentSession.errors.pattern">{{labelName?.ValidateCustomerAgentSession}} is invalid
+                                                </ng-container>
+                                                <ng-container *ngIf="f.ValidateCustomerAgentSession?.errors?.checknull1">
+                                                    Must be at least 3 characters long.
+                                                  </ng-container>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="btn-group my-3" >
+                              <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                                <button *ngIf="(userConfig?.Save)" (click)="saveInstagram('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                                <button  *ngIf=" (userConfig?.Next) " (click)="saveInstagram('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

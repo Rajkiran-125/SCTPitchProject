@@ -1,0 +1,165 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-4">
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-1 text-center">
+                    <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+                </div>
+                <div class="col-9 pl-0">
+                    <legend class="hubmaster"> Add New Access Control</legend>
+                    <div class="formGroup">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 dropDown">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Name}}</mat-label>
+                                    <input matInput formControlName="Name">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 dropDown">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Description}}</mat-label>
+                                    <input matInput formControlName="Description">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        
+
+                        <mat-form-field appearance="fill">
+                            <div class="text">
+                                <span>{{ labelName?.AddMoreModule}}</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.Category}}</mat-label>
+                                        <mat-select
+                                            (selectionChange)="getSubCategory($event.value);getModule($event.value)"
+                                            formControlName="Category">
+                                            <mat-option *ngFor="let data of categories" [value]="data.ModuleGroupping">
+                                                {{data.ModuleGroupping}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.Subcategory}}</mat-label>
+                                        <mat-select (selectionChange)="getModule($event.value)"
+                                            formControlName="Subcategory">
+                                            <mat-option *ngFor="let data of subcategory"
+                                                [value]="data.SubModuleGroupping">
+                                                {{data.SubModuleGroupping}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.ModuleName}}</mat-label>
+                                        <mat-select formControlName="ModuleName"
+                                            (selectionChange)="getActionList($event.value)">
+                                            <mat-option *ngFor="let data of modules" [value]="data.Id">
+                                                {{data.Module}}
+                                            </mat-option>
+                                        </mat-select>
+
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.Actionable}}</mat-label>
+                                        <mat-select formControlName="Action" disableOptionCentering multiple>
+                                            <mat-option *ngFor=" let data of action" [value]="data.ActionList">
+                                                {{data.ActionList}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+
+                                <div class="col-2">
+                                    <button class="btn" mat-flat-button color="primary" (click)="addValueItem()"
+                                        type="button"> {{ labelName?.Add}}</button>
+
+                                </div>
+
+                            </div>
+                        </mat-form-field>
+                        <div class="row background" *ngIf="tableloop.length > 0">
+                            <div class="col-3">
+                                <th>{{ labelName?.ModuleName }}</th>
+                            </div>
+
+                            <div class="col-2">
+                                <th>{{ labelName?.Category }}</th>
+                            </div>
+
+                            <div class="col-3">
+                                <th>{{ labelName?.Subcategory }}</th>
+                            </div>
+
+                            <div class="col-3">
+                                <th>{{ labelName?.Actionable }}</th>
+                            </div>
+
+                        </div>
+                       
+                        <div class="row tablebackground" *ngIf="tableloop.length > 0">
+
+                            <ng-container *ngFor="let item of tableloop">
+                                <div class="col-1 CustomCol pl-4">
+                                    <input type="checkbox" />
+                                  </div>
+                                <div class="col-3 CustomCol"   #tooltip="matTooltip" matTooltip = "{{ item.ModuleName }}">
+                                    <tr>{{item.ModuleName}}</tr>
+
+                                </div>
+
+                                <div class="col-2 CustomCol" #tooltip="matTooltip" matTooltip = "{{ item.Category }}">
+                                    <tr>{{item.Category}}</tr>
+
+                                </div>
+
+                                <div class="col-3 CustomCol" #tooltip="matTooltip" matTooltip = "{{ item.Subcategory }}">
+                                    <tr>{{item.Subcategory}}</tr>
+
+                                </div>
+
+                                <div class="col-2 CustomCol">
+                                    <div   #tooltip="matTooltip" matTooltip = "{{ item.Action }}">
+                                    <tr>{{item.Action}}</tr></div>
+
+                                </div>
+                                <div class="col-1 CustomCol">
+                                    <span>
+                                        <mat-icon *ngIf="this.userDetails.UserName == 'unfyd-admin'?true:false" class="remove cursorPointer" (click)="removeItem('')" #tooltip="matTooltip"
+                                        matTooltip="Delete">
+                                            delete_outline</mat-icon>
+
+                                    </span>
+                                </div>
+                            </ng-container>
+                        </div>
+
+                        <div class="btn-group py-4">
+                            <button id="reset" #reset class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset}}</button>
+                            
+                            <button class="btn" mat-flat-button color="primary" (click)="save('')"
+                                type="button"> {{ labelName?.Add}}</button>
+
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

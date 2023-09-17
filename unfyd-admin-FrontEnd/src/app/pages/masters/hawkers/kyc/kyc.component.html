@@ -1,0 +1,62 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <app-steps [steps]="hawkerFormSteps" [id]="path"></app-steps>
+    <div class="action-bar">
+        <div class="action-area">
+            <ng-container *ngIf="tabValue.length>0">
+                <div class="item-perpage" *ngIf="tabValue.length>10">
+                    <label>Show</label>
+                    <select (change)="setItemsPerPage($event.target.value)">
+                        <option>10</option>
+                        <option *ngIf="tabValue.length>25">25</option>
+                        <option *ngIf="tabValue.length>50">50</option>
+                        <option *ngIf="tabValue.length>100">100</option>
+                    </select>
+                    <label>entries</label>
+                </div>
+            </ng-container>
+        </div>
+        <div class="action-area">
+                <a mat-raised-button color="primary" (click)="uploadDocument('add-document', '')">Upload Document</a>
+        </div>
+    </div>
+    <div class="wrapper">
+            <form>
+                <div class="dataTable" *ngIf="tabValue.length>0">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sr No</th>
+                                <th></th>
+                                <th>Document Type</th>
+                                <th>Created On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td class="action">
+                                        <mat-icon class="view" (click)="viewDocument(data.Category, 'document')" #tooltip="matTooltip" matTooltip="View">remove_red_eye</mat-icon>
+                                        <mat-icon class="view"  (click)="uploadDocument('update-document', data)" #tooltip="matTooltip" matTooltip="Re-Upload">file_upload</mat-icon>
+                                    </td>
+                                    <td>{{data.Category}}</td>
+                                    <td>{{data.CreatedOn | date: regex.dateTimeFormat}}</td>
+                                </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <ng-container *ngIf="tabValue.length==0">
+                    <h5>No Data Found</h5>
+                </ng-container>
+                <div class="btn-group" *ngIf="userConfig?.Update">
+                    <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                    <button class="btn" mat-flat-button color="primary" (click)="submit()" type="button">Next >></button>
+                </div>
+                
+            </form>
+    </div>
+    <div class="pagination" *ngIf="tabValue.length>10">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+</div>

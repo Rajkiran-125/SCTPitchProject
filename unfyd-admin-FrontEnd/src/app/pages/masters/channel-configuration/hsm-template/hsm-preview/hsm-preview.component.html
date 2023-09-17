@@ -1,0 +1,44 @@
+<div class="row" style="height:100px;width:350px"> 
+<div id="custom-div" *ngIf="isShow">
+    
+        <div class="row">
+            <div class="container">                
+                <div class="box mobileImg" >
+                  
+                    <div class="stack-top" style="background:var(--gray-dark);">       
+              
+
+                            <div style="margin-top: 7px;">
+                        <span class ="bodyText" *ngIf="hsmObj?.MsgHeader == 'Text'">{{hsmObj?.MsgHeaderVal}}</span>
+                                </div>
+
+                        <img *ngIf="hsmObj?.MsgHeader == 'Image'" [src]="hsmObj?.MsgHeaderVal" alt="" srcset="">
+
+                        <video *ngIf="hsmObj?.MsgHeader == 'Video'" width="100%" style="border-radius: 5px;" controls>                  
+                            <source [src]="hsmObj?.MsgHeaderVal">
+                          </video>   
+
+
+                        <map *ngIf="hsmObj?.MsgHeader == 'Location'" name=""></map>
+
+                        <div style="margin-top: 7px;">
+                        <span *ngIf="hsmObj?.MsgHeader == 'Document'">
+                            
+                            <img  *ngIf="docfileext == 'pdf'" src="../../../../../../../assets/images/icons/pdficon.png" style="height: 81px;width: 84px;margin-left: 38px;border-radius: 4px;"/>
+                            <img  *ngIf="docfileext == 'docx'" src="../../../../../../../assets/images/icons/docicon.png" style="height: 81px;width: 84px;margin-left: 38px;border-radius: 4px;"/>
+                            <img  *ngIf="docfileext == 'xlsx'" src="../../../../../../../assets/images/icons/excelicon.png" style="height: 81px;width: 84px;margin-left: 38px;border-radius: 4px;"/>
+                            <br>
+                            <a href='{{hsmObj?.MsgHeaderVal}}'  target="_blank" >{{hsmObj?.MsgHeaderVal}}</a>
+                        </span>
+                        </div>
+
+
+                        <div style="margin-top: 5px;">
+                        <span class="bodyText" [innerHTML] = "hsmObj?.Body"> </span>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+        </div>
+    </div>  
+</div>

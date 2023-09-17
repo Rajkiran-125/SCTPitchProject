@@ -1,0 +1,277 @@
+.chooseIcon {
+  // background-color: var(--gray_color_80);
+  padding: 10px;
+  font-size: var(--extralarge-font);
+  color: var(--primary_color);
+  border: 1px solid transparent;
+
+  // border: 1px solid var(--gray_color);
+  // border-radius: 50px;
+  &:hover {
+    border: 1px solid var(--gray_color);
+    border-radius: 15px;
+  }
+}
+
+.iconBorder {
+  padding: 10px;
+  font-size: var(--extralarge-font);
+  color: var(--primary_color);
+  border: 1px solid var(--gray_color) !important;
+  border-radius: 15px;
+}
+
+.selectedChooseIcon {
+  border: 1px solid var(--primary_color) !important;
+  border-radius: 15px;
+}
+
+.dummySpace {
+  font-size: var(--extralarge-font);
+  visibility: hidden;
+}
+
+.mainDiv {
+  .preview {
+    background-color: var(--backgroud_color);
+    height: 100vh;
+    overflow: auto;
+    padding: 20px;
+
+    .previewSubHeader {
+      font-size: var(--content_title);
+      color: var(--black_color);
+      font-weight: bold;
+    }
+
+    .legend {
+      display: flex !important;
+      justify-content: space-between !important;
+    }
+  }
+
+  .addNewForm {
+    padding: 20px 35px 20px 22px;
+
+    .addFormControl {
+      background-color: var(--white_color);
+      border-radius: 5px !important;
+      color: var(--primary_color);
+      box-shadow: none;
+      border: 1px solid var(--gray_color);
+    }
+  }
+
+  .overflow {
+    overflow-y: auto;
+    height: 80vh;
+  }
+
+  .AddFormControls {
+    border: 1px solid var(--gray_color);
+    border-radius: 15px;
+    margin: 10px;
+    // padding: 20px;
+    background-color: var(--backgroud_color);
+
+    .form-bg {
+      background-color: var(--white_color);
+      border-radius: 15px;
+
+    }
+
+    .mainFormControl {
+      padding: 15px 30px;
+
+      .error {
+        font-size: 10.5px;
+        line-height: 1;
+      }
+
+      .placeholder {}
+
+      .mandatory {
+        font-size: var(--content);
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .deleteIcon {
+      color: var(--error);
+    }
+
+    .error {
+      color: var(--error);
+    }
+
+    .types {
+      font-size: var(--content);
+    }
+
+    .innerFormControl {
+      border-style: solid;
+      border-radius: 15px;
+      border-width: 0 0 1px 0;
+      border-color: var(--gray_color);
+    }
+
+    .addAttributeFormArea {
+      padding: 20px;
+
+      .list {
+        .attributeBorder {
+          border-style: solid;
+          border-width: 0px 0px 1px 0;
+          border-color: var(--gray_color);
+
+          .AttributeListValues {
+            font-size: var(--content);
+            font-weight: bold;
+          }
+        }
+
+        .options {
+          margin: 10px -25px !important;
+        }
+      }
+
+      .attributeBorder {
+        border-style: solid;
+        border-width: 0px 0px 1px 0;
+        border-color: var(--gray_color);
+
+        .AttributeListValues {
+          font-size: var(--content);
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+.inner-box{
+  padding: 0px 1.5rem;
+}
+
+::ng-deep {
+
+  .patchValueToControlsKey{
+    .mat-form-field-prefix{
+      padding: 0 0 0 9px;
+    }
+  }
+  .options {
+    mat-form-field {
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .placeholder {
+    mat-form-field {
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .APIUrl {
+    .normal-dropdown {
+      .mat-form-field-infix {
+        border-bottom: 0 !important
+      }
+    }
+
+    .text {
+      flex: 1;
+      font-size: var(--content);
+    }
+
+    .inputText {
+      flex: 7;
+      font-size: var(--content);
+    }
+
+    .mat-form-field-appearance-fill .mat-form-field-infix {
+      border-top: 0;
+      padding: 5px 0;
+    }
+
+    mat-form-field {
+      .mat-form-field-label-wrapper {
+        display: none;
+      }
+
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .mat-form-field-wrapper{
+    padding-bottom: 0 !important;
+  }
+}
+
+.row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  margin-right: -12px !important;
+  margin-left: -12px !important;
+}
+
+.gridTable {
+  margin-left: 0px !important;
+}
+
+.btn-group {
+  flex-wrap: wrap !important;
+  padding: 0px 1.6rem 0px;
+  margin-top: 5px;
+}
+
+.form-box{
+  padding: 0 1.5rem !important;;
+}
+
+@media screen and (max-width: 767px){
+
+  .inner-box{
+    padding: 0px 0.5rem;
+  }
+
+  .mobileToggle{
+    justify-content: space-around;
+  }
+  .types{
+    .mat-radio-button{
+      width: 23vw !important;
+    }
+  }
+  .smallBtn{
+    width: 25px !important;
+    min-width: 85px !important;
+  }
+  .mobileBtnGroup{
+    display: flex;
+  }
+  .btn-group{
+    margin: unset;
+    padding: 0px 12px !important;
+  }
+  .addNewForm{
+      padding: 20px 10px 20px 10px !important;
+  }
+
+  .form-box{
+    margin-left: 0.5rem;
+    padding: 0 15px !important;
+  }
+}
+
+.hoverInfo{
+  border: 1px solid var(--gray_color);
+  border-radius: 44px;
+  padding: 0px 8px;
+}

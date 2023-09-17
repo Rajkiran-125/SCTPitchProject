@@ -1,0 +1,97 @@
+<div class="inner-container height-adjust">
+    <div class="wrapper">
+        <ng-container>
+            <form [formGroup]="form">
+                <legend class="report_heading">{{reportname}}</legend>
+            </form>
+
+            <app-filter component="" [type]="type" [paginationArray]="paginationArray" [tabValue]="tabValue"
+                [addBtn]="false"></app-filter>
+            <app-loader *ngIf="loader"></app-loader>
+
+            <div *ngIf="!loader">
+                <div class="dataTable" style="overflow: auto;">
+                    <table>
+                        <thead>
+                            <tr *ngIf="tabValue.length>0">
+                                <ng-container *ngFor="let data of finalField; let i = index">
+                                    <th *ngIf="data.value != 'Id' && data.value != 'ID' && data.value !== 'status'" 
+                                    [ngClass]="!data.checked ? 'tabCol' : ''" class="column{{i}}">{{data.value}}
+                                    </th>
+                                </ng-container>
+                            </tr>
+                            <tr *ngIf="noData">
+                                <th>No record found</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="tabValue.length>0">
+                            <ng-container *ngFor="let data of tabValue | filter: search; let j = index">
+                                <tr>
+                                    <ng-container *ngFor="let val of finalField; let i = index">
+                                        <td *ngIf="val.value == 'Sr No' || val.value =='SrNo'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                                            class="column{{i}}">
+                                            <span>{{((currentpage-1)*(itemsPerPage))+(j+1)}}</span>
+                                        </td>
+                                        <td *ngIf="val.value !== 'SrNo' &&val.value !== 'Sr No' && val.value !== 'Date' && val.value !== 'Channel'
+                                        && val.value !== 'Message' && val.value !== 'UID' && val.value !== 'Session ID'
+                                        && val.value !== 'Transcript'  && val.value !== 'status'
+                                        && val.value !== 'Id' && val.value !== 'ID' && val.value !== 'SessionID' && val.value !== 'SessionId' 
+                                         && val.value !== 'Logged Date Time' && val.value !== 'Session Id'"
+                                            [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                                            <span>{{data[val.value] == '' ? '-' :data[val.value] == ' '?'-':
+                                            data[val.value] == undefined ? '-': data[val.value] == null ? '-' :
+                                            data[val.value] == '01 Jan 1900 12:00:00' ? '-':
+                                            data[val.value] == ' '?'-':
+                                            data[val.value] == 'undefined' ? '-':
+                                            data[val.value]}}</span>
+                                        </td>
+                                        <td *ngIf="val.value == 'Date'"
+                                            [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                                            <span>{{data[val.value]}}</span>
+                                        </td>
+                                        <td *ngIf="val.value == 'Channel'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                                            class="column{{i}}">
+                                            <span
+                                                [innerHTML]="data[val.value] == null? '-':htmlDecode(data[val.value])">
+                                            </span>
+                                        </td>
+                                        <td *ngIf="val.value == 'Message' || val.value =='SessionId' || 
+                                        val.value =='SessionID' ||val.value == 'UID' || val.value == 'Session ID'
+                                        || val.value =='Session Id'"
+                                            [ngClass]="!val.checked ? 'tabCol' : ''" class="column{{i}}">
+                                            <span #tooltip="matTooltip"
+                                                [matTooltip]="data[val.value]">{{data[val.value]?.length > 20 ?
+                                                (data[val.value] |
+                                                slice:0:20)+'...':(data[val.value])
+                                                }}</span>
+                                        </td>
+                                        <td *ngIf="val.value == 'Transcript'" [ngClass]="!val.checked ? 'tabCol' : ''"
+                                            class="column{{i}}">
+                                            <span #tooltip="matTooltip" matTooltip="Transcript" class="transcript"
+                                                *ngIf="data[val.value] !== 'Email'" (click)="getTranscript(data['Id'])">
+                                                <img class="manImg"
+                                                    src="assets/images/reports_icon/transcript.png" />
+                                            </span>
+                                            <span #tooltip="matTooltip" matTooltip="Transcript" class="transcript"
+                                                *ngIf="data[val.value] == 'Email'">
+                                                <img class="manImg"
+                                                    src="assets/images/reports_icon/transcript-off.png" />
+                                            </span>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" *ngIf="paginationArray.length>10">
+                    <pagination-controls (pageChange)="pageChange($event)" previousLabel="" nextLabel="">
+                    </pagination-controls>
+                </div>
+                <input type="hidden"
+                    *ngFor="let data of paginationArray | paginate: { itemsPerPage: itemsPerPage, currentPage: currentpage }">
+
+            </div>
+        </ng-container>
+    </div>
+</div>

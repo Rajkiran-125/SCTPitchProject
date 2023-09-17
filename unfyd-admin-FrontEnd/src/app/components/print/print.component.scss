@@ -1,0 +1,85 @@
+.receipt {
+  border: var(--border);
+  padding: 20px;
+  font-size: 14px;
+  color: var(--black_color_70);
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+
+    .logo {
+      margin-bottom: 20px;
+    }
+    h4 {
+      font-size: 24px;
+      line-height: 28px;
+      text-decoration: underline;
+      margin: 0;
+    }
+  }
+
+  .body {
+    flex: 1;
+    ul {
+      list-style: none;
+      padding: 10px 20px;
+      margin: 0;
+      // box-shadow: var(--box_shadow);
+      box-shadow: 0 0 5px #00000040;
+      li {
+        line-height: 32px;
+        span {
+          margin-left: 10px;
+        }
+      }
+    }
+    p{
+      line-height: 18px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .footer{
+    .receiptSignature{
+      text-align: right;
+      line-height: 22px;
+      span, strong{
+        display: block;
+      }
+    }
+    .info{
+      border-top: 1px solid var(--black_color_80);
+      font-size: 12px;
+      color: var(--black_color_70);
+      text-align: center;
+      margin: 10px 0 -20px 0;
+      line-height: 20px;
+    }
+  }
+}
+
+::ng-deep {
+  @media print {
+    body {
+
+      app-header,
+      mat-sidenav-container,
+      .mat-sidenav,
+      app-footer,
+      .cdk-overlay-container {
+        display: none !important;
+      }
+
+      app-print {
+        display: block !important;
+      }
+    }
+  }
+
+  app-print {
+    display: none;
+  }
+}

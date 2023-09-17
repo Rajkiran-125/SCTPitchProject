@@ -1,0 +1,153 @@
+<div class="inner-container col-lg-12 col-md-12 col-sm-12">
+    <div class="wrapper">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex">
+                <mat-icon class="gray cursorPointer my-1 ml-n3" (click)="goBack()">keyboard_backspace</mat-icon>
+                <h3 class="ml-3 heading">{{CampaignName}}</h3>
+            </div>
+        </div>
+        <div class="mb-4 mt-2 pl-4 campDetail">
+            <h3>Campaign Details</h3>
+            <div class="d-flex">
+                <div class="pr-2">
+                    <span>Channel <b>:</b>&nbsp;</span>
+                    <span>{{ChannelName}}</span>
+                </div>
+                <div class="mx-3">
+                    <span>Channel Scource <b>:</b>&nbsp;</span>
+                    <span *ngFor="let item of ChannelSource">{{item.ChannelSourceNames}}</span>
+                </div>
+                <div class="mx-3">
+                    <span>Start Time <b>:</b>&nbsp;</span>
+                    <span>{{StartTime}}</span>
+                </div>
+                <div class="mx-3">
+                    <span>End Time <b>:</b>&nbsp;</span>
+                    <span>{{EndTime}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="excelUpload">
+            <div class="">
+                <div class="row">
+                    <div class=" import-container mb-3">
+                        <mat-expansion-panel [expanded]="true">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="d-flex justify-content-between">
+                                    <span class="header-title">Import New</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="row align-items-center">
+                                <div class="col-8 audienceList">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Audience List Name</mat-label>
+                                        <input matInput [(ngModel)]="Audiencelistname" name="Audiencelistname"
+                                        readonly/>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-3 audienceList" >
+                                    <mat-form-field appearance="fill" class="dropdownButtonField">
+                                        <mat-label>Template</mat-label>
+                                        <mat-select class="skilldrop"[(ngModel)]="selectedStructureName" readonly>                                         
+                                            <mat-option *ngFor="let item of UploadedAudienceList"
+                                                [value]="item.StructureId">{{item.StructureName}}
+                                            </mat-option>
+                                        </mat-select>                                      
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-1 mb-4 excel-dow-button" style="cursor: pointer;">
+                                    <img src="assets/images/downloadSvgIcon.svg" alt="Icon"
+                                        (click)="downloadSampleExcel()" />
+
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3 import-list-container">
+                                <div class="">
+                                    <div class="row">
+                                        <div class="import-list-uploadfile text-center">
+                                            <p>
+                                                Drag and Drop Single or <br>
+                                                Multiple Excel Audiance List Files
+                                            </p>
+                                            <div class="">
+                                                <div class="disabledBtn text-center">
+                                                    <span class="mx-2 cursorPointer upload-btn"
+                                                        (click)="UploadExcel.click()">
+                                                        Browse This Computer
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input class="input-upload-file" type="file"
+                                            (change)="UploadCampaignExcel($event)" #UploadExcel id="UploadExcel" />
+                                    </div>
+
+                                    <div class="uploaded-file d-flex justify-content-between my-3"
+                                        *ngFor="let fileName of excelFileUpload; let i=index;">
+
+                                        <span class="mt-1">
+                                            <!-- {{fileName.name}} -->
+                                            {{InitialExcelfileName[i]}}
+                                        </span>
+                                        <div class="mt-1 d-flex">
+                                            <!-- <span>
+                                                    <mat-icon *ngIf="!fileName.status">check_circle</mat-icon>
+                                                    <mat-icon class="green"
+                                                        *ngIf="fileName.status">check_circle</mat-icon>
+                                                </span> -->
+                                            <span class="d-flex">
+                                                <mat-progress-spinner *ngIf="!fileName.status" class="green-spinner"
+                                                    color="success" [diameter]="20" [value]="progressValue"
+                                                    mode="determinate">
+                                                </mat-progress-spinner>
+                                                <span *ngIf="!fileName.status" class="progress-value">{{
+                                                    progressValue }}%</span>
+                                                <mat-icon class="green" *ngIf="fileName.status">
+                                                    done_all
+                                                </mat-icon>
+                                            </span>
+                                            <span>
+                                                <mat-icon *ngIf="fileName.status" class="red pointer" color="primary"
+                                                    (click)="removeExcelFileUpload(i)">delete</mat-icon>
+                                            </span>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="btn-group submit">
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mr-2"
+                                    [routerLink]="['/pitch/campaign/excelUpload']" mat-stroked-button>Cancel</button>
+
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base "
+                                    mat-stroked-button color="primary" type="button"
+                                    (click)="uploadExcelFiles()">Add New</button>
+
+                                <mat-form-field class="">
+                                    <!-- <mat-label>Add</mat-label> -->
+                                    <mat-select class="addSelect">
+                                        <mat-option>Add New</mat-option>
+                                        <mat-option>Append</mat-option>
+                                        <mat-option>Replace</mat-option>
+                                    </mat-select>                             
+                                </mat-form-field>
+
+                            </div>
+
+                        </mat-expansion-panel>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

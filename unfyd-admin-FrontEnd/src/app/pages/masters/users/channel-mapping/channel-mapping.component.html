@@ -1,0 +1,211 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="userConfig?.Cancel" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+      <div class="row ">
+        <div class="col-12">
+          <span class="d-flex">
+            <span>
+              <mat-icon class="gray cursorPointer"  (click)="backspace()">keyboard_backspace</mat-icon>
+            </span>
+            <span>
+              <legend class="ml-2">Update User</legend>
+            </span>
+          </span>
+          <div class="formGroup">
+            <div class="masters_block">
+              <app-steps [steps]="userFormSteps" [tabSelected]="'Channel Mapping'"  (newsteps)="addnewsteps($event)" [isDialog]="isDialog" [id]="path"></app-steps>
+              <span class = "small-font maxCapacity" >{{labelName?.MaxCapacityis ? labelName?.MaxCapacityis  : 'Max Capacity is'}} {{this.capacity}}</span>
+              <div class="channel-list" >
+              <div style="margin-top: 5px;" *ngIf = "channelGroup.controls.length > 0">
+                <!-- <div class="row">
+                  <div class="col-lg-3 col-md-6 channelfont">
+                    <span >{{labelName?.Channel ? labelName?.Channel  : 'Channel'}}</span>
+
+                  </div>
+                  <div class="col-lg-3 col-md-6 channelfont">
+                    <span >{{labelName?.ChannelSource ? labelName?.ChannelSource  : 'Channel Source'}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-3 inboundfont">
+                    <span>{{labelName?.Inbound ? labelName?.Inbound  : 'Inbound'}}</span>
+                  </div>
+                  <div class="col-lg-1 col-md-3 outboundfont">
+                    <span>{{labelName?.Outbound ? labelName?.Outbound  : 'Outbound'}}</span>
+                  </div>
+                  <div class="col-lg-3 col-md-4 fulcapfont">
+                    <span>{{labelName?.FullCapacity ? labelName?.FullCapacity  : 'Full Capacity'}}</span>
+                  </div>
+                </div> -->
+              </div>
+                <ng-container formArrayName="channelGroup" *ngFor="let item of channelGroup?.controls; let i = index;">
+                  <div  [formGroupName]="i">
+                  <div class="channel-row">
+                    <div>
+                       <div class="channel-input normal-dropdown align-items-center dropdown" >
+                        <span >{{labelName?.Channel ? labelName?.Channel  : 'Channel'}}</span>
+                        <mat-form-field appearance="fill" panelClass="normal-panel"
+                          [ngClass]="{ 'shake':  item.controls.channelid.errors }"   [ngClass]="form.value.channelGroup[i].ChannelSourceArr.length > 0? 'disabledIT':''">
+                          <mat-select (selectionChange) = "SelectChannelIdChSource(item.value.channelid); form.controls?.channelGroup?.controls[i].controls?.channelidSource.reset() " placeholder="Channel" formControlName="channelid" disableOptionCentering>
+                            <mat-select-trigger *ngIf="form.controls?.channelGroup?.controls[i].controls?.channelid" class="d-flex align-items-center">
+                              <ng-container *ngFor="let item2 of channelType">
+                              <ng-container *ngIf="form.controls?.channelGroup?.controls[i].controls?.channelid.value == item2.ChannelId">
+                                  <span [innerHtml]="item2?.ChannelIcon"></span>
+                                  <span>{{item2.ChannelName}}</span>
+                                </ng-container>
+                              </ng-container>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let data of channelType;let j = index "
+                              [value]="data.ChannelId">
+                              <span [innerHtml]="data?.ChannelIcon"></span>
+                            <span>{{data.ChannelName}}</span>
+                            </mat-option>
+                          </mat-select>
+                        <mat-error *ngIf="channelGroup?.controls[i]?.get('channelid')?.hasError('required')" style="padding-top: 14px;">{{labelName?.Channel}} is required </mat-error>
+                        </mat-form-field>
+                       </div>
+                    </div>
+                    <div>
+                      <div class="channel-input normal-dropdown align-items-center dropdown">
+                        <span >{{labelName?.ChannelSource ? labelName?.ChannelSource  : 'Channel Source'}}</span>
+                        <mat-form-field appearance="fill" panelClass="normal-panel"  [ngClass]="{ 'shake': item.controls.channelidSource.errors || item.controls?.channelidSource?.value == null}"      >
+                              <mat-select placeholder="Channel Source" formControlName="channelidSource" disableOptionCentering>
+                              <mat-select-trigger  class="d-flex align-items-center">
+                              <ng-container *ngFor="let item2 of userChannelNameChSource[item.value.channelid]">
+                                <ng-container *ngIf="form.controls?.channelGroup?.controls[i].controls?.channelidSource.value == item2.ChannelSourceId">
+                                  <span>{{item2.ChannelSourceName}}</span>
+                                </ng-container>
+                              </ng-container>
+                            </mat-select-trigger>
+                              <mat-option *ngFor="let data of findNonAdultsChannelSource(userChannelNameChSource[item.value.channelid],i);let q = index "
+                              [value]="data.ChannelSourceId">
+                              <span>{{data.ChannelSourceName}}</span>
+                            </mat-option>
+                           </mat-select>
+                          <mat-error *ngIf="channelGroup?.controls[i]?.get('channelidSource')?.hasError('required')" style="padding-top: 14px;">Channel Source is required </mat-error>
+                          <!-- <mat-hint *ngIf="item.controls?.channelidSource?.value == null" style="padding-top: 14px; color:#d32f2f;">Channel Source is required </mat-hint> -->
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="d-grid">
+                      <span>{{labelName?.Inbound ? labelName?.Inbound  : 'Inbound'}}</span>
+                        <input type="number" (keypress)="numericOnly($event)"  formControlName="inbound" placeholder="0" max={{capacity}} min=0>
+                    </div>
+                    <div class="d-grid">
+                      <span>{{labelName?.Outbound ? labelName?.Outbound  : 'Outbound'}}</span>
+                        <input type="number" (keypress)="numericOnly($event)" formControlName="outbound" placeholder="0" max={{capacity}} min=0>
+                    </div>
+                    <div>
+                      <span>{{labelName?.FullCapacity ? labelName?.FullCapacity  : 'Full Capacity'}}</span>
+                      <div class="checkbox" >
+                        <mat-checkbox color="primary" formControlName="fullcapacity">
+                        </mat-checkbox>
+                      </div>
+                    </div>
+                    <div>
+                    <mat-icon color="primary"  [ngClass]="form.value.channelGroup[i].channelid != '' ? '':'disabledIT'"  *ngIf="nonAdults?.length != 1" (click)="addItem()"  #tooltip="matTooltip"
+                    matTooltip="Add">add</mat-icon>
+                    <mat-icon class="remove"   [ngClass]= "channelGroup.controls.length > 1 ? '':'disabledIT' "   (click)="removeChannelGroup(i, item.value.channelid, item.value.channelidSource)" #tooltip="matTooltip"
+                      matTooltip="Remove">delete_outline</mat-icon>
+                    </div>
+                 </div>
+                 <mat-error *ngIf="form.value.channelGroup[i].inbound  > capacity || form.value.channelGroup[i].outbound > capacity">
+                  <small class="small-font capacitygreater" >
+                    {{labelName?.MaxCapacityis ? labelName?.MaxCapacityis  : 'Max Capacity is'}} {{capacity}}
+                  </small>
+                </mat-error>
+                <mat-error *ngIf="(form.value.channelGroup[i].inbound + form.value.channelGroup[i].outbound) == 0">
+                  <small class="small-font inoutboundzero" >
+                  {{labelName?.BothInboundandOutboundcannotbe0 ? labelName?.BothInboundandOutboundcannotbe0  : 'Both Inbound and Outbound cannot be 0'}}
+                  </small>
+                </mat-error>
+                            <div formArrayName="ChannelSourceArr"   *ngFor="let itemsource of item['controls'].ChannelSourceArr['controls']; let p = index;">
+                              <div class="channelSource-row" [formGroupName]="p">
+                                <div>
+                                  <div class="channel-input normal-dropdown d-flex align-items-center">
+                                    <mat-form-field appearance="fill" panelClass="normal-panel"  [ngClass]="{ 'shake':  itemsource.controls.channelSource.errors }"      >
+                                          <mat-select placeholder="Add" formControlName="channelSource" disableOptionCentering>
+                                          <mat-select-trigger *ngIf="form.controls?.channelGroup?.controls[i].controls?.ChannelSourceArr.controls[p].controls?.channelSource" class="d-flex align-items-center">
+                                          <ng-container *ngFor="let item2 of userChannelNameChSource[itemsource.value.channelid]">
+                                            <ng-container *ngIf="form.controls?.channelGroup?.controls[i].controls?.ChannelSourceArr.controls[p].controls?.channelSource.value == item2.ChannelSourceId">
+                                              <span>{{item2.ChannelSourceName}}</span>
+                                            </ng-container>
+                                          </ng-container>
+                                        </mat-select-trigger>
+                                        <mat-option *ngFor="let data of findNonAdultsChannelSource2(userChannelNameChSource[itemsource.value.channelid],i,p);let q = index "
+                                          [value]="data.ChannelSourceId">
+                                          <span>{{data.ChannelSourceName}}</span>
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div>
+                                  <input type="number"  formControlName="inbound" placeholder="1" max={{capacity}} min=0>
+                                  <input type="number" formControlName="outbound" placeholder="1" max={{capacity}} min=0>
+                                  <mat-error *ngIf="form.value.channelGroup[i].ChannelSourceArr[p].inbound  > capacity || form.value.channelGroup[i].ChannelSourceArr[p].outbound > capacity">
+                                    <small class="small-font" style="margin-left: 77px;">
+                                      {{labelName?.MaxCapacityis ? labelName?.MaxCapacityis  : 'Max Capacity is'}} {{capacity}}
+                                    </small>
+                                  </mat-error>
+                                  <mat-error *ngIf="(form.value.channelGroup[i].ChannelSourceArr[p].inbound + form.value.channelGroup[i].ChannelSourceArr[p].outbound) == 0">
+                                    <small class="small-font" style="padding-left:10px">
+                                    {{labelName?.BothInboundandOutboundcannotbe0 ? labelName?.BothInboundandOutboundcannotbe0  : 'Both Inbound and Outbound cannot be 0'}}
+                                    </small>
+                                  </mat-error>
+                                </div>
+                                <div>
+                                  <div class="checkbox"  style="margin-left: -35px;">
+                                    <mat-checkbox color="primary" formControlName="fullcapacity">
+                                    </mat-checkbox>
+                                  </div>
+                                </div>
+                                <mat-icon class="remove" (click)="removeChannelSource(i,p, itemsource.value.channelid,itemsource.value.channelSource)" #tooltip="matTooltip"
+                                  matTooltip="Remove" style="margin-left: 22px;">delete_outline</mat-icon>
+                              </div>
+                          </div>
+                         </div>
+                <div *ngIf="form.controls?.channelGroup?.controls[i].controls?.channelid.value == VoideChannelIdVal" style="margin-bottom: -10px;">
+                  <div class="row">
+                          <div class="col-lg-4 col-md-4 col-sm-12 dropdown">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.Extension ? labelName?.Extension  : 'Extension'}}</mat-label>
+                                <input matInput  appTitleCase>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.VoiceAdapters ? labelName?.VoiceAdapters  : 'Voice Adapters'}}</mat-label>
+                                <input matInput  appTitleCase>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.SRNumber ? labelName?.SRNumber  : 'SR Number'}}</mat-label>
+                                <input matInput  appTitleCase>
+                            </mat-form-field>
+                        </div>
+                      </div>
+                </div>
+                </ng-container>
+                <button *ngIf="channelGroup.controls.length < 1" (click)="addItem()" [disabled]="form.invalid" mat-stroked-button
+                  color="primary">Add More Channels</button>
+
+              </div>
+            </div>
+          </div>
+          <div class="btn-group">
+            <!-- <button *ngIf="userConfig?.Cancel"class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">{{labelName?.Cancel ? labelName?.Cancel  : 'Cancel'}}</button> -->
+            <button *ngIf="!reset && userConfig?.Reset" class="btn btn-gray" mat-flat-button type="Reset">{{labelName?.Reset ? labelName?.Reset  : 'Reset'}}</button>
+            <button *ngIf="userConfig?.SaveAddNew" class="btn outline"   mat-stroked-button color="primary"  (click)="submit('addNew')"
+             >{{labelName?.SaveAdd ? labelName?.SaveAdd  : 'Save & Add New User'}}</button>
+            <button *ngIf="userConfig?.Save"class="btn" mat-flat-button color="primary"  (click)="submit('')"
+              type="button">{{labelName?.Save ? labelName?.Save  : 'Save'}}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

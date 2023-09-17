@@ -1,0 +1,480 @@
+
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="count >= 5 && langres == true && langloopcount == 0 && this.adminconfigapicount == 0" >
+    <div class="wrapper" *ngIf="count >= 5 && langres == true && langloopcount == 0 && this.adminconfigapicount == 0">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" *ngIf="userConfig?.Reset" [routerLink]="['/masters/tenant']"></span>
+          </div>
+        <form [formGroup]="form">
+            <div class="row">
+                <div class="col-12">
+                    <span class="d-flex">
+                        <span>
+                            <mat-icon class="gray cursorPointer" [routerLink]="['/masters/tenant']">keyboard_backspace</mat-icon>
+                        </span>
+                        <span>
+                            <legend *ngIf="productName.length == 0" class="ml-2">Add New Tenant</legend>
+                            <legend *ngIf="productName.length > 0" class="ml-2">Update Tenant</legend>
+                        </span>
+                    </span>
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="tenantFormSteps" [id]="path"></app-steps>
+                            <div class="row ">
+
+
+                                    <mat-form-field appearance="fill" style=" padding-left: 20px;padding-right: 20px;">
+                                        <mat-label>{{labelName?.Product}}</mat-label>
+                                        <mat-select [(value)]="productName"
+                                            (selectionChange)="selectedProduct($event.value)" panelClass="normal-panel" style="font-size: 12px;"
+                                            disableOptionCentering multiple>
+                                            <mat-option *ngFor="let data of productType" [value]="data">
+                                                {{data?.ProductName}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+
+
+
+                            </div>
+<div style="padding-bottom:20px"  *ngIf="productName.length > 0">
+    <div class="container1" style="padding: 20px;">
+        <div class="row">
+            <div class="col">
+                <div class="col-lg-10 col-md-10 col-sm-9 pl-0" style="padding-bottom: 10px;">
+                    <span><b style="font-size: 14px;">Channel License</b></span>
+                </div>
+                <div class="row" style="margin-left: 1px;">
+                    <div div class="col-2" style="margin-right: 60px ;">
+                        <mat-form-field appearance="fill" style="width: 170px;"  class="tenant-dd">
+                            <mat-label>Channel</mat-label>
+                            <mat-select disableOptionCentering
+                            (selectionChange)="selectedReport($event.value,1)"
+                                [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="a[1].channel.channelid"
+                               multiple>
+                               <mat-select-trigger>
+                                  <ng-container  *ngFor="let dataid of a[1].channel.channelid">
+                                  <ng-container  *ngFor="let data6 of channelType">
+                                    <span *ngIf="data6?.ChannelId == dataid" [innerHtml]="data6?.ChannelIcon"></span>
+                                  </ng-container>
+                                  </ng-container>
+                              </mat-select-trigger>
+
+                              <div class="selectAll">
+                                <mat-checkbox color="primary" class="mat-option w-100" [checked]="common.isChecked(channelType,a[1].channel.channelid)"
+                                  (click)="$event.stopPropagation()" (change)="toggleSelection($event)">
+                                  Select All
+                                </mat-checkbox>
+                              </div>
+                                <mat-option *ngFor="let data of channelType"
+                                    [value]="data.ChannelId"><span [innerHtml]="data?.ChannelIcon"></span>{{data?.ChannelName}}
+                                </mat-option>
+
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-9 channel_license_display">
+                        <div  *ngFor="let data2 of channelType; let i= index">
+                            <div *ngIf="a[1]?.channel?.channelid.includes(data2.ChannelId)" class="d-flex align-items-center"
+                                style="border: 1px solid #b4b4b4;border-radius: 5px ;padding:10px 7px;margin-right: 10px;margin-bottom: 15px;">
+
+                                 <span  [innerHtml]="data2?.ChannelIcon" class="d-flex"></span>
+                                <span class="cutTextChannel" style="padding-right: 8px;font-size: 14px;">{{data2?.ChannelName}}   </span>
+                                <input
+                                [ngModelOptions]="{standalone: true}"
+                                 [(ngModel)]="a[1]?.channel.channelIdValue[data2.ChannelId]"
+                                     type="number" value="0"
+                                    min="0" max="999"
+                                    style="border: 1px solid #ccc;border-radius: 5px; max-width:54px;margin-right:5px;font-weight: bold;"
+                                    (keypress)="numericOnly($event)" matInput  />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <mat-accordion class="setting-accordion">
+                                        <mat-expansion-panel (opened)="panelOpenState = true"
+                                            (closed)="panelOpenState = false" *ngFor="let data of productName">
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title
+                                                    style="display:flex;justify-content:space-between;margin-right:0;">
+                                                    <span class="header-title"> <legend style="    padding-top: 12px;
+                                                        font-size: 14px;">{{data?.ProductName}}</legend></span>
+
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
+                                            <div style="padding-bottom:20px">
+                                            <div class="container1" >
+                                                <div class="row" style="padding: 30px;">
+                                                    <div class="col">
+                                                        <div class="col-lg-10 col-md-10 col-sm-9 pl-0"
+                                                            style="margin-bottom: 20px;">
+                                                            <span><b>Subscription</b></span>
+                                                        </div>
+                                                        <div class="row">
+
+                                                            <div class="col-lg-3 col-md-4 col-sm-12 ">
+                                                                <div class="card-layout">
+
+                                                                        <div class="cards" (click)="subscriptionChanges(0,data.Id)"   [style.backgroundColor]="a[data.Id].subscription.basic ? 'var(--gray_color_80)' : 'white'">
+
+
+                                                                        <div class="py-3"
+                                                                            style="display: flex;justify-content: space-between">
+                                                                            <img src="assets/images/icons/tenant-productlogo.png"
+                                                                                class="logoposition">
+                                                                            <span class="licence-count"></span>
+                                                                            <div class="more-optn">
+
+
+                                                                                <img  *ngIf="a[data.Id].subscription.basic == true"  src="assets/images/icons/bluecheckbox.PNG"
+                                                                                class="logoposition">
+                                                                                <img  *ngIf="a[data.Id].subscription.basic == false"  src="assets/images/icons/graycheckwhiteback.PNG"
+                                                                                class="logoposition">
+
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="card-data">
+                                                                            <div style="cursor: pointer;display:flex;">
+                                                                                <caption>
+                                                                                    <strong>Basic</strong>
+                                                                                </caption>
+                                                                            </div>
+                                                                            <div class="sub-data">
+                                                                                Lorem lpsum is simply dummy text
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-12 ">
+                                                                <div class="card-layout">
+
+                                                                    <div class="cards" (click)="subscriptionChanges(1,data.Id)"  [style.backgroundColor]="a[data.Id].subscription.standard ? 'var(--gray_color_80)' : 'white'">
+                                                                        <div class="py-3"
+                                                                            style="display: flex;justify-content: space-between">
+                                                                            <img src="assets/images/icons/tenant-productlogo.png"
+                                                                                class="logoposition">
+                                                                            <span class="licence-count"></span>
+                                                                            <div class="more-optn">
+
+
+
+                                                                                <img  *ngIf="a[data.Id].subscription.standard == true"  src="assets/images/icons/bluecheckbox.PNG"
+                                                                                class="logoposition">
+                                                                                <img  *ngIf="a[data.Id].subscription.standard == false"  src="assets/images/icons/graycheckwhiteback.PNG"
+                                                                                class="logoposition">
+
+
+
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="card-data">
+                                                                            <div style="cursor: pointer;display:flex;">
+                                                                                <caption>
+                                                                                    <strong>Standard</strong>
+                                                                                </caption>
+                                                                            </div>
+                                                                            <div class="sub-data">
+                                                                                Lorem lpsum is simply dummy text
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <div class="col-lg-3 col-md-4 col-sm-12 ">
+                                                                <div class="card-layout">
+
+                                                                    <div class="cards" (click)="subscriptionChanges(2,data.Id)" [style.backgroundColor]="a[data.Id].subscription.enterprise ? 'var(--gray_color_80)' : 'white'">
+                                                                        <div class="py-3"
+                                                                            style="display: flex;justify-content: space-between">
+                                                                            <img src="assets/images/icons/tenant-productlogo.png"
+                                                                                class="logoposition">
+                                                                            <span class="licence-count"></span>
+
+                                                                            <div class="more-optn">
+
+
+                                                                                <img  *ngIf="a[data.Id].subscription.enterprise == true"  src="assets/images/icons/bluecheckbox.PNG"
+                                                                                class="logoposition">
+                                                                                <img  *ngIf="a[data.Id].subscription.enterprise == false"  src="assets/images/icons/graycheckwhiteback.PNG"
+                                                                                class="logoposition">
+
+
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="card-data">
+                                                                            <div style="cursor: pointer;display:flex;">
+                                                                                <caption>
+                                                                                    <strong>Enterprise</strong>
+                                                                                </caption>
+                                                                            </div>
+                                                                            <div class="sub-data">
+                                                                                Lorem lpsum is simply dummy text
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-3 col-md-4 col-sm-12 ">
+                                                                <div class="card-layout">
+
+                                                                    <div class="cards" (click)="subscriptionChanges(3,data.Id)" [style.backgroundColor]="a[data.Id].subscription.custom ? 'var(--gray_color_80)' : 'white'">
+                                                                        <div class="py-3"
+                                                                            style="display: flex;justify-content: space-between">
+                                                                            <img src="assets/images/icons/tenant-productlogo.png"
+                                                                                class="logoposition">
+                                                                            <span class="licence-count"></span>
+
+                                                                            <div class="more-optn">
+
+
+                                                                                <img  *ngIf="a[data.Id].subscription.custom == true"  src="assets/images/icons/bluecheckbox.PNG"
+                                                                                class="logoposition">
+                                                                                <img  *ngIf="a[data.Id].subscription.custom == false"  src="assets/images/icons/graycheckwhiteback.PNG"
+                                                                                class="logoposition">
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="card-data">
+                                                                            <div style="cursor: pointer;display:flex;">
+                                                                                <caption>
+                                                                                    <strong>Custom</strong>
+                                                                                </caption>
+                                                                            </div>
+                                                                            <div class="sub-data">
+                                                                                Lorem lpsum is simply dummy text
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+</div>
+                                            <div class="container1" style="padding: 20px;">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="col-lg-10 col-md-10 col-sm-9 pl-0" style="padding-bottom: 10px;">
+                                                            <span><b>User-License</b></span>
+                                                        </div>
+                                                        <div class="row" >
+                                                            <div class="col-lg-3 col-md-3 col-sm-12" style="margin-left: 0px ;">
+                                                                <mat-form-field appearance="fill" class="tenant-dd">
+                                                                    <mat-label>User</mat-label>
+
+                                                                    <mat-select disableOptionCentering
+                                                                        (selectionChange)="selectedUser($event.value,data.Id)"
+                                                                        [ngModelOptions]="{standalone: true}"
+                                                                        [(ngModel)]="a[data.Id].user.userid"
+
+                                                                      multiple>
+                                                                        <mat-option *ngFor="let data of profileType"
+                                                                            [value]="data.Id">{{data?.SubType}}
+                                                                        </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </div>
+
+                                                            <div class="col-lg-9 col-md-9 col-sm-12 channel_license_display" style="margin-left: -20px;">
+                                                                <div *ngFor="let data3 of profileType; let k= index">
+                                                                    <div *ngIf="a[data.Id]?.user?.userid.includes(data3.Id)"
+                                                                        style="border: 1px solid #ccc;border-radius: 5px ;padding: 8px;margin-left: 10px; margin-top:5px"  class="agentlogo d-flex">
+                                                                                    {{data3?.SubType}}
+                                                                        <input
+                                                                            [ngModelOptions]="{standalone: true}"
+                                                                            [(ngModel)]="a[data.Id]?.user.useridValue[data3.Id]"
+                                                                            autocomplete="on" type="number" value="0"
+                                                                            min="0" max="999"
+                                                                            style="border: 1px solid #ccc;border-radius: 5px; max-width:54px;margin-left:5px;font-weight: bold;"
+                                                                            (keypress)="numericOnly($event)"  matInput />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+
+
+
+                                        </mat-expansion-panel>
+                                    </mat-accordion>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-14 col-md-14 col-sm-14" *ngIf="productName.length > 0" >
+
+                                <div class="container1" style="padding: 20px;">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="col-lg-10 col-md-10 col-sm-9 pl-0" style="padding-bottom: 10px;">
+                                                <span><b style="font-size: 14px;">Additional Info</b></span>
+                                            </div>
+
+                                            <div class="row" >
+                                                <div class="col-lg-4 col-md-4 col-sm-12">
+                                                    <mat-form-field appearance="fill" >
+                                                        <mat-label>Language</mat-label>
+
+                                                        <mat-select disableOptionCentering
+                                                        (selectionChange)="selectedlangfunc($event.value)"
+                                                        [(value)]="selectedlang"
+                                                          multiple>
+                                                            <mat-option *ngFor="let data of languageval"
+                                                                [value]="data">{{data?.language}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+
+
+                                                <div *ngFor="let data3 of selectedlang; let k= index" style="padding-bottom: 18px;">
+                                                    <div
+                                                        style="border: 1px solid #ccc;border-radius: 20px ;padding: 6px;margin-left: 10px;margin-top:5px"  class="agentlogo">
+                                                                   <span style="font-size: 14px;"> {{data3?.language}} </span><button style=" padding: 0px;
+                                                                                                    margin: 0px;
+                                                                                                    background: none;
+                                                                                                    border: none;
+                                                                                                    margin-left: 10px;
+                                                                                                "><b (click)="removelanguage(data3)">X</b> </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+
+
+
+                                                            <!-- if pitch selected -->
+                                                            <!-- <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="ispitchselected == true">
+                                                                <mat-form-field appearance="fill">
+                                                                    <mat-label>No of campaigns</mat-label>
+                                                                    <input matInput appTitleCase
+                                                                    formControlName="workcampaign">
+                                                                    <mat-error *ngIf="f.workcampaign.errors">
+                                                                        <ng-container *ngIf="f.workcampaign.errors.required">No of Campaigns is required
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="f.workcampaign.errors.pattern">No of Campaigns is invalid
+                                                                        </ng-container>
+                                                                    </mat-error>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="ispitchselected == true">
+                                                                <mat-form-field appearance="fill">
+                                                                    <mat-label>Daily Transaction limit</mat-label>
+                                                                    <input matInput appTitleCase
+                                                                    formControlName="worktransaction">
+                                                                    <mat-error *ngIf="f.worktransaction.errors">
+                                                                        <ng-container *ngIf="f.worktransaction.errors.required">Daily Transaction limit is required
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="f.worktransaction.errors.pattern">Daily Transaction limit is invalid
+                                                                        </ng-container>
+                                                                    </mat-error>
+                                                                </mat-form-field>
+                                                            </div> -->
+
+
+                                <div class="more-optn" style="padding-top: 5px;">
+                                   <span style="font-size: 14px;"> Allow LOB creation  </span>
+                                    <mat-slide-toggle formControlName="worklobcreation"
+                                        color="primary" (change)="AllowLOB($event)"
+                                        class="toggleBtn" style="padding-left: 10px;">
+                                    </mat-slide-toggle>
+                                </div>
+
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+                        <div class="btn-group">
+                            <!-- <button *ngIf="userConfig?.Reset" class="btn btn-gray" mat-flat-button type="Reset"  [routerLink]="['/masters/tenant']">Cancel</button> -->
+                            <button *ngIf="userConfig?.Save" class="btn" mat-flat-button type="button"  color="primary" (click)="nextfunction('save')">Save</button>
+                            <button *ngIf="userConfig?.Next"class="btn" mat-flat-button color="primary" type="button"
+                                (click)="nextfunction('next')">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>

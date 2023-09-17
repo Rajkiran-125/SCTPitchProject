@@ -1,0 +1,87 @@
+.wrapper{
+  //padding: 10px 15px;
+  padding-left: 0px;
+}
+
+.placeholdercount {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 40px !important;
+    height: 38px;
+    border: 1px solid var(--gray_color_80);
+    background-color: var(--backgroud_color);
+  }
+  
+  .placeholderadd {
+    border-radius: 0px 5px 5px 0px;
+    min-width: 40px !important;
+    height: 38px;
+    border: 1px solid var(--gray_color_80);
+    background-color: var(--white_color);
+  }
+  
+  .placeholderremove {
+    min-width: 40px !important;
+    height: 38px;
+    border: 1px solid var(--gray_color_80);
+    border-radius: 5px 0px 0px 5px;
+    background-color: var(--white_color);
+  }
+
+  
+.addfont {
+  color: var(--primary_color);
+  font-weight: 900;
+}
+
+.minusfont {
+  color: var(--primary_color);
+  font-weight: 900;
+}
+
+
+  .TimePickerStyle{
+    border: 1px solid var(--gray_color);
+    padding: 6px 1px 3px 15px;
+    margin: 0px 30px 0px 0px;
+    border-radius: 5px;
+    background: var(--backgroud_color);
+}
+
+.font{
+  font-family: Nunito Sans, Regular;
+}
+.daysWeeksFont{
+  color: #5f5f5f;
+  font-weight: 600
+}  
+
+// input.mat-input-element {
+//   font-size: 14px;
+//   font-weight: 900;
+// }
+
+
+.dailyWeekMonth{
+  padding-right :15px
+}
+
+.dayThe{
+  margin-right: -40px;
+}
+
+::ng-deep {
+.mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-flex{
+  background-color: var(--backgroud_color)
+}
+}
+
+.errorPadding{
+  padding-bottom: 15px; 
+  padding-left: 15px;
+  margin-top: -20px;
+}
+
+.TimerFont{
+  color: var(--gray-dark);
+}

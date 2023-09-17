@@ -1,0 +1,241 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper py-4 mt-3" >
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" routerLinkActive="router-link-active"  *ngIf="userConfig?.Cancel" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+        <div class="row ">
+          <div class="col-12">
+            <span class="d-flex backArrow">
+              <mat-icon class="gray cursorPointer" (click)="back()" >keyboard_backspace</mat-icon>
+              <legend class="pageTitle"> {{ reset ? 'Update' :'Add New' }} {{labelName?.TwitterAccount}}</legend>
+            </span>
+            <div class="formGroup">
+              <div class="masters_block">
+                <app-steps [steps]="twitterConfigurationsteps" [moduletype]="'twitter-configuration'" [id]="path"
+                  [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+                  <div class="row">
+                    <div class="col-lg-1 col-md-1 col-3 text-center pl-0">
+                      <div class="channelIcon cursorPointer" [matMenuTriggerFor]="menu" [ngStyle]="{'background-color': form.value.profilepic ? common.color[form.value.profilepic] : 'var(--gray_color)' }">
+                        <i class="chooseIcon icon-twitter"
+                          [ngStyle]="{'background-color': form.value.profilepic ? common.color[form.value.profilepic] : 'var(--gray_color)' }"></i>
+                      </div>
+                      <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                        <div class="row m-2" (click)="$event.stopPropagation()">
+                          <div class="col-12">
+                            <span class="selectColor pl-0">Select Icon Color</span>
+                          </div>
+                          <div class="col-3 py-2 px-1" *ngFor="let item of common.colorArray">
+                            <div class="row justify-content-center">
+                              <div
+                                class="cursorPointer colorTile d-flex align-items-center justify-content-center fontSize34PX"
+                                [ngStyle]="{'background': common.color[item], 'height': '30px', 'width': '30px'}"
+                                [ngClass]="item == form.value.profilepic ? 'selectedIconOnAddDashboardMatMenu':''"
+                                (click)="form.controls.profilepic.patchValue(item); menu.close.emit()">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-menu>
+                    </div>
+                    <div class="col-11">
+                      <div class="form_content">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.ChannelSourceName.errors }">
+                                    <mat-label>{{labelName?.ChannelSourceName}}</mat-label>
+                                    <input matInput formControlName="ChannelSourceName">
+                                    <mat-error *ngIf="f.ChannelSourceName.errors">
+                                        <ng-container *ngIf="f.ChannelSourceName.errors.required">{{labelName?.ChannelSourceName}}  is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.ChannelSourceName?.errors?.checknull">Whitespace not allowed
+                                        </ng-container>
+                                        <ng-container *ngIf="f.ChannelSourceName?.errors?.checknull1">
+                                          Must be at least 3 characters long.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.VersionNumber.errors }">
+                                    <mat-label>{{labelName?.VersionNumber}}</mat-label>
+                                    <input matInput formControlName="VersionNumber">
+                                    <mat-error *ngIf="f.VersionNumber.errors">
+                                        <ng-container *ngIf="f.VersionNumber.errors.required">{{labelName?.VersionNumber}} is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.VersionNumber?.errors?.checknull">Whitespace not allowed
+                                        </ng-container>
+                                        <ng-container *ngIf="f.VersionNumber?.errors?.checknull1">
+                                          Must be at least 3 characters long.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-8 col-md-8 col-sm-12">
+                              <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.SendMessageUrl.errors }">
+                                  <mat-label>{{labelName?.SendMessageUrl}}</mat-label>
+                                  <input matInput formControlName="SendMessageUrl">
+                                  <mat-error *ngIf="f.SendMessageUrl.errors">
+                                      <ng-container *ngIf="f.SendMessageUrl.errors.required">{{labelName?.SendMessageUrl}} is required
+                                      </ng-container>
+                                      <ng-container *ngIf="f.SendMessageUrl?.errors?.checknull">Whitespace not allowed
+                                      </ng-container>
+                                      <ng-container *ngIf="f.SendMessageUrl?.errors?.checknull1">
+                                        Must be at least 3 characters long.
+                                      </ng-container>
+                                      <ng-container *ngIf="f.SendMessageUrl?.errors.pattern">{{labelName?.SendMessageUrl}} is invalid.
+                                      </ng-container>
+                                  </mat-error>
+                              </mat-form-field>
+                          </div>
+                          <div class="col-lg-4 col-md-4 col-sm-12">
+                              <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.HandleID.errors }">
+                                  <mat-label>{{labelName?.HandleID}}</mat-label>
+                                  <input matInput formControlName="HandleID">
+                                  <mat-error *ngIf="f.HandleID.errors">
+                                      <ng-container *ngIf="f.HandleID.errors.required">{{labelName?.HandleID}} is required
+                                      </ng-container>
+                                      <ng-container *ngIf="f.HandleID?.errors?.checknull">Whitespace not allowed
+                                      </ng-container>
+                                      <ng-container *ngIf="f.HandleID?.errors?.checknull1">
+                                        Must be at least 3 characters long.
+                                      </ng-container>
+                                  </mat-error>
+                              </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="Sentiment"
+                          (toggleChange)="form.updateValueAndValidity()"  (change)="onButtonSelected()" labelPosition="before">{{labelName?.Sentiment}}</mat-slide-toggle>
+                        </div>
+                      </div>
+                      <div class="row">
+
+                      <div class="col-lg-8 col-md-8 col-sm-12"  *ngIf="form.value.Sentiment">
+                        <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.SentimentUrl.errors }">
+                            <mat-label>{{labelName?.SentimentUrl}}</mat-label>
+                            <input matInput formControlName="SentimentUrl">
+                            <mat-error *ngIf="f.SentimentUrl.errors">
+                                <ng-container *ngIf="f.SentimentUrl.errors.required">{{labelName?.SentimentUrl}}  is required
+                                </ng-container>
+                                <ng-container *ngIf="f.SentimentUrl?.errors?.checknull">Whitespace not allowed
+                                </ng-container>
+                                <ng-container *ngIf="f.SentimentUrl?.errors?.checknull1">
+                                  Must be at least 3 characters long.
+                                </ng-container>
+                                <ng-container *ngIf="f.SentimentUrl?.errors.pattern">{{labelName?.SentimentUrl}} is invalid.
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12"  *ngIf="form.value.Sentiment">
+                      <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.SentimentKey.errors }">
+                          <mat-label>{{labelName?.SentimentKey}}</mat-label>
+                          <input matInput formControlName="SentimentKey">
+                          <mat-error *ngIf="f.SentimentKey.errors">
+                              <ng-container *ngIf="f.SentimentKey.errors.required">{{labelName?.SentimentKey}} is required
+                              </ng-container>
+                              <ng-container *ngIf="f.SentimentKey?.errors?.checknull">Whitespace not allowed
+                              </ng-container>
+                              <ng-container *ngIf="f.SentimentKey?.errors?.checknull1">
+                                Must be at least 3 characters long.
+                              </ng-container>
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+
+                      </div>
+                    <div class="row">
+                      <div class="col-lg-4 col-md-4 col-sm-12" *ngIf="form.value.Sentiment">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.SentimentLanguage.errors }">
+                            <mat-label>{{labelName?.SentimentLanguage}}</mat-label>
+                            <!-- <input matInput formControlName="SentimentLanguage"> -->
+                            <mat-select formControlName="SentimentLanguage" >
+                              <mat-option *ngFor="let data of userLanguageName | orderBy:'language'" [value]="data.langcode">{{data.language}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf=" f.SentimentLanguage.errors">
+                              <ng-container *ngIf="f.SentimentLanguage.errors.required">{{labelName?.SentimentLanguage}} is required
+                              </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12"  *ngIf="form.value.Sentiment">
+                      <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.ScreenName.errors }">
+                          <mat-label>{{labelName?.ScreenName}}</mat-label>
+                          <input matInput formControlName="ScreenName">
+                          <mat-error *ngIf="f.ScreenName.errors">
+                              <ng-container *ngIf="f.ScreenName.errors.required">{{labelName?.ScreenName}}  is required
+                              </ng-container>
+                              <ng-container *ngIf="f.ScreenName?.errors?.checknull">Whitespace not allowed
+                              </ng-container>
+                              <ng-container *ngIf="f.ScreenName?.errors?.checknull1">
+                                Must be at least 3 characters long.
+                              </ng-container>
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                          <mat-slide-toggle class="fontSizeContentTitle" color="primary" formControlName="TweetwithPostLink"
+                          (toggleChange)="form.updateValueAndValidity()"  (change)="onButtonSelected1()" labelPosition="before">{{labelName?.TweetwithPostLink}}</mat-slide-toggle>
+                        </div>
+                      </div>
+                      <div class="row">
+
+                      <div class="col-lg-8 col-md-8 col-sm-12"  *ngIf="form.value.TweetwithPostLink">
+                        <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.TweetPostLink.errors }">
+                            <mat-label>{{labelName?.TweetPostLink}}</mat-label>
+                            <input matInput formControlName="TweetPostLink">
+                            <mat-error *ngIf="f.TweetPostLink.errors">
+                                <ng-container *ngIf="f.TweetPostLink.errors.required">{{labelName?.TweetPostLink}}  is required
+                                </ng-container>
+                                <ng-container *ngIf="f.TweetPostLink?.errors?.checknull">Whitespace not allowed
+                                </ng-container>
+                                <ng-container *ngIf="f.TweetPostLink?.errors?.checknull1">
+                                  Must be at least 3 characters long.
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12"  *ngIf="form.value.TweetwithPostLink">
+                      <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.TweetPostLinkMessage.errors }">
+                          <mat-label>{{labelName?.TweetPostLinkMessage}}</mat-label>
+                          <input matInput formControlName="TweetPostLinkMessage">
+                          <mat-error *ngIf="f.TweetPostLinkMessage.errors">
+                              <ng-container *ngIf="f.TweetPostLinkMessage.errors.required">{{labelName?.TweetPostLinkMessage}} is required
+                              </ng-container>
+                              <ng-container *ngIf="f.TweetPostLinkMessage?.errors?.checknull">Whitespace not allowed
+                              </ng-container>
+                              <ng-container *ngIf="f.TweetPostLinkMessage?.errors?.checknull1">
+                                Must be at least 3 characters long.
+                              </ng-container>
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+
+                </div>
+                        </div>
+                    </div>
+                    </div>
+
+
+
+                  </div>
+              <div class="btn-group my-3" >
+                <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                <button  *ngIf="path" class="btn btn-gray" mat-flat-button type="Reset" (click)="resetFunc()">{{labelName?.Reset}}</button>
+                <button *ngIf="(userConfig?.Save)" (click)="saveTwitter('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                <button   (click)="saveTwitter('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+              </div>
+            </div>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>

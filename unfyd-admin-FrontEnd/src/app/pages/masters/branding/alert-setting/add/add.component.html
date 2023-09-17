@@ -1,0 +1,355 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="userConfig?.Cancel" (click)="back()"></span>
+    </div>
+    <div class="row">
+      <div class="col-1 text-center">
+        <mat-icon class="gray cursorPointer backarrow" (click)="back()">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-lg-11 col-md-11 col-10">
+        <form [formGroup]="form" #formDirective="ngForm">
+          <div class="row">
+            <div class="col-lg-7 col-md-7 col-sm-7">
+              <h3 matDialogTitle>{{reset ? 'Update' : 'Add New'}} Alert Message</h3>
+              <div class="row">
+                <div class="col-6">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.AlertMessageName}}</mat-label>
+                    <input matInput formControlName="alertMsg" />
+                    <mat-error *ngIf="f.alertMsg.errors ">
+                      <ng-container *ngIf="f.alertMsg.errors.required">{{labelName?.AlertMessageName}} is
+                        required.</ng-container>
+                      <ng-container *ngIf="f.alertMsg.errors.pattern">{{labelName?.AlertMessageName}} is
+                        invalid.</ng-container>
+                      <ng-container *ngIf="f.alertMsg?.errors?.checknull1">Must be at least 3 characters
+                        long.</ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-6">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.AlertType}}</mat-label>
+                    <mat-select formControlName="alertMsgType" (selectionChange)="applyMsgType($event.value)">
+                      <mat-option *ngFor="let data of addAlert?.alertMsgType" [value]="data.key">{{ data.value }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.alertMsgType.errors">
+                      <ng-container *ngIf="f.alertMsgType.errors.required">{{labelName?.AlertType}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-6">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.AlertSubType}}</mat-label>
+                    <mat-select formControlName="alertMsgSubType" (selectionChange)="applyMsgSubType($event.value)">
+                      <mat-option *ngFor="let data of addAlert?.alertMsgSubType" [value]="data.key">{{ data.value }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.alertMsgSubType.errors">
+                      <ng-container *ngIf="f.alertMsgSubType.errors.required">{{labelName?.AlertSubType}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-6">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.Language}}</mat-label>
+                    <mat-select formControlName="language" (selectionChange)="applicableChange($event.value)">
+                      <mat-option *ngFor="let data of userLanguageName | orderBy:'language'"
+                        [value]="data.langcode">{{data.language}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf=" f.language.errors">
+                      <ng-container *ngIf="f.language.errors.required">{{labelName?.Language}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-6"> 
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{labelName?.AlertMessagePosition}}</mat-label>
+                    <mat-select formControlName="alertMsgPos" (selectionChange)="selectPos($event.value)">
+                      <mat-option *ngFor="let data of addAlert?.alertMsgPos" [value]="data">{{ data }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf=" f.alertMsgPos.errors">
+                      <ng-container *ngIf="f.alertMsgPos.errors.required">{{labelName?.AlertMessagePosition}} is required
+                      </ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-6">
+                  <mat-form-field appearance="fill" *ngIf="!deletePopup && this.form.value.alertMsgType != 'popup'">
+                    <mat-label>{{labelName?.AlertMessageDuration}}</mat-label>
+                    <input matInput type="number" formControlName="alertMsgDur" (keypress)="numericOnly($event)"
+                      placeholder="In sec" min="1" />
+                    <mat-error *ngIf=" f.alertMsgDur.errors">
+                      <ng-container *ngIf="f.alertMsgDur.errors.required">{{labelName?.AlertMessageDuration}} is required
+                      </ng-container>
+                      <ng-container
+                        *ngIf="(form.value.alertMsgDur <= 0) && !(f.alertMsgDur.errors.required)">{{labelName?.AlertMessageDuration}}
+                        has to be greater that 0 seconds</ng-container>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div *ngIf="form.value.alertMsgType == 'toaster'">
+                <h3 matDialogTitle class="d-none">{{labelName?.CreatePopUp}}</h3>
+                <mat-form-field appearance="fill">
+                  <mat-label>{{labelName?.MessageBody}}</mat-label>
+                  <textarea class="remark-style" rows="4" placeholder="Alert Body" formControlName="description"
+                    matInput></textarea>
+                  <mat-error *ngIf=" f.description.errors">
+                    <ng-container *ngIf="f.description.errors.required">{{labelName?.MessageBody}} is required
+                    </ng-container>
+                    <ng-container *ngIf="f.description?.errors?.checknull1">Must be at least 3 characters
+                      long.</ng-container>
+                    <ng-container *ngIf="f.description?.errors?.minlength">Must be at least 3 characters long
+                    </ng-container>
+                    <ng-container *ngIf="f.description?.errors?.maxlength">
+                      Cannot be beyond 300 characters.
+                    </ng-container>
+                    <ng-container *ngIf="f.description?.errors?.pattern">{{labelName?.MessageBody}} is invalid.
+                    </ng-container>
+
+                  </mat-error>
+                </mat-form-field>
+
+
+              </div>
+              <div class="alertCard mt-2" *ngIf="form.value.alertMsgType == 'popup'">
+                <div class="d-flex justify-content-between">
+                  <h5 matDialogTitle class="mb-3  text-left">Create Pop-Up</h5>
+                  <button class="btn outline preview_btn" mat-stroked-button
+                  color="primary" (click)="previewAlert(form.value)">Preview</button>
+                </div>
+                <div class="popup-box">
+                  <div class="profileInfo" >
+                    <div class="icon-dropdown">
+                      <mat-form-field class="normal-dropdown img-dropdown" appearance="legecy">
+                        <mat-select panelClass="normal-panel" formControlName="alertPopupIcon">
+                          <mat-select-trigger class="ml-2" color="secondary">
+                            <ng-container *ngFor="let item of addAlert?.imgDropdown">
+                              <img src={{item.Value}} style="width:20px;height:20px;"
+                                *ngIf="item.Value == form.value.alertPopupIcon">
+                              <span class="ml-2" *ngIf="item.Value == form.value.alertPopupIcon">{{item.Key}}</span>
+                            </ng-container>
+                          </mat-select-trigger>
+                          <mat-option *ngFor="let item of addAlert?.imgDropdown" [value]="item.Value">
+                            <img src={{item.Value}} style="width:30px;height:30px;"><span
+                              class="ml-2">{{item.Key}}</span>
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <div class="col-12 pl-0"  *ngIf="(form.value.alertMsgDur >= 999) ">
+                        <mat-hint class="mat-error">{{labelName?.AlertMessageDuration}} has to be within 3 digits</mat-hint>
+                      </div>
+                    </div>
+
+                    <mat-form-field appearance="fill" class="popuphead">
+
+                      <textarea rows="1" formControlName="msgHead" matInput minlength="2" maxlength="50"
+                        Placeholder="Popup Head" class="textarea-style popupbody"></textarea>
+                      <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;" *ngIf=" pophead == true">
+                        Popup Head is required</mat-hint>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" style="padding: 0px;">
+
+                      <textarea rows="3" formControlName="description" matInput minlength="2" maxlength="200"
+                        Placeholder="Popup Body" class="textarea-style"></textarea>
+                      <mat-error *ngIf=" f.description.errors">
+                        <ng-container *ngIf="f.description.errors.required">Popup Body is required
+                        </ng-container>
+                        <ng-container *ngIf="f.description.errors.minlength">
+                          Must be at least 3 characters long
+                        </ng-container>
+                        <ng-container *ngIf="f.description.errors.maxlength">
+                          Cannot be beyond 300 characters.
+                        </ng-container>
+                        <ng-container *ngIf="f.description.errors.pattern">Popup Body is invalid.
+                        </ng-container>
+                        <ng-container *ngIf="f.description?.errors?.checknull1">
+                          Must be at least 3 characters long.
+                        </ng-container>
+                      </mat-error>
+                    </mat-form-field>
+
+                    <div class="row" style="padding-bottom: 20px;">
+                      <div class="col-lg-4 col-md-4 col-sm-12">
+                        <mat-label style="padding-left: 5px; font-size: 12px">
+                          Button Type
+                        </mat-label>
+                      </div>
+                      <div class="col-lg-8 col-md-8 col-sm-12">
+                        <mat-radio-group (selectionChange)="onButtonSelected($event)" formControlName="buttontype">
+                          <mat-radio-button (change)="button($event)" value="Existing"> Existing </mat-radio-button>
+                          <mat-radio-button (change)="button($event)" value="Custom">Custom </mat-radio-button>
+                        </mat-radio-group>
+                      </div>
+                      <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                        *ngIf="typeofbutton == true"> Button Type is required</mat-hint>
+                    </div>
+
+                    <div *ngIf="form.value.buttontype == 'Existing'">
+                      <b style="font-size: 13px;">Select any option: </b>
+                      <mat-form-field class="normal-dropdown" appearance="legecy"
+                        [ngClass]="{ shake:  f.selectBtn.errors }">
+                        <mat-select panelClass="normal-panel" class="text-center py-3" formControlName="selectBtn"
+                          placeholder="Select " (selectionChange)="applicableChange($event.value)">
+                          <mat-select-trigger *ngIf="form.value.selectBtn != undefined">
+                            <ng-container *ngIf="form.value.selectBtn == 'Yes & No'">
+                              <div class="btn-group">
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mat-primary"
+                                  mat-flat-button color="primary">Yes</button>
+                                <button class="btn mat-focus-indicator btn mat-stroked-button mat-button-base"
+                                  mat-flat-button>No</button>
+                              </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="form.value.selectBtn == 'No & Yes'">
+                              <div class="btn-group ">
+                                <button class="btn mat-focus-indicator btn mat-stroked-button mat-button-base"
+                                  mat-flat-button>Yes</button>
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mat-primary"
+                                  color="primary" mat-flat-button>No</button>
+                              </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="form.value.selectBtn == 'OK'">
+
+                              <div class="btn-group">
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mat-primary"
+                                  mat-flat-button color="primary">OK</button>
+                              </div>
+                            </ng-container>
+                            <ng-container *ngIf="form.value.selectBtn == 'Approve & Reject'">
+                              <div class="btn-group">
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mat-primary"
+                                  mat-flat-button color="primary">Approve</button>
+                                <button class="btn mat-focus-indicator btn mat-stroked-button mat-button-base"
+                                  mat-flat-button>Reject</button>
+                              </div>
+                            </ng-container>
+                          </mat-select-trigger>
+                          <mat-option class="text-center py-3" *ngFor="let data of addAlert?.selectBtn" [value]="data">
+
+                            <ng-container *ngIf="data == 'Yes & No'">
+                              <div class="btn-group">
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mat-primary"
+                                  mat-flat-button color="primary">Yes</button>
+                                <button class="btn mat-focus-indicator btn mat-stroked-button mat-button-base"
+                                  mat-flat-button>No</button>
+                              </div>
+                            </ng-container>
+                            <ng-container *ngIf="data == 'No & Yes'">
+                              <div class="btn-group">
+                                <button class="btn mat-focus-indicator btn mat-stroked-button mat-button-base"
+                                  mat-flat-button>Yes</button>
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mat-primary"
+                                  color="primary" mat-flat-button>No</button>
+                              </div>
+                            </ng-container>
+                            <ng-container *ngIf="data == 'OK'">
+                              <div class="btn-group">
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mat-primary"
+                                  mat-flat-button color="primary">OK</button>
+                              </div>
+                            </ng-container>
+                            <ng-container *ngIf="data == 'Approve & Reject'">
+                              <div class="btn-group">
+                                <button class="mat-focus-indicator btn mat-flat-button mat-button-base mat-primary"
+                                  mat-flat-button color="primary">Approve</button>
+                                <button class="btn mat-focus-indicator btn mat-stroked-button mat-button-base"
+                                  mat-flat-button>Reject</button>
+                              </div>
+                            </ng-container>
+
+                          </mat-option>
+                        </mat-select>
+                        <mat-hint class="mat-error" style="margin-left: 15px;font-size: 12px;"
+                          *ngIf="existbutton == true"> Existing Button is required</mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div *ngIf="form.value.buttontype == 'Custom' ">
+                    <div formArrayName="place">
+                      <div *ngFor="let val of place().controls; let i= index " [formGroupName]="i">
+                        <div class="row ">
+                          <div class="col-lg-5 col-md-5 col-4" style="padding-right: 0px;">
+                            <mat-form-field appearance="fill">
+                              <mat-label> Buttons</mat-label>
+                              <input type="text" matInput formControlName="parameters" readonly>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-5 col-md-5 col-4" style="padding-right: 0px;">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Value</mat-label>
+                              <input type="text" matInput formControlName="holders">
+                              <mat-error *ngIf="place().controls[i].get('holders').hasError('required')"> Value
+                                is required field </mat-error>
+                              <mat-error *ngIf="val.get('holders')?.errors?.checknull">Whitespace not
+                                allowed.</mat-error>
+                              <mat-error *ngIf="val.get('holders')?.errors?.checknull1">Must be at least 3
+                                characters long.</mat-error>
+                              <mat-error *ngIf="place().controls[i].get('holders').hasError('pattern')"> Value
+                                is invalid </mat-error>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-2 col-md-2 col-4 mt-1">
+                            <div class="buttonflex">
+                              <div *ngIf="place().controls.length > 1" class="removediv">
+                                <mat-icon class="removematbtn" (click)="removeplace(1)">
+                                  delete
+                                </mat-icon>
+                              </div>
+                              <div style="padding: 2px; padding-top: 4px; border: 1px solid #839eb7;
+                                          border-radius: 4px; height: 30px; width: 30px; text-align: center; "
+                                *ngIf="place().controls.length < 3">
+                                <mat-icon class="plusicon" (click)="addplace()">
+                                  +
+                                </mat-icon>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4">
+              <div class="btn-group">
+                <!-- <button *ngIf="userConfig?.Cancel" (click)="back()" type="reset" class="btn btn-gray"
+                  mat-flat-button>{{labelName?.Cancel}}</button> -->
+                <button *ngIf="userConfig?.Reset && !reset "
+                  class="btn mat-focus-indicator btn btn-gray mat-flat-button mat-button-base ng-star-inserted"
+                  mat-flat-button type="reset" (click)="Reset()">
+                  {{labelName?.Reset}}
+                </button>
+                <button  *ngIf="form.value.alertMsgType == 'toaster'"
+                  class="btn mat-focus-indicator btn btn-gray mat-flat-button mat-button-base ng-star-inserted"
+                  mat-flat-button  (click)="previewAlert(form.value)">
+                 Preview
+                </button>
+                <button *ngIf="!reset && userConfig?.saveAndAddNew" class="btn outline" mat-stroked-button
+                  color="primary" (click)="alertMsgData('saveAndAddNew',formDirective)"
+                  type="submit">{{labelName?.saveAndAddNew}}
+                </button>
+                <button *ngIf="reset ? userConfig?.Update : userConfig?.Save"
+                  class="btn mat-focus-indicator mat-flat-button mat-button-base" mat-flat-button color="primary"
+                  (click)="alertMsgData('add',formDirective)" type="submit">{{ reset ? labelName?.Update :
+                  labelName?.Save}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

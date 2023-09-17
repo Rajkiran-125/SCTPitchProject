@@ -1,0 +1,117 @@
+.loginBg {
+    background: var(--secondary_color);
+    background: linear-gradient(0deg, rgba(243, 126, 34, 0.15) 0%, rgba(3, 109, 183, 0.15) 100%);
+    .loginWrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        width: 1000px;
+        height: 100vh;
+        margin: auto;
+        text-align: center;
+        .loginSlider {
+            flex: 0 0 400px;
+            width: 400px;
+            .slideContent {
+                img {
+                    width: 350px;
+                    height: auto;
+                    margin: auto auto 50px auto;
+                }
+                h2 {
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    color: var(--black_color_90);
+                    line-height: 37px;
+                    margin-bottom: 8px;
+                }
+                p {
+                    font-size: 16px;
+                    line-height: 20px;
+                    color: var(--black_color_70);
+                }
+            }
+        }
+        .loginPanel {
+            padding: 70px 50px;
+            border-radius: 30px;
+            background-color: var(--white_color);
+            flex: 0 0 350px;
+            box-shadow: var(--login_box_shadow);
+            .logo {
+                margin-bottom: 15px;
+                img{
+                    height: 35px;
+                }
+            }
+            h4 {
+                text-transform: uppercase;
+                font-weight: bold;
+                margin-bottom: 57px;
+                line-height: 21px;
+            }
+            .link {
+                display: inline-block;
+                margin-top: 47px;
+                text-decoration: underline;
+                color: var(--black_color_90);
+            }
+        }
+    }
+}
+
+::ng-deep {
+    .slick-dots {
+        li {
+            width: 14px;
+            height: 14px;
+            margin: 0;
+
+            button {
+                width: 14px;
+                height: 14px;
+                padding: 3px;
+                &:before {
+                    width: 14px;
+                    height: 14px;
+                    font-size: 8px;
+                    line-height: 14px;
+                    color: var(--black_color_90);
+                }
+            }
+            &:hover,&.slick-active {
+                button {
+                    &::before {
+                        color: var(--primary_color);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+  }
+   
+  .spinner:before {
+    content: '';
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--white_color);
+    border-top-color: var(--primary_color);
+    animation: spinner .8s linear infinite;
+  }
+
+  .btn{
+      span{
+          display: inline-block;
+          vertical-align: middle;
+          margin: 0 5px;
+      }
+  }

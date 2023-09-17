@@ -1,0 +1,147 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+  <div class="wrapper py-4 mt-3">
+    <div class="d-flex justify-content-end">
+      <span class="icon-rejected" *ngIf="(userConfig?.Cancel)" (click)="back()"></span>
+    </div>
+    <form [formGroup]="form">
+      <div class="row ">
+        <!-- <div class="col-1 text-center ">
+            <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+        </div> -->
+        <div class="col-12">
+          <span class="d-flex backArrow">
+            <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+            <legend> {{ reset ? 'Update' :'Add New' }} WhatsApp Account</legend>
+          </span>
+          <div class="formGroup">
+            <div class="masters_block">
+              <app-steps [steps]="channelConfigurationSteps" [moduletype]="'channelConfiguration'" [id]="path"
+                [uniqueid]="uniqueId" [action]="eventkey"></app-steps>
+              <div class="top_block"></div>
+
+              <div style="margin-bottom: 10px;">
+              <span><b>Attribute Mapping</b></span>
+              </div>
+              <div class="divbackground" *ngIf="form.value.product.length > 0" >
+
+                <ng-container formArrayName="product" *ngFor="let item of product?.controls; let i = index;"   class="divbackground" >
+                  <div class="row" [formGroupName]="i">
+                    <div class="col">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.AttributeType}}</mat-label>
+                        <mat-select formControlName="productid" disableOptionCentering>
+                          <mat-option *ngFor="let data of findNonAdults(productType,i)" [value]="data.Id">
+                            {{data.ProductName}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="equalsign">
+                    <span>=</span>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill">
+                        <mat-label>{{labelName?.AttributeName}}</mat-label>
+                        <mat-select class='roleidclss' formControlName="roleid" disableOptionCentering>
+                          <mat-option *ngFor="let data of findNonAdults2(attributeMapping,i)" [value]="data.Id">
+                            {{data.ProductName}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base cursorPointer addbutton">
+                     <mat-icon class="remove cursorPointer red-color" (click)="removeProductGroup(i)"
+                      #tooltip="matTooltip" matTooltip="Remove">delete_outline</mat-icon>
+                    </button> <button  mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base cursorPointer addbutton"
+                      [disabled]="form.invalid || form.value.product.length >= productType.length || form.value.product.length >= attributeMapping.length"
+                      #tooltip="matTooltip" matTooltip="Add" (click)="addItem()"><span class="addfont">+</span></button>
+                  </div>
+                </ng-container>
+              </div>
+              <div style="padding-left: 13px;padding-right:17px">
+              <div class="row divbackground"  *ngIf="form.value.product.length == 0"  style="padding-left: 12px;padding-bottom: 10px;">
+                <button *ngIf="form.value.product.length == 0" mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 cursorPointer addbutton"
+                [disabled]="form.invalid || form.value.product.length >= productType.length || form.value.product.length >= attributeMapping.length"
+                #tooltip="matTooltip" matTooltip="Add" (click)="addItem()"><span class="addfont">+</span></button>
+              </div>
+            </div>
+
+
+
+
+
+              <div style="margin-top: 15px; margin-bottom:10px">
+              <span><b>Additional Field</b></span>
+              </div>
+
+              <div class="divbackground" *ngIf="form.value.Listoption.length > 0">
+              <ng-container formArrayName="Listoption" *ngFor="let item of Listoption?.controls; let i = index;">
+                <div class="row" [formGroupName]="i">
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="textfieldbackground">
+                        <mat-label>Key</mat-label>
+                        <input matInput formControlName="channelkey">
+
+                        <mat-error *ngIf="Listoption.controls[i].get('channelkey').hasError('required')">Key is required field </mat-error>
+
+
+                        <mat-error *ngIf="item.get('channelkey')?.errors?.cannotContainSpace">Whitespace not allowed.</mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="equalsign">
+                      <span>=</span>
+                    </div>
+
+                    <div class="col textback" >
+                      <mat-form-field appearance="fill" class="textback">
+                        <mat-label>Values</mat-label>
+                        <input matInput formControlName="channelvalue">
+                        <!-- <mat-error *ngIf="item.controls[i].get('channelvalue').hasError('required')">Placeholders is required field </mat-error> -->
+
+                        <mat-error *ngIf="Listoption.controls[i].get('channelvalue').hasError('required')">Value is required field </mat-error>
+                        <mat-error *ngIf="item.get('channelvalue')?.errors?.cannotContainSpace">Whitespace not allowed.</mat-error>
+                         </mat-form-field>
+                    </div>
+
+
+
+                    <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 cursorPointer addbutton">
+                      <mat-icon class="remove cursorPointer red-color" (click)="removeListOption(i,item)"
+                       #tooltip="matTooltip" matTooltip="Remove">delete_outline</mat-icon>
+                     </button>
+
+
+
+                      <button mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 cursorPointer addbutton"
+                      #tooltip="matTooltip" matTooltip="Add" (click)="addlistoption()"><span class="addfont">+</span></button>
+
+                </div>
+
+
+
+              </ng-container>
+
+              </div>
+              <div style="padding-left: 13px;padding-right:17px">
+              <div class="row divbackground"  *ngIf="form.value.Listoption.length == 0"  style="padding-left: 12px;padding-bottom: 10px;">
+                <button *ngIf="form.value.Listoption.length == 0" mat-raised-button class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 cursorPointer addbutton"
+                #tooltip="matTooltip" matTooltip="Add" (click)="addlistoption()"><span class="addfont">+</span></button>
+              </div>
+            </div>
+            </div>
+            <div class="btn-group my-3" >
+              <!-- <button  class="btn btn-gray" *ngIf="(userConfig?.Cancel)"  (click)="back()"  routerLinkActive="router-link-active"  mat-flat-button type="Reset">{{ labelName?.Cancel}}</button> -->
+                <button *ngIf="(userConfig?.Save)" (click)="savewhatsapp('save')"  class="btn" mat-flat-button color="primary"  type="button">{{ labelName?.Save }}</button>
+                <button  *ngIf=" (userConfig?.Next) " (click)="savewhatsapp('next')" class="btn" mat-flat-button color="primary"  type="button">{{labelName?.Next }}</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

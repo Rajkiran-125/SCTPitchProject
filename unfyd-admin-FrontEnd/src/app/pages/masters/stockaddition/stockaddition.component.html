@@ -1,0 +1,109 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend>Stock Addition</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.producttype.errors }">
+                            <mat-label>{{labelName?.ProductType}}</mat-label>
+                            <mat-select formControlName="producttype">
+                                <mat-option *ngFor="let data of masters.productType" [value]="data">{{data}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submittedForm && f.producttype.errors">
+                                <ng-container *ngIf="f.producttype.errors.required">Product Type is required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.productcode.errors }">
+                            <mat-label>{{labelName?.ProductCode}}</mat-label>
+                            <mat-select formControlName="productcode"
+                                (selectionChange)="selectProductCode($event.value)" #select>
+                                <mat-option *ngFor="let data of tabkey" [value]="data.productCode">{{data.productCode}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.ProductDescription}}</mat-label>
+                            <input matInput formControlName="productdesc" appTitleCase readonly>
+                            <mat-error *ngIf="f.productdesc.errors">
+                                <ng-container *ngIf="f.productdesc.errors.maxlength">
+                                    {{masters.MaxLengthMessage2}}
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>    
+                 
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.productponumber.errors }">
+                                <mat-label>{{labelName?.OrderPONo}}</mat-label>
+                                <input matInput formControlName="productponumber">
+                            </mat-form-field>
+                        </div>                                                                  
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill"  [ngClass]="{ 'shake': submittedForm && f.productstockqty.errors }">
+                                <mat-label>{{labelName?.Qty}}</mat-label>
+                                <input maxlength="10" matInput formControlName="productstockqty">
+                                <mat-error *ngIf="submittedForm && f.productstockqty.errors">
+                                    <ng-container *ngIf="f.productstockqty.errors.pattern">Product stock qty is invalid
+                                    </ng-container>
+                                    <ng-container *ngIf="f.productstockqty.errors.required">Product stock qty is required
+                                    </ng-container>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.productrate.errors }">
+                                <mat-label>{{labelName?.Rate}}</mat-label>
+                                <input matInput formControlName="productrate">
+                            </mat-form-field>
+                        </div>
+                       
+                    </div>
+                    
+               
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.productgst.errors }">
+                            <mat-label>{{labelName?.GST}}</mat-label>
+                            <mat-select formControlName="productgst">
+                                <mat-option *ngFor="let data of ddgst;let i=index" [value]="ddgst[i]['HSNCode']">
+                                    {{ddgst[i]['GST']}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labelName?.Center}}</mat-label>
+                            <mat-select formControlName="productcenter">
+                                <mat-option *ngFor="let data of ddcenterdata;let i=index"
+                                    [value]="ddcenterdata[i]['Product Center Code']">{{ddcenterdata[i]['Product Center Code']}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group" *ngIf="userConfig?.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit()" type="button">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

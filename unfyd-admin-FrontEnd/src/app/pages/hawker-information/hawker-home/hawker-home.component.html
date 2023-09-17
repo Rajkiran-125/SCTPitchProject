@@ -1,0 +1,367 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+        <div class="wrapper biggermargin">
+
+        <div class="row" style=" padding: 1em 0;">
+            <div class="col-4 allCenter">
+                <img class="imgDimension" src={{photograph}} alt="">
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <h2>{{personalName}}</h2>
+
+                </div>
+                <div class="row">
+                    <div class="alignContentCenter margin25PX">
+                        <span class="textGray">
+                            <mat-icon>call</mat-icon>
+                        </span>
+                        <span class="phoneNumber">{{contactInfo?.MobileNo}}</span>
+                        <span class="textAfterNumber textGray">(Primary)</span>
+                    </div>
+                    <div class="alignContentCenter margin25PX " *ngIf="contactInfo?.AlternateNumber != 0" >
+                        <span class="textGray">
+                            <mat-icon>call</mat-icon>
+                        </span>
+                        <span class="phoneNumber">{{contactInfo?.AlternateNumber == 0 ? '-': contactInfo?.AlternateNumber}}</span>
+                        <span class="textAfterNumber textGray">(Alternate)</span>
+                    </div>
+                </div>
+
+                <div class="row marginTop1em">
+                    <div class="">
+                        <button  [ngClass]="isActive == 'Active' ? 'activeBtn':'btn btn-danger'" >{{isActive == 'Active' ? 'Activated':'Deactivated'}}</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="MoreDetails" (click)="changeMoreDetails()" >{{moreDetails == true? 'More Details':'Less Details'}}</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-container class="lessDetails" *ngIf="!moreDetails">
+        <ul [ngClass]="tab ? 'tab-steps' : 'form-steps'">
+                <li class="li1" *ngFor="let data of hawkerDetailsSteps" [ngClass]="{'selected': tabSelected == data.label}" (click)="tabData(data.label)">
+                    <a >
+                        <label>{{data.label}}</label>
+                    </a>
+                </li>
+        </ul>
+        <ng-container *ngIf="tabSelected == 'Personal Details'">
+            <div class="wrapper wrapper1">
+                <div class="row details" *ngFor="let innerObj of data">
+                    <ng-container *ngFor="let item of innerObj | keyvalue : keepOrder">
+                        <div class="col col-3" >
+                            <p>
+                                <small>{{item.key}}</small>
+                                <strong *ngIf="item.key == 'Date of Birth'">{{item.value |date : 'mediumDate' }}</strong>
+                                <strong *ngIf=" item.key == 'Application Date'">{{item.value |date : 'mediumDate' }}</strong>
+                                <ng-container *ngIf="item.key == 'Signature'">
+                                    <img class="signature" [src]="item.value == null || item.value == undefined || item.value == '' ? '/assets/images/imgNotAvaialble.png': item.value" alt="" >
+                                </ng-container>
+                                
+                                <strong *ngIf=" item.key == 'Signature'"><img src='' alt="" ></strong>
+                                <strong *ngIf="item.key != 'Date of Birth' && item.key != 'Application Date' && item.key != 'Signature'">{{item.value == true ? 'Yes' : item.value == false ? 'No' : item.value == null || item.value == '' ? '-' : item.value}}</strong>
+                            </p>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'Contact Details'">
+            <div class="wrapper wrapper1">
+                <div class="row details" *ngFor="let innerObj of data">
+                    <ng-container *ngFor="let item of innerObj | keyvalue : keepOrder">
+                        <div class="col col-4" *ngIf="item.key !== 'Present Address' && item.key !== 'Permanent Address' " >
+                            <p>
+                                <small *ngIf="item.key != 'Aadhaar Card' && item.key != 'PAN Card' ">{{item.key}}</small>
+                                <strong *ngIf="item.key != 'Aadhaar Card' && item.key != 'PAN Card' ">{{item.value == true ? 'Yes' : item.value == false ? 'No' : item.value == null || item.value == '' ? '-' : item.value}}</strong>
+
+                                <ng-container class="" *ngIf="item.key == 'Aadhaar Card' || item.key == 'PAN Card'">
+                                    <img class="signature " [src]="item.value == null || item.value == undefined || item.value == '' ? '/assets/images/imgNotAvaialble.png': item.value" alt="" >
+                                    <strong class="">
+                                        {{item.key}}
+                                    </strong>
+                                </ng-container>
+                            </p>
+                        </div>
+                        <ng-container *ngIf="item.key == 'Present Address' || item.key == 'Permanent Address' || item.key == 'Communication Address'">
+                        <legend class="col col-12 address">{{item.key}}</legend>
+                        <div class="col col-4" *ngFor="let item of item.value | keyvalue : keepOrder">
+                            <p>
+                                <small>{{item.key}}</small>
+                                <strong>{{item.value == true ? 'Yes' : item.value == false ? 'No' : item.value == null || item.value == '' ? '-' : item.value}}</strong>
+                            </p>
+                        </div>
+                    </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'Finance Details'">
+            <div class="wrapper wrapper1">
+                <div class="row details" *ngFor="let innerObj of data">
+                    <ng-container *ngFor="let item of innerObj | keyvalue : keepOrder">
+                        <div class="col col-4" >
+                            <p>
+                                <small>{{item.key}}</small>
+                                <ng-container *ngIf="item.key == 'Cancel Cheque'">
+                                    <img class="signature" [src]="item.value == null || item.value == undefined || item.value == '' ? '/assets/images/imgNotAvaialble.png': item.value" alt="" >
+                                </ng-container>
+                                <strong *ngIf="item.key != 'Cancel Cheque'">{{item.value == true ? 'Yes' : item.value == false ? 'No' : item.value == null || item.value == '' ? '-' : item.value}}</strong>
+                            </p>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'PCC Details'">
+            <div class="wrapper wrapper1">
+                <div class="row details" *ngFor="let innerObj of data">
+                    <ng-container *ngFor="let item of innerObj | keyvalue : keepOrder">
+                        <div class="col col-4" >
+                            <p>
+                                <small>{{item.key}}</small>
+                                <strong *ngIf="item.key == 'PCC Initiation  Date' || item.key == 'PCC Application Reference Date' || item.key == 'PCC Valid From Date' || item.key == 'PCC Valid to Date'">{{item.value |date : 'mediumDate' }}</strong>
+                                <ng-container *ngIf="item.key == 'Police Clearance Certificate'">
+                                    <img class="signature" [src]="item.value == null || item.value == undefined || item.value == '' ? '/assets/images/imgNotAvaialble.png': item.value" alt="" >
+                                </ng-container>
+                                <strong *ngIf="item.key != 'PCC Initiation  Date' && item.key != 'PCC Application Reference Date' && item.key != 'PCC Valid From Date' && item.key != 'PCC Valid to Date'">{{item.value == true ? 'Yes' : item.value == false ? 'No' : item.value == null || item.value == '' ? '-' : item.value}}</strong>
+                            </p>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'Medical Details'">
+            <div class="wrapper wrapper1">
+                <div class="row details" *ngFor="let innerObj of data">
+                    <ng-container *ngFor="let item of innerObj | keyvalue : keepOrder">
+                        <div class="col col-4" >
+                            <p>
+                                <small>{{item.key}}</small>
+                                <strong *ngIf="item.key == 'Medical Test Initiation Date' || item.key == 'Medical Test Result Date'">{{item.value |date : 'dd/MM/yyyy' }}</strong>
+                                <ng-container *ngIf="item.key == 'Covid Vaccination Certificate' || item.key == 'Medical Test Report'">
+                                    <img class="signature" [src]="item.value == null || item.value == undefined || item.value == '' ? '/assets/images/imgNotAvaialble.png': item.value" alt="" >
+                                </ng-container>
+                                <strong *ngIf="item.key != 'Covid Vaccination Certificate' && item.key != 'Medical Test Initiation Date' && item.key != 'Medical Test Result Date'">{{item.value}}</strong>
+                            </p>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'Training Details'">
+            <div class="wrapper wrapper1">
+                <div class="row details" *ngFor="let innerObj of data">
+                    <ng-container *ngFor="let item of innerObj | keyvalue : keepOrder">
+                        <div class="col col-4" >
+                            <p>
+                                <small>{{item.key}}</small>
+                                <strong *ngIf="item.key == 'Training Initiation date' || item.key == 'Training completion date'">{{item.value |date : 'mediumDate' }}</strong>
+                                <ng-container *ngIf="item.key == 'Covid Vaccination Certificate' || item.key == 'Medical Test Report'">
+                                    <img class="signature" [src]="item.value == null || item.value == undefined || item.value == '' ? '/assets/images/imgNotAvaialble.png': item.value" alt="" >
+                                </ng-container>
+                                <strong *ngIf="item.key != 'Training Initiation date' && item.key != 'Training completion date'">{{item.value == true ? 'Yes' : item.value == false ? 'No' : item.value == null || item.value == '' ? '-' : item.value}}</strong>
+                            </p>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'Documents'">
+            <div class="wrapper wrapper1  dataTable" >
+                <table>
+                <thead>
+                    <tr>
+                        <ng-container *ngFor="let data of tabKey; let i = index">
+                            <th>{{data == 'Action' ? '' : data}}</th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="tabValue.length>0">
+                        <tr
+                            *ngFor="let data of tabValue ; let j = index">
+
+                            <ng-container *ngFor="let val of tabKey; let i = index">
+                                <td *ngIf="val == 'Sr No'"><span>{{j+1}}</span></td>
+                                <td *ngIf="val == 'Action'" class="action">
+                                    <mat-icon class="view" (click)="view(data[tabKey[i+1]], data[tabKey[i]])"
+                                        #tooltip="matTooltip" matTooltip="View">remove_red_eye</mat-icon>
+                                </td>
+                                <td *ngIf="val == 'Print'">
+                                    <button class="btn sm-btn" mat-flat-button color="primary" type="button">
+                                        <mat-icon>print</mat-icon><span>Print</span>
+                                    </button>
+                                </td>
+                                <td *ngIf="val !== 'Sr No' && val !== 'Action' && val !== 'Print'">
+                                    <span [innerHtml]="data[tabKey[i]]"></span>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="tabValue.length==0">
+                        <tr>
+                            <td [attr.colspan]="tabKey.length">No Data Found</td>
+                        </tr>
+                    </ng-container>
+
+                </tbody>
+            </table>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'Other'">
+            <div class="wrapper wrapper1">
+                <div class="row details" *ngFor="let innerObj of data">
+                    <ng-container *ngFor="let item of innerObj | keyvalue : keepOrder">
+                        <div class="col col-4" >
+                            <p>
+                                <small>{{item.key}}</small>
+                                <strong *ngIf="item.key == 'Application approval date by Admin' || item.key == 'From Date' || item.key == 'To Date'">{{item.value |date : 'mediumDate' }}</strong>
+                                <ng-container *ngIf="item.key == 'Covid Vaccination Certificate' || item.key == 'Medical Test Report'">
+                                    <img class="signature" [src]="item.value == null || item.value == undefined || item.value == '' ? '/assets/images/imgNotAvaialble.png': item.value" alt="" >
+                                </ng-container>
+                                <strong *ngIf="item.key != 'Application approval date by Admin' && item.key != 'From Date' && item.key != 'To Date'">{{item.value == true ? 'Yes' : item.value == false ? 'No' : item.value == null || item.value == '' ? '-' : item.value}}</strong>
+                            </p>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <ng-container *ngIf="data.length==0">
+                    <tr>
+                        <td [attr.colspan]="tabKey.length">No Data Found</td>
+                    </tr>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'Payment'">
+            <div class="wrapper wrapper1">
+
+                <div class="dataTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let data of tabKey; let i = index">
+                                    <th *ngIf="data !== 'Transaction Date'">{{data}}</th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of tabValue; let j = index">
+                                <ng-container *ngFor="let val of tabKey; let i = index">
+                                    <td *ngIf="val == 'Sr No'"><span>{{j+1}}</span></td>
+                                    <td *ngIf="val == 'Print'">
+                                        <button (click)="print(data)" class="btn sm-btn" mat-flat-button color="primary" type="button">
+                                            <mat-icon>print</mat-icon><span>Print</span>
+                                        </button>
+                                    </td>
+                                    <td *ngIf="val !== 'Sr No' && val !== 'Transaction Date' && val !== 'Print'">
+                                        <span [innerHtml]="data[tabKey[i]]"></span>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="moreDetails">
+        <div class="moreDetails" >
+            <div class="row mt-4 justify-content-between">
+                <h3>Bills & Payments</h3>
+                <div>
+                </div>
+            </div>
+                <div class="row " >
+                    <div class="card"  *ngFor="let item of payments?.slice(0, 3)">
+                        <div class="">
+                            <span class="headingInsideCard" >Bill Date - {{item.TransactionDateTime | date: 'd MMM, y' }}</span>
+                        </div>
+                        <div class="marginDivDueAmount">
+                            <span class="blue dueAmount">Paid &#8377;{{item.AmountToBePaid}}</span>
+                        </div>
+                        <div class="due">
+                            <span class="" >Paid on {{item.TransactionDateTime}}</span><span class="marginX1em"><span class="">11.24.25</span></span>
+                        </div>
+                    </div>
+            </div>
+
+
+
+        <div >
+            <div class="row mt-4 justify-content-between">
+                <h3>My Training</h3>
+                <div>
+                </div>
+
+            </div>
+            <div class="row"  [ngClass]="myTraining?.length > 3 ?'jcsb':''">
+                    <div class="card3" *ngFor="let item of myTraining?.slice(0, 4)" [ngClass]="myTraining?.length > 3 ?'':''">
+                        <div class="">
+                            <label class="headingInsideCard" >Beneficiary Training</label>
+                        </div>
+                        <div class="due">
+                            <label [ngClass]="item.TrainingStatus == 'Not Completed'?'red': item.TrainingStatus == 'Completed'?'green':item.TrainingStatus == 'In Progress'?'yellow':''  " >{{item.TrainingStatus}}</label>
+                        </div>
+                    </div>
+            </div>
+
+
+
+        </div>
+        <div>
+            <div class="row justify-content-between mt-4 ">
+                <h3>My Grievances</h3>
+                <div>
+                    <h4 class="more" (click)="goTo('beneficiary-grievances')" *ngIf="myGrievances?.length > 3" >More</h4>
+                </div>
+
+            </div>
+            <div class="row"  *ngIf="myGrievances?.length > 2">
+                <div class="col-lg-4 col-md-4 col-sm-12 p-1" *ngFor="let item of myGrievances?.slice(0, 3)">
+                    <div class="bg-white p-4 border-15px">
+                    <div>
+                        <span class="largeFont font-weight-bold">
+                            {{item.ComplaintSubject | titlecase}}
+                        </span>
+                    </div>
+                    <div>
+                        <span class="mediumFont">
+                            {{item.ComplaintSubject | titlecase}}
+                        </span>
+                    </div>
+                    <div>
+                        <span class="mediumFont font-weight-bold" [ngClass]="item.Status == 'Pending'?'red': item.Status == 'Resolved'?'green':''  ">{{item.Status | titlecase}}</span>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row"  *ngIf="myGrievances?.length < 2">
+                <div class="card3 justify-content-between my-1" *ngFor="let item of myGrievances">
+                    <div>
+                        <span class="largeFont font-weight-bold">
+                            {{item.ComplaintSubject | titlecase}}
+                        </span>
+                    </div>
+                    <div>
+                        <span class="largeFont">
+                            {{item.ComplaintSubject | titlecase}}
+                        </span>
+                    </div>
+                    <div>
+                        <span class="largeFont font-weight-bold" [ngClass]="item.Status == 'Pending'?'red': item.Status == 'Resolved'?'green':''  ">{{item.Status | titlecase}}</span>
+                    </div>
+                    </div>
+                </div>
+            <div class="row" *ngIf="myGrievances?.length == 0">
+                <div class="card3">
+                <span class="due">No Data Available.</span>
+            </div>
+            </div>
+        </div>
+        </div>
+    </ng-container>
+</div>

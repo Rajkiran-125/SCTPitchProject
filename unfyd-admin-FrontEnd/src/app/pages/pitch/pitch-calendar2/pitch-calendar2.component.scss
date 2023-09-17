@@ -1,0 +1,152 @@
+.title {
+  color: #053c6d;
+  font-weight: bold;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+}
+
+.innerContainer {
+  width: 90%;
+  margin: auto;
+  margin-top: 4%;
+
+  .row {
+    background: #053c6d;
+    width: 100%;
+    margin-left: 0px;
+    border-radius: 30px 30px 0px 0px;
+
+    h3 {
+      margin-top: 0.3rem;
+      // margin: 0 0 10px;
+      color: #fff;
+    }
+  }
+
+  .border {
+    border: 1px solid rgb(202, 202, 202);
+    border-radius: 30px;
+  }
+}
+
+.innerContainer ::ng-deep br {
+  display: none;
+}
+
+::ng-deep br:nth-child(1) {
+  display: none;
+}
+
+::ng-deep .mat-typography h3 {
+  margin: 0px 0 7px;
+  padding: 0.2rem;
+}
+
+
+pre {
+  background-color: #f5f5f5;
+  padding: 15px;
+}
+
+
+
+::ng-deep .cal-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.eventOpen {
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .modal-content {
+  background: #4B89DC;
+  width: 400px;
+  border: none;
+  border-radius: 10px;
+  margin: auto;
+  margin-top: 10rem;
+}
+// margin-left: auto;
+// margin-right: auto;
+
+h4 {
+  color: #fff;
+}
+
+.close-btn {
+  width: 5%;
+  border: none;
+  background: transparent;
+  color: #fff;
+  padding-right: 0.5rem;
+}
+
+.button-clo{
+  padding: 1rem 1rem 0rem 0rem;
+}
+.modal-body{
+  padding: 1rem;
+}
+.modal-body p {
+  color: #dfdfdf;
+}
+.modal-body p span {
+  color: #fff;
+}
+
+  // ::ng-deep .cal-time-label-column{
+    // display: none;
+  // }
+
+  ::ng-deep .cal-day-column::after{
+    // display: none;
+    // background-color: red;
+    content: "\a";
+    white-space: pre;
+  }
+
+  ::ng-deep .cal-event-title{
+    // background: #000;
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+  }
+
+  ::ng-deep .cal-week-view .cal-event{
+    // background-color: red;
+    width: auto;
+    color: #fff;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    font-size: x-small;
+  }
+
+  ::ng-deep .cal-weekend:nth-child(7) b {
+    color: red;
+  }
+  ::ng-deep .cal-weekend:nth-child(7) span {
+    color: red;
+  }
+  ::ng-deep .cal-week-view .cal-header.cal-weekend span {
+     color: none; 
+}
+
+  ::ng-deep .cal-starts-within-day{
+    width: 100px;
+  }
+
+  ::ng-deep .cal-week-view .cal-event{
+    border: none;
+    border-radius: 12px;
+    position: relative;
+  }

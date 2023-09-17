@@ -1,0 +1,297 @@
+
+<button class="close-btn" *ngIf="data.type != 'selectAudienceList'" mat-icon-button mat-dialog-close>
+  <mat-icon>close</mat-icon>
+</button>
+
+<ng-container *ngIf="data.type == 'campaignApproval'">
+  <div class="dialogContent " style="padding:0!important;">
+      <div class="icon-thumbs_up">
+          <mat-icon>thumb_up</mat-icon>
+      </div>        
+      <div mat-dialog-content class="logouttitle">
+          <h2>Are you sure?</h2>
+      </div>
+      <div class="logoutsubtitle">
+          <h4>You want to send this campaign for approval</h4>
+      </div>
+      <div mat-dialog-actions>
+          <div class="btn-group d-flex mb-3">
+              <button  class="btn" mat-stroked-button color="primary" button cdkFocusInitial (click)="closeDialog(false)">No</button>
+              <button class="btn" mat-flat-button color="primary" type="submit"  (click)="closeDialog(true)">Yes</button>
+          </div>
+      </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="data.type == 'hsmTemplate'">
+
+  <div class="px-0 py-0">
+      <div style="overflow: hidden; font-size: 12px;">
+        <table>
+          <tbody *ngIf="data?.tabValue.length>0">
+            <tr class="row">
+              <ng-container
+                *ngFor="let item of data.tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage:page  }; let j = index">
+                <th style="border : none !important;">
+                  <div (click)="sendDataToNotification(item)" class="col-12" style="margin-top: 10px;">
+                    <div class="cardfirstlayer ">
+                      {{item['Template Name']}}
+                    </div>
+                    <!-- {{item|json}} -->
+                    <div class="cardsecondlayer">
+                      <img src="{{item['Message Header Value']}}" *ngIf="item['Message Header'] == 'Image'" class="cardimg" />
+                      <video *ngIf="item['Message Header'] == 'Video'" class="cardvideo" controls>
+                        <source src="{{item['Message Header Value']}}">
+                      </video>
+                      <img *ngIf="item['Message Header'] == 'Document'"
+                        src="assets/images/icons/documentfile.png" class="carddoc" />
+                      <img *ngIf="item['Message Header'] == 'Text'"
+                        src="assets/images/icons/documentfile.png" class="carddoc" />
+                      <img *ngIf="item['Message Header'] == 'Location'"
+                        src="assets/images/icons/documentfile.png" class="carddoc" />
+                    </div>
+                    <div class="cardthirdlayer">
+                      {{item['Name Space']}}
+                    </div>
+                  </div>
+                </th>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" *ngIf="data.tabValue.length>itemsPerPage">
+        <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel="">
+        </pagination-controls>
+      </div>
+  </div>
+</ng-container>  
+
+<ng-container *ngIf="data.type == 'CampaignInfo'">
+    <div class="">
+        <div class="p-2">
+            <legend class="page-header mb-4">Diwali Offer</legend>
+            <span class="sub-title font-weight-bold align-items-center">Campaign Details</span>
+
+            <div class="campainInfo-box mt-2">
+                <div class="row" >
+                    <div class="col-12 col-lg-3 col-md-6 col-sm-12 mb-2">
+                        <div class="">
+                            <span class="details">Campaign Name: {{CampaignName}}</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-md-6 col-sm-12 mb-2">
+                        <div class="">
+                            <span class="details">Decription: {{Description}}</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-md-6 col-sm-12 mb-2">
+                        <div class="">
+                            <span class="details">Start Date: {{StartTime | date: 'dd/MM/yyyy HH:MM:SS'}}</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 col-md-6 col-sm-12 mb-2">
+                        <div class="">
+                            <span class="details">End Date: {{EndTime | date: 'dd/MM/yyyy HH:MM:SS'}}</span>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Table1 -->
+                <div class="mt-2">
+                    <h5 class="font-weight-bold">Target Audience</h5>
+                </div>
+                <table class="table">
+                    <thead class="card-header">
+                        <tr>
+                            <th scope="col">Order</th>
+                            <th scope="col">Audience List</th>
+                            <th scope="col">Total Audience</th>
+                            <th scope="col">Concurrency %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of targetAudienceTableDetails;let i=index;">
+                            <td>{{i+1}}</td>
+                            <td>{{item.AudienceList}}</td>
+                            <td>{{item.TotalAudience}}</td>
+                            <td>{{item.Concurrency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+    
+    
+                <!-- Table1 -->
+                <div class="mt-4">
+                    <h5 class="font-weight-bold">Rule</h5>
+                </div>
+    
+                <table class="table">
+                    <thead class="card-header">
+                        <tr>
+                            <th scope="col">Rule Name</th>
+                            <th scope="col">Channel</th>
+                            <th scope="col">Language</th>
+                            <th scope="col">Template</th>
+                            <th scope="col">Field Mapping</th>
+                            <th scope="col">Data Filter</th>
+                        </tr>
+                    </thead>
+                    <tbody class="card-body">
+                        <tr *ngFor="let item of ruleTableDetails;let i=index;">
+                            <td>{{item.rulename}}</td>
+                            <td>
+                                <span [innerHTML]="ChannelNameIcon"></span> {{ ChannelName }}
+                            </td>
+                            <td>{{item.languagecode}}</td>
+                            <td><button (click)="templateView()">View</button></td>
+                            <td><button (click)="fieldMappingView()">View</button></td>
+                            <td><button (click)="dataFilterView()">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="data.type == 'templateView'">
+    <div class="templateView">
+        <h5 class="font-weight-bold text-primary">Ganesh Chaturthi</h5>
+        <!-- <img class="mb-2" style="width: 30% !important;" src="assets/images/viewTemplate/Group_9483.png" alt=""> -->
+        <div class="image-container">
+            <img class="mb-2 main-image" [class.deskTopOuter]="selectedImageIndex === 0" [src]="getImagePath(selectedImageIndex)" alt="">
+            <img class="overlay-image" [class.deskTopInner]="selectedImageIndex === 0" src="https://cx1.unfyd.com/FileUploads/AgentUtility/no-activechats.png" alt="">
+        </div>
+    </div>
+    <div class="icon">
+        <a (click)="changeImage(0)" [class.active]="selectedImageIndex === 0"><img src="assets/images/viewTemplate/Path_955.svg" alt=""></a>
+        <a (click)="changeImage(1)" [class.active]="selectedImageIndex === 1"><img src="assets/images/viewTemplate/Path_957.svg" alt=""></a>
+        <a (click)="changeImage(2)" [class.active]="selectedImageIndex === 2"><img src="assets/images/viewTemplate/Path_958.svg" alt=""></a>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="data.type == 'fieldMappingView'">
+    <div class="">
+        <div class="p-2">
+            <div class="campainInfo-box">
+                <!-- Table1 -->
+                <div class="mt-2">
+                    <h5 class="font-weight-bold">Field Mapping</h5>
+                </div>
+                <table class="table">
+                    <thead class="card-header">
+                        <tr>
+                            <th scope="col">Campaign Field</th>
+                            <th scope="col">Audience List Field</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of fieldMappingViewArr;let i=index;">
+                            <td>{{item.campaignField}}</td>
+                            <td>{{item.audienceListField}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="data.type == 'dataFilterView'">
+    <div class="dataFilterView">
+        <div class="p-2">
+            <div class="campainInfo-box">
+                <!-- Table1 -->
+                <div class="mt-2">
+                    <h5 class="font-weight-bold">Data Filter</h5>
+                </div>
+                <table class="table">
+                    <thead class="card-header">
+                        <tr>
+                            <th scope="col">Field</th>
+                            <th scope="col">Condition</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of dataFilterViewArr;let i=index;" class="table-row">
+                            <td>{{item.field}}</td>
+                            <td>{{item.condition}}</td>
+                            <td>{{item.value}}</td>
+                            <td class="action-cell">
+                                <div *ngIf="i !== dataFilterViewArr.length - 1" class="square-box">AND</div>
+                            </td>                         
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+
+<ng-container *ngIf="data.type == 'confirmation'">
+  <mat-card-content>
+      <h4 class="font-weight-bold">This Table Already Exist Please Create New Table</h4>
+      <div class="d-flex justify-content-end mt-4">
+          <div class="mr-2">
+              <button mat-raised-button color="primary" (click)="closeDialog2()">OK</button>
+          </div>
+      </div>
+  </mat-card-content>
+</ng-container>
+
+<ng-container *ngIf="data.type == 'getAudienceList'">
+   <div class="audienceListTable" style=" margin-bottom: 5px;">
+    <h2 class="audienceListTitle" style=" margin-bottom: 5px;">Select Audience List</h2> 
+    <div class="table-container">
+        <app-pitch-table [tabValue]="tabValue1" [type]="type1"
+        class="class1 mt-2"></app-pitch-table>
+    </div>
+    <br>
+    <div class="add-btn ml-3" *ngIf="tabValue1.length !==0 ">
+        <button>Add</button>
+    </div>
+  </div> 
+</ng-container>
+
+<ng-container *ngIf="data.type == 'selectAudienceList'">
+    <div class="dialogContent">
+        <div class="row align-items-center">
+            <div class="col-4 border-right" (click)="simpleModeAudienceList('simple-mode')" style="padding: 100px 0px;margin: 0px 0px;">
+                <div class="AudListImg simple-mode"></div>
+                <div class="AudListName">Add New Simple Mode</div>
+            </div>
+            <div class="col-4 border-right pointer" (click)="simpleModeAudienceList('expert-mode')" style="padding: 100px 0px;margin: 0px 0px;">
+                <div class="AudListImg expert-mode"></div>
+                <div class="AudListName">Add New Expert Mode</div>
+            </div>
+            <div class="col-4 pointer" (click)="simpleModeAudienceList('existing-mode')" style="padding: 100px 0px;margin: 0px 0px;">
+                <div class="AudListImg existing-mode"></div>
+                <div class="AudListName">Create From Existing</div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+
+<!-- ------------- Delete Campaign -------------------- -->
+<ng-container *ngIf="data.type == 'deleteCampaign'">
+    <mat-card-content>
+        <div class="content">
+            <img _ngcontent-cty-c83="" style="height: 60px; width: 60px;" src="assets/images/icons/delete.png">
+            <br>
+            <p class="delConf">Are you sure ?</p>
+            <p>You want to delete the data ?</p>
+            <br>
+            <button mat-stroked-button class="outline btn1-primary delbtn mx-3">
+                <span style="color:#fff">Yes</span>
+            </button>
+            <button class="mat-focus-indicator btn mat-flat-button mat-button-base" mat-dialog-close
+                mat-stroked-button>No</button>
+        </div>
+    </mat-card-content>
+</ng-container>

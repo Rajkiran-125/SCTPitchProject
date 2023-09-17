@@ -1,0 +1,655 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <form [formGroup]="form">
+      <legend class="legendheader">
+        {{changeModuleDisplayName}}
+      </legend>
+
+      <div class="row">
+        <div class="col-10" style="display: flex;justify-content: space-between;padding-left: 0;">
+          <div class="pl-0 blue-dropdown">
+            <mat-form-field appearance="fill">
+              <mat-label>Application </mat-label>
+              <mat-select [(value)]="productName" (selectionChange)="getApp($event.value,'selected','toggle');"
+                panelClass="blue-panel">
+                <mat-option *ngFor="let data of productType" [value]="data.Id">
+                  {{data.ProductName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="d-flex justify-content-end text-end">
+
+            <div class="d-flex align-items-center">
+              <i class="icon-add addBtnBlue mr-3" color="primary" *ngIf="userConfig?.Add && productName" (click)="addApp()"></i>
+              <i class="icon-edit editBtn" *ngIf="userConfig?.Edit && !edit  && gettreeList.length!==0" (click)="changeEdit()"></i>
+            </div>
+            <!-- <button  color="primary" mat-stroked-button
+              class="editBtn addBtnBlue mx-2"></button> -->
+              <!-- <mat-icon *ngIf="userConfig?.Add && productName" (click)="addApp()">add</mat-icon> -->
+              <!-- <mat-icon *ngIf="userConfig?.Edit && !edit  && gettreeList.length!==0" (click)="changeEdit()">edit</mat-icon> -->
+            <!-- <button  color="primary" mat-flat-button
+               class="editBtn"></button> -->
+            <button *ngIf="(userConfig?.Update)  && edit && gettreeList.length!==0" mat-raised-button class="btn"
+              color="primary" (click)="updateChildModule()" class="saveBtn">&nbsp;&nbsp;Update&nbsp;&nbsp;</button>
+          </div>
+        </div>
+        <div class="col-12 mt-3 pl-0">
+          <div class="noCategoryFound " *ngIf="gettreeList.length==0">No Record Found</div>
+        </div>
+        <div class="col-10 pl-0">
+          <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree">
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+              <div style="width:100%;" *ngIf="node.ParentId !== themeid || themeid === undefined">
+                <li class="mat-tree-node borderMain">
+                  <span style="position:fixed;" #spanTrigger class="context-menu-trigger" #matTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="contextMenuOne"></span>
+                  <div (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" class="mat-tree-border"
+                    [ngStyle]="{'margin-top' : !node.ParentId ? '10px':'auto'}"
+                    style="width:100%;display:flex;justify-content: space-between;align-items:center;height:55px;margin-top: 2px;border-bottom: 1px solid var(--gray_color_80);padding-left: 60px; border-radius: 3px;">
+                    <span style="padding-right: 10px"><i [ngClass]="dummyValues[node.Id].Icon"></i></span>
+                    <span style="flex: 1;font-family: Nunito Sans, Regular;font-weight: bold;">{{node.Name}}</span>
+                    <span style="margin-right:5px;">
+                      <span>
+                        <div *ngIf="node.ControlType == 'Textbox' && node.AdditionalProperty != undefined ">
+
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <input autocomplete="off" type="text" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" class="shortcutkeyInput"
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:50px;padding: 5px;background-color: #fff;"
+                                matInput />
+                              <span *ngIf="dummyValues[node.Id].AdditionalProperty >= 2"
+                                style="padding: 10px;font-size: 22px;">+</span>
+                              <input *ngIf="dummyValues[node.Id].AdditionalProperty >= 2" autocomplete="off" type="text"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="dummyValues[node.Id].AssignedValue1"
+                                class="shortcutkeyInput"
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:35px;padding: 5px;background-color: #fff;"
+                                matInput />
+                              <span *ngIf="dummyValues[node.Id].AdditionalProperty == 3"
+                                style="padding: 10px;font-size: 22px;">+</span>
+                              <input *ngIf="dummyValues[node.Id].AdditionalProperty == 3" autocomplete="off" type="text"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="dummyValues[node.Id].AssignedValue2"
+                                class="shortcutkeyInput"
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:35px;padding: 5px;background-color: #fff;"
+                                matInput />
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node,'toggle')"
+                                checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true"
+                                style="padding-left: 20px;">
+                              </mat-slide-toggle>
+
+                            </div>
+
+                          </div>
+                        </div>
+
+
+                        <div *ngIf="node.ControlType == 'Number'">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <input autocomplete="off" (keypress)="common.numericOnly($event)" type="number" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" min="0" max="999"
+                                class="shortcutkeyInput"
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:50px;padding: 5px;background-color: #fff;"
+                                matInput />
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node,'toggle')"
+                                checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true"
+                                style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+
+
+
+                        <div *ngIf="node.ControlType == 'Dropdown'">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <mat-form-field appearance="fill" style="width: 180px;margin-top: 20px;"
+                                class="shortcutkeyDropdown">
+                                <mat-select matinput [ngModelOptions]="{standalone: true}"
+                                  [(ngModel)]="dummyValues[node.Id].AssignedValue" #selected>
+                                  <mat-option *ngFor="let items of node.ConfigValue" [value]="items.Value">
+                                    {{ items.Value }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node,'toggle')"
+                                checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true"
+                                style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <div *ngIf="node.ControlType == 'MultiSelect'">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <mat-form-field appearance="fill" style="padding-top: 20px;width: 180px;"
+                                class="shortcutkeyDropdown">
+                                <mat-select multiple [ngModelOptions]="{standalone: true}"
+                                  [(ngModel)]="dummyValues[node.Id].AssignedValue">
+                                  <mat-option *ngFor="let items of node.ConfigValue" [value]="items.Value">
+                                    {{ items.Value }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node,'toggle')"
+                                checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true"
+                                style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <div *ngIf="node.ControlType == 'DatePicker'">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <mat-form-field appearance="fill" class="shortcutkeyDropdown shortcutkeydatePicker"
+                                style="padding-top: 20px;width: 140px;">
+                                <input [ngModelOptions]="{standalone: true}" [min]="todayDate" [max]="maxDate" readonly
+                                  type="text" [(ngModel)]="dummyValues[node.Id].AssignedValue" [matDatepicker]="Date"
+                                  matInput>
+                                <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+                                <mat-datepicker #Date></mat-datepicker>
+                              </mat-form-field>
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node,'toggle')"
+                                checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true"
+                                style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- formControlName="starttime" -->
+                        <!-- <div *ngIf="node.ControlType == 'TimeControl'">
+                        <div *ngIf="dummyValues[node.Id].Status">
+                          <div  [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" >
+                        <mat-form-field appearance="fill" style="padding-top: 20px;width: 70px;">
+                          <input matTimepicker #t1="matTimepicker" formControlName="starttime"  [(ngModel)]="dummyValues[node.Id].AssignedValue"  readonly>
+                        </mat-form-field>
+
+                      <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                      [checked]="dummyValues[node.Id]?.Status" (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true" style="padding-left: 20px;">
+                      </mat-slide-toggle>
+                      </div>
+                      </div>
+                      </div> -->
+
+
+                        <div *ngIf="node.ControlType == 'TimeControl'" class="d-flex align-items-center">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <input readonly
+                                value="{{dummyValues[node.Id].AssignedValue?.hour ? dummyValues[node.Id].AssignedValue?.hour > 9 ? dummyValues[node.Id].AssignedValue?.hour : '0'+dummyValues[node.Id].AssignedValue?.hour : '00'}}:{{dummyValues[node.Id].AssignedValue?.minute ? dummyValues[node.Id].AssignedValue?.minute > 9 ? dummyValues[node.Id].AssignedValue?.minute : '0'+dummyValues[node.Id].AssignedValue?.minute : '00'}}:{{dummyValues[node.Id].AssignedValue?.second ? dummyValues[node.Id].AssignedValue?.second > 9 ? dummyValues[node.Id].AssignedValue?.second : '0'+dummyValues[node.Id].AssignedValue?.second : '00'}}">
+                              <mat-icon class="timerIconPositionChild"
+                                [ngClass]=" !edit  ? 'disabledIT' : 'cursorPointer'"
+                                [matMenuTriggerFor]="menu4">access_time</mat-icon>
+                              <mat-menu #menu4="matMenu" class="w-100 px-2  d-flex align-items-center "
+                                xPosition="before">
+                                <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                             $event.stopPropagation();" [(ngModel)]="dummyValues[node.Id].AssignedValue"
+                                  [ngModelOptions]="{standalone: true}" [seconds]="true" [hourStep]="1" [minuteStep]="1"
+                                  [secondStep]="1">
+                                </ngb-timepicker>
+                              </mat-menu>
+                              <!-- </mat-form-field> -->
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node,'toggle')"
+                                checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true"
+                                style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div *ngIf="node.ControlType == 'DateTime'">
+                          <mat-slide-toggle [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" color="primary"
+                            class="toggleBtn" (toggleChange)="flip(node.Id)" [checked]="dummyValues[node.Id]?.Status"
+                            (change)="UpdateStatus(node.Id,$event,node.ParentId,node,'toggle')" checked={{node?.Status}}
+                            *ngIf="dummyValues[node.Id]?.Status == true">
+                          </mat-slide-toggle>
+                        </div>
+
+
+                        <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                          [checked]="dummyValues[node.Id]?.Status"
+                          (change)="UpdateStatus(node.Id,$event,node.ParentId,node);" checked={{node?.Status}}
+                          *ngIf="dummyValues[node.Id]?.Status == false">
+                        </mat-slide-toggle>
+                      </span>
+                    </span>
+                    <mat-menu #contextMenuOne="matMenu">
+                      <button [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="" *ngIf="userConfig?.Create"
+                        mat-menu-item (click)="addSetting(node)">
+                        <mat-icon>add</mat-icon>
+                        <span>{{labelName?.Create}}</span>
+                      </button>
+                      <button [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" *ngIf="userConfig?.Modify"
+                        mat-menu-item (click)=" editTreeNode(node)">
+                        <mat-icon>edit</mat-icon>
+                        <span>{{labelName?.Modify}}</span>
+                      </button>
+                      <button [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" mat-menu-item
+                        (click)="deleteNode(node)">
+                        <mat-icon class="red-color cursorPointer">delete_outline</mat-icon>
+                        <span>{{labelName?.Delete}}</span>
+                      </button>
+                    </mat-menu>
+                  </div>
+                </li>
+              </div>
+
+            </mat-tree-node>
+
+
+            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild">
+              <div class="mat-tree-node"
+                style="border: 1px solid var(--gray_color_80); border-radius: 10px;padding: 8px;background: #f8f8f8;"
+                [ngStyle]="{'margin-top' : !node.ParentId ? '10px':'0px' }">
+                <li class="mat-tree-node borderMain">
+                  <span style="position:fixed;" #spanTrigger class="context-menu-trigger" #matTrigger="matMenuTrigger"
+                    [matMenuTriggerFor]="contextMenuTwo"></span>
+                  <div (contextmenu)="openContextMenu($event, matTrigger, spanTrigger)" class="mat-tree-border"
+                    style="width:100%;display:flex;justify-content: space-between;align-items:center;height:40px;">
+
+                    <span style="padding-left: 10px;padding-right: 10px;"><i [ngClass]="dummyValues[node.Id].Icon"
+                        class="treeIcons"></i></span>
+                    <span style="flex: 1;font-family: Nunito Sans, Bold; margin-left: 15px;"
+                      [ngStyle]="{'margin-left' : !node.ParentId ? '':'15px', 'font-size' : !node.ParentId ? '14px' : '14px', 'font-weight' : !node.ParentId? 'bold' : '100'}"><b>{{node.Name}}</b></span>
+                    <span style="margin-right:5px;">
+                      <span>
+
+                        <div *ngIf="node.ControlType == 'Textbox' && node.AdditionalProperty != undefined ">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <input autocomplete="off" type="text" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue"
+                                style="margin-right: 5px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:50px;padding: 5px;background-color: #fff;"
+                                matInput />
+                              <span *ngIf="dummyValues[node.Id].AdditionalProperty >= 2">+</span>
+                              <input *ngIf="dummyValues[node.Id].AdditionalProperty >= 2" autocomplete="off" type="text"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="dummyValues[node.Id].AssignedValue1"
+                                class="shortcutkeyInput"
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:35px;padding: 5px;background-color: #fff;"
+                                matInput />
+                              <span *ngIf="dummyValues[node.Id].AdditionalProperty == 3">+</span>
+                              <input *ngIf="dummyValues[node.Id].AdditionalProperty == 3" autocomplete="off" type="text"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="dummyValues[node.Id].AssignedValue2"
+                                class="shortcutkeyInput"
+                                style="margin-right: 0px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:35px;padding: 5px;background-color: #fff;"
+                                matInput />
+
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}}
+                                *ngIf="dummyValues[node.Id]?.Status == true" style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="node.ControlType == 'Number'">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <input autocomplete="off" (keypress)="common.numericOnly($event)" type="number" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="dummyValues[node.Id].AssignedValue" min="0" max="999"
+                                style="margin-right: 10px;margin-top: 0px;border: 1px solid #ccc;border-radius: 5px; width:50px;padding: 5px;background-color: #fff;"
+                                matInput />
+
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}}
+                                *ngIf="dummyValues[node.Id]?.Status == true">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="node.ControlType == 'Dropdown'">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <mat-form-field appearance="fill" style="padding-top: 20px;width: 180px;"
+                                class="shortcutkeyDropdown">
+                                <mat-select matinput [ngModelOptions]="{standalone: true}"
+                                  [(ngModel)]="dummyValues[node.Id].AssignedValue" #selected>
+                                  <mat-option *ngFor="let items of node.ConfigValue" [value]="items.Value">
+                                    {{ items.Value }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}}
+                                *ngIf="dummyValues[node.Id]?.Status == true" style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="node.ControlType == 'MultiSelect'">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'"
+                              class="d-flex align-items-center shortcutkeyDropdown">
+                              <mat-form-field appearance="fill" style="padding-top: 20px;width: 180px;">
+                                <mat-select multiple [ngModelOptions]="{standalone: true}"
+                                  [(ngModel)]="dummyValues[node.Id].AssignedValue">
+                                  <mat-option *ngFor="let items of node.ConfigValue" [value]="items.Value">
+                                    {{ items.Value }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}}
+                                *ngIf="dummyValues[node.Id]?.Status == true" style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="node.ControlType == 'DatePicker'">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="d-flex align-items-center">
+                              <mat-form-field appearance="fill" class="shortcutkeyDropdown shortcutkeydatePicker"
+                                style="padding-top: 20px;width: 140px;">
+                                <input [ngModelOptions]="{standalone: true}" readonly type="text"
+                                  [(ngModel)]="dummyValues[node.Id].AssignedValue" [matDatepicker]="Date"
+                                  [max]="maxDate" [min]="minDate" matInput>
+                                <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+                                <mat-datepicker #Date></mat-datepicker>
+                              </mat-form-field>
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}}
+                                *ngIf="dummyValues[node.Id]?.Status == true" style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- [ngModelOptions]="{standalone: true}" -->
+                        <!-- <mat-icon class="cursorPointer" matSuffix (click)="t1.showDialog()">access_time</mat-icon> -->
+                        <!-- <div *ngIf="node.ControlType == 'TimeControl'">
+                        <div *ngIf="dummyValues[node.Id].Status">
+                          <div  [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" >
+                        <mat-form-field appearance="fill" style="padding-top: 20px;width: 180px;">
+                          <input matTimepicker #t1="matTimepicker" formControlName="starttime"  [(ngModel)]="dummyValues[node.Id].AssignedValue" placeholder="00:00" readonly>
+                        </mat-form-field>
+
+                      <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                      [checked]="dummyValues[node.Id]?.Status" (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true" style="padding-left: 20px;">
+                      </mat-slide-toggle>
+                      </div>
+                      </div>
+                      </div> -->
+
+
+                        <!-- <div *ngIf="node.ControlType == 'TimeControl'">
+                        <div *ngIf="dummyValues[node.Id].Status">
+                          <div  [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" >
+                        <mat-form-field appearance="fill" style="padding-top: 20px;width: 180px;">
+                          <input matTimepicker [ngModelOptions]="{standalone: true}" [(ngModel)]="dummyValues[node.Id].AssignedValue" placeholder="00:00">
+                        </mat-form-field>
+
+                      <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                      [checked]="dummyValues[node.Id]?.Status" (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}} *ngIf="dummyValues[node.Id]?.Status == true" style="padding-left: 20px;">
+                      </mat-slide-toggle>
+                      </div>
+                      </div>
+                      </div> -->
+
+
+                        <div *ngIf="node.ControlType == 'TimeControl'" class="d-flex align-items-center">
+                          <div *ngIf="dummyValues[node.Id].Status">
+                            <div [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'">
+                              <input readonly
+                                value="{{dummyValues[node.Id].AssignedValue?.hour ? dummyValues[node.Id].AssignedValue?.hour > 9 ? dummyValues[node.Id].AssignedValue?.hour : '0'+dummyValues[node.Id].AssignedValue?.hour : '00'}}:{{dummyValues[node.Id].AssignedValue?.minute ? dummyValues[node.Id].AssignedValue?.minute > 9 ? dummyValues[node.Id].AssignedValue?.minute : '0'+dummyValues[node.Id].AssignedValue?.minute : '00'}}:{{dummyValues[node.Id].AssignedValue?.second ? dummyValues[node.Id].AssignedValue?.second > 9 ? dummyValues[node.Id].AssignedValue?.second : '0'+dummyValues[node.Id].AssignedValue?.second : '00'}}">
+
+                              <mat-icon class="timerIconPosition" [ngClass]=" !edit  ? 'disabledIT' : 'cursorPointer'"
+                                [matMenuTriggerFor]="menu1">access_time</mat-icon>
+                              <mat-menu #menu1="matMenu" class="w-100 px-2  d-flex align-items-center "
+                                xPosition="before">
+                                <ngb-timepicker #tp name="timepicker" (click)=" $event.preventDefault();
+                                 $event.stopPropagation();" [(ngModel)]="dummyValues[node.Id].AssignedValue"
+                                  [ngModelOptions]="{standalone: true}" [seconds]="true" [hourStep]="1" [minuteStep]="1"
+                                  [secondStep]="1">
+                                </ngb-timepicker>
+                              </mat-menu>
+                              <!-- </mat-form-field> -->
+                              <mat-slide-toggle color="primary" class="toggleBtn" (toggleChange)="flip(node.Id)"
+                                [checked]="dummyValues[node.Id]?.Status"
+                                (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}}
+                                *ngIf="dummyValues[node.Id]?.Status == true" style="padding-left: 20px;">
+                              </mat-slide-toggle>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div *ngIf="node.ControlType == 'DateTime'">
+                          <mat-slide-toggle [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" color="primary"
+                            class="toggleBtn" (toggleChange)="flip(node.Id)" [checked]="dummyValues[node.Id]?.Status"
+                            (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}}
+                            *ngIf="dummyValues[node.Id]?.Status == true && node.Name !== 'Themes'&& node.Name !== 'Application Shortcut Keys' && node.Name !== 'Help'">
+                          </mat-slide-toggle>
+                        </div>
+                        <mat-slide-toggle [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'"
+                          *ngIf="dummyValues[node.Id]?.Status == false" color="primary" class="toggleBtn"
+                          (toggleChange)="flip(node.Id)" [checked]="dummyValues[node.Id]?.Status"
+                          (change)="UpdateStatus(node.Id,$event,node.ParentId,node)" checked={{node?.Status}}>
+                        </mat-slide-toggle>
+
+
+                      </span>
+                    </span>
+
+                    <button mat-icon-button matTreeNodeToggle [disabled]="dummyValues[node.Id]?.Status == false"
+                      [attr.aria-label]="'Toggle ' + node.Name">
+                      <mat-icon class="mat-icon-rtl-mirror">
+                        {{nestedTreeControl.isExpanded(node) ? 'keyboard_arrow_up' : 'expand_more'}}
+                      </mat-icon>
+                    </button>
+                    <mat-menu #contextMenuTwo="matMenu">
+                      <button [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" class="" *ngIf="userConfig?.Create"
+                        mat-menu-item (click)="addSetting(node)">
+                        <mat-icon>add</mat-icon>
+                        <span>{{labelName?.Create}}</span>
+                      </button>
+                      <button [ngClass]=" !edit ? 'disabledIT' : 'cursorPointer'" *ngIf="userConfig?.Modify"
+                        mat-menu-item (click)="editTreeNode(node)">
+                        <mat-icon>edit</mat-icon>
+                        <span>{{labelName?.Modify}}</span>
+                      </button>
+
+                    </mat-menu>
+                  </div>
+                </li>
+
+              </div>
+
+              <div [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)"
+              style="background: #f8f8f8;border-radius: 3px;">
+              <ng-container matTreeNodeOutlet>
+
+                <div *ngIf=" node.Name == 'Themes' || node.ConfigKey == 'theme' " style="padding: 20px;">
+
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-6 p-0 padding10">
+                      <div class="innerCardContent">
+                        <img src="assets/images/admin/darkBlueTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('darkbluetheme')">
+                        <hr class="my-0">
+                        <div class="cardName">
+                          <span style="font-family: Nunito Sans, Regular;">Dark Blue</span>
+                          <div class="d-flex align-items-center">
+                            <span class="mr-2">
+                              <mat-checkbox color="primary" labelPosition="before" [checked]="isChecked[0]"
+                              (change)="setcheckbox(0)">Default</mat-checkbox>
+                            </span>
+                            <span>
+                               <mat-slide-toggle color="primary" class="toggleBtn" labelPosition="before"
+                              [checked]="darkblue" checked=darkblue (toggleChange)="themetoggle('darkbluetheme')"
+                              (change)="themechange('darkbluetheme',$event.checked)"></mat-slide-toggle>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-6 p-0 padding10">
+                      <div class="innerCardContent">
+                        <img src="assets/images/admin/greenTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('greentheme')">
+                        <hr class="my-0">
+                        <div class="cardName">
+                          <span style="font-family: Nunito Sans, Regular;">Green</span>
+                          <div class="d-flex align-items-center">
+                            <span class="mr-2">
+                              <mat-checkbox color="primary" labelPosition="before" [checked]="isChecked[1]"
+                              (change)="setcheckbox(1)">Default</mat-checkbox>
+                            </span>
+                            <span>
+                              <mat-slide-toggle color="primary" class="toggleBtn" labelPosition="before"
+                              [checked]="green" checked=green (toggleChange)="themetoggle('greentheme')"
+                              (change)="themechange('greentheme',$event.checked)"></mat-slide-toggle>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 p-0 padding10">
+                      <div class="innerCardContent">
+                        <img src="assets/images/admin/blueTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('bluetheme')">
+                        <hr class="my-0">
+                        <div class="cardName">
+                          <span style="font-family: Nunito Sans, Regular;">Blue</span>
+                          <div class="d-flex align-items-center">
+                            <span class="mr-2">
+                              <mat-checkbox color="primary" labelPosition="before" [checked]="isChecked[2]"
+                              (change)="setcheckbox(2)">Default</mat-checkbox>
+                            </span>
+                            <span>
+                              <mat-slide-toggle color="primary" class="toggleBtn" labelPosition="before"
+                              [checked]="blue" checked=blue (toggleChange)="themetoggle('bluetheme')"
+                              (change)="themechange('bluetheme',$event.checked)"></mat-slide-toggle>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 p-0 padding10">
+                      <div class="innerCardContent">
+                        <img src="assets/images/admin/orangeTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('orangetheme')">
+                        <hr class="my-0">
+                        <div class="cardName">
+                          <span style="font-family: Nunito Sans, Regular;">Orange</span>
+                          <div class="d-flex align-items-center">
+                            <span class="mr-2">
+                              <mat-checkbox color="primary" labelPosition="before" [checked]="isChecked[3]"
+                              (change)="setcheckbox(3)">Default</mat-checkbox>
+                            </span>
+                            <span>
+                              <mat-slide-toggle color="primary" class="toggleBtn" labelPosition="before"
+                              [checked]="orange" checked=orange (toggleChange)="themetoggle('orangetheme')"
+                              (change)="themechange('orangetheme',$event.checked)"></mat-slide-toggle>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 p-0 padding10">
+                      <div class="innerCardContent">
+                        <img src="assets/images/admin/darkTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('darktheme')">
+                        <hr class="my-0">
+                        <div class="cardName">
+                          <span style="font-family: Nunito Sans, Regular;">Dark Theme</span>
+                          <div class="d-flex align-items-center">
+                            <span class="mr-2">
+                              <mat-checkbox color="primary" labelPosition="before" [checked]="isChecked[4]"
+                              (change)="setcheckbox(4)">Default</mat-checkbox>
+                            </span>
+                            <span>
+                              <mat-slide-toggle color="primary" class="toggleBtn" labelPosition="before"
+                              [checked]="darktheme" checked=darktheme (toggleChange)="themetoggle('darktheme')"
+                              (change)="themechange('darktheme',$event.checked)"></mat-slide-toggle>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 p-0 padding10">
+                      <div class="innerCardContent">
+                        <img src="assets/images/admin/darkBlueTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('customizetheme')"
+                          *ngIf="customizethemecolorimage == 'darkblue'">
+                        <img src="assets/images/admin/blueTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('customizetheme')"
+                          *ngIf="customizethemecolorimage == 'blue'">
+                        <img src="assets/images/admin/themeChange.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('customizetheme')"
+                          *ngIf="customizethemecolorimage == 'green'">
+                        <img src="assets/images/admin/orangeTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('customizetheme')"
+                          *ngIf="customizethemecolorimage == 'orange'">
+                        <img src="assets/images/admin/darkTheme.PNG" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('customizetheme')"
+                          *ngIf="customizethemecolorimage == 'gray'">
+                        <img src="assets/images/admin/YellowTheme.png" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('customizetheme')"
+                          *ngIf="customizethemecolorimage == 'yellow'">
+                        <img src="assets/images/admin/RedTheme.png" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('customizetheme')"
+                          *ngIf="customizethemecolorimage == 'red'">
+                        <img src="assets/images/admin/PurpleTheme.png" alt="" srcset=""
+                          class="cardImage primaryBackgroundColor" (click)="gotoThemeComponent('customizetheme')"
+                          *ngIf="customizethemecolorimage == 'purple'">
+                        <hr class="my-0">
+                        <div class="cardName">
+                          <span style="font-family: Nunito Sans, Regular;">Customize</span>
+                          <div class="d-flex align-items-center">
+                            <span class="mr-2">
+                              <mat-checkbox color="primary" labelPosition="before" [checked]="isChecked[5]"
+                              (change)="setcheckbox(5)">Default</mat-checkbox>
+                            </span>
+                            <span>
+                              <mat-icon class="gray" *ngIf="userConfig?.Edit"
+                              (click)="gotoThemeComponent('customizetheme')">edit</mat-icon>
+                            </span>
+                            <span>
+                              <mat-slide-toggle color="primary" class="toggleBtn" labelPosition="before"
+                              [checked]="customize" checked=customize (toggleChange)="themetoggle('customizetheme')"
+                              (change)="themechange('customizetheme',$event.checked)"></mat-slide-toggle>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </ng-container>
+              </div>
+            </mat-nested-tree-node>
+          </mat-tree>
+          <div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-size: var(--normal-font);
+  font-weight: bold;
+  color: #053c6d;
+  color: var(--primary_color);
+  margin-bottom: 10px;
+}
+
+.darkWrapper1 {
+  background: #ffffff;
+  border: var(--border) !important;
+  border-radius: 20px !important;
+  opacity: 1 !important;
+  max-height: auto !important;
+  overflow-y: auto;
+  padding: 1.5rem 1.5rem 25px !important;
+  width: 99%;
+  margin-bottom: 20px;
+  &:hover {
+    box-shadow: 0px 0px 6px #00000029 !important;
+  }
+}
+
+.groupTitle1 {
+  span {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--black_color_80);
+    line-height: 20px;
+    margin-left: 15px;
+  }
+}
+
+legend {
+  font-size: var(--normal-font) !important;
+}
+span {
+  font-size: var(--content_title) !important;
+}
+.wrapper {
+  padding-right: 50px !important;
+  padding-left: 0px !important;
+}
+.size{
+  font-size: 16px!important;
+  }
+.width-100{
+  margin-left: 10px !important;
+}
+
+@media screen and (max-width: 767px)
+{
+  .wrapper {
+    padding: 30px 15px !important;
+
+    .btn-width80{
+      width: 75px !important;
+      min-width: 75px !important;
+      margin: 0px 5px;
+    }
+}
+
+.customproductgrp{
+  width:auto !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-infix {
+  border-top: 5px solid transparent !important;
+}
+
+::ng-deep{
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding: 0px 10px 0px 10px !important;
+  }
+
+
+}
+}

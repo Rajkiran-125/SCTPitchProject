@@ -1,0 +1,93 @@
+.container{
+  
+    .row{
+        justify-content: center;
+        margin: 2em 0;
+        .backKey{
+            text-align: end;color: gray;
+        }
+        .billsHeading{
+            font-size: larger;
+        }
+
+        mat-accordion{
+            margin: 1em 0;
+            width: 100%;
+            box-shadow: 0px 2px 3px #0000001a;
+            box-shadow: var(--box_shadow);
+            box-shadow: 1px 3px 20px #dfdfdf;
+            align-items: center;
+            mat-expansion-panel{
+                mat-expansion-panel-header{
+                    margin: 1em;
+                    .row{
+                        margin: 1em;
+                        .heading{
+                            font-size: large;
+                            font-weight: bold;
+                        }
+                        
+                    }
+                }
+                .blue{
+                    color: #036db7;
+                }
+                .blueData{
+                }
+                
+            }
+        }
+    }
+}
+
+.red{
+    color: #db4756;
+}
+
+.yellow{
+    color: #fbb424;
+}
+
+.gray{
+    color: #7d7d7d;
+}
+
+.green{
+    color:#36bc9b
+}
+.blue{
+    color:#036db7
+}
+.bold{
+    font-weight: bold;
+}
+
+.marginTopHalfEM{
+    margin: 0.5em 0 0;
+}
+
+.badPackagingImages{
+    margin-bottom: 1em;
+    img{
+        height: 6em;
+        margin: 0 0.5em;
+        border-radius: 15px;
+    }
+}
+
+
+  
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+  }
+  
+
+
+@media screen and (max-width: 480px) {
+    ::ng-deep {
+        span{
+            width: 100%;
+            display: block !important;
+        }
+    }
+}

@@ -1,0 +1,53 @@
+
+tbody{
+  height:auto;overflow:scroll
+}
+
+
+
+
+.campaignList ::ng-deep .mat-slide-toggle-bar {
+    height: 20px !important;
+    width:45px !important;
+    border-radius: 5px !important;
+    background-color: #c5c4c4;
+  }
+  .campaignList ::ng-deep .mat-slide-toggle-thumb{
+    top:3px !important;
+     right:6px !important;
+    position: relative;
+    width: 42px !important;
+    border-radius: 5px !important;
+    display: block !important;
+    background-color: #fc3164 !important;
+  } 
+  .campaignList ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    width:48px !important;
+    background-color: #c5c4c4;
+    margin-right: 5px;
+  }
+  .campaignList ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
+    width: 41px !important;
+    background-color: #3dbf87 !important;
+  }
+  
+  :host {
+    .mat-slide-toggle {
+      &.mat-checked {
+        ::ng-deep.mat-slide-toggle-thumb::after {
+          content: 'Start';
+          color: #fff;
+          margin: 7px;
+        }
+      }
+      &:not(.mat-checked) {
+        ::ng-deep.mat-slide-toggle-thumb::after {
+          content: 'Stop';
+          color: #fff;
+          margin: 7px;
+        }
+      }
+    }
+  }  
+
+

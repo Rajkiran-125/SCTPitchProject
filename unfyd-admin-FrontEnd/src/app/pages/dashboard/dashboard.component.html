@@ -1,0 +1,117 @@
+
+<app-loader class="" *ngIf="loader"></app-loader>
+
+<div class="dashboardContainer" *ngIf="!loader">
+  <div class="row m-0">
+    <div class="col-lg-9 col-md-12 col-sm-12 px-0">
+      <div class="row m-0">
+     
+        <div class="col-lg-3 col-md-3 col-sm-12 colPadding my-2" >
+          <div class="border align-items-center p-1 py-3  " ngClass="color0"> 
+            <div class="col-12 text-center">
+              <span class="xxxlFont">
+                {{trainingData['Total Collections'] == null ? '0' :(trainingData['Total Collections']!= null && trainingData['Total Collections'].toString().length > 7) ? ((trainingData['Total Collections']/10000000)| currency:"INR":true)+'Cr' : (trainingData['Total Collections']!= null && trainingData['Total Collections'].toString().length > 5) ? ((trainingData['Total Collections']/100000)| currency:"INR":true)+'L'   :trainingData['Total Collections']| currency:"INR":true:'1.0-0' }}
+              </span>
+            </div>
+            <div class="col-12 text-center">
+              <h6>Total Collections</h6>
+            </div>    
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 colPadding my-2" >
+          <div class="border align-items-center p-1 py-3  " ngClass="color1"> 
+            <div class="col-12 text-center">
+              <span class="xxxlFont">
+               {{trainingData['Total Applicants']}}</span>
+            </div>
+            <div class="col-12 text-center">
+              <h6>Total Applicants</h6>
+            </div>    
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 colPadding my-2" >
+          <div class="border align-items-center p-1 py-3  " ngClass="color2"> 
+            <div class="col-12 text-center">
+              <span class="xxxlFont">
+               {{trainingData['Total Registrations']}}</span>
+            </div>
+            <div class="col-12 text-center">
+              <h6>Total Registrations</h6>
+            </div>    
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 colPadding my-2" >
+          <div class="border align-items-center p-1 py-3  " ngClass="color3"> 
+            <div class="col-12 text-center">
+              <span class="xxxlFont">
+               {{trainingData['Total Grievances']}}</span>
+            </div>
+            <div class="col-12 text-center">
+              <h6>Total Grievances</h6>
+            </div>    
+          </div>
+        </div>
+      </div>
+      <div class="row mx-0 ">
+        <div class="col-lg-4 col-md-3 col-sm-12 colPadding my-2">
+          <div class="border align-items-center py-0   bg-white"> 
+            <app-dashboard-payment-collection></app-dashboard-payment-collection>  
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-3 col-sm-12 colPadding my-2">
+          <div class="border align-items-center py-0   bg-white"> 
+            <app-dashboard-overall-collection></app-dashboard-overall-collection>  
+          </div>
+        </div>
+       
+        <div class="col-lg-4 col-md-3 col-sm-12 colPadding my-2">
+          <div class="border align-items-center py-0   bg-white"> 
+            <app-dashboard-grievance></app-dashboard-grievance>  
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-3 col-sm-12 colPadding my-2">
+          <div class="border align-items-center py-0   bg-white"> 
+            <app-dashboard-hawker-application></app-dashboard-hawker-application>  
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-3 col-sm-12 colPadding my-2">
+          <div class="border align-items-center py-0   bg-white"> 
+            <app-dashboard-registration-ratio></app-dashboard-registration-ratio>  
+          </div>
+        </div>
+        
+
+        <div class="col-lg-4 col-md-3 col-sm-12 colPadding my-2">
+          <div class="border  align-items-center py-0   bg-white"> 
+            <app-dashboard-training></app-dashboard-training>  
+          </div>
+        </div>
+        
+      </div>
+      <div class="row mx-0 ">
+        
+     
+        
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 px-0">
+      <div class="row m-0">
+        <div class="col-lg-12 col-md-3 col-sm-12 colPadding my-2">
+          <div class="border align-items-center py-0   bg-white"> 
+            <app-dashboard-top-performer></app-dashboard-top-performer>  
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-3 col-sm-12 colPadding my-2">
+          <div class="border align-items-center py-0   bg-white"> 
+            <app-dashboard-top-performer-by-location></app-dashboard-top-performer-by-location>  
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+  
+  </div>  

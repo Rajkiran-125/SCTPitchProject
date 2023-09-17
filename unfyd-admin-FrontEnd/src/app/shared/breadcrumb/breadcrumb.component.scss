@@ -1,0 +1,41 @@
+::ng-deep{
+    .mat-menu-panel.a{
+        width: 10em !important;
+    }
+}
+
+ul li a{
+    font-size: 18px !important;
+}
+
+
+.reloadText{
+    // font-size: var(--medium-font);
+    cursor: pointer;
+    color: var(--black_color_70);
+    &:hover{
+      color: var(--primary_color);
+    }
+
+}
+
+@media screen and (max-width: 767px){
+    ul li a{
+        font-size: 14px !important;
+    }
+    .cutText1{
+        min-width: 20px;
+        max-width: 153px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .cutText2{
+        min-width: 20px;
+        max-width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

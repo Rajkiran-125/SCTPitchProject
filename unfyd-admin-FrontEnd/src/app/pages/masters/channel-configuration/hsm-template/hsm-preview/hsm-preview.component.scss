@@ -1,0 +1,55 @@
+.container{
+    width: 190px;
+    height: 350px;
+    position: relative;
+    margin: 20px;
+}
+.box{
+    width: 150%;
+    height: 140%;
+    position: absolute;
+    background-size: 85%;
+    background-repeat: no-repeat;
+    margin-left: 40px;
+    margin: 0 20%;
+    word-break:  break-word;
+    font-size: var(--medium-font);
+     img {
+        border-radius: 5px;
+
+        width: 164px;
+        height: 100px;
+     }
+     .bodyText{
+        margin: 5px;
+        color: azure;
+    }
+}
+.stack-top{
+    width: 66%;
+    height: 81%;  
+    z-index: 1;
+    position: absolute;
+    margin: 27px;
+    top: 43px; 
+    padding: 10px;
+    font-size: var(--small-font);
+    overflow: auto;
+    border-radius: 10px;
+}
+
+div button {
+    position: relative;
+    float: right;
+    margin-right: 50px;
+}
+
+.text{
+    width: 100px;
+    margin-top: 100px;
+    margin-left: 25%;
+    border-radius: 10px;
+    position: absolute;
+    top: 50px;
+    word-break: break-all;
+}

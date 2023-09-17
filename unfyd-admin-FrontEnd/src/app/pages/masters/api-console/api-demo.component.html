@@ -1,0 +1,268 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+   <div class="wrapper">
+      <legend class="primary-color font-weight-bold size">API Gateway</legend>
+      <div class="row py-2">
+         <div class="col-lg-3 col-md-3 col-sm-6 blue-dropdown">
+            <mat-form-field appearance="fill">
+               <mat-select panelClass="blue-panel" [(ngModel)]="productId" [ngModelOptions]="{standalone: true}"
+                 >
+                  <mat-option *ngFor="let data of productType" [value]="data.Id" (click)="test(data)">
+                     {{data.ProductName}}</mat-option>
+               </mat-select>
+            </mat-form-field>
+         </div>
+      </div>
+
+      <div class="container"  >
+         <div mat-tab-nav-bar>
+              <a mat-tab-link *ngFor="let data of apiConsole" (click)="tabClick(data.tab)"
+                  [active]="selectedTab == data.tab" class="userNavtab">
+                  {{data.label}} </a>
+          </div>
+         <div>
+          <div class="Date mr-2" style="margin-top: 15px;">
+            <form [formGroup]="DateForm">
+               <div class="row">
+                  <div class="col-3 mr-2">
+                     <mat-form-field appearance="fill">
+                        <mat-label>From Date</mat-label>
+                        <input [datePickerFormat]="dateFormat" (focus)="fromDate.open()" (click)="fromDate.open()" readonly
+                           formControlName="fromDate" type="text" [matDatepicker]="fromDate" [max]="maxDate"
+                           [min]="minDate" matInput>
+                        <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                        <mat-datepicker #fromDate></mat-datepicker>
+                     </mat-form-field>
+                  </div>
+                  <div class="col-3">
+                     <mat-form-field appearance="fill">
+                        <mat-label>To Date</mat-label>
+                        <input [datePickerFormat]="dateFormat" (focus)="toDate.open()" (click)="toDate.open()" readonly
+                           formControlName="toDate" type="text" [matDatepicker]="toDate" [max]="maxDate" [min]="minDate"
+                           matInput>
+                        <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                        <mat-datepicker #toDate></mat-datepicker>
+                     </mat-form-field>
+                  </div>
+
+
+                  <div class="col-3">
+                     <button mat-raised-button type="submit" (click)="submitForm()" class="width-100" color="primary">View</button>
+                  </div>
+
+
+               </div>
+            </form>
+         </div>
+
+
+
+
+         <div *ngIf="Type.length > 0;else noData">
+            <ng-container *ngFor="let typ of Type; index as x">
+               <div class="mt-3 mx-3 mb-1">
+                  <mat-accordion>
+                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" style="    background: var(--black_color_60);">
+                        <mat-expansion-panel-header>
+                           <mat-panel-title>
+                              <b>{{typ}}</b>
+                           </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+
+
+
+
+<!-- {{categories|json}}
+{{wiseObj|json}} -->
+                        <ng-container *ngFor="let category of categories; index as i" class="p-2">
+                           <div *ngIf="wiseObj[typ][category].length > 0;" >
+
+
+                              <mat-accordion>
+                                 <!-- (click) = 'GetModuleData($event,typ,category)' -->
+                                 <mat-expansion-panel class="mb-2" (opened)="panelOpenState = true;GetModuleData($event,typ,category)" (closed)="panelOpenState = false"  style="background: var(--black_color_60);" >
+                                    <mat-expansion-panel-header>
+                                       <mat-panel-title>
+                                          <span class="catfont">{{category}}</span>
+                                       </mat-panel-title>
+
+                                    </mat-expansion-panel-header>
+
+
+
+
+
+
+                              <div>
+
+
+                                 <mat-card-content>
+                                   <div class="row">
+                                    <div class="col-lg-7 col-md-7 col-sm-12">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                       <div class="row">
+                                          <span class="fontfam col-5" style="text-align: right; padding: 0;">Hit Count</span>
+                                          <span class="fontfam col-3" style="text-align: center;">Success</span>
+                                          <span class="fontfam col-3" style="text-align: center;">Failure</span>
+                                       </div>
+                                   </div>
+                                   <div class="col-lg-1 col-md-4 col-sm-12">
+                                   </div>
+                                 </div>
+                                </mat-card-content>
+
+
+                                <ng-container *ngFor="let item of wiseObj[typ][category]; index as y">
+
+                                    <mat-card class=" CardApi" *ngIf="wiseObj[typ][category].length > 0; else noData" >
+                                       <mat-card-content>
+                                       <div class="row">
+
+                                            <div class="col-7">
+                                              <span style="border: 1px solid #36BC9B;border-radius: 20px ;padding: 6px ;margin-left: 5px;" class="post-chip cursorPointer" (click)="openDialogdemo(y,category,typ)" *ngIf="wiseObj[typ][category][0] !== 'loading'" >
+                                                <span style="font-size: 14px;">{{item?.RequestType}}</span>
+                                                <button style=" padding: 0px;margin: 0px;background: none;border: none;" ></button>
+                                             </span>
+                                             <span *ngIf="item?.Action?.toLowerCase() == 'add' || item?.Action?.toLowerCase() == 'insert'" style="border: 1px solid #f8f8f8;border-radius: 5px ;padding: 3px;margin-left: 10px;background: #f8f8f8;" class="cursorPointer" (click)="openDialogdemo(y,category,typ)">
+                                                <mat-icon class="iconsize" >add</mat-icon><span style="font-size: 12px;color: #212121;">Add</span>
+                                             </span>
+                                             <span  *ngIf="item?.Action?.toLowerCase() == 'edit' || item?.Action?.toLowerCase() == 'update'" style="border: 1px solid #f8f8f8;border-radius: 5px ;padding: 3px;margin-left: 6px;background: #f8f8f8;" class="cursorPointer" (click)="openDialogdemo(y,category,typ)">
+                                                <mat-icon class="iconsize">edit</mat-icon><span style="font-size: 12px;color: #212121;">Update</span>
+                                             </span>
+                                             <span *ngIf="item?.Action?.toLowerCase() == 'delete'"   style="border: 1px solid #f8f8f8;border-radius: 5px ;padding: 3px;margin-left: 6px;background: #f8f8f8;" class="cursorPointer" (click)="openDialogdemo(y,category,typ)">
+                                                <mat-icon class="iconsize">delete</mat-icon><span style="font-size: 12px;color: #212121;">Delete</span>
+                                             </span>
+                                             <span *ngIf="item?.Action?.toLowerCase() == 'list' || item?.Action?.toLowerCase() == 'get'"  style="border: 1px solid #f8f8f8;border-radius: 5px ;padding: 3px;margin-left: 10px;background: #f8f8f8;" class="cursorPointer" (click)="openDialogdemo(y,category,typ)">
+                                                <mat-icon class="iconsize">home</mat-icon><span style="font-size: 12px;color: #212121;">Get</span>
+                                             </span>
+                                             <span *ngIf="item?.Action?.toLowerCase() == 'post'"  style="border: 1px solid #f8f8f8;border-radius: 5px ;padding: 3px;margin-left: 10px;background: #f8f8f8;" class="cursorPointer" (click)="openDialogdemo(y,category,typ)">
+                                              <mat-icon class="iconsize">edit</mat-icon><span style="font-size: 12px;color: #212121;">Post</span>
+                                           </span>
+                                             <span *ngIf="item?.Action?.toLowerCase() == 'bulk delete'"   style="border: 1px solid #f8f8f8;border-radius: 5px ;padding: 3px;margin-left: 10px;background: #f8f8f8;" class="cursorPointer" (click)="openDialogdemo(y,category,typ)">
+                                                <mat-icon class="iconsize">delete</mat-icon><span style="font-size: 12px;color: #212121;">Bulk</span>
+                                             </span>
+                                             <span *ngIf="item?.Action?.toLowerCase() == 'activate'"  style="border: 1px solid #f8f8f8;border-radius: 5px ;padding: 3px;background: #f8f8f8;" class="cursorPointer" (click)="openDialogdemo(y,category,typ)">
+                                                <mat-icon class="iconsize">home</mat-icon><span style="font-size: 12px;color: #212121;">Activate</span>
+                                             </span>
+                                             <span *ngIf="item?.Action?.toLowerCase() != 'add' && item?.Action?.toLowerCase() != 'insert' && item?.Action?.toLowerCase() != 'edit' && item?.Action?.toLowerCase() != 'update' && item?.Action?.toLowerCase() != 'post' && item?.Action?.toLowerCase() != 'delete' && item?.Action?.toLowerCase() != 'list' && item?.Action?.toLowerCase() != 'get' && item?.Action?.toLowerCase() != 'bulk delete' && item?.Action?.toLowerCase() != 'activate'"  style="border: 1px solid #f8f8f8;border-radius: 5px ;padding: 3px;background: #f8f8f8;" class="cursorPointer" (click)="openDialogdemo(y,category,typ)">
+                                              <mat-icon class="iconsize">tune</mat-icon><span style="font-size: 12px;color: #212121;">{{item?.Action|titlecase}}</span>
+                                            </span>
+                                             <span class="primary-color font-weight-bold ml-3 cursorPointer ellipsis" title="{{item.URL}}"
+                                             matTooltipPosition="right"><u  (click)="openDialogdemo(y,category,typ)">{{item.URL}}</u></span>
+                                             <span *ngIf="wiseObj[typ][category][0] == 'loading'">Loading...</span>
+                                             </div>
+
+
+                                             <div class="col-lg-4 col-md-4 col-sm-12">
+                                                <div class="row">
+                                                   <span class="fontfam col-5" style="text-align: right;">{{item.TotalCount}}</span>
+                                                   <span class="fontfam col-3" style="text-align: right;">{{item.SuccessCount}}</span>
+                                                   <span class="fontfam col-3" style="text-align: right;">{{item.FailureCount}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-1 col-md-4 col-sm-12"  *ngIf="wiseObj[typ][category][0] !== 'loading'">
+                                                <mat-icon (click)="exportToExcel($event,item)"
+                                                class="float-right dwnld cursorPointer">download</mat-icon>
+                                            </div>
+
+                                       </div>
+
+                                       </mat-card-content>
+                                    </mat-card>
+
+                                 </ng-container>
+
+
+
+                              </div>
+
+
+
+                           </mat-expansion-panel>
+                        </mat-accordion>
+
+
+                           </div>
+                        </ng-container>
+
+
+
+
+
+                     </mat-expansion-panel>
+                  </mat-accordion>
+               </div>
+            </ng-container>
+         </div>
+
+
+
+         <div class="mt-3 mx-3 d-none">
+            <mat-accordion>
+               <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                     <mat-panel-title>
+                        <b>Reports</b>
+                     </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="p-2">
+                  </div>
+                  <ng-container *ngFor="let item of items; index as i">
+                     <div class="p-2">
+                        <p>
+                           <mat-icon *ngIf="reportsClosed[i]"
+                              (click)="reportsClosed[i] = !reportsClosed[i];">add</mat-icon>
+                           <mat-icon *ngIf="!reportsClosed[i]"
+                              (click)="reportsClosed[i] = !reportsClosed[i];">close</mat-icon>
+                           Report {{i+1}}
+                        </p>
+                        <ng-container *ngIf="!reportsClosed[i]">
+                           <mat-card>
+                              <mat-card-content>
+                                 <mat-chip class="get-chip mr-2">GET</mat-chip>
+                                 <mat-icon>edit</mat-icon>
+                                 <span class="primary-color font-weight-bold ml-3"
+                                    (click)="openDialog(i)"><u>/api/v1/endpoint1</u></span>
+                                 <mat-icon class="float-right dwnld">download</mat-icon>
+                              </mat-card-content>
+                           </mat-card>
+                           <mat-card>
+                              <mat-card-content>
+                                 <mat-chip class="put-chip mr-2">PUT</mat-chip>
+                                 <mat-icon>delete</mat-icon>
+                                 <span class="primary-color font-weight-bold ml-3"
+                                    (click)="openDialog(i)"><u>/api/v1/endpoint2</u></span>
+                                 <mat-icon class="float-right dwnld">download</mat-icon>
+                              </mat-card-content>
+                           </mat-card>
+                           <mat-card>
+                              <mat-card-content>
+                                 <mat-chip class="post-chip mr-2">POST</mat-chip>
+                                 <mat-icon>edit</mat-icon>
+                                 <span class="primary-color font-weight-bold ml-3"
+                                    (click)="openDialog(i)"><u>/api/v1/endpoint3</u></span>
+                                 <mat-icon class="float-right dwnld">download</mat-icon>
+                              </mat-card-content>
+                           </mat-card>
+                        </ng-container>
+                     </div>
+                  </ng-container>
+               </mat-expansion-panel>
+            </mat-accordion>
+         </div>
+
+         </div>
+      </div>
+
+      <ng-template #noData>
+         <div class="col-12 mt-3">
+            <div class="noCategoryFound ">No Records found</div>
+         </div>
+      </ng-template>
+
+
+   </div>
+</div>

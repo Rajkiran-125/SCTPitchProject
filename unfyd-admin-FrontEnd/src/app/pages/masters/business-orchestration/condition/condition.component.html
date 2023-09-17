@@ -1,0 +1,77 @@
+<div class="row middleLabel" [formGroup]="apiChecker">
+    <div class="col-3 sub-accordion-fields">
+      <div class="col-2 static_label">{{labelName?.Field}}</div>
+        <mat-form-field appearance="fill"
+            floatLabel='never'>
+  
+            <mat-select formControlName="field" placeholder="Select" (selectionChange)="fieldChange($event.value)">
+                <mat-option
+                    *ngFor="let data of staticField"
+                    [value]="data.Key">{{data.Value}}</mat-option>
+                <mat-option
+                    *ngFor="let data of responseArray"
+                    [value]="data.response">{{data.field}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="col-3 sub-accordion-fields" *ngIf="apiChecker?.value?.field == 'Custom'">
+      <div class="col-3 static_label"> Attribute </div>
+      <mat-form-field appearance="fill"
+            floatLabel='never'>
+            <mat-select *ngIf="dropdown"
+                formControlName="value"
+                placeholder="Attribute">
+                <mat-option *ngFor="let data of actionGroup" [value]="data.value">{{data.label}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <!-- {{apiChecker.value.field | json}} -->
+    <div class="col-2 sub-accordion-fields">
+      <div class="col-2 static_label">{{labelName?.Condition}}</div>
+        <mat-form-field appearance="fill"
+            floatLabel='never'>
+            <mat-select formControlName="condition"
+                placeholder="Select">
+                <mat-option
+                    *ngFor="let data of comparison_conditions"
+                    [value]="data">{{data}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="col-2 sub-accordion-fields" >
+      <div class="col-2 static_label">{{labelName?.Value}}</div>
+        <mat-form-field appearance="fill" *ngIf="apiChecker?.value?.field !== 'Custom'"
+            floatLabel='never'>
+            <input *ngIf="!dropdown" matInput formControlName="value"
+                placeholder="Value" appTitleCase>
+            <mat-select *ngIf="dropdown"
+                formControlName="value"
+                placeholder="Value">
+                <mat-option *ngFor="let data of actionGroup" [value]="data.value">{{data.label}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field  appearance="fill" *ngIf="apiChecker?.value?.field === 'Custom'"
+        floatLabel='never'>
+        <input  matInput formControlName="custom"
+        placeholder="Value" appTitleCase></mat-form-field>
+    </div>
+    <div class="col-1">
+        <div class="d-flex align-items-center mt-2">
+            <mat-button-toggle-group
+            formControlName="additional_condition"
+            *ngIf="!otherObj.last">
+            <mat-button-toggle
+                *ngFor="let data of condition"
+                [value]="data">{{data}}</mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-icon class="mat-btn red-color"
+            (click)="removeCondition(otherObj.parent, otherObj.child, 'condition')"
+            *ngIf="otherObj.count !== 1"
+            matTooltip="Remove">delete_outline</mat-icon>
+        <mat-icon class="mat-btn primary-color add"
+                (click)="addCondition(otherObj.parent, 'condition')" *ngIf="otherObj.last"
+                matTooltip="Add">add</mat-icon>
+        </div>
+    </div>
+    </div>
+  

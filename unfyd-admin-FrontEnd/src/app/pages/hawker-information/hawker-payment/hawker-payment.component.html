@@ -1,0 +1,189 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="container"  *ngIf="!loader">
+    <div class="row row1">
+        <div class="col-1 backKey" style="">
+            <mat-icon class="cursorPointer" (click)="back()" > keyboard_backspace </mat-icon>
+        </div>
+        <div class="col-4">
+            <span class="billsHeading">Payment Summary</span>
+            <div class="row">
+                <div class="card">
+                    <div class="row width100">
+                        <div class="col-8">
+                            <span>Monthly Fee</span>
+                        </div>
+                        <div class="col-4 price">
+                            <span>&#8377;500</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row width100">
+                        <div class="col-8">
+                            <span>Penalty Fee(If any)</span>
+                        </div>
+                        <div class="col-4 price">
+                            <span>&#8377;500</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row width100 green">
+                        <div class="col-8">
+                            <span>Discount</span>
+                        </div>
+                        <div class="col-4 price">
+                            <span>-&#8377;500</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row width100">
+                        <div class="col-8">
+                            <span>Reactivation Fee(If any)</span>
+                        </div>
+                        <div class="col-4 price">
+                            <span>&#8377;500</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row width100">
+                        <div class="col-8">
+                            <span>GST 8%</span>
+                        </div>
+                        <div class="col-4 price">
+                            <span>&#8377;500</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottomOfCard" >
+                    <div class="row width100">
+                        <div class="col-8">
+                            <span>Total Outstanding</span>
+                        </div>
+                        <div class="col-4 price">
+                            <span>&#8377;1234</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <span class="billsHeading">Choose Payment Mode</span>
+
+                    <mat-accordion class="example-headers-align accordian">
+                        <mat-expansion-panel (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="flexGrow0">
+                                <i class="fa-solid fa-star"></i>
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <span>Saved Payment Option</span>
+                            </mat-panel-description>
+                            <mat-panel-description class="pay0">
+                                <button class="pay" *ngIf="cvvLen == 3">Pay Now</button>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                      
+                            
+                            <div class="row content" >
+                                <form [formGroup]="options">
+                                      <mat-radio-group [formControl]="floatLabelControl">
+                                        <mat-radio-button *ngFor="let item of cards;let i = index"  value={{i}} (click)="cardSelected(i)" >
+                                            <div class="cardInfo">
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <div class="">{{item.bank_name}}</div>
+                                                        <div class="">{{item.card_number}}</div>
+                                                    </div>  
+                                                    <div class="col-4" *ngIf="floatLabelControl.value == i">
+                                                        <input class="cvv" type="text" pattern="\d*" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="cvv" #cvv (keyup)="enablePayButton('cvv',cvv.value)">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </mat-radio-button>
+                                      </mat-radio-group>
+                                </form>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <mat-accordion class="example-headers-align accordian">
+                        <mat-expansion-panel (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="flexGrow0">
+                                <i class="fa-solid fa-credit-card"></i>
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <span>Credit / Debit / ATM Card</span>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                      
+                            
+                            <div class="row content" >
+                                
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <mat-accordion class="example-headers-align accordian">
+                        <mat-expansion-panel (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="flexGrow0">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <span>Net Banking</span>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                      
+                            
+                            <div class="row content" >
+                              
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <mat-accordion class="example-headers-align accordian">
+                        <mat-expansion-panel (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="flexGrow0">
+                                <img class="upi" src="/assets/images/upi-payment.png" alt="" srcset="">
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <span>UPI</span>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                      
+                            
+                            <div class="row content" >
+
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                    <mat-accordion class="example-headers-align accordian">
+                        <mat-expansion-panel (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="flexGrow0">
+                                <i class="fa-solid fa-wallet"></i>
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                <span>Wallets</span>
+                            </mat-panel-description>
+                          </mat-expansion-panel-header>
+                      
+                            
+                            <div class="row content" >
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+            </div>
+        <div class="col-1">
+
+        </div>
+    </div>
+</div>

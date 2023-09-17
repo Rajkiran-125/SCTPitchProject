@@ -1,0 +1,32 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="search-form">
+            <form [formGroup]="form">
+                <legend>Business Unit</legend>
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 btn-group">
+                        <button (click)="searchHawker('all')" class="btn" mat-flat-button color="primary"
+                            type="submit">View</button>
+                        <button (click)="gotoFormPage('add',null)" class="btn" mat-flat-button color="primary"
+                            type="submit">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="wrapper" style="padding: 0 !important;margin: 10px 0;">
+        <nav class="padding0" mat-tab-nav-bar>
+            <ng-container *ngFor="let data of tabs">
+                <a mat-tab-link [active]="tabSelected == data.label" (click)="changeTab(data.label)"
+                    *ngIf="configData[data.tab]" [active]="tabSelected == data.label">
+                    {{data.label}}</a>
+            </ng-container>
+        </nav>
+        <app-filter *ngIf="tabValue.length>0" component="" [role]="userDetails.role" [type]="type" [tabValue]="tabValue"
+            [addBtn]="false"></app-filter>
+        <app-loader *ngIf="loader"></app-loader>
+    </div>
+</div>

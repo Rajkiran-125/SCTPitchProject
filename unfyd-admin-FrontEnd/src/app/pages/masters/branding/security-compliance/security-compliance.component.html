@@ -1,0 +1,317 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+    <div class="wrapper">
+        <form [formGroup]="form">
+            <legend class="legendheader">{{changeModuleDisplayName}}
+            </legend>
+
+            <div class="formGroup">
+                <div class="group">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-lg-2 col-md-6 col-5 blue-dropdown">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Application</mat-label>
+                                <mat-select [(value)]="productData" (selectionChange)="selectedProduct($event.value)"
+                                    panelClass="blue-panel">
+                                    <mat-option *ngFor="let data of productType" [value]="data">
+                                        {{data.ProductName}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </div>
+
+                        <div class="pr-3" *ngIf="userDetails.UserName == 'unfyd-admin' && data">
+                            <button class="mobileBtn" *ngIf="userConfig?.Add" mat-flat-button color="primary"
+                                (click)="addFirstLevel()">{{labelName?.Add}}</button> &nbsp;
+                            <button class="mobileBtn" *ngIf="userConfig?.Update" mat-flat-button color="primary"
+                                (click)="submit('')">{{labelName?.Update}}</button>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+
+            <div class="col-12 mt-2 pl-0" *ngIf="form.value.firstGroups.length==0">
+                <div class="noCategoryFound">No Record Found</div>
+            </div>
+            <div class="col-10 pl-0">
+                <mat-accordion class="setting-accordion" formArrayName="firstGroups" [multi]="true"
+                    #accordion="matAccordion">
+                    <ng-container *ngFor="let firstData of form['controls'].firstGroups['controls']; let ix = index">
+                        <mat-expansion-panel formGroupName="{{ ix }}"
+                            (opened)="panelOpenState = true; !firstData.value.status ? mapanel.close():''"
+                            (closed)="panelOpenState = false" #mapanel="matExpansionPanel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <i [ngClass]="firstData.value.icon"></i>
+                                    <span class="header-title cutText">{{firstData.value.title}}</span>
+                                </mat-panel-title>
+                                <div (click)="$event.stopPropagation();" class="d-flex">
+                                    <ng-container formArrayName="formControls"
+                                        *ngFor="let data of firstData['controls'].formControls['controls']; let iy = index">
+                                        <ng-container formGroupName="{{ iy }}">
+                                            <ng-container *ngIf="data.value?.key == 'Text'">
+                                                <input type="text" class="textInput" formControlName="value">
+                                                <mat-label ngClass="labelAfterInput">{{data.value.label}}</mat-label>
+                                            </ng-container>
+                                            <ng-container *ngIf="data.value?.key == 'From'">
+                                                <input type="text" class="textInput" formControlName="value">
+                                                <mat-label ngClass="labelAfterInput">{{data.value.label}}</mat-label>
+                                            </ng-container>
+                                            <ng-container *ngIf="data.value?.key == 'To'">
+                                                <mat-label ngClass="labelBeforeInput">to</mat-label>
+                                                <input type="text" class="textInput" formControlName="value">
+                                                <mat-label ngClass="labelAfterInput">{{data.value.label}}</mat-label>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="userDetails.UserName == 'unfyd-admin'">
+                                        <button mat-stroked-button color="primary"
+                                            (click)="addSecondLevel(ix, firstData.value.id)">{{labelName?.AddNew}}</button>
+                                        <button mat-icon-button
+                                            (click)="editFirstLevel(ix, firstData.value.id, firstData.value.icon, firstData.value.title, firstData.value.status, firstData['controls'].formControls['controls'])">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <button mat-icon-button *ngIf="firstData.value?.secondGroups.length <= 0"
+                                            (click)="removeFirstLevel(ix, firstData.value.id)">
+                                            <mat-icon>delete_outline</mat-icon>
+                                        </button>
+                                    </ng-container>
+                                    <ng-container
+                                        *ngIf="firstData.value.title == 'Spam Control' && userConfig?.AddSpam && firstData.value.status == true ">
+                                        <i class="icon-add" (click)="SpamControl()"> </i>
+                                    </ng-container>
+                                    <ng-container
+                                        *ngIf="firstData.value.title == 'Blacklist' && firstData.value.status == true ">
+                                        <!-- <div class="inner-container" *ngIf="!loader">
+                                          <app-masters newLabelName ="BlackList"  moduleName="BlackList" type="security-modules" [edit]="true"></app-masters>
+                                         </div> -->
+                                        <mat-icon class="cursorPointer"
+                                            (click)="Blacklist()">keyboard_arrow_right</mat-icon>
+                                    </ng-container>
+                                    <ng-container
+                                        *ngIf="firstData.value.title == 'Content Analyzer' && firstData.value.status == true ">
+                                        <i class="icon-add" (click)="Both()"> </i>
+                                    </ng-container>
+                                </div>
+                                <mat-slide-toggle  *ngIf="firstData.value.title !== 'Content Analyzer' "(click)="$event.stopPropagation();" color="primary" class="toggleBtn"
+                                    (toggleChange)="mapanel.close()" formControlName="status"
+                                    labelPosition="before"></mat-slide-toggle>
+                            </mat-expansion-panel-header>
+                            <ul formArrayName="secondGroups">
+                                <ng-container
+                                    *ngFor="let secondData of firstData['controls'].secondGroups['controls']; let iy = index">
+                                    <ng-container formGroupName="{{ iy }}">
+                                        <li>
+                                            <strong>{{secondData.value.title}}</strong>
+                                            <ng-container
+                                                *ngIf="secondData.value.title == 'Block Location' && secondData.value.status == true">
+                                                <mat-icon class="cursorPointer"
+                                                    (click)="blocklocation()">keyboard_arrow_right</mat-icon>
+                                            </ng-container>
+                                            <ng-container
+                                                *ngIf="secondData.value.title == 'Block IP Address' && secondData.value.status == true">
+                                                <mat-icon class="cursorPointer"
+                                                    (click)="BlockIPAdd()">keyboard_arrow_right</mat-icon>
+                                            </ng-container>
+                                            <ng-container
+                                                *ngIf="secondData.value.title == 'Email Address' && secondData.value.status == true">
+                                                <mat-icon class="cursorPointer"
+                                                    (click)="Email()">keyboard_arrow_right</mat-icon>
+                                            </ng-container>
+                                            <ng-container
+                                                *ngIf="secondData.value.title == 'Domain' && secondData.value.status == true">
+                                                <mat-icon class="cursorPointer"
+                                                    (click)="Domain()">keyboard_arrow_right</mat-icon>
+                                            </ng-container>
+                                            <ng-container *ngIf="secondData.value.title == 'IP Address'">
+                                                <mat-icon class="cursorPointer"
+                                                    (click)="IPAddress()">keyboard_arrow_right</mat-icon>
+                                            </ng-container>
+                                            <ng-container *ngIf="secondData.value.title == 'Customer Content Analyzer'">
+                                              <mat-icon class="cursorPointer"
+                                                  (click)="contentAnalyser()">keyboard_arrow_right</mat-icon>
+                                          </ng-container>
+                                          <ng-container *ngIf="secondData.value.title == 'Agent Block Content'">
+                                            <mat-icon class="cursorPointer"
+                                                (click)="blockcontent()">keyboard_arrow_right</mat-icon>
+                                        </ng-container>
+                                            <!-- <div ngIf="secondData.value.title == 'Block Location'" (click)="blocklocation()"></div> -->
+                                            <ng-container formArrayName="formControls">
+                                                <ng-container
+                                                    *ngFor="let data of secondData['controls'].formControls['controls']; let iy = index">
+                                                    <ng-container formGroupName="{{ iy }}">
+                                                        <ng-container *ngIf="data.value?.key == 'Text'">
+                                                            <input type="text" class="textInput"
+                                                                formControlName="value">
+                                                            <mat-label ngClass="labelAfterInput">{{data.value.label}}
+                                                            </mat-label>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="data.value?.key == 'From'">
+                                                            <input type="text" class="textInput"
+                                                                formControlName="value">
+                                                            <mat-label ngClass="labelAfterInput">{{data.value.label}}
+                                                            </mat-label>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="data.value?.key == 'To'">
+                                                            <mat-label
+                                                                ngClass="labelBeforeInput">{{labelName?.to}}</mat-label>
+                                                            <input type="text" class="textInput"
+                                                                formControlName="value">
+                                                            <mat-label ngClass="labelAfterInput">{{data.value.label}}
+                                                            </mat-label>
+                                                        </ng-container>
+
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                            <ng-container *ngIf="userDetails.UserName == 'unfyd-admin'">
+                                                <button mat-icon-button
+                                                    (click)="addThirdLevel(ix, iy, secondData.value.id)">
+                                                    <mat-icon>add_circle_outline</mat-icon>
+                                                </button>
+                                                <button mat-icon-button
+                                                    (click)="editSecondLevel(ix, iy, secondData.value.id, secondData.value.icon, secondData.value.title, secondData.value.status, secondData['controls'].formControls['controls'])">
+                                                    <mat-icon>edit</mat-icon>
+                                                </button>
+                                                <button mat-icon-button
+                                                    *ngIf="secondData.value.thirdGroups.length  <= 0"
+                                                    (click)="removeSecondLevel(ix, iy, secondData.value.id)">
+                                                    <mat-icon>delete_outline</mat-icon>
+                                                </button>
+                                            </ng-container>
+                                            <mat-slide-toggle   *ngIf="secondData.value.title !== 'Customer Content Analyzer' && secondData.value.title !== 'Agent Block Content'" color="primary" class="toggleBtn" formControlName="status"
+                                                labelPosition="before"></mat-slide-toggle>
+                                        </li>
+                                        <ng-container formArrayName="thirdGroups">
+                                            <ng-container
+                                                *ngFor="let thirdData of secondData['controls'].thirdGroups['controls']; let iz = index">
+                                                <ng-container formGroupName="{{ iz }}">
+                                                    <li>
+                                                        <label class="cutText 1">
+                                                            <ng-container
+                                                                *ngIf="thirdData.value.forthGroups.length==0">{{thirdData.value.title}}</ng-container>
+                                                            <strong
+                                                                *ngIf="thirdData.value.forthGroups.length>0">{{thirdData.value.title}}</strong>
+                                                        </label>
+                                                        <ng-container formArrayName="formControls"
+                                                            *ngFor="let data of thirdData['controls'].formControls['controls']; let iw = index">
+                                                            <ng-container formGroupName="{{ iw }}">
+                                                                <ng-container *ngIf="data.value?.key == 'Text'">
+                                                                    <input type="text" class="textInput"
+                                                                        formControlName="value">
+                                                                    <mat-label ngClass="labelAfterInput">
+                                                                        {{data.value.label}}</mat-label>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="data.value?.key == 'From'">
+                                                                    <input type="text" class="textInput"
+                                                                        formControlName="value">
+                                                                    <mat-label ngClass="labelAfterInput">
+                                                                        {{data.value.label}}</mat-label>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="data.value?.key == 'To'">
+                                                                    <mat-label
+                                                                        ngClass="labelBeforeInput">{{labelName?.to}}
+                                                                    </mat-label>
+                                                                    <input type="text" class="textInput"
+                                                                        formControlName="value">
+                                                                    <mat-label ngClass="labelAfterInput">
+                                                                        {{data.value.label}}</mat-label>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="userDetails.UserName == 'unfyd-admin'">
+                                                            <button mat-icon-button #tooltip="matTooltip"
+                                                                matTooltip="Add"
+                                                                (click)="addForthLevel(ix, iy, iz, thirdData.value.id)">
+                                                                <mat-icon>add_circle_outline</mat-icon>
+                                                            </button>
+                                                            <button mat-icon-button #tooltip="matTooltip"
+                                                                matTooltip="Edit"
+                                                                (click)="editThirdLevel(ix, iy, iz, thirdData.value.id, thirdData.value.icon, thirdData.value.title, thirdData.value.status, thirdData['controls'].formControls['controls'])">
+                                                                <mat-icon>edit</mat-icon>
+                                                            </button>
+                                                            <button mat-icon-button #tooltip="matTooltip"
+                                                                matTooltip="Delete"
+                                                                *ngIf="thirdData.value.forthGroups.length  <= 0"
+                                                                (click)="removeThirdLevel(ix, iy, iz, thirdData.value.id)">
+                                                                <mat-icon>delete_outline</mat-icon>
+                                                            </button>
+                                                        </ng-container>
+                                                        <mat-slide-toggle color="primary" class="toggleBtn"
+                                                            #tooltip="matTooltip" matTooltip="Toggle"
+                                                            formControlName="status" labelPosition="before">
+                                                        </mat-slide-toggle>
+                                                    </li>
+                                                    <ul formArrayName="forthGroups">
+
+                                                        <ng-container class="noopadding"
+                                                            *ngFor="let forthData of thirdData['controls'].forthGroups['controls']; let iw = index">
+                                                            <li formGroupName="{{ iw }}" class="noopadding">
+                                                                <label
+                                                                    class="cutText 2">{{forthData.value.title}}</label>
+                                                                <ng-container formArrayName="formControls">
+                                                                    <ng-container
+                                                                        *ngFor="let data of forthData['controls'].formControls['controls']; let iw = index">
+                                                                        <ng-container formGroupName="{{ iw }}">
+                                                                            <ng-container
+                                                                                *ngIf="data.value?.key == 'Text'">
+                                                                                <input type="text" class="textInput"
+                                                                                    formControlName="value">
+                                                                                <mat-label ngClass="labelAfterInput">
+                                                                                    {{data.value.label}}</mat-label>
+                                                                            </ng-container>
+                                                                            <ng-container
+                                                                                *ngIf="data.value?.key == 'From'">
+                                                                                <input type="text" class="textInput"
+                                                                                    formControlName="value">
+                                                                                <mat-label ngClass="labelAfterInput">
+                                                                                    {{data.value.label}}</mat-label>
+                                                                            </ng-container>
+                                                                            <ng-container
+                                                                                *ngIf="data.value?.key == 'To'">
+                                                                                <mat-label
+                                                                                    ngClass="labelBeforeInput">{{labelName?.to}}
+                                                                                </mat-label>
+                                                                                <input type="text" class="textInput"
+                                                                                    formControlName="value">
+                                                                                <mat-label ngClass="labelAfterInput">
+                                                                                    {{data.value.label}}</mat-label>
+                                                                            </ng-container>
+                                                                        </ng-container>
+                                                                    </ng-container>
+                                                                </ng-container>
+                                                                <ng-container
+                                                                    *ngIf="userDetails.UserName == 'unfyd-admin'">
+                                                                    <button mat-icon-button
+                                                                        (click)="editForthLevel(ix, iy, iz, iw, forthData.value.id, forthData.value.icon, forthData.value.title, forthData.value.status, forthData['controls'].formControls['controls'])">
+                                                                        <mat-icon>edit</mat-icon>
+                                                                    </button>
+                                                                    <button mat-icon-button
+                                                                        (click)="removeForthLevel(ix, iy, iz, iw, forthData.value.id)">
+                                                                        <mat-icon>delete_outline</mat-icon>
+                                                                    </button>
+                                                                </ng-container>
+                                                                <mat-slide-toggle color="primary" class="toggleBtn"
+                                                                    formControlName="status" labelPosition="before">
+                                                                </mat-slide-toggle>
+                                                            </li>
+                                                        </ng-container>
+                                                    </ul>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </ul>
+                        </mat-expansion-panel>
+                    </ng-container>
+                </mat-accordion>
+            </div>
+        </form>
+    </div>
+</div>

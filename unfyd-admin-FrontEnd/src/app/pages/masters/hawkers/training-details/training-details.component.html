@@ -1,0 +1,72 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+<app-steps [steps]="hawkerFormSteps" [id]="path"></app-steps>
+<div class="wrapper">
+    <form [formGroup]="form">
+        <legend>Training Details</legend>
+            <div class="formGroup">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                    <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.traininginitiationdatetime.errors }">
+                            <mat-label>{{labelName?.InitiationDate}}</mat-label>
+                            <input (focus)="traininginitiationdatetime.open()" (click)="traininginitiationdatetime.open()" readonly
+                                formControlName="traininginitiationdatetime" type="text" [matDatepicker]="traininginitiationdatetime"
+                                datePickerFormat="DD-MM-YYYY" matInput [min]="minDate"
+                                (dateInput)="initiationDateChange($event.value)">
+                            <mat-datepicker-toggle matSuffix [for]="traininginitiationdatetime"></mat-datepicker-toggle>
+                            <mat-datepicker #traininginitiationdatetime></mat-datepicker>
+                            <mat-error *ngIf=" f.traininginitiationdatetime.errors">
+                                <ng-container *ngIf="f.traininginitiationdatetime.errors.required">Initiaiton date is
+                                    required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" >
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.businessunit.errors }">
+                            <mat-label>{{labelName?.BusinessUnit}}</mat-label>
+                            <mat-select formControlName="businessunit">
+                                <mat-option *ngFor="let data of businessUnit" [value]="data.BizUnitID">{{data.BizUnitName}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf=" f.businessunit.errors">
+                                <ng-container *ngIf="f.businessunit.errors.required">Business unit is
+                                    required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" >
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.trainingcompletionstatus.errors }">
+                            <mat-label>{{labelName?.CompletionStatus}}</mat-label>
+                            <mat-select (selectionChange)="statusCheck($event.value)" formControlName="trainingcompletionstatus">
+                                <mat-option *ngFor="let data of masterConfig?.completionStatus"
+                                 [value]="data.Key">{{data.Key}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-12" >
+                    <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.trainingcompletiondatetime.errors }">
+                            <mat-label>{{labelName?.CompletionDate}}</mat-label>
+                            <input (focus)="trainingcompletiondatetime.open()" (click)="trainingcompletiondatetime.open()" readonly
+                                formControlName="trainingcompletiondatetime" type="text" [matDatepicker]="trainingcompletiondatetime"
+                                datePickerFormat="DD-MM-YYYY" matInput [min]="fromDate"
+                                [disabled]="fromDatePicker">
+                            <mat-datepicker-toggle matSuffix [for]="trainingcompletiondatetime"></mat-datepicker-toggle>
+                            <mat-datepicker #trainingcompletiondatetime></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group" *ngIf="userConfig?.Update">
+                <button class="btn btn-gray" (click)="back()" mat-flat-button type="Reset">Cancel</button>
+                <button *ngIf="!reset" class="btn btn-gray" mat-flat-button type="Reset">Reset</button>
+                <button class="btn" mat-stroked-button (click)="submit('save')" type="button">Save</button>
+                <button class="btn" mat-flat-button color="primary" (click)="submit('next')" type="button">Next >></button>
+            </div>
+    </form>
+</div>
+</div>

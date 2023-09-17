@@ -1,0 +1,96 @@
+<div class="inner-container">
+  <div class="wrapper py-4">
+    <div class="row">
+      <div class="col-1 text-center ">
+        <mat-icon class="gray cursorPointer" [routerLink]="['/masters/hubModules']">keyboard_backspace</mat-icon>
+      </div>
+      <div class="col-11 pl-0">
+        <div class="row">
+          <div class="col-10">
+            <legend class="hubmaster"> Add New HUB Modules </legend>
+          </div>
+          <div class="col-2 text-left">
+            <button mat-stroked-button class="text-center" (click)="edit()" class="addBtn">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="row part ">
+         
+          <div class="col-12 text-left  pl-0">
+            <div class="abcd">
+              <div class=" pr-3">
+                <i class="icon-hubModSummary"></i>
+              </div>
+              <div class="w-100">
+                <div class=" singleRow pl-0">
+                  <div class="row rowTitle">
+                    <div class="col-12">
+                      <span>{{labelName?.ModuleName}}</span>
+                    </div>
+                  </div>
+                  <div class="row rowValue">
+                    <div class="col-12 addEllipsis">
+                      <th>{{ActionValueOne?.Module}}</th>
+                    </div>
+                  </div>
+                </div>
+                <div class=" singleRow pl-0">
+                  <div class="row rowTitle">
+                    <div class="col-12">
+                      <span>{{labelName?.Category}}</span>
+                    </div>
+                  </div>
+                  <div class="row rowValue">
+                    <div class="col-12 addEllipsis">
+                      <th>{{ActionValueOne?.ModuleGroupping}}</th>
+                    </div>
+                  </div>
+                </div>
+                <div class=" singleRow pl-0">
+                  <div class="row rowTitle">
+                    <div class="col-12">
+                      <span>{{labelName?.Description}}</span>
+                    </div>
+                  </div>
+                  <div class="row rowValue">
+                    <div class="col-12 addEllipsis">
+                      <th>{{ActionValueOne?.Description}}</th>
+                    </div>
+                  </div>
+                </div>
+                <div class=" singleRow pl-0">
+                  <div class="row rowTitle">
+                    <div class="col-12">
+                      <span>{{labelName?.SubCategory}}</span>
+                    </div>
+                  </div>
+                  <div class="row rowValue">
+                    <div class="col-12 addEllipsis">
+                      <th>{{ActionValueOne?.SubModuleGroupping}}</th>
+                    </div>
+                  </div>
+                </div>
+                <div class=" singleRow pl-0">
+                  <div class="row rowTitle">
+                    <div class="col-12">
+                      <span>{{labelName?.Actionable}}</span>
+                    </div>
+                  </div>
+                  <div class="row rowValue">
+                    <div class="col-2 addEllipsis" *ngFor="let data of actionList">
+                      <mat-checkbox color="primary" [checked]="defaultcheckbox">
+                        <th>{{this.data}}</th>
+                      </mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

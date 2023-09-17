@@ -1,0 +1,121 @@
+.fields-summary {
+    padding: 30px 20px;
+    background-color: var(--gray_color_60);
+    height: 95vh;
+}
+.h4 {
+    font-size: var(--normal-font);
+    color: var(--primary_color);
+    font-weight: bold;
+}
+.attribute-form {
+    border: var(--border);
+    border-radius: 10px;
+    padding: 20px;
+}
+.field-height {
+    max-height: 68vh;
+    overflow: auto;
+}
+.preview{
+    background-color: var(--backgroud_color);
+    height: 100vh;
+    overflow: auto;
+    padding: 20px;
+    .previewSubHeader{
+      font-size: var(--content_title);
+      color: var(--black_color);
+      font-weight: bold;
+    }
+}
+
+
+
+
+.mainDiv{
+    .preview{
+      background-color: var(--backgroud_color);
+      height: 100vh;
+      overflow: auto;
+      padding: 20px;
+      .previewSubHeader{
+        font-size: var(--content_title);
+        color: var(--black_color);
+        font-weight: bold;
+      }
+    }
+    .addNewForm{
+      padding: 20px;
+      .addFormControl{
+        background-color: var(--white_color);
+        border-radius: 5px !important;
+        color: var(--primary_color);
+        box-shadow: none;
+        border: 1px solid var(--gray_color);
+      }
+    }
+    .overflow{
+      overflow-y: auto;
+      height: 80vh;
+    }
+  
+    
+  }
+
+.form-bg {
+    background-color: var(--white_color);
+    border-radius: 15px;
+}
+
+.AddFormControls{
+    border: 1px solid var(--gray_color);
+    border-radius: 15px;
+    background-color: var(--backgroud_color);
+    
+    .mainFormControl{
+      padding: 20px;
+      .mandatory{
+        font-size: var(--content);
+        display: flex;
+        align-items: center;
+      }
+    }
+    .deleteIcon{
+      color: var(--error);
+    }
+    .error{
+      color: var(--error);
+    }
+    .types{
+      font-size: var(--content);
+    }
+    .innerFormControl{
+      border-style: solid;
+      border-radius: 15px;
+      border-width: 0 0 1px 0;
+      border-color: var(--gray_color);
+    }
+    .addAttributeFormArea{
+      padding: 20px;
+      .list{
+        .attributeBorder{
+          border-style: solid;
+          border-width: 0px 0px 1px 0;
+          border-color: var(--gray_color);
+          .AttributeListValues{
+            font-size: var(--content);
+            font-weight: bold;
+          }
+        }
+
+        .options{
+          margin: 10px 0 !important;
+        }
+      }
+    }
+  }
+
+  .text{
+    flex: 1;
+    font-size: var(--content);
+  }

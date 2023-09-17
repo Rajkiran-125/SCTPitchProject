@@ -1,0 +1,235 @@
+<div class="inner-container">
+    <div class="wrapper">
+        <div class="d-flex justify-content-end">
+            <span class="icon-rejected" (click)="back()"></span>
+          </div>
+        <div class="row">
+            <div class="col-1 text-center backarrow">
+                <mat-icon class="gray cursorPointer" (click)="back()">keyboard_backspace</mat-icon>
+            </div>
+
+            <div class="col-lg-7 col-md-10 col-10 pl-0">
+                <legend *ngIf="ActionValueOne?.Id == null" class="hubmaster">Add New HUB Modules</legend>
+                <legend *ngIf="ActionValueOne?.Id != null" class="hubmaster">Update HUB Modules</legend>
+                <form [formGroup]="form"  #formDirective="ngForm">
+                    <div class="formGroup">
+                        <div class="row">
+                            <div class="col-3 ">
+
+                                <div class="avatar" style="display: grid;">
+                                    <div class="cursorPointer  colorBorder colorTileHubmodule selectedIconOnAddDashboard"
+                                        [matMenuTriggerFor]="menu" class="{{form?.value.iconstore}}"
+                                      style="margin: auto;"  >
+                                    </div>
+                                    <mat-menu #menu="matMenu" class="w-100  overflow-hidden">
+                                        <div class="row m-2 matMenuIcons" (click)="$event.stopPropagation()">
+
+                                            <div class="col-3 py-2 px-1" *ngFor="let data of mastericon">
+                                                <div class="row justify-content-center primary-color">
+                                                    <div class="cursorPointer colorTileHubmodule d-flex align-items-center justify-content-center onHoverIcon"
+                                                        class="{{data.Value}}"
+                                                        (click)="iconselect(data.Value); menu.close.emit()" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </mat-menu>
+                                </div>
+                            </div>
+
+                            <div class="col-9">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.ModuleName}}</mat-label>
+                                            <input matInput formControlName="modulename" >
+                                            <mat-error *ngIf=" f.modulename?.errors">
+                                                <ng-container *ngIf="f.modulename?.errors?.required">
+                                                    Module Name  is required
+                                                </ng-container>
+                                                <ng-container *ngIf="f.modulename?.errors?.pattern">
+                                                    {{labelName?.ModuleName}} is invalid
+                                                  </ng-container>
+                                                <ng-container *ngIf="f.modulename?.errors?.checknull">Whitespace not allowed.
+                                                </ng-container>
+                                                <ng-container *ngIf="f.modulename?.errors?.checknull1">Must be at least 3 characters long.
+                                                </ng-container>
+
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>{{labelName?.FormName}}</mat-label>
+                                            <input matInput formControlName="formname">
+                                            <mat-error *ngIf=" f.formname.errors">
+                                                <ng-container *ngIf="f.formname.errors.required">
+                                                    {{labelName?.FormName}} is required
+                                                </ng-container>
+                                                <ng-container *ngIf="f.formname?.errors?.pattern">
+                                                    {{labelName?.FormName}} is invalid
+                                                  </ng-container>
+                                                <ng-container *ngIf="f.formname?.errors?.checknull">Whitespace not allowed.
+                                                </ng-container>
+                                                <ng-container *ngIf="f.formname?.errors?.checknull1">Must be at least 3 characters long.
+                                                </ng-container>
+
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 dropDown">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Description}}</mat-label>
+                                    <input matInput formControlName="description" maxlength="500" autocomplete="off">
+                                    <mat-error *ngIf="f.description.errors">
+                                        <ng-container *ngIf="f.description.errors.pattern">
+                                            {{labelName?.Description}} is invalid
+                                          </ng-container>
+                                    <ng-container *ngIf="f.description.errors.minlength">
+                                        Must be at least 3 characters long.
+                                      </ng-container>
+                                      <ng-container *ngIf="f.description.errors.maxlength">
+                                        Cannot be beyond 500 characters.
+                                      </ng-container>
+                                      <ng-container *ngIf="f.description?.errors?.checknull1">
+                                        Must be at least 3 characters long.
+                                      </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 dropDown">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Category}}</mat-label>
+                                    <mat-select formControlName="category"
+                                        (selectionChange)="getSubCategory($event.value)">
+
+                                        <mat-option *ngFor="let data of categorymodule" [value]="data.ModuleGroupping">
+                                            {{data.ModuleGroupping}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf=" f.category.errors">
+                                        <ng-container *ngIf="f.category.errors.required">
+                                            Category  is required
+                                        </ng-container>
+
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12 dropDown">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.SubCategory}}</mat-label>
+                                    <mat-select formControlName="subcategory">
+                                        <mat-option *ngFor="let data of subcategoryvalue "
+                                            [value]="data.SubModuleGroupping"> {{data.SubModuleGroupping}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 dropDown">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.ResourceLocatorPath}}</mat-label>
+                                    <input matInput formControlName="resource" autocomplete="off">
+                                    <mat-error *ngIf=" f.resource.errors">
+                                        <ng-container *ngIf="f.resource.errors.required">
+                                            Resource Locator Path  is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f.resource?.errors?.checknull">Whitespace not allowed.
+                                        </ng-container>
+                                        <ng-container *ngIf="f.resource.errors.pattern">
+                                            {{labelName?.ResourceLocatorPath}} is invalid
+                                          </ng-container>
+
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-10 dropDown">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.Actionable}}</mat-label>
+                                    <mat-select formControlName="actionable" multiple class="actionable-main">
+                                        <mat-option *ngFor="let data of actionvalue" [value]="data.Key">{{data.Value}}
+                                        </mat-option>
+
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-2">
+                                <span >
+                                    <button mat-raised-button
+                                        class="mat-focus-indicator width-100 mat-raised-button mat-button-base mb-2 searchBtn"
+                                        style="float: right;width:40px;font-weight: bold;"
+                                        (click)="addAction = true">+</button>
+                                </span>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <span  *ngIf="addAction">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>{{labelName?.AddActionable}}</mat-label>
+                                        <input matInput formControlName="addactionable" autocomplete="off" #action  >
+                                        <span matSuffix class="d-flex">
+                                            <mat-icon class="cursorPointer" (click)="insertAction(action.value)">done
+                                            </mat-icon>
+                                            <mat-icon class="cursorPointer" (click)="clearAction()">clear</mat-icon>
+                                        </span>
+                                        <mat-error *ngIf=" f.addactionable.errors">
+                                            <ng-container *ngIf="f.addactionable?.errors?.checknull">Whitespace not allowed.
+                                            </ng-container>
+
+                                        </mat-error>
+                                    </mat-form-field>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-none d-block d-md-none">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <!-- <button class="btn btn-gray btnwidth mr-2" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button>  -->
+                            <ng-container *ngIf=" ActionValueOne?.Id == null">
+                             <button *ngIf="!reset && userConfig?.Reset"  #reset class="btn btn-gray btnwidth" mat-flat-button type="Reset"  (click)="Resetfunc()">{{labelName?.Reset}}</button>
+                            </ng-container>
+                            <button class="btn btnwidth" *ngIf=" ActionValueOne?.Id != null" mat-flat-button color="primary" type="button"
+                            (click)="hubSubmit('', formDirective)">{{labelName?.Update}}</button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 mt-2">
+                          <button class="btn outline btnwidth mr-2" *ngIf=" ActionValueOne?.Id == null" mat-stroked-button color="primary" type="button"
+                            (click)="hubSubmit('addNew', formDirective)">{{labelName?.SaveAddNew}}</button>
+                          <button class="btn btnwidth" *ngIf="userConfig?.Save && ActionValueOne?.Id == null" mat-flat-button color="primary" type="button"
+                                (click)="hubSubmit('', formDirective)">{{labelName?.Save}}</button>
+                        </div>
+                    </div>
+
+                    <div class="btn-group d-none d-md-block">
+                        <!-- <button class="btn btn-gray" (click)="back()"  mat-flat-button type="Reset">{{labelName?.Cancel}}</button>  -->
+                       <ng-container *ngIf=" ActionValueOne?.Id == null">
+                        <button *ngIf="!reset && userConfig?.Reset"  #reset class="btn btn-gray" mat-flat-button type="Reset"  (click)="Resetfunc()">{{labelName?.Reset}}</button>
+                       </ng-container>
+                        <button class="btn outline" *ngIf=" ActionValueOne?.Id == null" mat-stroked-button color="primary" type="button"
+                        (click)="hubSubmit('addNew', formDirective)">{{labelName?.SaveAddNew}}</button>
+                        <button class="btn" *ngIf="userConfig?.Save && ActionValueOne?.Id == null" mat-flat-button color="primary" type="button"
+                            (click)="hubSubmit('', formDirective)">{{labelName?.Save}}</button>
+                        <button class="btn" *ngIf=" ActionValueOne?.Id != null" mat-flat-button color="primary" type="button"
+                            (click)="hubSubmit('', formDirective)">{{labelName?.Update}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

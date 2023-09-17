@@ -1,0 +1,147 @@
+<app-loader *ngIf="loader"></app-loader>
+
+<div class="inner-container">
+    <div class="wrapper py-4">
+        <form [formGroup]="form" #formDirective="ngForm">
+            <div class="row">
+                <div class="col-1 text-center">
+                    <mat-icon class="gray cursorPointer"
+                        [routerLink]="['/masters/rm-mapping']">keyboard_backspace</mat-icon>
+                </div>
+                <div class="col-11 pl-0">
+                    <legend class="size"> {{labelName?.RMMapping}}</legend>
+                    <div class="formGroup">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.UID}} </mat-label>
+                                    <input matInput formControlName="uid">
+                                    <mat-error *ngIf="f.uid.errors">
+                                        <ng-container *ngIf="f.uid.errors.required">
+                                          {{labelName?.UID}} is required
+                                        </ng-container>
+                                        <ng-container *ngIf="f?.uid?.errors?.checknull1">Must be at least 3 characters
+                                            long.
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RMOne}} </mat-label>
+                                    <mat-select formControlName="rm1">
+                                        <mat-option *ngFor="let item of rmArray()" [(value)]="item.id">
+                                            {{item.UserName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.rm1.errors">
+                                        <ng-container *ngIf="f.rm1.errors.required">
+                                          {{labelName?.RMOne}} is required
+                                        </ng-container>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RMTwo}}</mat-label>
+                                    <mat-select formControlName="rm2">
+                                        <mat-option *ngFor="let item1 of rmArrayMethod()" [(value)]="item1.id">
+                                            {{item1.UserName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RMThree}}</mat-label>
+                                    <mat-select formControlName="rm3">
+                                        <mat-option *ngFor="let item2 of rmArrayMethod1()" [(value)]="item2.id">
+                                            {{item2.UserName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RMFour}}</mat-label>
+                                    <mat-select formControlName="rm4">
+                                        <mat-option *ngFor="let item3 of rmArrayMethod2()" [(value)]="item3.id">
+                                            {{item3.UserName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RMPOOlOne}}</mat-label>
+
+                                    <mat-select formControlName="rmpool1">
+                                        <mat-option *ngFor="let data of rmpoolArray()" [value]="data.GroupID">
+                                            {{data.GroupName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="f.rmpool1.errors">
+                                        <ng-container *ngIf="f.rmpool1.errors.required">
+                                          {{labelName?.RMPOOlOne}} is required
+                                        </ng-container>
+
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RMPOOlTwo}}</mat-label>
+                                    <mat-select formControlName="rmpool2">
+                                        <mat-option *ngFor="let data1 of rmpoolArrayMethod()" [value]="data1.GroupID">
+                                            {{data1.GroupName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RMPOOlThree}}</mat-label>
+                                    <mat-select formControlName="rmpool3">
+                                        <mat-option *ngFor="let data2 of rmpoolArrayMethod1()" [value]="data2.GroupID">
+                                            {{data2.GroupName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>{{labelName?.RMPOOlFour}}</mat-label>
+                                    <mat-select formControlName="rmpool4">
+                                        <mat-option *ngFor="let data2 of rmpoolArrayMethod2()" [value]="data2.GroupID">
+                                            {{data2.GroupName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button *ngIf="userConfig?.Cancel" class="btn btn-gray btnwidth mr-2" mat-flat-button type="Reset"
+                            (click)=" back()">{{labelName?.Cancel}}</button>
+
+                        <button *ngIf="!path && userConfig?.Reset" id="reset" #reset class="btn btn-gray" mat-flat-button
+                            type="Reset">{{labelName?.Reset}}</button>
+                        <button *ngIf="!path  && userConfig?.SaveAddNew" class="btn outline btnwidth" mat-stroked-button color="primary"
+                            (click)="submit('save&new',formDirective)">{{labelName?.SaveAddNew}}</button>
+
+                        <button *ngIf="!path  && userConfig?.Save" class="btn" mat-flat-button color="primary" type="button"
+                            (click)=" submit('',formDirective)">{{labelName?.Save}}</button>
+                        <button *ngIf="path  && userConfig?.Update" class="btn" mat-flat-button color="primary" type="button"
+                            (click)=" submit('',formDirective)">{{labelName?.Update}}</button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

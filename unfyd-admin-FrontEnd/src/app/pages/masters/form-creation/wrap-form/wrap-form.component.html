@@ -1,0 +1,582 @@
+<div class="row mainDiv pl-1">
+  <div class="col-8">
+    <div class="row m-0 addNewForm align-items-center">
+      <div class="col-lg-10 col-md-10 col-9 pl-0">
+        <span class="mr-1" *ngIf="!isDialog"><mat-icon class="gray cursorPointer" (click)="goTo('back')">keyboard_backspace</mat-icon></span>
+        <span class="header">{{ path ? labelName?.UpdateForm : labelName?.AddNewForm}}</span>
+      </div>
+      <div class="col-lg-2 col-md-2 col-2 text-right">
+        <button *ngIf="userConfig?.AddControls" mat-mini-fab class="addFormControl"
+          [disabled]="validateIdAvailable() || addNewFormField() || !newControl" (click)="addFormControl()">
+          <mat-icon class=""
+            [ngClass]="(validateIdAvailable() || addNewFormField()) ? 'gray':'primary-color'">add</mat-icon>
+        </button>
+      </div>
+      <!-- {{form.value|json}} -->
+    </div>
+
+    <div class="row">
+      <div class="col-12 overflow form-box">
+        <form [formGroup]="formName">
+          <div class="row inner-box d-flex justify-content-around">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f1.formName.errors }">
+                <mat-label>{{labelName?.FormName}}</mat-label>
+                <input matInput formControlName="formName" appTitleCase [readonly]="path">
+                <mat-error *ngIf="f1.formName.errors">
+                  <ng-container *ngIf="f1.formName.errors.required">{{labelName?.FormName}} is required
+                  </ng-container>
+                  <ng-container *ngIf="f1.formName.errors.pattern">{{labelName?.FormName}} is invalid
+                  </ng-container>
+                  <ng-container *ngIf="f1.formName.errors.maxlength">{{labelName?.FormName}} mininmum length is 100
+                  </ng-container>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f1.description.errors }">
+                <mat-label>{{labelName?.FormDescription}}</mat-label>
+                <input matInput formControlName="description" appTitleCase>
+                <mat-error *ngIf="f1.description.errors">
+                  <ng-container *ngIf="f1.description.errors.required">{{labelName?.FormDescription}} is required
+                  </ng-container>
+                  <ng-container *ngIf="f1.description.errors.pattern">{{labelName?.FormDescription}} is invalid
+                  </ng-container>
+                  <ng-container *ngIf="f1.description.errors.maxlength">{{labelName?.FormDescription}} is invalid
+                  </ng-container>
+                </mat-error>
+              </mat-form-field>
+              <div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center inner-box mt-2">
+            <div class="col-12 systemDefinedFields" *ngIf="structureTemplate.length > 0">
+              <mat-form-field appearance="fill">
+                <mat-label>{{labelName?.template  ? labelName?.template : 'Select Template'}}</mat-label>
+                <mat-select [(ngModel)]="structureTemplateSelected" [ngModelOptions]="{standalone: true}" disableOptionCentering (selectionChange)="structureTemplateChanged($event.value)">
+                  <ng-container *ngFor="let data of structureTemplate">
+                    <mat-option [value]="data.StructureName">
+                      {{data.StructureName | titlecase}}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row inner-box d-flex justify-content-around" *ngFor="let item of allFormControl; let i = index;" (selectionChange)="changesDone()"
+            (click)="changesDone()" (change)="changesDone()" (toggleChange)="changesDone()" (mouseover)="changesDone()"
+            (keyup)="changesDone()" (keypress)="changesDone()">
+            <ng-container *ngIf="selectedIndex == i">
+              <!-- {{item|json}} -->
+              <div class="my-3">
+                <div class="AddFormControls">
+                  <div class="form-bg">
+                    <div class="mainFormControl">
+                      <div class="text-right">
+                        <span *ngIf="userConfig?.Delete" class="cursorPointer" (click)="deleteFormControl( i,item.Id)">
+                          <mat-icon class="deleteIcon">delete</mat-icon>
+                        </span>
+                      </div>
+
+                      <!-- <div class="row m-0 p-0 mb-4">
+                          <div class="col-12 types">
+                            <span class="mr-3 font-weight-bold">{{labelName?.Type}}</span>
+                            <mat-radio-group aria-labelledby="example-radio-group-label" class="" color="primary"
+                              [ngModelOptions]="{standalone: true}" [(ngModel)]="item.type"
+                              (change)="changeControlType($event.value,i); changesDone()">
+                              <mat-radio-button class="" *ngFor="let type of formControlTypes" [value]="type">
+                                {{type | titlecase}}
+                              </mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                        </div> -->
+                        <div class="row m-0 p-0 mb-3">
+                          <div class="col-lg-6 col-md-6 col-12">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.Type ? labelName?.Type : 'Type'}}</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.type" (selectionChange)="changeControlType($event.value,i);changesDone()">
+                                <mat-option *ngFor="let type of formControlTypes" [value]="type">
+                                  {{type|titlecase}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      <div class="row m-0 p-0 6">
+                        <!-- placeholder -->
+                        <div class="col-lg-6 col-md-6 col-sm-12"
+                          [ngClass]="checkRegex(regex.alphabetWithSpaceDotAndhypen,item.label) == false ? '':'mb-4' ">
+                          <mat-form-field appearance="fill" class="">
+                            <mat-label>{{labelName?.PlaceHolder}}</mat-label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.label"
+                              (keyup)="changesDone()" matInput>
+                              <mat-hint class="error mt-3"
+                              *ngIf="checkRegex(regex.alphabetWithSpaceDotAndhypen,item.label) == false">
+                              {{labelName?.PlaceHolder}} is required and must be alphabets only.
+                            </mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12" *ngIf="item.type === 'checkbox'">
+                          <mat-form-field appearance="fill" class="">
+                            <mat-label>{{labelName?.formControlName === undefined ? 'FormControlName':
+                              labelName?.formControlName}}</mat-label>
+                            <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.formControlName"
+                              (keyup)="changesDone()" matInput>
+                          </mat-form-field>
+                        </div>
+                        <!-- <mat-hint class="error mb-3 col-6 mt-1"
+                          *ngIf="checkRegex(regex.alphabetWithSpaceDotAndhypen,item.label) == false">
+                          {{labelName?.PlaceHolder}} is required and must be alphabets only.
+                        </mat-hint>
+                        </div> -->
+                          <div *ngIf="item.type == 'upload'">
+                            <div class="row m-0 p-0 5">
+                              <div class="col-lg-6 col-md-6 col-12">
+                                <span class="mr-3 font-weight-bold">{{labelName?.formatType ? labelName?.formatType : 'File Type'}}</span>
+                                <mat-radio-group aria-labelledby="example-radio-group-label" class="" color="primary"
+                                  [ngModelOptions]="{standalone: true}" [(ngModel)]="item.uploadFormType"
+                                  (change)="changesDone()">
+                                  <mat-radio-button class="" value="single">Single</mat-radio-button>
+                                  <mat-radio-button class="" value="multiple">Multiple</mat-radio-button>
+                                </mat-radio-group>
+                              </div>
+                              <div class="col-lg-6 col-md-6 col-12">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>{{labelName?.fileFormat ? labelName?.fileFormat : 'File Format'}}</mat-label>
+                                  <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.uploadFormFileFormat" multiple>
+                                    <mat-option *ngFor="let data of fileFormatsDynamicForm" [value]="data.Key" (selectionChange)="changesDone()">
+                                      {{data.Value}}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 col-md-6 col-12 mb-4" *ngIf="item.type == 'input'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Type</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.dataType">
+                                <mat-option *ngFor="let data of dataTypeArray | orderBy: 'Key'" [value]="data">
+                                  {{data}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <!-- regular expression -->
+                          <div class="col-lg-6 col-md-6 col-12 mb-4" *ngIf="item.type == 'input'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.RegularExpression}}</mat-label>
+                              <input type="text" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="item.regularExpression" matInput (keyup)="changesDone()"
+                                (keypress)="changesDone()">
+                            </mat-form-field>
+                          </div>
+                          <!-- default value -->
+                          <div class="col-lg-6 col-md-6 col-12 mb-4" *ngIf="item.type == 'input'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                              <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.value" matInput
+                                (keyup)="changesDone()" (keypress)="changesDone()">
+                              <mat-hint class="error mt-3"
+                                *ngIf="item.regularExpression != null && item.value != null && item.value != ''">
+                                <ng-container *ngIf="checkRegex(item.regularExpression,item.value) == false">
+                                  {{labelName?.DefaultValue}} is not as per Regular expressions.
+                                </ng-container>
+                              </mat-hint>
+                            </mat-form-field>
+                          </div>
+
+                          <div class="col-6" *ngIf="item.type == 'list'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.ParentList}}</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.parent"
+                                (selectionChange)="changeParentId(item,i); changesDone()">
+                                <mat-option *ngFor="let data of filterParentDropDown(item.label)" [value]="data"
+                                  (click)="selectedParent(data)">
+                                  {{data}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-6" *ngIf="item.type == 'list'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.value">
+                                <mat-option *ngFor="let data of defaultValueForDropDown(i) | orderBy"
+                                  [value]="data.option">
+                                  {{data.option}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+
+                          <div class="col-lg-6 col-md-4 col-12 mb-4" *ngIf="item.type != 'button'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.MappedAttribute == undefined ? 'Mapped Attribute' :
+                                labelName?.MappedAttribute}}</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.MappedAttribute"
+                                (selectionChange)="changesDone()">
+                                <mat-option *ngFor="let data of mappedAttributes" [value]="data.key">
+                                  {{data.value}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-6 col-md-4 col-12" *ngIf="item.mandatory && item.type != 'button'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.MandatoryInputErrorMessage == undefined ? 'Mandatory Input Error
+                                Message' :
+                                labelName?.MandatoryInputErrorMessage}}</mat-label>
+                              <input matInput [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="item.MandatoryErrorMessage" />
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-6 col-md-4 col-12" *ngIf="showRegexMessage(item.regularExpression) && item.type != 'button'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.InvalidInputErrorMessage == undefined ? 'Invalid Input Error
+                                Message' :
+                                labelName?.InvalidInputErrorMessage}}</mat-label>
+                              <input matInput [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="item.RegexErrorMessage" />
+                            </mat-form-field>
+                          </div>
+                          <div class="col-6 mb-3"  *ngIf="item.type == 'checkbox'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.DefaultValue}}</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.value">
+                                <mat-option [value]="true">{{labelName?.Checked}}</mat-option>
+                                <mat-option [value]="false">{{labelName?.Unchecked}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-6 mb-3" *ngIf="item.type == 'checkbox'">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.NestedControl}}</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.nestedControlOfWhom"
+                                (selectionChange)="setNestedParentControl(item.nestedControlOfWhom,item.formControlName,i); changesDone()"
+                                multiple>
+                                <mat-option *ngFor="let data of filterNestedControls(i)" [value]="data">
+                                  {{data}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row m-0 p-0 2">
+                        <div class="col-lg-4 col-md-4 col-sm-12 mandatory">
+                          <span class="">Hide</span>
+                          &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="item.hide" class="toggleBtn" (toggleChange)="changesDone()"></mat-slide-toggle>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12 mandatory" *ngIf="item.type != 'button'">
+                          <span class="">{{labelName?.Mandatory}}</span>
+                          &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="item.mandatory" class="toggleBtn" (toggleChange)="changesDone()"
+                            (change)="changesDone()"></mat-slide-toggle>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12 mandatory" *ngIf="item.type != 'button'">
+                          <span class="">{{labelName?.LockControl === undefined ? 'Lock Control' :
+                            labelName?.LockControl}}</span>
+                          &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="item.LockControl" class="toggleBtn" (toggleChange)="changesDone()"
+                            (change)="changesDone()"></mat-slide-toggle>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12 mandatory" *ngIf="item.type == 'list' && item.type != 'button'">
+                          <span class="">{{labelName?.APIConfiguration}}</span>
+                          &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="item.Dynamic" class="toggleBtn" (toggleChange)="selectedShowAPIModule();changesDone();"
+                            (change)="changesDone();toggleChange($event.checked,item)"></mat-slide-toggle>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12 mandatory" *ngIf="item.type == 'list' && item.parent && item.type != 'button'">
+                          <span class="">Reset Value On Parent Change</span>
+                          &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="item.resetValueOnParentChange" class="toggleBtn" (toggleChange)="changesDone()"
+                            (change)="changesDone()"></mat-slide-toggle>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12 mandatory" *ngIf="item.type == 'list' && item.type != 'button'">
+                          <span class="">API call after change</span>
+                          &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="item.APICallAfterChange" class="toggleBtn" (toggleChange)="selectedShowAPIModule();changesDone()"
+                            (change)="changesDone()"></mat-slide-toggle>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12 mandatory" *ngIf="item.type == 'list' && item.type != 'button'">
+                          <span class="">Patch value to controls when changed</span>
+                          &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="item.patchValueToControlsWhenChanged" class="toggleBtn" (toggleChange)="changesDone()"
+                            (change)="changesDone()"></mat-slide-toggle>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12 mandatory" *ngIf="item.type == 'button'">
+                          <span class="">Check Validation</span>
+                          &nbsp;&nbsp;<mat-slide-toggle color="primary" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="item.checkValidation" class="toggleBtn" (toggleChange)="changesDone()"
+                            (change)="changesDone()"></mat-slide-toggle>
+                        </div>
+                    </div>
+                      <div class="row m-0 p-0" *ngIf="item.type == 'list' && item.patchValueToControlsWhenChanged">
+                        <ng-container *ngFor="let itemList of item.patchValueToControls; let h = index; let first = first">
+                              <div class="col-4">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Field</mat-label>
+                                  <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="itemList.field" (change)="changesDone()">
+                                    <mat-option *ngFor="let data of returnListOfFormControls(item,h)"
+                                      [value]="data.formControlName">
+                                      {{data.formControlName}}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-6 inputText normal-dropdown patchValueToControlsKey">
+                                <mat-form-field appearance="fill" class="">
+                                  <!-- <mat-label>Key</mat-label> -->
+                                  <span matPrefix class="pr-0">option.</span>
+                                  <input panelClass="normal-panel" type="text" placeholder="key" [ngModelOptions]="{standalone: true}" [(ngModel)]="itemList.key"
+                                    (keyup)="changesDone()" matInput>
+                                    <span matSuffix matTooltip="generally option = {key:' ',value:' '}"><span class="hoverInfo cursorPointer">i</span>
+                                    </span>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-2 pt-2">
+                                <mat-icon class="mat-btn primary-color" (click)="addPatchValueToControls(i,h)" *ngIf="first || disabledAddPatchValueToControls(item)"
+                                    matTooltip="Add">add</mat-icon>
+                                <mat-icon class="mat-btn red-color" (click)="removePatchValueToControls(i,h)" *ngIf="!first"
+                                    matTooltip="Remove">delete_outline</mat-icon>
+                              </div>
+                        </ng-container>
+                      </div>
+
+                      <div class="row m-0 p-0 2" *ngIf="item.type == 'button'">
+                        <div class="col-lg-5 col-md-5 col-12 options" *ngIf="item.checkValidation">
+                          <mat-form-field appearance="fill">
+                            <mat-label>Select Controls</mat-label>
+                            <mat-select  [(ngModel)]="item.checkValidationFormControls" [ngModelOptions]="{standalone: true}"
+                              (selectionChange)="changesDone()" multiple>
+                              <mat-option *ngFor="let data of returnAllFormControlLists()" [value]="data">
+                                {{data}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="item.type == 'button' && buttonsAvailable(i).length > 0">
+                        <div class="col-11 mandatory">
+                          <mat-slide-toggle labelPosition="before" color="primary" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.clickButtonAfter" class="toggleBtn" >Click button after</mat-slide-toggle>
+                        </div>
+                        <div class="col-1">
+                          <mat-icon class="mat-btn blue" (click)="addClickButtonAfter(i)" [ngClass]="buttonsAvailable(i).length == 0 || !item.clickButtonAfter || (item.clickButtonAfterArray.length !=0 && item.clickButtonAfterArray.length == buttonsAvailable(i).length ) ? 'disabledIT':'primary-color'"
+                            matTooltip="Add">add</mat-icon>
+                        </div>
+                        <div class="col-12 pt-2" *ngIf="buttonsAvailable(i).length > 0 && item.clickButtonAfter">
+                          <div class="row m-0 p-0 1" *ngFor="let item2 of item.clickButtonAfterArray; let m = index">
+                            <!-- {{buttonsArrayToClick(i,m)|json}} -->
+                            <div class="col-lg-4 col-md-4 col-12">
+                              <mat-form-field appearance="fill">
+                                <mat-label>{{labelName?.Button == undefined ? 'Button' : labelName?.Button}}</mat-label>
+                                <mat-select  [(ngModel)]="item2.value" [ngModelOptions]="{standalone: true}"
+                                  (selectionChange)="changesDone()">
+                                  <mat-option *ngFor="let data of buttonsArrayToClick(i,m)" [value]="data">
+                                    {{data}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>{{item2.value}}
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-12">
+                              <mat-icon class="mat-btn red text-error pt-2" (click)="removeClickButtonAfter(i,m)"
+                              matTooltip="Remove">delete_outline</mat-icon>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="item.type == 'list' && !item.Dynamic" class="addAttributeFormArea">
+                    <div class="list">
+                      <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                        <span class="AttributeListValues">{{labelName?.AttributeListValues}}</span>
+                        <mat-icon class="primary-color cursorPointer"
+                          (click)="addAttribute(item?.formControlName,i)">add</mat-icon>
+                      </div>
+                      <div class="d-flex align-items-center options"
+                        *ngFor="let item2 of item?.listOfValues;let k = index">
+                        <div class="d-contents">
+                          <div class="col-3 pr-1 flex1"
+                            *ngIf="item2.parent2FormControl && item2.parent2FormControl !== item2.parent1FormControl">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.ParentList}} 2</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.parent2Value">
+                                <mat-option *ngFor="let data of returnParentDropdown(item2) | orderBy"
+                                  [value]="data.key">
+                                  {{data.value}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-3 pr-1 flex1" *ngIf="item2.parent1FormControl">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.ParentList}} 1</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.parent1Value">
+                                <mat-option *ngFor="let data of returnChildDropdown(item2)" [value]="data.key">
+                                  {{data.value}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-3 pr-1 flex1">
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.TypeHere}}</mat-label>
+                              <input type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.value"
+                                [(ngModel)]="item2.key" matInput>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-3 pr-1 flex1" >
+                            <mat-form-field appearance="fill">
+                              <mat-label>{{labelName?.NestedControl}}</mat-label>
+                              <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.nestedControl"
+                                (selectionChange)="setNestedControlOfLists($event.value,item2.value,item.label);changesDone()" multiple>
+                                <mat-option *ngFor="let data of returnControlListForList(item.label,item.parent)" [value]="data">
+                                  {{data}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="item.type == 'list' && item.Dynamic && showAPIModule" class="addAttributeFormArea">
+                    <div class="mainFormControl">
+                      <app-api-module (formvalue)="formvalue($event)" [control]="item"
+                    [formControls]="returnControlLists()" [formControlsList]="returnControlDropdown()"></app-api-module>
+                    </div>
+                  </div>
+                  <div *ngIf="item.type == 'button' && showAPIModule" class="addAttributeFormArea">
+                    <div class="mainFormControl">
+                      <app-api-module (formvalue)="formvalue($event)" [control]="item"
+                      [formControls]="returnControlLists()" [formControlsList]="returnControlDropdown()"></app-api-module>
+                    </div>
+                  </div>
+                  <div *ngIf="item.type == 'list' && item.APICallAfterChange" class="addAttributeFormArea">
+                    <div class="mainFormControl">
+                      <div class="list">
+                        <div class="attributeBorder row d-flex justify-content-between m-0 p-0">
+                          <span class="AttributeListValues">API details to call after change</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="item.type == 'list' && item.APICallAfterChange && showAPIModule" class="addAttributeFormArea">
+                    <div class="mainFormControl">
+                      <!-- {{item|json}} -->
+                      <app-api-module (formvalue)="formvalueForAPIChange($event)" [control]="item"
+                        [APICallAfterChange]="true"
+                        [formControls]="returnControlLists()" [formControlsList]="returnControlDropdown()"></app-api-module>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div class="btn-group mobileBtnGroup mt-4">
+            <mat-slide-toggle *ngIf="formName.value.formName !== ''" color="primary"
+            (change)="createTableToggle($event.checked)" formControlName="createTable"
+            class="toggleBtn mt-2 mr-3">Create Table</mat-slide-toggle>
+          <mat-slide-toggle *ngIf="tableName" color="primary" (change)="TableToggle($event.checked)"
+            formControlName="tableType" class="toggleBtn mt-2 ml-3 mr-3">{{labelName?.Manual === undefined ? 'Manual'
+            : labelName?.Manual}}</mat-slide-toggle>
+            <button class="btn btn-gray smallBtn" mat-flat-button (click)="reset()"
+              *ngIf="!path && userConfig?.Reset">Reset</button>
+            <button class="btn outline primary-button smallBtn" mat-stroked-button color="primary"
+              *ngIf="path ? userConfig?.Update : userConfig?.Submit"
+              [disabled]="formName.invalid || addNewFormField() || allFormControl.length == 0"
+              (click)="path ? update(allFormControl) : submit(allFormControl)">{{path ? 'Update':'Submit'}}</button>
+            <div class="mt-2">
+              <mat-form-field appearance="fill" *ngIf="tableName">
+                <mat-label>Table Name</mat-label>
+                <input type="text" formControlName="tableName" matInput>
+                <mat-error *ngIf="f1.tableName.errors">
+                  <ng-container *ngIf="f1.tableName.errors.required">Table name is required
+                  </ng-container>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mx-3 mt-2 gridTable" *ngIf="tableName">
+            <div class="col-4">
+              <mat-radio-group formControlName="Primary" (change)="prioritySet($event.value)">
+                <mat-radio-button value="Primary">Primary</mat-radio-button>
+                <mat-radio-button value="Unique">Unique</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <ng-container *ngIf="formName.value.Primary">
+              <div class="col-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Controls</mat-label>
+                  <mat-select formControlName="PrimaryColumn">
+                    <mat-option *ngFor="let data of returnControlLists()" [value]="data">
+                      {{data}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </ng-container>
+          </div>
+          <div class="row mx-3 mb-2 gridTable" *ngIf="tableName">
+            <ng-container *ngIf="mappedData">
+              <div class="col-4">
+                <div class="inputText">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Mapped Table</mat-label>
+                    <mat-select formControlName="MappedTable" (selectionChange)="getColumnData($event.value)">
+                      <mat-option *ngFor="let data of tableArray" [value]="data.object_id">
+                        {{data.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="inputText">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Mapped Column</mat-label>
+                    <mat-select formControlName="MappedColumn">
+                      <mat-option *ngFor="let data of columnArray" [value]="data.name">
+                        {{data.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="inputText">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Reference Column</mat-label>
+                    <mat-select formControlName="ReferenceColumn">
+                      <ng-container>
+                        <mat-option *ngFor="let data of reference()" [value]="data.formControlName">
+                          {{data.formControlName}}
+                        </mat-option>
+                      </ng-container>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </form>
+        <!-- {{allFormControl|json}} -->
+      </div>
+    </div>
+  </div>
+  <div class="col-4 preview">
+    <div class="legend">
+      <span class="previewSubHeader">{{ labelName?.preview }}</span>
+      <mat-icon class="view" (click)="openDialog('formPreview')" #tooltip="matTooltip"
+        matTooltip="Form Details">remove_red_eye</mat-icon>
+    </div>
+    <div *ngIf="dummyAllFormControl.length > 0">
+      <app-form-preview [item]="dummyAllFormControl" (newItemEvent)="addItem($event)"
+        (selectedIndex)="selectedIndexValue($event)"></app-form-preview>
+    </div>
+  </div>
+</div>
+<app-loader *ngIf="loader"></app-loader>

@@ -1,0 +1,48 @@
+
+.dashboardContainer{
+    padding: 12px 12px;
+    overflow: hidden;
+    height: auto;
+    .colPadding{
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+}
+h1 {
+    font-size: var(--extralarge-font);
+    font-weight: bold;
+}
+.border {
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #ccc;
+}
+
+.color0{
+    background-color: #4B89DC;
+    color: #ffffff;
+}
+
+.color1{
+    background-color: #36BC9B;
+    color: #ffffff;
+}
+
+.color2{
+    background-color: #F5BA41;
+    color: #ffffff;
+}
+
+.color3{
+    background-color: #ED5564;
+    color: #ffffff;
+}
+
+::ng-deep{
+    .border{
+        border-radius: 15px !important;
+    }
+}
+
+.xxxlFont{
+    font-size:45px;
+}

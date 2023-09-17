@@ -1,0 +1,19 @@
+// .mat-form-field-flex{
+//     background-color: var(--white_color) !important;
+// }
+
+.submitButton{
+    text-decoration: none;
+}
+
+.pointerNone{
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+::ng-deep{
+    .wrapper{
+        max-height: none !important;
+        overflow-y: hidden;
+    }
+}

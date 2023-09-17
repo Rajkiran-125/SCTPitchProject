@@ -1,0 +1,53 @@
+
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container" *ngIf="!loader">
+  <div class="wrapper">
+    <div class="row d-flex align-items-center">
+
+      <div class="col-11 text-left">
+        <span class="header d-none d-md-block">{{ changeModuleDisplayName}}</span>
+      </div>
+      <div class="col-1 text-right">
+
+        <button *ngIf="userConfig?.Add" mat-mini-fab class="addForm d-none">
+          <mat-icon class="primary-color" (click)="goTo('add')" >add</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-lg-2 col-md-2 col-6 blue-dropdown">
+        <mat-form-field appearance="fill">
+          <mat-label>Application</mat-label>
+          <mat-select [(value)]="productID"
+              (selectionChange)="selectedProduct($event.value)" panelClass="blue-panel">
+              <mat-option *ngFor="let data of productType" [value]="data?.Id">
+                  {{data?.ProductName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-md-4 col-12 outerCard" *ngFor="let item of allFormsData">
+        <div class="card cursorPointer" (click)="goTo(item.Key)">
+          <div class="d-flex justify-content-between">
+            <i class="icon-{{item.Key}} icons"></i>
+            <mat-icon class="more cursorPointer d-none" [matMenuTriggerFor]="menu">more_vert</mat-icon>
+            <mat-menu #menu="matMenu" class="w-100">
+              <button *ngIf="userConfig?.Edit" mat-menu-item (click)="editForm(item.Key)"><mat-icon>edit</mat-icon>Edit</button>
+              <button  *ngIf="userConfig?.Preview" mat-menu-item (click)="previewForm(item.Key)"><mat-icon>remove_red_eye</mat-icon>Preview</button>
+              <button mat-menu-item><mat-icon class="red-color">delete</mat-icon>Delete</button>
+            </mat-menu>
+          </div>
+          <div class="cardContent">
+            <div>
+              <strong class="cardHeading" *ngIf="labelName">{{ labelName[item.Key] | titlecase}}</strong>
+            </div>
+            <div>
+              <span class="cardInnerContent">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>

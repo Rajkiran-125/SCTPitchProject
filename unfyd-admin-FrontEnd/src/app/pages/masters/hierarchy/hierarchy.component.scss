@@ -1,0 +1,54 @@
+legend{
+  color: var(--primary_color);
+  font-weight: bold;
+  font-size: var(--title) !important;
+}
+
+form{
+  width: 100% !important;
+  .formGroup{
+    border-radius: 15px;
+    
+  }
+}
+
+::ng-deep{
+
+  .two{
+    .mat-filter {
+      border-bottom: 1px solid grey;
+      border-radius: 0;
+      box-shadow: none;
+      box-sizing: border-box;
+      font-size: inherit;
+      padding: 10px 16px !important;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+}
+  }
+
+}
+.saveAndAddNew{
+  border: 1px solid var(--primary_color) !important;
+  color: var(--primary_color);
+  font-weight: bold;
+  font-size: var(--medium-font);
+}
+.wrapper{
+  padding-right: 50px !important;
+  padding-left: 0px !important;
+}
+
+@media screen and (max-width: 767px)
+{
+  .inner-container{
+    padding: 0px 0px 5px 0px !important; 
+    margin-top: 0.5rem !important;
+	
+  .wrapper {
+    padding: 20px 15px !important;
+}
+  }
+}

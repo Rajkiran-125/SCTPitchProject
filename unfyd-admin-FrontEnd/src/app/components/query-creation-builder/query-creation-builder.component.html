@@ -1,0 +1,71 @@
+<!-- {{query|json}} -->
+<!-- {{config|json}} -->
+<!-- && query.rules.length > 0 -->
+<query-builder *ngIf="objectKeys(config.fields).length > 0" class="queryBuilder" [(ngModel)]='query' [allowCollapse]="true" [ngModelOptions]="{standalone: true}" [config]='config'  [classNames]='classNames'>
+
+  <ng-container *queryButtonGroup="let ruleset; let addRule=addRule; let addRuleSet=addRuleSet; let removeRuleSet=removeRuleSet">
+    <ng-container *ngIf="!isDisabled">
+      <mat-icon class="iconPrimarySize mx-1" [ngClass]="validityCheck() ? 'disabledIT' : ''" (click)="addRule();changed()">add</mat-icon>
+      <mat-icon class="iconPrimarySize mx-1" [ngClass]="validityCheck() ? 'disabledIT' : ''" (click)="addRuleSet();changed()">add_circle_outline</mat-icon>
+      <mat-icon class="iconDeleteSize mx-1" (click)="removeRuleSet();changed()">remove_circle_outline</mat-icon>
+      <!-- <button type="button" (click)="addRule();changed()"><mat-icon>add</mat-icon></button>
+      <button type="button" (click)="addRuleSet();changed()"><mat-icon>add_circle_outline</mat-icon></button>
+      <button type="button" (click)="removeRuleSet();changed()"><mat-icon>remove_circle_outline</mat-icon></button> -->
+    </ng-container>
+</ng-container>
+<ng-container *queryRemoveButton="let rule; let removeRule=removeRule">
+  <ng-container *ngIf="!isDisabled">
+    <!-- <button type="button" mat-icon-button color="accent" (click)="removeRule(rule);changed()"> -->
+      <mat-icon class="iconDeleteSize mx-1" (click)="removeRule(rule);changed()">remove</mat-icon>
+    <!-- </button> -->
+  </ng-container>
+</ng-container>
+<ng-container *querySwitchGroup="let ruleset">
+  <mat-radio-group *ngIf="ruleset" [disabled]="isDisabled" [(ngModel)]="ruleset.condition" [ngModelOptions]="{standalone: true}" (ngModelChange)="changed()">
+    <mat-radio-button value="and">And</mat-radio-button>
+    <mat-radio-button value="or">Or</mat-radio-button>
+  </mat-radio-group>
+</ng-container>
+<div class="inputText normal-dropdown mx-2" *queryField="let rule; let fields=fields; let onChange=onChange">
+  <mat-form-field appearance="fill">
+    <mat-select [disabled]="isDisabled" [(ngModel)]="rule.field" [ngModelOptions]="{standalone: true}" (ngModelChange)="onChange($event, rule);changed()" panelClass="normal-panel">
+      <mat-option *ngFor="let field of fields" [value]="field.value">{{field.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="inputText normal-dropdown mx-2" *queryOperator="let rule; let operators=operators">
+  <mat-form-field appearance="fill">
+    <mat-select [disabled]="isDisabled" [(ngModel)]="rule.operator" [ngModelOptions]="{standalone: true}" panelClass="normal-panel" (ngModelChange)="changed()">
+      <mat-option *ngFor="let value of operators" [value]="value">{{value}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<!-- Override input component for 'boolean' type -->
+<ng-container *queryInput="let rule; type: 'checkbox'">
+  <mat-checkbox [disabled]="isDisabled" class="pl-2 pt-2" color="primary" [(ngModel)]="rule.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="changed()"></mat-checkbox>
+</ng-container>
+<div class="col-auto pr-0 pl-2 inputText normal-dropdown" *queryInput="let rule; type: 'input'">
+  <mat-form-field appearance="fill">
+    <input [disabled]="isDisabled" matInput [(ngModel)]="rule.value" [ngModelOptions]="{standalone: true}" panelClass="normal-panel" (ngModelChange)="changed()">
+    </mat-form-field>
+</div>
+<div class="col-3 pr-4 pl-2 inputText normal-dropdown" *queryInput="let rule; type: 'datetime'">
+  <mat-form-field appearance="fill">
+    <input [disabled]="isDisabled" [(ngModel)]="rule.value" [ngModelOptions]="{standalone: true}" matInput [matDatepicker]="dp" readonly panelClass="normal-panel" (ngModelChange)="changed()">
+    <mat-datepicker-toggle [disabled]="isDisabled" matSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp></mat-datepicker>
+  </mat-form-field>
+</div>
+<!-- Override input component for 'category' type -->
+<ng-container *ngIf=""></ng-container>
+<div class="inputText normal-dropdown mx-2" *queryInput="let rule; let field=field; let options=options; type: 'list'">
+  <mat-form-field appearance="fill">
+    <mat-select [disabled]="isDisabled" [(ngModel)]="rule.value" [ngModelOptions]="{standalone: true}" [placeholder]="field.name" panelClass="normal-panel" (ngModelChange)="changed()">
+      <mat-option *ngFor="let opt of options" [value]="opt.value">
+        {{ opt.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+...
+</query-builder>

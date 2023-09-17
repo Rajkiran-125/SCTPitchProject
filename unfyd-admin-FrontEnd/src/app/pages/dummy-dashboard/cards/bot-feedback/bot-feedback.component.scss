@@ -1,0 +1,10 @@
+.feedBackInfo{
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: var(--backgroud_color);
+  font-size: var(--content);
+  font-weight: bold;
+  border-radius: 15px;
+  margin: 0 0 6px;
+}

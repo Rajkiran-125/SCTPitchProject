@@ -1,0 +1,1123 @@
+<div class="filter">
+
+  <div class="count" *ngIf="!userConfig?.reportFilter && type !=='audienceList'">
+    <ng-container *ngIf="type == 'DrilldownTable'">
+      {{totalItems}} {{totalItems> 1 ? 'Records':'Record'}}
+    </ng-container>
+
+    <ng-container *ngIf="type !== 'DrilldownTable' && type !== 'PrivilegeViewTable'">
+      {{tabValue?.length}} {{tabValue?.length> 1 ? 'Records':'Record'}}
+    </ng-container>
+    <ng-container *ngIf="type == 'PrivilegeViewTable' && tabValue.length > 0">
+      {{tabValue?.length}} {{tabValue?.length> 1 ? 'Records':'Record'}}
+    </ng-container>
+
+  </div>
+  <div class="count" *ngIf="userConfig?.reportFilter">
+    {{tabValueLength}} {{tabValueLength > 1 ? 'Records':'Record'}}
+  </div>
+  <div class="action-bar ">
+    <div class="action-area">
+      <div class="d-flex"
+        *ngIf="type == 'email-template'|| type == 'TaskGroup' || type == 'BusinessOrchestration'  || type == 'task' ||  this.moduleName == 'BlackList' || type == 'scheduler'  || this.moduleName == 'Email' || this.moduleName == 'Domain' || this.moduleName == 'IPAddress'|| moduleName == 'BlockLocation' || moduleName == 'BlockIPAdd' || type == 'UserGroup' || type == 'ScorecardTemplate' || type == 'accounts' || type == 'skills' || type == 'rm-mapping' || type == 'hsm-template'|| type == 'AlertMessage' || type == 'contact-center-location'|| type == 'break-not-ready-reason-codes' || type == 'hierarchy'  || type =='tenant' || type == 'quicklinks'  || type == 'maskingrule' || type == 'product-group'  || type == 'Business Orchestration' || type == 'business-orchestration' || type == 'hub-admin-access-controller' ||type == 'customerproduct' || type == 'blockcontent' || type == 'broadcast' || type == 'holidays' || component == 'OnlineHours' || component == 'OfflineDays' || type == 'Notification' || (type == 'NotificationInternal' || type == 'NotificationExternal') || type == 'sla' || type == 'schedule'   ">
+        <a mat-raised-button *ngIf="hasChecked?.length > 0" (click)="bulkdelete()"
+          class="action-btn d-flex justify-content-center align-items-center bulkDelete">
+          <mat-icon class="red-color">delete</mat-icon>
+        </a>
+      </div>
+
+      <div class="action-area"
+        *ngIf=" (type == 'PrivilegeViewTable' || type == 'hubModules'  || type == 'Privilege')   && userDetails.UserName === 'unfyd-admin'">
+        <a mat-raised-button *ngIf="hasChecked?.length > 0" (click)="bulkdelete()"
+          class="action-btn d-flex justify-content-center align-items-center bulkDelete">
+          <mat-icon class="red-color">delete</mat-icon>
+        </a>
+      </div>
+      <div class="d-flex" *ngIf="(this.tabe == 'Features' || this.tabe == 'System')">
+        <a mat-raised-button *ngIf="hasChecked?.length > 0" (click)="bulkdelete()"
+          class="action-btn d-flex justify-content-center align-items-center bulkDelete">
+          <mat-icon class="red-color">delete</mat-icon>
+        </a>
+      </div>
+      <div class="searchInputBox" *ngIf="tabKey?.length > 0 && tabValue.length > 0 && type !== 'PrivilegeViewTable'">
+
+        <!-- <a mat-raised-button  class="action-btn p-0" [ngClass]="searchPanel ? 'hide' : 'show'" (click)="searchToggle()">
+                  <span  #tooltip="matTooltip" matTooltip="Search" class="icon-search searchIcon"></span>
+              </a> -->
+
+        <mat-form-field class="example-form-field" appearance="fill">
+          <input matInput type="text" [(ngModel)]="value" (keyup)="setSearch($event.target.value)"
+            placeholder="Search Campaign">
+          <span class="d-flex">
+            <mat-icon matSuffix mat-icon-button aria-label="Clear" (click)="setSearch('');clearSearch();"
+              class="searchbutton" *ngIf="crossIcon">close</mat-icon>
+            <mat-icon class="cursorPointer">search</mat-icon>
+          </span>
+
+        </mat-form-field>
+      </div>
+      <div class="d-flex">
+        <ng-container
+          *ngIf="tabValue.length>0 || userConfig?.reportFilter ||type == 'event' || type == 'product-group' || (totalItems > 10 && type == 'DrilldownTable') || (tabValueLength >10 && type == 'DrilldownTable')">
+
+          <div class="item-perpage"
+            *ngIf=" !userConfig?.reportFilter && (tabValue.length>10  || (totalItems > 10 && type == 'DrilldownTable')) ">
+            <label>Show</label>
+            <select (change)="setItemsPerPage($event.target.value)" *ngIf=" type !== 'PrivilegeViewTable'"
+              class="select1">
+              <option>10</option>
+
+              <option *ngIf="tabValue.length>25 || (totalItems > 25 && type == 'DrilldownTable')">25
+              </option>
+              <option *ngIf="tabValue.length>50 || (totalItems > 50 && type == 'DrilldownTable')">50
+              </option>
+              <option *ngIf="tabValue.length>100 || (totalItems > 100 && type == 'DrilldownTable')">100
+              </option>
+            </select>
+            <label>entries</label>
+          </div>
+          <!-- pagination number filter -->
+
+          <div *ngIf="type == 'product-group'">
+            <form [formGroup]="CategoryForm">
+              <div class="" style="display: flex;height: 30px;margin-right: 10px;"
+                *ngIf="tabs == 'GET_CATEGORY' || tabs == 'GET_SUB_CATEGORY'">
+                <mat-form-field appearance="fill" class="customproductgrp">
+                  <mat-label>Product Group</mat-label>
+                  <mat-select formControlName="ProductGroup">
+                    <mat-option *ngFor="let data of product" (click)="getcategorydropdwon(data.Actionable)"
+                      [value]="data['Actionable']">
+                      {{data['Group Name']}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="mx-2" *ngIf="tabs == 'GET_SUB_CATEGORY'">
+                  <mat-form-field appearance="fill" class="customproductgrp">
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="categ">
+                      <mat-option *ngFor="let data of category" (click)="searchcategory()" [value]="data['Actionable']">
+                        {{ data["Category Name"]}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div *ngIf="type == 'event'">
+            <div class="pr-2" style="display: flex;height: 30px;" *ngIf="tabe == 'Features' || tabe == 'System'">
+              <mat-form-field appearance="fill">
+                <mat-label>Category</mat-label>
+                <mat-select [(ngModel)]="eventcatValue" (selectionChange)="searchevent(eventcatValue)">
+                  <mat-option *ngFor="let data of eventCategory" [value]="data.Id">
+                    {{data.Category}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="Date mr-2" *ngIf="userConfig?.reportFilter">
+            <form [formGroup]="DateForm">
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>Date</mat-label>
+                  <input [datePickerFormat]="dateFormat" (focus)="Date.open()" (click)="Date.open()" readonly
+                    formControlName="Date" type="text" [matDatepicker]="Date" [max]="maxDate" [min]="minDate" matInput>
+                  <mat-datepicker-toggle matSuffix [for]="Date"></mat-datepicker-toggle>
+                  <mat-datepicker #Date></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+
+
+
+          <div class="mr-2 mt-1" *ngIf="userConfig?.reportFilter">
+            <mat-icon (click)="searchHawker()" #tooltip="matTooltip" matTooltip="Search"
+              style="font-size: 25px !important;color: var(--gray_color);">
+              search
+            </mat-icon>
+          </div>
+
+
+          <!-- Pitch Templates start -->
+          <div class="searchInputBox1">
+            <mat-form-field class="example-form-field templates-search-box" appearance="fill"
+              *ngIf="type == 'addtemplates' ">
+              <input matInput type="text" #input [(ngModel)]="value" (keyup)="setSearch($event.target.value)">
+              <span class="d-flex">
+                <mat-icon matSuffix mat-icon-button aria-label="Clear" (click)="setSearch('');clearSearch();"
+                  class="searchbutton" *ngIf="input.value.length > 1">close</mat-icon>
+                <mat-icon class="cursorPointer">search</mat-icon>
+              </span>
+            </mat-form-field>
+          </div>
+          <!-- Pitch Templates end -->
+
+          <div class="item-perpage" *ngIf="tabValueLength>10 || (tabValueLength > 10 && type == 'DrilldownTable')">
+            <label>Show</label>
+            <select (change)="setItemsReportPerPage($event.target.value)" *ngIf=" type !== 'PrivilegeViewTable' ">
+              <option>10</option>
+              <option *ngIf="tabValueLength>20 || (tabValueLength > 20 && type == 'DrilldownTable')">20
+              </option>
+              <option *ngIf="tabValueLength>30 || (tabValueLength > 30 && type == 'DrilldownTable')">30
+              </option>
+              <!-- <option *ngIf="tabValueLength>100 || (tabValueLength > 100 && type == 'DrilldownTable')">100</option> -->
+            </select>
+            <label>entries</label>
+          </div>
+
+          <mat-button-toggle-group *ngIf="type =='hsm-template'" #group="matButtonToggleGroup" value="table"
+            class="toggleButtonsForFilter mx-1" name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle matTooltip="Grid View" (click)="hsmtabletoggle('card')" value="card">
+              <span><i class="icon-GridView" style="color: var(--gray_color);"></i></span>
+
+
+            </mat-button-toggle>
+            <mat-button-toggle matTooltip="List View" (click)="hsmtabletoggle('table')" value="table">
+              <span><i class="icon-ListView" style="color: var(--gray_color);"></i></span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+          <mat-button-toggle-group *ngIf="type =='email-template'" #group="matButtonToggleGroup" value="table"
+            class="toggleButtonsForFilter mx-1" name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle matTooltip="Grid View" (click)="emailtabletoggle('card')" value="card">
+              <span><i class="icon-GridView" style="color: var(--gray_color);"></i></span>
+
+
+            </mat-button-toggle>
+            <mat-button-toggle matTooltip="List View" (click)="emailtabletoggle('table')" value="table">
+              <span><i class="icon-ListView" style="color: var(--gray_color);"></i></span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+
+          <!-- search input icon -->
+          <!-- <div class="search-bar" >
+                  <input type="text" class="search-click" />
+                      <mat-icon class="cursorPointer">search</mat-icon>
+                  </div> -->
+          <div class="searchInputBox"
+            *ngIf="tabKey?.length > 0 && tabValue.length > 0 && type == 'PrivilegeViewTable'  && isFilterOnCreate == true">
+            <mat-form-field class="example-form-field" appearance="fill">
+              <input matInput type="text" [(ngModel)]="value" (keyup)="setSearch($event.target.value)">
+              <span class="d-flex">
+                <mat-icon matSuffix mat-icon-button aria-label="Clear" (click)="setSearch('');clearSearch();"
+                  class="searchbutton" *ngIf="crossIcon">close</mat-icon>
+                <mat-icon class="cursorPointer">search</mat-icon>
+              </span>
+            </mat-form-field>
+
+            <mat-form-field class="example-form-field" appearance="fill" *ngIf="type !=='audienceList'">
+              <input matInput type="text" [(ngModel)]="value" (keyup)="setSearch($event.target.value)">
+              <span class="d-flex">
+                <mat-icon matSuffix mat-icon-button aria-label="Clear" *ngIf="searchClose"
+                  (click)="setSearch('');clearSearch();" class="searchbutton">close</mat-icon>
+                <mat-icon class="cursorPointer">search</mat-icon>
+              </span>
+            </mat-form-field>
+
+            <!-- Pitch Audience Table -->
+            <mat-form-field class="example-form-field" appearance="fill" *ngIf="type =='audienceList'"
+              style="width:57vw;">
+              <input matInput type="text" [(ngModel)]="value" (keyup)="setSearch($event.target.value)">
+              <span class="d-flex">
+                <mat-icon matSuffix mat-icon-button aria-label="Clear" (click)="setSearch('');clearSearch();"
+                  class="searchbutton">close</mat-icon>
+                <mat-icon class="cursorPointer">search</mat-icon>
+              </span>
+            </mat-form-field>
+          </div>
+
+        </ng-container>
+      </div>
+      <div class="d-flex">
+        <ng-container *ngIf="(tabKey.length>0 && tabValue.length > 0) || userConfig?.reportFilter">
+
+          <ng-container *ngIf="type == 'users'">
+            <a mat-raised-button class="action-btn" (click)="sampleDataExport()">
+              <i #tooltip="matTooltip" matTooltip="Sample Data Format" class="icon-sampleDownload"></i></a>
+            <input hidden #exelUpload type="file" (change)="import($event)">
+
+            <a mat-raised-button class="action-btn" (click)="exelUpload.click()"><i #tooltip="matTooltip"
+                matTooltip="Import" class="icon-import"></i></a>
+          </ng-container>
+          <!-- download icon -->
+          <a mat-raised-button *ngIf="userConfig?.reportExcel" class="action-btn" [matMenuTriggerFor]="report"><i
+              #tooltip="matTooltip" matTooltip="Export" class="icon-export"></i></a>
+
+          <a mat-raised-button *ngIf="userConfig?.Export" class="action-btn" (click)="export()"><i #tooltip="matTooltip"
+              matTooltip="Export" class="icon-export"></i></a>
+
+          <a mat-raised-button *ngIf="type =='DrilldownTable' && !userConfig?.Export" class="action-btn"
+            (click)="export()">
+            <i matTooltip="Export" class="icon-export"></i></a>
+          <!-- download icon -->
+
+          <ng-container *ngIf="bulkId?.length>0 && userDetails.RoleType == 'ER Officer'">
+            <a mat-raised-button class="action-btn" (click)="bulkUpdate('Approved', '')"><i #tooltip="matTooltip"
+                matTooltip="Approved" class="icon-approved"></i></a>
+            <a mat-raised-button class="action-btn" (click)="openDialog('Reject')"><i #tooltip="matTooltip"
+                matTooltip="Reject" class="icon-rejected"></i></a>
+          </ng-container>
+          <a mat-raised-button class="action-btn" *ngIf="reportExcel || userConfig?.Filter" (click)="toggleFilter()"
+            matTooltip="Filter" [class.toggled]="filterShow">
+            <i *ngIf="!filterShow" class="icon-filter"></i>
+            <i *ngIf="filterShow" class="icon-rejected"></i>
+          </a>
+
+
+          <div *ngIf="filterShow" class="tab-filters">
+            <div class="cust-filters">
+              <div class="ft-menu">
+                <div class="title">
+                  <div style="margin-top: 14px;margin-left: 18px; ">Filter</div>
+                  <div class="frm-btns">
+                    <button style="margin-top: 10px; margin-right: 20px;" class="filter-save btn" mat-flat-button
+                      color="primary" (click)="filterApply();toggleFilter()">Apply</button>
+                  </div>
+                </div>
+                <form [formGroup]="form">
+
+                  <div class="tabview">
+                    <div class="custom-tab horizontal-tab custom-hegt-scroll">
+                      <ul class="nav">
+                        <li *ngFor="let input of dynamicinputFields; let DynamicIndex = index"
+                          (click)="dynamicActiveFields(DynamicIndex)">
+                          <a data-target="#{{DynamicIndex}}" data-toggle="tab"
+                            [class.active]="isFavorite && DynamicIndex === dynamicActiveNumber">{{input.label}}</a>
+                        </li>
+                      </ul>
+                      <div class="tab-content">
+                        <div class="tab-pane " *ngFor="let input of dynamicinputFields; let DynamicIndex = index"
+                          id="{{DynamicIndex}}" [class.active]="isFavorite && DynamicIndex === dynamicActiveNumber">
+                          <div class="form-group">
+                            <div class="fileds">
+                              <ul>
+                                <!-- <li *ngIf="input.controlType =='checkboxes'">
+                                    <mat-form-field class="example-margin" appearance="fill">
+                                      <mat-label>{{input.label}}</mat-label>
+                                      <mat-select [formControlName]="input.columnType" multiple>
+                                        <mat-option *ngFor="let val of input.options" value="{{val.key}}">
+                                          {{val.label}}</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </li> -->
+                                <!-- <li  *ngIf="input.controlType =='defaultDropDownList' && input.columnType == 'ServiceContractID'">
+                                    <mat-form-field appearance="outline">
+                                      <mat-label>{{input.label}}</mat-label>
+                                      <mat-select [formControlName]="input.columnType">
+                                        <mat-option *ngFor="let val of serviceData" [value]="val.ServiceContractID">
+                                          {{val.ServiceContractID}}:{{val.ServiceContractName}}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </li>
+                                  <li *ngIf="input.controlType =='radio'">
+                                    <mat-radio-group [formControlName]="input.key" [id]="input.key">
+                                      <mat-radio-button *ngFor="let opt of radioOptions"
+                                        [checked]="input.value == opt.key" [value]="opt.value">
+                                        {{opt.value }} </mat-radio-button>
+                                    </mat-radio-group>
+                                  </li>
+                                  <li *ngIf="input.controlType =='checkbox'">
+                                    <mat-checkbox id="{{DynamicIndex}}" [(ngModel)]="input.checkboxStatus"
+                                      [formControlName]="input.columnType" [id]="input.columnType"> {{input.label}}
+                                    </mat-checkbox>
+                                  </li>
+  
+                                  <li *ngIf="input.controlType =='defaultDropDownList' && input.columnType == 'Team' ">
+                                    <mat-form-field class="" appearance="fill">
+                                      <mat-label>{{input.label}}</mat-label>
+                                      <mat-select [formControlName]="input.columnType" multiple>
+                                        <mat-option *ngFor="let val of teamsData" value="{{val.TeamID}}">
+                                          {{val.TeamName}}</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </li> -->
+                                <!-- <div  *ngIf="input.controlType == 'dropdown' && input.columnType != 'Channel' && input.columnType != 'ChannelSource' && input.columnType !== 'SkillName'
+                                   && input.columnType !== 'AgentName' && input.columnType !== 'Disposition' && input.columnType !== 'SubDisposition' &&  input.columnType !== 'SubSubDisposition'
+                                    && input.columnType !== 'LoginId' && input.columnType !== 'UserName' && input.columnType !== 'UserId' && input.columnType !== 'PRODUCT' && input.columnType !== 'TemplateName'">
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>{{input.label}}</mat-label>
+                                      <mat-select id="{{DynamicIndex}}" class="example-margin" [id]="input.key"
+                                        [formControlName]="input.key">
+                                        <mat-option *ngFor="let opt of teamsData" [value]="opt.TeamID">
+                                          {{opt.TeamName}}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                  <div  *ngIf="input.controlType == 'MultiSelect' && input.columnType != 'Channel' && input.columnType != 'ChannelSource' && input.columnType !== 'SkillName' && input.columnType !== 'AgentName'
+                                  &&   input.columnType !== 'Disposition'    &&   input.columnType !== 'SubDisposition'  &&   input.columnType !== 'SubSubDisposition'  && input.columnType !== 'LoginId' && input.columnType !== 'UserName' && input.columnType !== 'UserId' && input.columnType !== 'PRODUCT' && input.columnType !== 'TemplateName'">
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>{{input.label}}</mat-label>
+                                      <mat-select id="{{DynamicIndex}}" class="example-margin" [id]="input.key"
+                                        [formControlName]="input.key" multiple>
+                                        <mat-option *ngFor="let opt of teamsData" [value]="opt.TeamID">{{opt.TeamName}}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div> -->
+                                <div *ngIf="input.columnType == 'Date'" [formGroupName]="input.columnType">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>Start Date</mat-label>
+                                    <input [datePickerFormat]="dateFormat" matInput [matDatepicker]="picker"
+                                      [formControlName]="'startDate'" (focus)="picker?.open()" (click)="picker?.open()"
+                                      [max]="maxDate" [min]="minDate" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="picker">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                  </mat-form-field>
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>End Date</mat-label>
+                                    <input [datePickerFormat]="dateFormat" matInput [matDatepicker]="picker1"
+                                      [formControlName]="'endDate'" (focus)="picker1?.open()" (click)="picker1?.open()"
+                                      [max]="maxDate" [min]="minDate" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                  </mat-form-field>
+                                </div>
+                                <div
+                                  *ngIf="input.controlType == 'datepicker' && input.columnType !== 'Date' && input.columnType !== 'ContractStartDate' && input.columnType !== 'ContractEndDate'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <input [datePickerFormat]="dateFormat" matInput [formControlName]="input.key"
+                                      (focus)="datepicker?.open()" (click)="datepicker?.open()" [max]="maxDate"
+                                      [min]="minDate" readonly [matDatepicker]="datepicker" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #datepicker>
+                                    </mat-datepicker>
+                                  </mat-form-field>
+                                </div>
+
+
+                                <div *ngIf="input.controlType == 'timepicker'">
+                                  <div class=" d-flex align-items-center pr-0 TimePickerStyle"
+                                    [matMenuTriggerFor]="timeFrom">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <input class="form-input border-0 w-100" [disabled]="true" placeholder="00:00:00"
+                                      value="{{form.value[input.key]?.hour ? form.value[input.key]?.hour > 9 ? form.value[input.key]?.hour : '0'+form.value[input.key]?.hour : '00'}}:{{form.value[input.key]?.minute ? form.value[input.key]?.minute > 9 ? form.value[input.key]?.minute : '0'+form.value[input.key]?.minute : '00'}}:{{form.value[input.key]?.second ? form.value[input.key]?.second > 9 ? form.value[input.key]?.second : '0'+form.value[input.key]?.second : '00'}}" />
+                                    <mat-icon class="timerIconPosition">access_time</mat-icon>
+                                    <mat-menu #timeFrom="matMenu"
+                                      class="w-100 px-2  d-flex align-items-center cardMoreFetures" xPosition="before">
+                                      <ngb-timepicker #tp name="timepicker"
+                                        (click)=" $event.preventDefault(); $event.stopPropagation();"
+                                        [formControlName]="input.key" [seconds]="true" [hourStep]="1" [minuteStep]="1"
+                                        [secondStep]="1">
+                                      </ngb-timepicker>
+                                    </mat-menu>
+                                  </div>
+                                </div>
+
+
+                                <div *ngIf="input.columnType == 'Channel' && input.controlType == 'MultiSelect' ">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="getChannelSource($event.value);allChannelSelect($event.value,1)"
+                                      multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()" (change)="toggleChannelSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let val of channel" [value]="val.Id">
+                                        <span [innerHTML]="val.Channel"></span>
+                                        <span>{{val.ChannelName}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'Channel' && input.controlType == 'dropdown'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="getChannelSource($event.value)">
+                                      <mat-option *ngFor="let val of channel" [value]="val.Id">
+                                        <span [innerHTML]="val.Channel"></span>
+                                        <span>{{val.ChannelName}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'ChannelSource' && input.controlType == 'dropdown' ">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="getTemplate($event.value);">
+                                      <mat-option *ngFor="let data of ChannelSource"
+                                        [value]="data.ChannelSourceId">{{data.ChannelSourceName }}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'ChannelSource' && input.controlType == 'MultiSelect' ">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="getTemplate($event.value);allChannelSourceSelect($event.value,1)"
+                                      multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()"
+                                          (change)="toggleChannelSourceSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let data of ChannelSource"
+                                        [value]="data.ChannelSourceId">{{data.ChannelSourceName }}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'TemplateName' && input.controlType == 'dropdown' ">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key">
+                                      <mat-option *ngFor="let data of TemplateData"
+                                        [value]="data.Actionable">{{data['Name Space']}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'TemplateName' && input.controlType == 'MultiSelect' ">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="allTemplateSelect($event.value,1)" multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()"
+                                          (change)="toggleTemplateNameSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let data of TemplateData"
+                                        [value]="data.Actionable">{{data['Name Space']}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'Disposition' && input.controlType == 'MultiSelect' ">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="getSubDisposition($event.value);allDispositionSelect($event.value,1)"
+                                      multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()"
+                                          (change)="toggleDispositionSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let val of Disposition" [value]="val.Disposition">
+                                        <span>{{val.Disposition}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'Disposition' && input.controlType == 'dropdown'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="getSubDisposition($event.value)">
+                                      <mat-option *ngFor="let val of Disposition" [value]="val.Disposition">
+                                        <span>{{val.Disposition}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div
+                                  *ngIf="input.columnType == 'SubDisposition' && input.controlType == 'MultiSelect' ">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="getSubSubDisposition($event.value);allSubDispositionSelect($event.value,1)"
+                                      multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()"
+                                          (change)="toggleSubDispositionSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let val of SubDisposition" [value]="val.SubDisposition">
+                                        <span>{{val.SubDisposition}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'SubDisposition' && input.controlType == 'dropdown'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="getSubSubDisposition($event.value)">
+                                      <mat-option *ngFor="let val of SubDisposition" [value]="val.SubDisposition">
+                                        <span>{{val.SubDisposition}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div
+                                  *ngIf="input.columnType == 'SubSubDisposition' && input.controlType == 'MultiSelect' ">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="allSubSubDispositionSelect($event.value,1)" multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()"
+                                          (change)="toggleSubSubDispositionSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let val of SubSubDisposition" [value]="val.SubSubDisposition">
+                                        <span>{{val.SubSubDisposition}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf="input.columnType == 'SubSubDisposition' && input.controlType == 'dropdown'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key">
+                                      <mat-option *ngFor="let val of SubSubDisposition" [value]="val.SubSubDisposition">
+                                        <span>{{val.SubSubDisposition}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf=" input.controlType == 'MultiSelect' && input.columnType == 'AgentName'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="allAgentNameSelect($event.value,1)" multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()"
+                                          (change)="toggleAgentNameSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let val of agents" [value]="val.id">
+                                        <span>{{val.UserName}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf=" input.controlType == 'dropdown' && input.columnType == 'AgentName'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key">
+                                      <mat-option *ngFor="let val of agents" [value]="val.id">
+                                        <span>{{val.UserName}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf=" input.controlType == 'MultiSelect' && input.columnType == 'SkillName'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="allSkillNameSelect($event.value,1)" multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()"
+                                          (change)="toggleSkillNameSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let data of skillType" [value]="data.Id">{{data.SkillName}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+
+                                <div *ngIf=" input.controlType == 'dropdown' && input.columnType == 'SkillName'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key">
+                                      <mat-option *ngFor="let data of skillType" [value]="data.Id">{{data.SkillName}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+
+                                <div *ngIf=" input.controlType == 'MultiSelect' && input.columnType == 'UserName'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="allUserNameSelect($event.value,1)" multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()" (change)="toggleUserNameSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let data of userName" [value]="data.Id">{{data.Username}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+
+                                <div *ngIf=" input.controlType == 'dropdown' && input.columnType == 'UserName'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key">
+                                      <mat-option *ngFor="let data of userName" [value]="data.Id">{{data.Username}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf=" input.controlType == 'MultiSelect' && input.columnType == 'UserId'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="allUserIDSelect($event.value,1)" multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()" (change)="toggleUserIdSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let data of userId" [value]="data.Id">{{data.Username}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+
+                                <div *ngIf=" input.controlType == 'dropdown' && input.columnType == 'UserId'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key">
+                                      <mat-option *ngFor="let data of userId" [value]="data.Id">{{data.Username}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf=" input.controlType == 'MultiSelect' && input.columnType == 'LoginId'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="allLoginIdSelect($event.value,1)" multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()" (change)="toggleLoginIdSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let data of logInID" [value]="data.Id">{{data.Username}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+
+                                <div *ngIf=" input.controlType == 'dropdown' && input.columnType == 'LoginId'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key">
+                                      <mat-option *ngFor="let data of logInID" [value]="data.Id">{{data.Username}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                                <div *ngIf=" input.controlType == 'MultiSelect' && input.columnType == 'PRODUCT'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key"
+                                      (selectionChange)="allPRODUCTSelect($event.value,1)" multiple>
+                                      <div class="selectAll">
+                                        <mat-checkbox color="primary" class="mat-option w-100"
+                                          [checked]="common.isChecked(input.columnType,form.value[input.columnType])"
+                                          (click)="$event.stopPropagation()" (change)="togglePRODUCTSelection($event)">
+                                          Select All
+                                        </mat-checkbox>
+                                      </div>
+                                      <mat-option *ngFor="let data of ProductName"
+                                        [value]="data.Actionable">{{data.Name}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+
+                                <div *ngIf=" input.controlType == 'dropdown' && input.columnType == 'PRODUCT'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <mat-select [formControlName]="input.key">
+                                      <mat-option *ngFor="let data of ProductName"
+                                        [value]="data.Actionable"><span>{{data.Name}}</span>
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+
+                                <div *ngIf="input.controlType == 'textbox'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <input matInput placeholder="Enter value" [formControlName]="input.key">
+                                  </mat-form-field>
+                                </div>
+
+                                <div *ngIf="input.controlType == 'Number'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <input matInput type="number" [formControlName]="input.key">
+                                  </mat-form-field>
+                                </div>
+                                <li *ngIf="input.controlType =='Toggle'">
+                                  <mat-slide-toggle id="{{DynamicIndex}}" color="primary"
+                                    [(ngModel)]="input.toggleStatus" [id]="input.key" [formControlName]="input.key">
+                                    {{input.label}}
+                                  </mat-slide-toggle>
+                                </li>
+                                <div
+                                  *ngIf="input.columnType == 'ContractStartDate' && input.controlType == 'datepicker'"
+                                  [formGroupName]="input.columnType">
+                                  <mat-radio-group [(ngModel)]="dateRadioButton"
+                                    (ngModelChange)="dateChanged(input.columnType)"
+                                    [ngModelOptions]="{standalone: true}" [id]="input.key">
+                                    <mat-radio-button value="7"> Before 7 days </mat-radio-button>
+                                    <mat-radio-button value="30"> Before 30 days </mat-radio-button>
+                                    <mat-radio-button value="select"> Select Dates </mat-radio-button>
+                                  </mat-radio-group>
+                                  <ng-container *ngIf="dateRadioButton == 'select'">
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>Start Date</mat-label>
+                                      <input matInput [matDatepicker]="picker" [formControlName]="'startDate'"
+                                        (focus)="picker?.open()" (click)="picker?.open()" readonly>
+                                      <mat-datepicker-toggle matSuffix [for]="picker">
+                                      </mat-datepicker-toggle>
+                                      <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>End Date</mat-label>
+                                      <input matInput [matDatepicker]="picker1" [formControlName]="'endDate'"
+                                        (focus)="picker1?.open()" (click)="picker1?.open()" readonly>
+                                      <mat-datepicker-toggle matSuffix [for]="picker1">
+                                      </mat-datepicker-toggle>
+                                      <mat-datepicker #picker1></mat-datepicker>
+                                    </mat-form-field>
+                                  </ng-container>
+                                </div>
+                                <div
+                                  *ngIf=" input.columnType == 'ContractEndDate' && input.controlType == 'datepicker'">
+                                  <mat-form-field appearance="fill">
+                                    <mat-label>{{input.label}}</mat-label>
+                                    <input matInput [matDatepicker]="picker1" [formControlName]="input.columnType">
+                                    <mat-datepicker-toggle matSuffix [for]="picker1">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker1></mat-datepicker>
+                                  </mat-form-field>
+                                </div>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                        <div id="Name" class="tab-pane">
+                          SLA
+                        </div>
+                        <div id="Number" class="tab-pane">
+                          <div class="fileds">
+                            <ul>
+                              <li>
+                                <mat-checkbox class="example-margin">
+                                  Low
+                                </mat-checkbox>
+                              </li>
+                              <li>
+                                <mat-checkbox class="example-margin">
+                                  Medium
+                                </mat-checkbox>
+                              </li>
+                              <li>
+                                <mat-checkbox class="example-margin">
+                                  High
+                                </mat-checkbox>
+                              </li>
+                              <li>
+                                <mat-checkbox class="example-margin">
+                                  Critical
+                                </mat-checkbox>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div id="EmailId" class="tab-pane">
+                          Periodical
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <mat-menu class="dropdown" xPosition="before" #report="matMenu">
+            <button mat-menu-item (click)="reports('day')">Last 1 Day</button>
+            <button mat-menu-item (click)="reports('week')">Last 7 Days</button>
+            <button mat-menu-item (click)="reports('month')">Last 1 Month</button>
+          </mat-menu>
+          <a mat-raised-button
+            *ngIf="tabKey?.length > 0 && type != 'drillDown' && type != 'DrilldownTable'   && type != 'PrivilegeViewTable'"
+            class="action-btn chooseFileIcon" [matMenuTriggerFor]="columnFilter">
+            <i #tooltip="matTooltip" matTooltip="Field Chooser" class="icon-table_sort"></i>
+          </a>
+          <a mat-raised-button
+            *ngIf="tabKey?.length > 0 && tabValue.length > 0 && type == 'PrivilegeViewTable'  && isFilterOnCreate == true"
+            class="action-btn" [matMenuTriggerFor]="columnFilter">
+            <i #tooltip="matTooltip" matTooltip="Field Chooser" class="icon-table_sort"></i>
+          </a>
+          <mat-menu class="mat-menu-panel" xPosition="before" #columnFilter="matMenu">
+            <ul class="checkbox-dropdown" cdkDropList [cdkDropListData]="finalField"
+              (cdkDropListDropped)="drop($event)">
+              <ng-container *ngFor="let data of finalField; let i = index">
+                <li cdkDrag (click)="$event.stopPropagation()">
+                  <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+                  <mat-checkbox labelPosition="before" color="primary" [checked]="data.checked"
+                    (change)="columnSorting($event.checked, data.value, 'column'+i)">
+                    {{data.value}}</mat-checkbox>
+                </li>
+              </ng-container>
+            </ul>
+            <div class="table-sorting-btn">
+              <button mat-flat-button color="primary" class="btn btn-block" (click)="saveColumnSorting()">Save</button>
+            </div>
+          </mat-menu>
+        </ng-container>
+        <div class="item-perpage"
+          *ngIf=" this.type == 'users' && tab == 'GETALLDISABLEUSERS' && hasChecked?.length > 0 ">
+          <a mat-raised-button class="width-100" color="primary" *ngIf=" hasChecked?.length > 0 "
+            (click)="activateUser()">Activate</a>
+        </div>
+        <div class="d-none d-md-block">
+          <!-- filter dropdown -->
+          <div class="userss " *ngIf="this.type == 'users' && tab == 'GETALLUSERS' ">
+            <mat-form-field appearance="fill" class="mobileFilterDropdown">
+              <mat-label> Select</mat-label>
+              <mat-select [(ngModel)]="resetBtnValue"
+                (selectionChange)="userActionData(resetBtnValue);getActionable($event)">
+                <mat-option *ngIf="isResetEnabled == true" value="resetPassword">Reset
+                  Password</mat-option>
+                <mat-option value="forceLogout">Force Logout</mat-option>
+                <mat-option value="forceUnlock">Locked Users</mat-option>
+                <mat-option value="activeusers">Active Users</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <!-- filter dropdown -->
+        </div>
+        <div class="" *ngIf="this.type == 'approvals'">
+          <mat-form-field appearance="fill">
+            <mat-label> Select Module</mat-label>
+            <mat-select [(ngModel)]="selectedApprovalModules" (selectionChange)="selectedApprovalModulesChanged()">
+              <mat-option *ngFor="let item of approvalModules"
+                [value]="item.ModuleName">{{item.ModuleName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <a mat-raised-button class="width-100" color="primary" style="margin-left: 7px;"
+          *ngIf="(actionname !=='activeusers' && actionname !=='noval')  && hasChecked?.length > 0 " color="primary"
+          [disabled]="form.invalid" (click)="resetRecord('val');userActionable()">Reset</a>
+
+        <button mat-stroked-button color="primary" class="outline ml-2"
+          *ngIf="userConfig?.Add && addBtn && isDialog == false && ( type !== 'holidays' && type !== 'email-template' && type !=='scheduler' && type !== 'security-modules' && this.tab != 'GETALLDISABLEUSERS' &&  type !=='BusinessHours' && type !=='days' && type !=='AlertMessage' && type !=='event' && type !== 'broadcast' && type !== 'Notification' && type !=='tenant' && type !== 'Privilege' && type !== 'label'  && type !=='sla' && type !== 'BusinessOrchestration' && type !== 'Solution-Manager'  && type !== 'task')"
+          [routerLink]="type == 'beneficiary'  || type == 'employee' ? 'personal-details' : 'add'">
+          Add</button>
+
+        <button mat-stroked-button color="primary" class="outline"
+          *ngIf=" userConfig?.Add && addBtn && isDialog == false && (type !== 'holidays' && type !== 'email-template' && type !== 'scheduler' && type !== 'security-modules' && type !=='sla' && type !== 'BusinessOrchestration' && this.tab != 'GETALLDISABLEUSERS' &&   type !=='BusinessHours' && type !=='days'&& type !=='event' && type !== 'broadcast' && type !== 'Notification' && type !=='AlertMessage' && type !=='tenant' && type !== 'Privilege' && type !== 'label' && addbuttontenant == true )"
+          [routerLink]="type == 'beneficiary' || type == 'employee' ? 'personal-details' : 'add'">
+          Add</button>
+
+        <button mat-stroked-button color="primary" class="outline" *ngIf=" userConfig?.Add && type == 'task'"
+          [disabled]="taskGroupInfo?.TaskGroupFields?.length == 0"
+          [ngClass]="taskGroupInfo?.TaskGroupFields?.length == 0  ? 'disabledIT' : ''" (click)="createTask()">
+          Add
+        </button>
+        <ng-container *ngIf="pitchTable && type !=='audienceList'">
+          <button mat-stroked-button id="pitchButton" (click)="addButtonForPitch()"
+            class="ml-1 outline btn1-primary text">
+            <span style="color:white;">Add New</span>
+          </button>
+        </ng-container>
+        <button mat-stroked-button *ngIf="type =='audienceList'" class="ml-1 outline text">
+          <span>Add New</span>
+        </button>
+        <button mat-stroked-button color="primary" class="outline"
+          *ngIf=" userConfig?.Add && addBtn && isDialog == false && (type !== 'holidays' && type !== 'email-template' && type !== 'scheduler' && type !== 'security-modules'  && type !=='sla' && type !== 'BusinessOrchestration' && this.tab != 'GETALLDISABLEUSERS' &&   type !=='BusinessHours' && type !=='days'&& type !=='event' && type !== 'broadcast' && type !== 'Notification' && type !=='AlertMessage' && type =='tenant' && type !== 'Privilege' && type !== 'label' && addbuttontenant == true )"
+          [routerLink]="type == 'beneficiary' || type == 'employee' ? 'personal-details' : 'add'">
+          Add</button>
+        <button mat-stroked-button color="primary" class="outline"
+          *ngIf="userConfig?.Add && type =='sla' && slaproductID" [routerLink]="['/masters/sla/',slaproductID]">
+          Add</button>
+        <button mat-stroked-button color="primary" class="outline"
+          *ngIf="userConfig?.Add && type =='BusinessOrchestration' && BOProductID"
+          [routerLink]="['/masters/business-orchestration/add/',BOProductID]">
+          Add</button>
+        <button mat-stroked-button color="primary" class="outline ml-1"
+          *ngIf="userConfig?.Add &&  isDialog == false  && type == 'Privilege'" [matMenuTriggerFor]="HubAccessMenu">
+          Add</button>
+
+        <div>
+          <mat-menu #HubAccessMenu="matMenu" class="temphubacess overflowcustom">
+            <div class="row addhubaccess">
+              <ng-template matMenuContent let-name="name">
+                <button *ngIf="userConfig?.NewAccess" class="btn px-5" mat-flat-button color="primary"
+                  (click)="hubAccessRoute()" type="button">Add New Access Control</button>
+              </ng-template>
+            </div>
+
+            <div class="text hubAccessStyle">
+              <div class="copy cursorPointer">Or Copy With</div>
+              <div *ngIf="tabValue.length>0">
+                <div class="copyvalue cursorPointer" *ngFor="let data of tabValue" (click)="hubAdminSummary(data)">
+                  {{data['Control Name']}}</div>
+              </div>
+            </div>
+          </mat-menu>
+        </div>
+        <button mat-stroked-button color="primary"
+          *ngIf="(userConfig?.Add && addBtn && type == 'AlertMessage' && tabKey?.length > 0)  || AlertMsgData == false"
+          [routerLink]="['/masters/branding/alert-setting/add/']"
+          [queryParams]="{ Product : this.productID, Language: AlertLanguage }" class="outline ml-1">
+          Add</button>
+
+        <!-- <a mat-raised-button *ngIf="userConfig?.Add && addBtn && type == 'AlertMessage' && tabKey?.length > 0 " class="action-btn"
+                      (click)="openAlertDialog('alert-setting',null)"><i
+                   class="icon-add"></i>1</a> -->
+
+
+        <button mat-stroked-button color="primary" *ngIf="userConfig?.AddHolidays  && type == 'holidays'"
+          (click)="openAlertDialog('HolidaysAdd',null)" class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary"
+          *ngIf=" userConfig?.AddBlockLocation && type == 'security-modules' && moduleName == 'BlockLocation'"
+          (click)="openAlertDialog('BlockLocation',null)" class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary"
+          *ngIf=" userConfig?.AddBlockIPAdd && type == 'security-modules' && moduleName == 'BlockIPAdd'"
+          (click)="openAlertDialog('BlockIPAdd',null)" class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary"
+          *ngIf=" userConfig?.AddSpamEmail && type == 'security-modules' && moduleName == 'Email'"
+          (click)="openAlertDialog('SpamControl',null)" class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary"
+          *ngIf=" userConfig?.AddSpamDomain && type == 'security-modules' && moduleName == 'Domain'"
+          (click)="openAlertDialog('SpamControl',null)" class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary"
+          *ngIf=" userConfig?.AddSpamIPAddress && type == 'security-modules' && moduleName == 'IPAddress'"
+          (click)="openAlertDialog('SpamControl',null)" class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary"
+          *ngIf=" userConfig?.AddBlackList && type == 'security-modules' && moduleName == 'BlackList'"
+          (click)="openAlertDialog('BlackList',null)" class="ml-1 outline">
+          Add</button>
+
+
+
+        <button mat-stroked-button color="primary"
+          *ngIf=" userConfig?.AddOnline &&  type == 'BusinessHours' && tabSelected =='Online Hours'"
+          (click)="openAlertDialog('hour',null)" class="ml-1 outline">
+          Add</button>
+
+        <a mat-raised-button class="action-btn" *ngIf=" userConfig?.AddLabels && type == 'label'"
+          (click)="openAlertDialog('label',null)"><i class="icon-add"></i></a>
+
+        <button mat-stroked-button color="primary"
+          *ngIf="userConfig?.AddOffline &&  type == 'BusinessHours' && tabSelected =='Offline Days'"
+          (click)="openAlertDialog('day',null)" class="ml-1 outline">
+          Add</button>
+
+        <a mat-raised-button class="width-100" style="width: auto;" color="primary" *ngIf="type == 'account'"
+          (click)="openAccountDialog('addAccount')">Add New Account</a>
+
+        <a mat-raised-button class="width-100" style="width: auto;" color="primary" *ngIf="type == 'productView'"
+          (click)="openAccountDialog('productView')">Add Product</a>
+        <button mat-stroked-button color="primary" *ngIf=" userConfig?.AddHSM && type =='hsm-template'"
+          [routerLink]="['/masters/channel-configuration/hsm-template/add']"
+          [queryParams]="{ filter: 'add-hsm',channelid : ChannelIdInput, uniquecode : ChannelUniqueCodeInput}"
+          class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary" *ngIf="  type =='email-template'"
+          [routerLink]="['/masters/channel-configuration/email-configuration/email-template/add']"
+          [queryParams]="{ filter: 'add-email',channelid : ChannelIdInput, uniquecode : ChannelUniqueCodeInput}"
+          class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary" *ngIf="type =='broadcast' && productID"
+          [routerLink]="['/masters/broadcast/add']" [queryParams]="{ filter: 'addbroadcast', productID : productID }"
+          class="ml-1 outline">
+          Add</button>
+        <button mat-stroked-button color="primary" *ngIf="type =='scheduler' && schedulerproductID"
+          [routerLink]="['/masters/scheduler/',schedulerproductID]" class="ml-1 outline">
+          Add</button>
+
+        <button mat-stroked-button color="primary"
+          *ngIf="type =='event' && productID  && isDialog == false && (tabe == 'Category' || tabe == 'Features' || tabe == 'System')"
+          [routerLink]="['/masters/event/add']" [queryParams]="{ filter: 'addevent', productID : productID }"
+          class="ml-1 outline">
+          Add </button>
+
+        <button mat-stroked-button color="primary" class="outline ml-1"
+          *ngIf="(type == 'Notification') && (tabn == 'internal' || tabn == 'external') && productID"
+          [routerLink]="['/masters/notifications/add']"
+          [queryParams]="{filter: 'add',master: tabn,productID: productID }">
+          Add</button>
+
+
+        <a *ngIf="type =='DrilldownTable'" mat-raised-button class="action-btn mx-0"
+          (click)="common.refreshTable.next(true)"><i #tooltip="matTooltip" matTooltip="Refresh"
+            class="icon-refresh"></i></a>
+        <a mat-raised-button class="action-btn"
+          *ngIf=" userConfig?.Add && type == 'contact-center-location' && isDialog == true"
+          (click)="openAlertDialog('CCLAdd',null)"><i class="icon-add"></i></a>
+        <a mat-raised-button class="action-btn" *ngIf=" userConfig?.Add && type == 'skills' && isDialog == true"
+          (click)="openAlertDialog('addSkill',null)"><i class="icon-add"></i></a>
+
+        <a mat-raised-button class="action-btn" *ngIf=" userConfig?.Add && type == 'UserGroup' && isDialog == true"
+          (click)="openAlertDialog('addUG',null)"><i class="icon-add"></i></a>
+        <a mat-raised-button class="action-btn" *ngIf=" userConfig?.Add && type == 'hierarchy' && isDialog == true"
+          (click)="openAlertDialog('addHY',null)"><i class="icon-add"></i></a>
+        <a mat-raised-button class="action-btn" *ngIf=" userConfig?.Add && type == 'product-group' && isDialog == true"
+          (click)="openAlertDialog('addPGcat',null)"><i class="icon-add"></i></a>
+        <a mat-raised-button class="action-btn"
+          *ngIf=" userConfig?.Add && type == 'users' && this.tab != 'GETALLDISABLEUSERS' && isDialog == true"
+          (click)="openAlertDialog('addUsers',null)"><i class="icon-add"></i></a>
+        <a mat-raised-button class="action-btn" *ngIf=" userConfig?.Add && type == 'event' && isDialog == true"
+          (click)="openAlertDialog('eventADD',null)"><i class="icon-add"></i></a>
+        <a mat-raised-button class="action-btn" [matMenuTriggerFor]="HubAccessMenu"
+          *ngIf="userConfig?.Add &&  isDialog == true &&  type == 'Privilege'"><i class="icon-add"></i></a>
+        <!-- <button mat-stroked-button color="primary" class="outline" *ngIf="userConfig?.Add &&  isDialog == true  && type == 'Privilege'"
+                        [matMenuTriggerFor]="HubAccessMenu"  >
+                            Add</button> -->
+      </div>
+    </div>
+  </div>
+  <div class="row d-none d-block d-md-none">
+    <div class="col-12 userss " *ngIf="this.type == 'users' && tab == 'GETALLUSERS' ">
+      <mat-form-field appearance="fill" class="mobileFilterDropdown">
+        <mat-label> Select</mat-label>
+        <mat-select [(ngModel)]="resetBtnValue" (selectionChange)="userActionData(resetBtnValue);getActionable($event)">
+          <mat-option *ngIf="isResetEnabled == true" value="resetPassword">Reset Password</mat-option>
+          <mat-option value="forceLogout">Force Logout</mat-option>
+          <mat-option value="forceUnlock">Locked Users</mat-option>
+          <mat-option value="activeusers">Active Users</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

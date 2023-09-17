@@ -1,0 +1,233 @@
+<app-loader *ngIf="loader"></app-loader>
+<div class="inner-container">
+    <div class="wrapper py-5">
+        <form [formGroup]="form">
+            <div class="row ">
+                <div class="col-1 text-center">
+                    <mat-icon class="gray cursorPointer pl-4"
+                        [routerLink]="['/masters/contact']">keyboard_backspace</mat-icon>
+                </div>
+                <div class="col-11">
+                    <legend>{{path == null ? 'Add New Contact':'Update Contact'}}</legend>
+
+                    <div class="formGroup">
+                        <div class="masters_block">
+                            <app-steps [steps]="ContactSteps" [id]="path == null ? '': path"></app-steps>
+                            <div class="top_block">
+                                <div class="avatar">
+                                    <mat-icon *ngIf="!form.value.profilepic">person</mat-icon>
+                                    <img *ngIf="form.value.profilepic" [src]="form.value.profilepic">
+                                    <input type="checkbox" (click)="uploadDocument(true,'UserProfile')">
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-3">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Title</mat-label>
+                                            <mat-select formControlName="title">
+                                                <mat-option *ngFor="let item of salutationData"
+                                                    [value]="item.Key">{{item.Value}}</mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="f.title.errors">
+                                                <ng-container *ngIf="f.title?.errors?.required">Title is required
+                                                </ng-container>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-3">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>First Name</mat-label>
+                                            <input matInput formControlName="firstname">
+                                            <mat-error *ngIf="f.firstname.errors">
+                                                <ng-container *ngIf="f.firstname?.errors?.required">First Name is
+                                                    required
+                                                </ng-container>
+                                                 <ng-container *ngIf="f.firstname?.errors?.checknull">Whitespace not allowed
+                                                </ng-container>
+                                            </mat-error>
+
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-3">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Middle Name</mat-label>
+                                            <input matInput formControlName="middlename">
+                                            <mat-error *ngIf="f.middlename.errors">
+                                                <ng-container *ngIf="f.middlename?.errors?.required">Middle Name is
+                                                    required
+                                                </ng-container>
+                                                <ng-container *ngIf="f.middlename?.errors?.checknull">Whitespace not allowed
+                                                </ng-container>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-3">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Last Name</mat-label>
+                                            <input matInput formControlName="lastname">
+                                            <mat-error *ngIf="f.lastname.errors">
+                                                <ng-container *ngIf="f.lastname?.errors?.required">Last Name is required
+                                                </ng-container>
+                                                <ng-container *ngIf="f.lastname?.errors?.checknull">Whitespace not allowed
+                                                </ng-container>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Gender</mat-label>
+                                                <mat-select formControlName="gender">
+                                                    <mat-option *ngFor="let item of genderdata"
+                                                        [value]="item.Key">{{item.Value}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.gender.errors">
+                                                    <ng-container *ngIf="f.gender?.errors?.required">Gender is required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+
+
+                                        <div class="col-3">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>DOB</mat-label>
+                                                <input readonly formControlName="dob" type="text" [matDatepicker]="dob"
+                                                    matInput>
+                                                <mat-datepicker-toggle matSuffix [for]="dob">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #dob></mat-datepicker>
+                                                <mat-error *ngIf="f.dob.errors">
+                                                    <ng-container *ngIf="f.dob.errors.required ">DOB is required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-3">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Blood Group</mat-label>
+                                                <mat-select formControlName="bloodgroup">
+                                                    <mat-option *ngFor="let item of bloodgroupData"
+                                                        [value]="item.Key">{{item.Value}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.bloodgroup.errors">
+                                                    <ng-container *ngIf="f.bloodgroup.errors.required ">Blood Group is
+                                                        required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="col-3">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Nationality</mat-label>
+                                                <mat-select formControlName="nationality">
+                                                    <mat-option *ngFor="let item of nationalityData"
+                                                        [value]="item.Key">{{item.Value}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.nationality.errors">
+                                                    <ng-container *ngIf="f.nationality.errors.required ">Nationality is
+                                                        required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Religion</mat-label>
+                                                <mat-select formControlName="religion">
+                                                    <mat-option *ngFor="let item of religionData"
+                                                        [value]="item.Key">{{item.Value}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.religion.errors">
+                                                    <ng-container *ngIf="f.religion.errors.required ">Religion is
+                                                        required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Language</mat-label>
+                                                <mat-select formControlName="language">
+                                                    <mat-option
+                                                        *ngFor="let data of userLanguageName | orderBy:'language'"
+                                                        [value]="data.langcode">{{data.language}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.language.errors">
+                                                    <ng-container *ngIf="f.language.errors.required ">Language is
+                                                        required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+
+
+                                        <div class="col-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Marital Status</mat-label>
+                                                <mat-select formControlName="maritalstatus">
+                                                    <mat-option *ngFor="let item of maritalstatusData"
+                                                        [value]="item.Key">{{item.Value}}</mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="f.maritalstatus.errors">
+                                                    <ng-container *ngIf="f.maritalstatus.errors.required ">Marital
+                                                        Status is
+                                                        required
+                                                    </ng-container>
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+
+                    <div class="btn-group">
+                        <button class="btn btn-gray" mat-flat-button type="Reset"
+                            (click)="cancleRoute()">Cancle</button>
+
+                        <button class="btn btn-gray" mat-flat-button type="Reset"  *ngIf="!path">Reset</button>
+                        <button class="btn outline" mat-flat-button color="primary" type="button" (click)="submit()"
+                            >Save</button>
+
+                        <!-- <button class="btn" mat-flat-button color="primary" type="button"
+                            *ngIf="path && userConfig?.Update" (click)="next()">Update</button> -->
+                        <button class="btn" mat-flat-button color="primary" type="button" (click)="next()">Next</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+</div>

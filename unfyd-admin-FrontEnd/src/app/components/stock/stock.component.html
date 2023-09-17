@@ -1,0 +1,154 @@
+<div class="hawkerInfo" *ngIf="hawkerDetails.display">
+    <ul>
+        <li><span>Name - {{hawkerDetails.hawkerfirstname + ' ' + hawkerDetails.hawkermiddlename + ' ' +
+                hawkerDetails.hawkerlastname}}</span></li>
+        <li><span *ngIf="hawkerDetails.mobileNo">Mobile No. - {{hawkerDetails.mobileNo}}</span>
+            <span *ngIf="hawkerDetails.registration">Registration No. - {{hawkerDetails.registration}}</span>
+        </li>
+    </ul>
+    <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+    <legend *ngIf="!hawkerDetails.display">Stock</legend>
+    <div class="component-grid" *ngIf="!hawkerDetails.registration">
+        <div class="column">
+        <div class="dataTable">
+            <table>
+                <thead>
+                    <tr *ngIf="tabValue.length>0">
+                        <th class="column{{i}}" *ngFor="let data of tabKey; let i = index">{{data}}</th>
+                    </tr>
+                    <tr *ngIf="noData">
+                        <th>Hawker not registerd</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        </div>
+    </div>
+    <div class="component-grid" *ngIf="hawkerDetails.registration">
+        <div class="column">
+            <div class="summary">
+                <h3>Stock Issue</h3>
+                <form [formGroup]="form">
+                    <ng-container *ngIf="product.length>0">
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.productname.errors }">
+                            <mat-label>Product Name</mat-label>
+                            <mat-select formControlName="productname"
+                                (selectionChange)="productCheck($event.value)">
+                                <mat-option *ngFor="let data of product" [value]="data['Product Name']">
+                                    {{data['Product Name']}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submittedForm && f.productname.errors">
+                                <ng-container *ngIf="f.productname.errors.required">Please select product name
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" *ngIf="sizeDropdown"
+                            [ngClass]="{ 'shake': submittedForm && f.productsize.errors }">
+                            <mat-label>Product Size</mat-label>
+                            <input matInput formControlName="productsize">
+                            <mat-error *ngIf="submittedForm && f.productsize.errors">
+                                <ng-container *ngIf="f.productsize.errors.required">Please select product size
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.quantity.errors }">
+                            <mat-label>Product Quantity</mat-label>
+                            <input matInput formControlName="quantity" (keypress)="numericOnly($event)">
+                            <mat-error *ngIf="submittedForm && f.quantity.errors">
+                                <ng-container *ngIf="f.quantity.errors.required">Quantity required
+                                </ng-container>
+                                
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.productcenter.errors }">
+                            <mat-label>Product Center</mat-label>
+                            <mat-select formControlName="productcenter">
+                                <mat-option *ngFor="let data of productCenter" [value]="data['Product Code']">
+                                    {{data['Product Code'] + ' - ' + data['Product Center Code']}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submittedForm && f.productcenter.errors">
+                                <ng-container *ngIf="f.productcenter.errors.required">Product center required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.issuedate.errors }">
+                            <mat-label>Issue Date</mat-label>
+                            <input (focus)="issuedate.open()"
+                                (click)="issuedate.open()" readonly formControlName="issuedate"
+                                type="text" [matDatepicker]="issuedate" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="issuedate"></mat-datepicker-toggle>
+                            <mat-datepicker #issuedate></mat-datepicker>
+                            <mat-error *ngIf="submittedForm && f.issuedate.errors">
+                                <ng-container *ngIf="f.issuedate.errors.required">Issue date required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" [ngClass]="{ 'shake': submittedForm && f.status.errors }">
+                            <mat-label>Status</mat-label>
+                            <mat-select formControlName="status" (selectionChange)="changeProductStatus($event.value)"
+                               >
+                                <mat-option *ngFor="let data of masters.stockStatus" [value]="data">
+                                    {{data}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submittedForm && f.status.errors">
+                                <ng-container *ngIf="f.status.errors.required">Please select status
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field *ngIf="remarkPanel" appearance="fill"
+                            [ngClass]="{ 'shake': submittedForm && f.remark.errors }">
+                            <mat-label>Remark</mat-label>
+                            <input matInput formControlName="remark">
+                            <mat-error *ngIf="submittedForm && f.remark.errors">
+                                <ng-container *ngIf="f.remark.errors.required">Remark required
+                                </ng-container>
+                            </mat-error>
+                        </mat-form-field>
+                    </ng-container>
+
+                    <div class="btn-group">
+                        <button class="btn" mat-flat-button color="primary" (click)="submit()"
+                            type="submit">Issued</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <div class="column">
+            <app-filter *ngIf="tabValue.length>0" component="stock" [role]="userDetails.role" [totalCount]="tabValue.length"
+                [type]="'beneficiary'" [tabValue]="tabValue"></app-filter>
+
+            <div class="dataTable">
+                <table>
+                    <thead>
+                        <tr *ngIf="tabValue.length>0">
+                            <th class="column{{i}}" *ngFor="let data of tabKey; let i = index">{{data}}</th>
+                        </tr>
+                        <tr *ngIf="tabValue.length==0">
+                            <th>No Stock Issued</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="tabValue.length>0">
+                        <tr
+                            *ngFor="let data of tabValue | filter: search | paginate: { itemsPerPage: itemsPerPage, currentPage: page }; let j = index">
+                            <ng-container *ngFor="let val of tabKey; let i = index">
+                                <td *ngIf="val == 'Sr No'" class="column{{i}}"><span>{{j+1}}</span></td>
+                                <td *ngIf="val !== 'Sr No'" class="column{{i}}">
+                                    <span
+                                        [ngClass]="data[tabKey[i]] == 'Issued' ? 'success' : data[tabKey[i]] == 'Return' ? 'error' : ''"
+                                        [innerHtml]="data[tabKey[i]]"></span>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" *ngIf="tabValue.length>10">
+                <pagination-controls (pageChange)="page = $event" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+        </div>
+    </div>
